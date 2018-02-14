@@ -31,7 +31,7 @@
     }
   },
   "scripts": {
-    "dev":
+    "build-dev":
       "NODE_ENV=development webpack --mode development --config internals/webpack/webpack.prod.babel.js",
     "build":
       "NODE_ENV=production webpack --mode production --config internals/webpack/webpack.prod.babel.js"

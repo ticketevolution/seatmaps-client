@@ -12,7 +12,7 @@ build-dev:
   steps:
     - script:
         name: install dependencies
-        code: yarn && cd server && yarn && cd ..
+        code: yarn
     - script:
         name: run build - includes tests
         code: yarn build-dev
@@ -42,15 +42,25 @@ deploy-dev:
   box: node:boron
 
   steps:
+    - edgecaseadmin/install-aws-cli:
+        key: $AWS_KEY
+        secret: $AWS_SECRET
+        region: $AWS_REGION
     - script:
         name: upload new build to cdn & make file available publicly
         code: |
           cd /pipeline/source/build
+          # aws s3 cp `grep -l main *.js` s3://ticketevolution-dev/maps.js
 
 deploy-production:
   box: node:boron
   steps:
+    - edgecaseadmin/install-aws-cli:
+        key: $AWS_KEY
+        secret: $AWS_SECRET
+        region: $AWS_REGION
     - script:
         name: upload new build to cdn & make file available publicly
         code: |
           cd /pipeline/source/build
+          # aws s3 cp artifact.tar.gz s3://ticketevolution/maps.js
