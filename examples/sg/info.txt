@@ -1,0 +1,78 @@
+sg
+
+Obviously not a js plugin (embedded in sg site)
+
+Dependencies:
+  * React
+  * Redux
+  * StyledComponents
+  * React Infinite
+  * Polished
+
+- Utilizes component library
+
+> Payout Actions
+  EDIT_INFO: 'account/payout/edit-info',
+  GO_TO_STEP: 'account/payout/go-to-step',
+  SET_ERRORS: 'account/payout/set-errors',
+  SELECT_METHOD: 'account/payout/select-method',
+  EDIT_VENMO_PHONE: 'account/payout/venmo/phone-edit',
+  EDIT_VENMO_EMAIL: 'account/payout/venmo/email-edit',
+  EDIT_ACH_INFO: 'account/payout/ach/edit',
+  SUBMIT_PAYOUT_METHOD: 'account/payout/submit',
+  LOADING: 'account/payout/loading',
+  RESET: 'account/payout/reset',
+  BACK_TO_INFO: 'account/payout/back-to-info',
+  SET_PAYOUT_METHOD: 'account/payout/set-payout-method',
+  PAYOUT_METHOD_FAIL: 'account/payout/submit-fail',
+  FETCH_PAYOUT_METHOD: 'account/payout/fetch-payout-method',
+  FETCH_PAYOUT_METHOD_ERROR: 'account/payout/fetch-payout-method-error',
+  BOOTSTRAP_PAYOUT_METHOD: 'account/payout/bootstrap-method',
+  PAYOUT_METHOD_UPDATE_DONE: 'account/payout/method-update-finished',
+  SET_USER_INFO: 'account/payout/set-user-info'
+
+> Phone Verification actions
+  EDIT_PHONE_NUMBER: 'account/phone-number/edit',
+  LOADING: 'account/phone-number/loading',
+  PHONE_UPDATE_SUCCESS: 'account/phone-number/success',
+  ERROR: 'account/phone-number/error',
+  EDIT_VERIFICATION_CODE: 'account/phone-number/code-edit',
+  VERIFY_SUCCESS: 'account/phone-number/verify-success',
+  VERIFY_FAIL: 'account/phone-number/verify-fail',
+  BACK_TO_PHONE: 'account/phone-number/back-to-phone',
+  RESET: 'account/phone-number/reset'
+
+>
+  RESET: 'event/reset',
+  SET_EVENT: 'event/event/set',
+  SET_LOADED: 'event/loaded/set',
+  SET_VENUE_CONFIGS: 'event/venueConfigs/set',
+  BOOTSTRAP_FROM_LISTINGS: 'event/bootstrapFromListings',
+  BOOTSTRAP_FROM_SERVER: 'event/bootstrapFromServer',
+  BOOTSTRAP_FROM_MOBILE_WEB: 'event/bootstrapFromMobileWeb',
+  SET_AVAILABILITY: 'event/config/availability/set',
+  SET_ACCESS_CODE: 'event/accessCode/set',
+  REMOVE_ACCESS_CODE: 'event/accessCode/remove',
+  FETCH_ACCESS_CODE: 'event/accessCode/fetch',
+  FETCH_ACCESS_CODE_SUCCESS: 'event/accessCode/fetch/success',
+  FETCH_ACCESS_CODE_ERROR: 'event/accessCode/fetch/error',
+  SET_HOVERED: 'event/hovered/set',
+  SET_SELECTED: 'event/selected/set',
+  SET_HOVERED_SEATS: 'event/hoveredSeats/set',
+  SET_SELECTED_SEATS: 'event/selectedSeats/set',
+  SET_ACTIVE_LISTING: 'event/activeListing/set',
+  SET_TOP_LISTING: 'event/topListing/set',
+  SET_BACK_STATE: 'event/backState/set',
+  SET_FILTER_PROPERTY: 'event/filter/setProperty',
+  ENABLE_FILTER: 'event/filter/enable',
+  SET_LISTING_COLLECTIONS: 'event/listingCollection/setBulk',
+  UPDATE_REDRAW_MAPKEYS: 'event/redrawMapkeys/update',
+  REMOVE_REDRAW_MAPKEYS: 'event/redrawMapkeys/remove',
+  SET_OPEN: 'event/open/set',
+  SET_FULL_SCREEN: 'event/fullScreen/set',
+  SHOW_MODAL: 'event/modals/show',
+  HIDE_MODAL: 'event/modals/hide',
+  SET_LOADING_USER_LISTINGS: 'event/userListings/loading',
+  SET_USER_LISTINGS_FETCH_ERROR: 'event/userListings/error',
+  SET_USER_LISTINGS: 'event/userListings/set',
+  VECTOR_MAP_LOADED: 'event/vectorMap/loaded'

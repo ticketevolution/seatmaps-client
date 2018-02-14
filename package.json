@@ -1,0 +1,52 @@
+{
+  "name": "ticket_evolution_seatmaps",
+  "version": "0.0.1",
+  "description": "interactive seatmaps",
+  "repository": {
+    "url": "git@github.com:ticketevolution/seatmaps-client.git",
+    "type": "git"
+  },
+  "main": "index.js",
+  "author": "BRAD LARSON",
+  "license": "UNLICENSED",
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "es2015": {
+            "modules": false
+          }
+        }
+      ],
+      "stage-0"
+    ],
+    "env": {
+      "production": {
+        "only": ["src"]
+      },
+      "test": {
+        "plugins": ["transform-es2015-modules-commonjs", "dynamic-import-node"]
+      }
+    }
+  },
+  "scripts": {
+    "dev":
+      "NODE_ENV=development webpack --mode development --config internals/webpack/webpack.prod.babel.js",
+    "build":
+      "NODE_ENV=production webpack --mode production --config internals/webpack/webpack.prod.babel.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "flow-bin": "^0.65.0",
+    "jest": "^22.2.2",
+    "prettier": "1.10.2",
+    "webpack": "^4.0.0-beta.1",
+    "webpack-cli": "^2.0.4"
+  }
+}

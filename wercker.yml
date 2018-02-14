@@ -1,0 +1,56 @@
+build:
+  box: node:8.5.0
+
+  steps:
+    - script:
+        name: listing dir
+        code: ls
+
+build-dev:
+  box: node:8.5.0
+
+  steps:
+    - script:
+        name: install dependencies
+        code: yarn && cd server && yarn && cd ..
+    - script:
+        name: run build - includes tests
+        code: yarn build-dev
+    - script:
+        name: copy files to the next pipeline and cleanup
+        code: |
+          cd $WERCKER_SOURCE_DIR
+          cp -r build internals package.json .git "$WERCKER_OUTPUT_DIR"
+
+build-prod:
+  box: node:8.5.0
+
+  steps:
+    - script:
+        name: install dependencies
+        code: yarn
+    - script:
+        name: run build - includes tests
+        code: yarn build
+    - script:
+        name: copy files to the next pipeline and cleanup
+        code: |
+          cd $WERCKER_SOURCE_DIR
+          cp -r build internals package.json .git "$WERCKER_OUTPUT_DIR"
+
+deploy-dev:
+  box: node:boron
+
+  steps:
+    - script:
+        name: upload new build to cdn & make file available publicly
+        code: |
+          cd /pipeline/source/build
+
+deploy-production:
+  box: node:boron
+  steps:
+    - script:
+        name: upload new build to cdn & make file available publicly
+        code: |
+          cd /pipeline/source/build
