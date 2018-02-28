@@ -42,8 +42,6 @@ deploy-dev:
   box: google/cloud-sdk:latest
 
   steps:
-    - add-ssh-key:
-        keyname: GCR_KEY
     - script:
         name: upload new build to cdn & make file available publicly
         code: |
