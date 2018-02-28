@@ -1,5 +1,23 @@
 /* @flow */
+/** @jsx h */
 
-import map from 'map/index.js'
+import { h, render } from 'preact'
+import TicketMap from './ticketmap'
 
-console.log(map)
+if (process.env.NODE_ENV === 'development') {
+  // Enable preact devtools
+  // eslint-disable-next-line import/no-unassigned-import
+  require('preact/devtools')
+}
+
+const root = document.getElementById(window._ticketEvolution.rootId)
+
+if (root) {
+  // $FlowFixMe
+  render(<TicketMap />, root, root.lastChild)
+}
+
+// Hot Module Replacement
+if (module.hot) {
+  module.hot.accept()
+}
