@@ -9,44 +9,189 @@
   "main": "index.js",
   "author": "BRAD LARSON",
   "license": "UNLICENSED",
+  "engines": {
+    "npm": ">=8"
+  },
+  "scripts": {
+    "analyze": "node ./internals/scripts/analyze.js",
+    "prebuild": "rm -rf ./build && yarn lint",
+    "parcel-build": "yarn clean-build && parcel build src/index.js --out-dir=./build",
+    "parcel": "parcel ./src/index.html --out-dir=./build",
+    "clean-build": "rm -rf ./build",
+    "format": "prettier-standard 'src/**/*.js' 'internals/**/*.js' 'server/**/*.js'",
+    "build": "yarn clean-build && cross-env NODE_ENV=production webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
+    "build-dev": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p",
+    "build:dll": "node ./internals/scripts/dependencies.js",
+    "start": "yarn && yarn build:dll && cross-env NODE_ENV=development node server",
+    "start:prod": "cross-env NODE_ENV=production node server",
+    "deploy:production": "yarn build && yarn start:prod",
+    "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
+    "lint": "standard",
+    "pretest": "yarn test:clean && yarn lint",
+    "test:clean": "rm -rf ./coverage",
+    "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
+    "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll"
+  },
+  "standard": {
+    "plugins": [
+      "flowtype"
+    ],
+    "parser": "babel-eslint",
+    "globals": [
+      "ga",
+      "afterEach",
+      "before",
+      "beforeAll",
+      "beforeEach",
+      "describe",
+      "expect",
+      "fetch",
+      "it",
+      "jest",
+      "require",
+      "sessionStorage",
+      "alert",
+      "FormData",
+      "XMLHttpRequest",
+      "Response",
+      "URL"
+    ],
+    "ignore": [
+      ".git/",
+      "node_modules/",
+      "flow-typed/",
+      "examples/"
+    ]
+  },
   "babel": {
     "presets": [
       [
         "env",
         {
-          "es2015": {
-            "modules": false
-          }
+          "modules": false
         }
       ],
-      "stage-0"
+      "stage-0",
+      "flow",
+      "preact"
+    ],
+    "plugins": [
+      [
+        "transform-class-properties"
+      ],
+      [
+        "transform-react-jsx",
+        {
+          "pragma": "h"
+        }
+      ]
     ],
     "env": {
       "production": {
-        "only": ["src"]
+        "only": [
+          "src"
+        ],
+        "plugins": [
+          "transform-react-remove-prop-types",
+          "transform-react-constant-elements"
+        ]
       },
       "test": {
-        "plugins": ["transform-es2015-modules-commonjs", "dynamic-import-node"]
+        "plugins": [
+          "transform-es2015-modules-commonjs",
+          "dynamic-import-node"
+        ]
       }
     }
   },
-  "scripts": {
-    "build-dev":
-      "NODE_ENV=development webpack --mode development --config internals/webpack/webpack.prod.babel.js",
-    "build":
-      "NODE_ENV=production webpack --mode production --config internals/webpack/webpack.prod.babel.js"
+  "dllPlugin": {
+    "path": "node_modules/seatmaps-dlls",
+    "exclude": [
+      "cross-env"
+    ],
+    "include": [
+      "core-js",
+      "preact"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 10,
+        "branches": 10,
+        "functions": 10,
+        "lines": 10
+      }
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/internals/testing/test-bundler.js",
+    "testRegex": "tests/.*\\.test\\.js$"
+  },
+  "dependencies": {
+    "preact": "8.2.7",
+    "preact-compat": "^3.18.0",
+    "unfetch": "^3.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "add-asset-html-webpack-plugin": "2.1.2",
+    "babel-cli": "6.26.0",
+    "babel-core": "6.26.0",
+    "babel-loader": "7.1.3",
+    "babel-plugin-dynamic-import-node": "1.2.0",
+    "babel-plugin-react-transform": "3.0.0",
+    "babel-plugin-styled-components": "1.5.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
+    "babel-plugin-transform-react-constant-elements": "6.23.0",
+    "babel-plugin-transform-react-inline-elements": "6.22.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.13",
+    "babel-polyfill": "6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-flow": "^6.23.0",
-    "babel-preset-stage-0": "^6.24.1",
-    "flow-bin": "^0.65.0",
-    "jest": "^22.2.2",
-    "prettier": "1.10.2",
-    "webpack": "^4.0.0-beta.1",
-    "webpack-cli": "^2.0.4"
+    "babel-preset-flow": "6.23.0",
+    "babel-preset-preact": "^1.1.0",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-0": "6.24.1",
+    "circular-dependency-plugin": "4.4.0",
+    "compression-webpack-plugin": "1.1.10",
+    "cross-env": "5.1.3",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
+    "eslint": "4.18.1",
+    "eslint-plugin-flowtype": "2.46.1",
+    "eventemitter3": "3.0.1",
+    "eventsource-polyfill": "0.9.6",
+    "exports-loader": "0.7.0",
+    "extract-text-webpack-plugin": "3.0.2",
+    "file-loader": "1.1.10",
+    "flow-bin": "0.66.0",
+    "html-loader": "0.5.5",
+    "html-webpack-plugin": "webpack-contrib/html-webpack-plugin",
+    "image-webpack-loader": "4.1.0",
+    "imports-loader": "0.8.0",
+    "jest-cli": "22.4.2",
+    "jest-styled-components": "5.0.0",
+    "json-loader": "0.5.7",
+    "lint-staged": "7.0.0",
+    "localStorage": "1.0.3",
+    "null-loader": "0.1.1",
+    "parcel-bundler": "^1.6.2",
+    "prettier-standard": "^8.0.0",
+    "shelljs": "0.8.1",
+    "standard": "11.0.0",
+    "style-loader": "0.20.2",
+    "stylelint": "9.1.1",
+    "stylelint-config-standard": "18.1.0",
+    "uglifyjs-webpack-plugin": "1.2.2",
+    "url-loader": "0.6.2",
+    "webpack": "4.0.1",
+    "webpack-cli": "2.0.9",
+    "webpack-dev-middleware": "2.0.6",
+    "webpack-hot-middleware": "2.21.1"
   }
 }

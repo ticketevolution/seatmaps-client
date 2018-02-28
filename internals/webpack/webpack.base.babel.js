@@ -35,14 +35,14 @@ module.exports = options => ({
                 quality: '65-90',
                 speed: 4
               },
+              optipng: {
+                optimizationLevel: 7
+              },
               mozjpeg: {
                 progressive: true
               },
               gifsicle: {
                 interlaced: false
-              },
-              optipng: {
-                optimizationLevel: 7
               }
             }
           }
@@ -53,42 +53,31 @@ module.exports = options => ({
         use: 'html-loader'
       },
       {
-        test: /\.json$/,
-        use: 'json-loader'
-      },
-      {
         test: /\.(mp4|webm)$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000
-          }
-        }
+        use: 'url-loader?limit=10000'
       }
     ]
   },
-  // plugins: options.plugins.concat([
-  //   new webpack.ProvidePlugin({
-  //     // make fetch available
-  //     fetch: 'exports-loader?self.fetch!whatwg-fetch'
-  //   }),
-  //   new webpack.DefinePlugin({
-  //     'process.env': {
-  //       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-  //       DEFAULT_HOST: JSON.stringify(process.env.DEFAULT_HOST)
-  //     }
-  //   })
-  // ]),
+  plugins: options.plugins.concat([
+    // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
+    // inside your code for any environment checks; UglifyJS will automatically
+    // drop any unreachable code.
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        API_ENDPOINT: JSON.stringify(process.env.API_ENDPOINT)
+      }
+    })
+  ]),
   resolve: {
+    alias: {
+      react: 'preact'
+    },
     modules: ['src', 'node_modules'],
-    extensions: ['.js'],
-    mainFields: ['browser', 'jsnext:main', 'main']
+    extensions: ['.js', '.jsx', '.json'],
+    mainFields: ['jsnext:main', 'main']
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
-  node: {
-    fs: 'empty',
-    net: 'empty'
-  },
   performance: options.performance || {}
 })

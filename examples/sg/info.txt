@@ -42,7 +42,7 @@ Dependencies:
   BACK_TO_PHONE: 'account/phone-number/back-to-phone',
   RESET: 'account/phone-number/reset'
 
->
+> Event Actions
   RESET: 'event/reset',
   SET_EVENT: 'event/event/set',
   SET_LOADED: 'event/loaded/set',
@@ -76,3 +76,116 @@ Dependencies:
   SET_USER_LISTINGS_FETCH_ERROR: 'event/userListings/error',
   SET_USER_LISTINGS: 'event/userListings/set',
   VECTOR_MAP_LOADED: 'event/vectorMap/loaded'
+
+> Delivery Actions
+  DELIVERY_METHOD_TYPE_SHIPPING: 'ship',
+  DELIVERY_METHOD_TYPE_ELECTRONIC: r,
+  DELIVERY_METHOD_TYPE_INSTANT: o,
+  DELIVERY_METHOD_TYPE_WILLCALL: 'willcall',
+  DELIVERY_METHOD_TYPE_PICKUP: 'pickup'
+
+> Checkout actions
+  INIT: 'checkout/bootstrap/init',
+  SET_STATIC_DATA: 'checkout/bootstrap/static-data/set',
+  BOOTSTRAP_SUCCESS: 'checkout/bootstrap/success',
+  SET_USER_DATA: 'checkout/bootstrap/user/set',
+  BOOTSTRAP_ERROR: 'checkout/bootstrap/error',
+  SET_MARKETS: 'checkout/markets/set',
+  SET_SUMMARY: 'checkout/summary/set',
+  SUMMARY_LOADING: 'checkout/summary/loading',
+  SET_STEP: 'checkout/step/set',
+  REMOVE_STEP: 'checkout/step/remove',
+  GO_TO_NEXT_STEP: 'checkout/step/next',
+  GO_TO_PREV_STEP: 'checkout/step/prev',
+  SET_CONTACT_INFO: 'checkout/contact/form/set',
+  UPDATE_CONTACT_INFO: 'checkout/contact/form/update',
+  SET_CONTACT_FORM_ERRORS: 'checkout/contact/form/error',
+  RESET: 'checkout/reset/hard',
+  SOFT_RESET: 'checkout/reset/soft',
+  SET_EXTERNAL_ERRORS: 'checkout/errors/external/set',
+  CLEAR_EXTERNAL_ERROR: 'checkout/errors/external/clear',
+  SET_FULLSCREEN_ERROR: 'checkout/errors/fullscreen/set',
+  SET_LOGIN_REQUIRED: 'checkout/errors/login-required',
+  SET_QUANTITY: 'checkout/quantity/set',
+  SET_SEAT_OPTION: 'checkout/seat-option/set',
+  SET_PAYMENT_METHOD: 'checkout/payment-method/set',
+  SET_SPREEDLY_PAYMENT_METHOD: 'checkout/payment-method/spreedly/set',
+  SET_DELIVERY_METHOD: 'checkout/delivery-method/set',
+  SET_SHIPPING_ADDRESS: 'checkout/shipping-address/set',
+  SET_SHIP_TO_BILLING_ADDRESS: 'checkout/ship-to-billing/set',
+  INIT_PURCHASE: 'checkout/purchase/init',
+  PURCHASE_LOADING: 'checkout/purchase/loading',
+  PURCHASE_SUCCESS: 'checkout/purchase/success',
+  PURCHASE_FLOW_EXIT: 'checkout/purchase/exit',
+  SET_PURCHASE: 'checkout/purchase/set',
+  SHOW_CVV_FORM: 'checkout/purchase/cvv/show',
+  UPDATE_CVV: 'checkout/purchase/cvv/update',
+  SUBMIT_CVV: 'checkout/purchase/cvv/submit',
+  LISTING_NOT_AVAILABLE: 'checkout/purchase/error/listing-not-available',
+  LOAD_CART: 'checkout/cart/load',
+  SET_APPLE_PAY_ENABLED: 'checkout/apple-pay/set/enabled',
+  SET_IS_APPLE_PAYING: 'checkout/apple-pay/paying/set',
+  SET_APPLE_PAY_DATA: 'checkout/apple-pay/data/set',
+  SET_PROMO_CODE: 'checkout/promo-code/set',
+  SET_PRICE_TYPES: 'checkout/price-types/set'
+
+> Partner Actions
+  FETCHING_INITIAL_LIST: 'buzzfeed/initial-list/fetch',
+  SET_EVENTS_LIST: 'buzzfeed/events/set',
+  SET_FETCH_ERROR: 'buzzfeed/error/set',
+  SET_CATEGORIES: 'buzzfeed/categories/set',
+  FETCHING_MORE_EVENTS: 'buzzfeed/more-events/fetch',
+  UPDATE_EVENTS: 'buzzfeed/events/update',
+  SET_NO_DATA: 'buzzfeed/initial-list/empty',
+  LOCATION_CHANGED: 'buzzfeed/location/update',
+  SET_LOCATION_NAME: 'buzzfeed/location/display-name/set',
+  SET_NO_CATEGORIES: 'buzzfeed/categories/empty',
+  OUTER_LIST_SHOW_ACTION: 'buzzfeed/list/show/action'
+
+> Promo Codes
+  RESET: 'promocodes/reset',
+  SET_PROMO_CODE: 'promocodes/set',
+  SET_PROMO_CODES: 'promocodes/set/list',
+  LOADING: 'promocodes/loading',
+  SET_MODE: 'promocodes/set/mode',
+  RECEIVE_APPLY_SUCCESS: 'promocodes/receive/apply/success',
+  RECEIVE_APPLY_ERROR: 'promocodes/receive/apply/error',
+  RECEIVE_CODES_SUCCESS: 'promocodes/receive/codes/success',
+  RECEIVE_CODES_ERROR: 'promocodes/receive/codes/error',
+  FORM_RESET: 'promocodes/form/reset'
+
+> Shipping Address
+  RESET: 'shipping-address/reset',
+  FETCH_SHIPPING_ADDRESSES: 'shipping-address/fetch',
+  SET_SHIPPING_ADDRESSES: 'shipping-address/set',
+  EDIT_SHIPPING_ADDRESS: 'shipping-address/edit',
+  ADD_SHIPPING_ADDRESS: 'shipping-address/add',
+  REMOVE_SHIPPING_ADDRESS: 'shipping-address/remove',
+  UPDATE_SUCCESS: 'shipping-address/update/success',
+  UPDATE_LOADING: 'shipping-address/update/loading',
+  UPDATE_FORM: 'shipping-address/form/update',
+  RESET_FORM: 'shipping-address/form/reset',
+  RESET_DEFAULT_ADDRESS: 'shipping-address/default/reset',
+  SET_FORM_ERRORS: 'shipping-address/form/errors/set',
+  SET_FORM_VISIBILITY: 'shipping-address/form/visibility/set',
+  SUBMIT_SHIPPING_FORM: 'shipping-address/form/submit'
+
+> Ticket Transfer
+  SEARCH_INTENT_CHANGED: 'transfer-init/search/update',
+  SEARCH_RESULTS_RECEIVED: 'transfer-init/search/success',
+  CACHE_SEARCH_RESULTS: 'transfer-init/search/cache',
+  SELECT_RECIPIENT: 'transfer-init/recipient/select',
+  BACK_TO_RECIPIENT_VIEW: 'transfer-init/recipient/view',
+  SET_QUANTITY: 'transfer-init/quantity/set',
+  UPDATE_PRICE: 'transfer-in  it/price/update',
+  TRANSFER_SENDING: 'transfer-init/send/init',
+  TRANSFER_SEND_SUCCESS: 'transfer-init/send/success',
+  TRANSFER_SEND_ERROR: 'transfer-init/send/error',
+  FETCHING_PRETRANSFER_INFO: 'transfer-init/info/fetch',
+  SET_PRETRANSFER_INFO: 'transfer-init/info/set',
+  PRETRANSFER_INFO_ERROR: 'transfer-init/info/error',
+  SET_SEAT_SELECTION: 'transfer-init/seats/set',
+  RESET: 'transfer-init/form/reset',
+  CANCEL_REQUEST: 'transfer-init/cancel/request',
+  CANCEL_SUCCESS: 'transfer-init/cancel/success',
+  CANCEL_ERROR: 'transfer-init/cancel/error'
