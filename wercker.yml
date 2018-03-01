@@ -49,9 +49,9 @@ deploy-dev:
           gcloud auth activate-service-account --key-file=keyfile.json
           cd /pipeline/source/build
           sudo apt-get --yes install curl
-          curl -X POST --upload-file `grep -l main *.js` -H "Authorization: Bearer `gcloud auth print-access-token`" -H "Content-Type: text/javascript" "https://www.googleapis.com/upload/storage/v1/b/ticketevolution/seatmaps-dev/o?uploadType=media&name=main.js"
+          curl -X POST --upload-file `grep -l ./ *.js` -H "Authorization: Bearer `gcloud auth print-access-token`" -H "Content-Type: text/javascript" "https://www.googleapis.com/upload/storage/v1/b/ticketevolution-dev/o?uploadType=media&name=main.js"
           cd $WERCKER_SOURCE_DIR
-          curl -X POST --data-binary @internals/scripts/gcloud/public.json -H "Authorization: Bearer `gcloud auth print-access-token`" -H "Content-Type: application/json" "https://www.googleapis.com/storage/v1/b/ticketevolution/seatmaps-dev/o/main.js/acl"
+          curl -X POST --data-binary @internals/scripts/gcloud/public.json -H "Authorization: Bearer `gcloud auth print-access-token`" -H "Content-Type: application/json" "https://www.googleapis.com/storage/v1/b/ticketevolution-dev/o/main.js/acl"
 
 deploy-production:
   box: node:boron
