@@ -54,14 +54,16 @@ deploy-dev:
           curl -X POST --data-binary @internals/scripts/gcloud/public.json -H "Authorization: Bearer `gcloud auth print-access-token`" -H "Content-Type: application/json" "https://www.googleapis.com/storage/v1/b/ticketevolution-dev/o/main.js/acl"
 
 deploy-production:
-  box: node:boron
+  box: google/cloud-sdk:latest
+
   steps:
-    - edgecaseadmin/install-aws-cli:
-        key: $AWS_KEY
-        secret: $AWS_SECRET
-        region: $AWS_REGION
     - script:
         name: upload new build to cdn & make file available publicly
         code: |
+          echo -E "$GCR_JSON_KEY_FILE" > keyfile.json
+          gcloud auth activate-service-account --key-file=keyfile.json
           cd /pipeline/source/build
-          # aws s3 cp artifact.tar.gz s3://ticketevolution/maps.js
+          sudo apt-get --yes install curl
+          curl -X POST --upload-file `grep -l ./ *.js` -H "Authorization: Bearer `gcloud auth print-access-token`" -H "Content-Type: text/javascript" "https://www.googleapis.com/upload/storage/v1/b/ticketevolution/o?uploadType=media&name=main.js"
+          cd $WERCKER_SOURCE_DIR
+          curl -X POST --data-binary @internals/scripts/gcloud/public.json -H "Authorization: Bearer `gcloud auth print-access-token`" -H "Content-Type: application/json" "https://www.googleapis.com/storage/v1/b/ticketevolution/o/main.js/acl"
