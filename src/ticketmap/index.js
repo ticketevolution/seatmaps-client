@@ -15,16 +15,18 @@ type Props = {
 export default class TicketMap extends Component<Props, State> {
   state: State
 
-  constructor (props: any) {
+  constructor(props: any) {
     super(props)
     this.state = {
       mapSvg: ''
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     fetch(
-      'https://storage.googleapis.com/ticketevolution/maps/110_8888881.svg'
+      'https://storage.googleapis.com/ticketevolution/maps/' +
+        window._ticketEvolution.ticketMapId +
+        '.svg'
     ).then(response =>
       response.text().then(text => {
         if (response.ok) {
@@ -36,11 +38,9 @@ export default class TicketMap extends Component<Props, State> {
     )
   }
 
-  render () {
-    console.log('log:', this.state.mapSvg)
+  render() {
     return (
       <div>
-        <div>testin!</div>
         <div dangerouslySetInnerHTML={{ __html: this.state.mapSvg }} />
       </div>
     )
