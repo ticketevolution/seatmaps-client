@@ -20,6 +20,7 @@ A client side JavaScript plugin that enables users to view seatmaps with availab
   window._ticketEvolution = {
     accessToken: '<access_token>',
     apiVersion: '11',
+    ticketMapId: '110_8888881',
     rootId: 'root'
   }
 </script>
@@ -49,6 +50,10 @@ window._ticketEvolution = {
   // Access Token found in your Ticket Evolution settings
   //  allowing you to utilize the client library
   accessToken: '<access_token>',
+
+  // Ticket Map ID List
+  // can be found in your Tevo Settings
+  ticketMapId: '110_8888881',
 
   // Api Version to be utilized
   apiVersion: '11',
