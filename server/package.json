@@ -7,9 +7,9 @@
   "license": "UNLICENSED",
   "dependencies": {
     "body-parser": "1.18.2",
-    "chalk": "2.3.1",
+    "chalk": "2.3.2",
     "compression": "1.7.2",
-    "express": "4.16.2",
+    "express": "4.16.3",
     "ip": "1.1.5",
     "minimist": "1.2.0"
   }
