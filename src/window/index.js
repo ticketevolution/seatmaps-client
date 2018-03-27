@@ -1,0 +1,2 @@
+declare var TicketEvolutionWindow
+export default window._ticketEvolution

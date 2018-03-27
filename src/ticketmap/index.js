@@ -4,6 +4,9 @@
 import { h, Component } from 'preact'
 import fetch from 'unfetch'
 import panzoom from 'panzoom'
+import { Spinner } from 'spin.js'
+import TicketEvolutionWindow from 'window'
+import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 
 type State = {
   mapSvg: string,
@@ -18,53 +21,77 @@ type Props = {
 
 export default class TicketMap extends Component<Props, State> {
   state: State
+  tevoWindow = TicketEvolutionWindow
+  spinnerContainer = null
+  spinner = null
+  mapZoom: any = null
 
-  constructor (props: any) {
+  constructor(props: any) {
     super(props)
     this.state = {
       mapSvg: '',
       ticketList: '',
       availableSections: [],
-      unavailableSections: []
+      unavailableSections: [],
+      isMapLoaded: false
     }
   }
 
-  componentDidMount () {
-    // Should be API call to receive available ticket list for event
-    // if a map is specified, load it, otherwise load the default (Lakers old court for now)
-    const mapURL = window._ticketEvolution.ticketMapId
-      ? 'https://storage.googleapis.com/ticketevolution/maps/' +
-        window._ticketEvolution.ticketMapId +
-        '.svg'
-      : 'https://storage.googleapis.com/ticketevolution/maps/196_2656.svg'
+  componentDidMount() {
+    // show spinner until map is loaded
+    this.spinner = new Spinner({
+      lines: 10, // The number of lines to draw
+      speed: 2, // Rounds per second
+      className: 'spinner', // The CSS class to assign to the spinner
+      top: '150px', // Top position relative to parent
+      left: '50%', // Left position relative to parent
+      position: 'relative' // Element positioning
+    }).spin(document.getElementById('mapRoot'))
 
+    const mapURL = this.tevoWindow.venueId
+      ? 'https://storage.googleapis.com/ticketevolution/maps/' +
+        this.tevoWindow.venueId +
+        '.svg'
+      : 'https://storage.googleapis.com/ticketevolution/maps/not_available.svg'
     fetch(mapURL)
       .then(response =>
         response.text().then(mapHtmlString => {
           if (response.ok) {
-            document
-              .getElementById('mapRoot')
-              .insertAdjacentHTML('afterbegin', mapHtmlString)
+            let mapRoot = document.getElementById('mapRoot')
+            if (mapRoot) {
+              mapRoot.innerHTML = mapHtmlString
+            }
+          } else {
+            throw Error(
+              'There was an error with your request, please try again'
+            )
           }
         })
       )
       .then(() => {
-        return fetch(
-          'https://storage.googleapis.com/ticketevolution/ticketList.json'
-        ).then(response => {
-          response.json().then(json => {
-            if (response.ok) {
-              this.setState({
-                ticketList: json,
-                availableSections: json.filteredTickets.map(
-                  list => list.section
-                )
-              })
-            }
-          })
-        })
+        // check if a width is set in the config
+        if (this.tevoWindow.containerWidth) {
+          const mapWidth = this.tevoWindow.containerWidth - 30
+          const mapSvg = document.querySelector('#mapRoot > svg')
+          if (mapSvg && mapSvg.attributes.length) {
+            mapSvg.setAttribute('width', `${mapWidth}`)
+            mapSvg.setAttribute(
+              'height',
+              `${parseInt(mapSvg.attributes.getNamedItem('height').nodeValue) *
+                (mapWidth /
+                  parseInt(
+                    mapSvg.attributes.getNamedItem('height').nodeValue
+                  ))}`
+            )
+          }
+        }
       })
-      .then(() => this.setupMap())
+      .then(() => {
+        if (this.tevoWindow.venueId) {
+          this.setupMap()
+        }
+      })
+      .catch(e => console.log('Message: ', e))
   }
 
   /*
@@ -75,14 +102,13 @@ export default class TicketMap extends Component<Props, State> {
       - fontFamily (only)
   */
 
-  setupMap () {
+  setupMap() {
     // set font
     const rootElement = document && document.getElementById('rootElement')
     document
       .querySelectorAll('#rootElement text')
       .forEach(
-        elem =>
-          (elem.style.fontFamily = `${window._ticketEvolution.mapFontFamily}`)
+        elem => (elem.style.fontFamily = `${this.tevoWindow.mapFontFamily}`)
       )
 
     // set color scheme
@@ -111,70 +137,54 @@ export default class TicketMap extends Component<Props, State> {
           '#0d7374'
         ].includes(fillColor)
       ) {
-        if (window._ticketEvolution.primaryTicketColor.length) {
-          elem.setAttribute('fill', window._ticketEvolution.primaryTicketColor)
+        if (this.tevoWindow.primaryTicketFill.length) {
+          elem.setAttribute('fill', this.tevoWindow.primaryTicketFill)
         }
       }
       switch (fillColor) {
         // unavailable
         case '#9E9E9E':
-          if (window._ticketEvolution.unavailableTicketColor.length) {
-            elem.setAttribute(
-              'fill',
-              window._ticketEvolution.unavailableTicketColor
-            )
+          if (this.tevoWindow.emptySectionFill.length) {
+            elem.setAttribute('fill', this.tevoWindow.emptySectionFill)
           }
       }
     })
 
     // add hover styling, which includes tooltip
-
-    document &&
-      rootElement &&
-      rootElement.addEventListener(
-        'mouseover',
-        ({ target }: SyntheticInputEvent<*>) => {
-          const fillColor = target.attributes.getNamedItem('fill')
-          const strokeColor = target.attributes.getNamedItem('stroke')
-          if (fillColor && strokeColor) {
-            // ensure we're hovering over a section && the section isn't selected
-            if (
-              ['#7ddaff'].includes(fillColor.nodeValue) &&
-              strokeColor.nodeValue !== '#0125AC'
-            ) {
-              return target.setAttribute(
-                'fill',
-                window._ticketEvolution.hoverTicketColor
-              )
-            }
+    rootElement &&
+      rootElement.addEventListener('mouseover', ({ target }: any) => {
+        const fillColor = target.attributes.getNamedItem('fill')
+        const strokeColor = target.attributes.getNamedItem('stroke')
+        if (fillColor && strokeColor) {
+          // ensure we're hovering over a section && the section isn't selected
+          if (
+            ['#7ddaff'].includes(fillColor.nodeValue) &&
+            strokeColor.nodeValue !== '#0125AC'
+          ) {
+            return target.setAttribute('fill', this.tevoWindow.hoverTicketFill)
           }
         }
-      )
+      })
 
     // hover cleanup
-    document
-      .getElementById('rootElement')
-      .addEventListener('mouseout', ({ target }: SyntheticInputEvent<*>) => {
+    rootElement &&
+      rootElement.addEventListener('mouseout', ({ target }: any) => {
         const fillColor = target.attributes.getNamedItem('fill')
         const strokeColor = target.attributes.getNamedItem('stroke')
         // ensure we're hovering over a section && the section isn't selected
         if (fillColor && strokeColor) {
           if (
-            fillColor.nodeValue === window._ticketEvolution.hoverTicketColor &&
+            fillColor.nodeValue === this.tevoWindow.hoverTicketFill &&
             strokeColor.nodeValue !== '#0125AC'
           ) {
-            target.setAttribute(
-              'fill',
-              window._ticketEvolution.primaryTicketColor
-            )
+            target.setAttribute('fill', this.tevoWindow.primaryTicketFill)
           }
         }
       })
 
     // activate/deactivate section
-    document
-      .getElementById('rootElement')
-      .addEventListener('click', ({ target }: SyntheticInputEvent<*>) => {
+    rootElement &&
+      rootElement.addEventListener('click', ({ target }: any) => {
         const fillColor = target.attributes.getNamedItem('fill')
 
         if (fillColor) {
@@ -182,8 +192,8 @@ export default class TicketMap extends Component<Props, State> {
           if (fillColor !== '#6f6f6f') {
             if (
               [
-                window._ticketEvolution.primaryTicketColor,
-                window._ticketEvolution.selectedTicketColor
+                this.tevoWindow.primaryTicketFill,
+                this.tevoWindow.selectedTicketFill
               ].includes(fillColor.nodeValue)
             ) {
               const isSectionSelected =
@@ -191,8 +201,8 @@ export default class TicketMap extends Component<Props, State> {
               target.setAttribute(
                 'fill',
                 isSectionSelected
-                  ? window._ticketEvolution.primaryTicketColor
-                  : window._ticketEvolution.selectedTicketColor
+                  ? this.tevoWindow.primaryTicketFill
+                  : this.tevoWindow.selectedTicketFill
               )
               target.setAttribute(
                 'stroke-width',
@@ -208,101 +218,96 @@ export default class TicketMap extends Component<Props, State> {
       })
 
     // Setup Zoom on Map
-    panzoom(document.getElementById('rootElement'), {
-      zoomSpeed: 0.1,
-      zoomDoubleClickSpeed: 3,
-      maxZoom: 10,
-      minZoom: 1
+    this.mapZoom = svgPanZoom('#mapRoot > svg', {
+      zoomScaleSensitivity: 0.3,
+      minZoom: 1,
+      maxZoom: 10
     })
   }
 
-  zoom (isZoomIn?: boolean) {
-    let mapElement = document.getElementById('mapRoot')
-    if (mapElement) {
-      const currentZoom = parseFloat(mapElement.style.zoom)
-
-      if (isZoomIn) {
-        if (currentZoom) {
-          mapElement.style.zoom = currentZoom + 0.6
-        } else {
-          mapElement.style.zoom = 1.6
-        }
-      } else {
-        if (currentZoom && currentZoom > 1) {
-          mapElement.style.zoom = currentZoom - 0.6
-        }
-      }
-    }
+  renderHomeIcon() {
+    return (
+      <svg
+        version="1.0"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 200 200"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <g
+          transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)"
+          fill="#007879"
+          stroke="none"
+        >
+          <path
+            d="M666 1864 c-93 -20 -176 -56 -257 -110 -71 -47 -188 -164 -214 -214
+      l-16 -31 -54 30 c-44 25 -59 29 -79 21 -14 -5 -28 -20 -31 -33 -6 -22 93 -481
+      115 -534 13 -31 46 -38 78 -17 26 17 341 308 375 346 21 25 22 61 2 78 -8 7
+      -45 14 -82 17 -105 8 -106 12 -36 81 234 229 615 185 795 -92 98 -151 106
+      -352 20 -521 -34 -68 -153 -184 -224 -218 -162 -77 -342 -71 -494 18 -23 14
+      -47 25 -53 25 -6 0 -45 -26 -86 -58 -97 -75 -99 -91 -13 -149 233 -158 553
+      -166 802 -21 l48 29 217 -214 c119 -118 226 -220 238 -226 34 -17 119 -13 161
+      8 42 22 70 50 101 101 23 39 29 126 10 163 -6 12 -115 123 -242 248 l-231 225
+      22 67 c82 250 38 510 -121 713 -93 118 -234 213 -377 254 -101 29 -279 36
+      -374 14z"
+          />
+        </g>
+      </svg>
+    )
   }
 
-  render () {
+  render() {
+    const buttonStyle = {
+      width: '40px',
+      background: '#fff',
+      color: '#007879',
+      border: '1px solid #ccc',
+      borderRadius: '8px',
+      display: 'block',
+      textAlign: 'center',
+      fontSize: '24px',
+      textDecoration: 'none',
+      fontWeight: '500',
+      cursor: 'pointer'
+    }
     return (
-      <div style={{ width: '100%', display: 'flex' }}>
+      <div
+        style={{
+          width: `${this.tevoWindow.containerWidth}px`,
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        <div
+          ref={spinnerContainer => (this.spinnerContainer = spinnerContainer)}
+        />
         <div
           style={{
-            position: 'relative',
-            float: 'right',
-            display: 'inline-block'
+            display: 'flex'
           }}
         >
-          <div
-            style={{
-              width: '30px',
-              zIndex: '10',
-              borderRadius: '2px',
-              boxShadow: '0 1px 2px rgba(0,0,0,.1)'
-            }}
-          >
-            <a
-              onClick={() => this.zoom(true)}
-              style={{
-                background: '#fff',
-                color: '#1673e6',
-                border: '1px solid #ccc',
-                display: 'block',
-                textAlign: 'center',
-                padding: '7px 0',
-                fontSize: '17px',
-                textDecoration: 'none',
-                fontWeight: '500',
-                transition: '.2s',
-                borderRadius: '2px 2px 0 0',
-                cursor: 'pointer'
-              }}
-            >
-              +
-            </a>
-            <a
-              onClick={() => this.zoom()}
-              style={{
-                background: '#fff',
-                color: '#1673e6',
-                border: '1px solid #ccc',
-                display: 'block',
-                textAlign: 'center',
-                padding: '7px 0',
-                fontSize: '17px',
-                textDecoration: 'none',
-                fontWeight: '500',
-                transition: '.2s',
-                borderRadius: '2px 2px 0 0',
-                cursor: 'pointer'
-              }}
-            >
-              ‐
-            </a>
-          </div>
+          <a onClick={() => this.mapZoom.zoomIn()} style={buttonStyle}>
+            +
+          </a>
+          <a onClick={() => this.mapZoom.zoomOut()} style={buttonStyle}>
+            ‐
+          </a>
+          <a style={buttonStyle} onClick={() => this.mapZoom.reset()}>
+            {this.renderHomeIcon()}
+          </a>
         </div>
         <div
           id={'mapRoot'}
           style={{
-            cursor: '-webkit-grab'
+            cursor: '-webkit-grab',
+            width: this.tevoWindow.containerWidth
           }}
         />
         {/* Array of Selected Sections // Array of Unavailable Sections */}
         <div>
           <div>Available Sections: </div>
-          <ul className='list--tags'>
+          <ul className="list--tags">
             {this.state.availableSections.map((item, i) => (
               <li key={i}>{item}</li>
             ))}
