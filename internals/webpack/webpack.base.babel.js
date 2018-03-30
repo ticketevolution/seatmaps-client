@@ -69,6 +69,7 @@ module.exports = options => ({
       }
     })
   ]),
+  mode: 'development' || options.mode,
   resolve: {
     alias: {
       react: 'preact'

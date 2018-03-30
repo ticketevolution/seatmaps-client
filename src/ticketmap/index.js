@@ -3,16 +3,38 @@
 
 import { h, Component } from 'preact'
 import fetch from 'unfetch'
-import panzoom from 'panzoom'
 import { Spinner } from 'spin.js'
 import TicketEvolutionWindow from 'window'
+import Toggle from 'react-toggled'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
+const buttonStyle = {
+  width: '40px',
+  background: '#fff',
+  color: '#007879',
+  border: '1px solid #ccc',
+  borderRadius: '8px',
+  display: 'block',
+  textAlign: 'center',
+  fontSize: '24px',
+  textDecoration: 'none',
+  fontWeight: '500',
+  cursor: 'pointer'
+}
+
+const toggleText = {
+  padding: '0 5px',
+  fontFamily: 'sans-serif',
+  fontSize: '14px'
+}
 
 type State = {
   mapSvg: string,
-  ticketList: any,
+  venueConfiguration: any,
   availableSections: Array<String>,
-  unavailableSections: Array<String>
+  unavailableSections: Array<String>,
+  selectedSections: Array<String>,
+  isZoneToggled: boolean,
+  currentHoveredZone: string
 }
 
 type Props = {
@@ -25,16 +47,21 @@ export default class TicketMap extends Component<Props, State> {
   spinnerContainer = null
   spinner = null
   mapZoom: any = null
+  mouseOutTimeout: any
 
   constructor(props: any) {
     super(props)
     this.state = {
       mapSvg: '',
-      ticketList: '',
+      venueConfiguration: null,
       availableSections: [],
       unavailableSections: [],
-      isMapLoaded: false
+      selectedSections: [],
+      isMapLoaded: false,
+      isZoneToggled: true,
+      currentHoveredZone: ''
     }
+    this.mouseOutTimeout
   }
 
   componentDidMount() {
@@ -69,6 +96,19 @@ export default class TicketMap extends Component<Props, State> {
         })
       )
       .then(() => {
+        return fetch(
+          'https://storage.googleapis.com/ticketevolution/venueConfiguration.json'
+        ).then(response => {
+          response.json().then(json => {
+            if (response.ok) {
+              this.setState({
+                venueConfiguration: json
+              })
+            }
+          })
+        })
+      })
+      .then(() => {
         // check if a width is set in the config
         if (this.tevoWindow.containerWidth) {
           const mapWidth = this.tevoWindow.containerWidth - 30
@@ -94,14 +134,6 @@ export default class TicketMap extends Component<Props, State> {
       .catch(e => console.log('Message: ', e))
   }
 
-  /*
-      G - Zones
-      Paths - Sections
-      Desc - Tooltip Text
-      Text
-      - fontFamily (only)
-  */
-
   setupMap() {
     // set font
     const rootElement = document && document.getElementById('rootElement')
@@ -111,57 +143,97 @@ export default class TicketMap extends Component<Props, State> {
         elem => (elem.style.fontFamily = `${this.tevoWindow.mapFontFamily}`)
       )
 
-    // set color scheme
     document.querySelectorAll('#rootElement path').forEach(elem => {
-      const fillColor = elem.attributes.getNamedItem('fill').nodeValue
-      // primary (multiple primary cases here, should be removed once maps are standardized)
-      if (
-        [
-          '#1f6b6b',
-          '#067677',
-          '#007879',
-          '#156f6f',
-          '#1f6b6b',
-          '#176e6e',
-          '#0c7374',
-          '#0a7475',
-          '#226a69',
-          '#047778',
-          '#0b7475',
-          '#117172',
-          '#1d6c6c',
-          '#117171',
-          '#097576',
-          '#147070',
-          '#077677',
-          '#0d7374'
-        ].includes(fillColor)
-      ) {
-        if (this.tevoWindow.primaryTicketFill.length) {
-          elem.setAttribute('fill', this.tevoWindow.primaryTicketFill)
+      const elemFill = elem.attributes.getNamedItem('fill')
+      if (elemFill) {
+        const fillColor = elemFill.nodeValue
+
+        switch (fillColor) {
+          // unavailable
+          case '#9E9E9E':
+            if (this.tevoWindow.emptySectionFill.length) {
+              elem.setAttribute('fill', this.tevoWindow.emptySectionFill)
+            }
+            break
+          case '#666':
+            if (this.tevoWindow.primaryTicketFill.length) {
+              elem.setAttribute('fill', this.tevoWindow.primaryTicketFill)
+            }
+            break
         }
       }
-      switch (fillColor) {
-        // unavailable
-        case '#9E9E9E':
-          if (this.tevoWindow.emptySectionFill.length) {
-            elem.setAttribute('fill', this.tevoWindow.emptySectionFill)
-          }
+    })
+
+    // set color scheme for groups
+    document.querySelectorAll('#rootElement g').forEach(elem => {
+      const elemFill = elem.attributes.getNamedItem('fill')
+      if (elemFill) {
+        const fillColor = elemFill.nodeValue
+
+        switch (fillColor) {
+          // unavailable
+          case '#9E9E9E':
+            if (this.tevoWindow.emptySectionFill.length) {
+              elem.setAttribute('fill', this.tevoWindow.emptySectionFill)
+            }
+            break
+          case '#666':
+            if (this.tevoWindow.primaryTicketFill.length) {
+              elem.setAttribute('fill', this.tevoWindow.primaryTicketFill)
+            }
+            break
+        }
       }
     })
 
     // add hover styling, which includes tooltip
     rootElement &&
       rootElement.addEventListener('mouseover', ({ target }: any) => {
-        const fillColor = target.attributes.getNamedItem('fill')
-        const strokeColor = target.attributes.getNamedItem('stroke')
-        if (fillColor && strokeColor) {
-          // ensure we're hovering over a section && the section isn't selected
-          if (
-            ['#7ddaff'].includes(fillColor.nodeValue) &&
-            strokeColor.nodeValue !== '#0125AC'
-          ) {
+        if (this.isSectionOrZone(target.id)) {
+          if (this.state.isZoneToggled) {
+            this.setAttrOnTargetedObjects(
+              target.id,
+              this.tevoWindow.hoverTicketFill,
+              'fill'
+            )
+            if (
+              this.state.currentHoveredZone ===
+              this.state.venueConfiguration.sectionZoneMetas[target.id].zid
+            ) {
+              clearTimeout(this.mouseOutTimeout)
+            }
+            this.setState({
+              currentHoveredZone: this.state.venueConfiguration
+                .sectionZoneMetas[target.id].zid
+            })
+          } else {
             return target.setAttribute('fill', this.tevoWindow.hoverTicketFill)
+          }
+          // check if the parent has an id in the section configuration
+        } else if (this.isSectionOrZone(target.parentNode.id)) {
+          if (this.state.isZoneToggled) {
+            this.setAttrOnTargetedObjects(
+              target.parentNode.id,
+              this.tevoWindow.hoverTicketFill,
+              'fill'
+            )
+            if (
+              this.state.currentHoveredZone ===
+              this.state.venueConfiguration.sectionZoneMetas[
+                target.parentNode.id
+              ].zid
+            ) {
+              clearTimeout(this.mouseOutTimeout)
+            }
+            this.setState({
+              currentHoveredZone: this.state.venueConfiguration
+                .sectionZoneMetas[target.parentNode.id].zid
+            })
+          } else {
+            return target.parentNode.setAttribute(
+              'fill',
+              this.tevoWindow.hoverTicketFill
+            )
           }
         }
       })
@@ -169,35 +241,236 @@ export default class TicketMap extends Component<Props, State> {
     // hover cleanup
     rootElement &&
       rootElement.addEventListener('mouseout', ({ target }: any) => {
-        const fillColor = target.attributes.getNamedItem('fill')
-        const strokeColor = target.attributes.getNamedItem('stroke')
-        // ensure we're hovering over a section && the section isn't selected
-        if (fillColor && strokeColor) {
+        this.mouseOutTimeout = setTimeout(() => {
+          const fillColor = target.attributes.getNamedItem('fill')
+          const parentColor = target.parentNode.attributes.getNamedItem('fill')
+
           if (
-            fillColor.nodeValue === this.tevoWindow.hoverTicketFill &&
-            strokeColor.nodeValue !== '#0125AC'
+            this.isSectionOrZone(target.id) &&
+            !this.state.selectedSections.includes(target.id)
           ) {
-            target.setAttribute('fill', this.tevoWindow.primaryTicketFill)
+            if (this.state.isZoneToggled) {
+              this.setAttrOnTargetedObjects(
+                target.id ? target.id : target.parentNode.id,
+                this.tevoWindow.primaryTicketFill,
+                'fill'
+              )
+            } else {
+              if (fillColor) {
+                if (fillColor.nodeValue === this.tevoWindow.hoverTicketFill) {
+                  target.setAttribute('fill', this.tevoWindow.primaryTicketFill)
+                }
+              }
+            }
+          } else if (
+            this.isSectionOrZone(target.parentNode.id) &&
+            !this.state.selectedSections.includes(target.parentNode.id)
+          ) {
+            if (parentColor) {
+              if (this.state.isZoneToggled) {
+                if (parentColor.nodeValue === this.tevoWindow.hoverTicketFill) {
+                  this.setAttrOnTargetedObjects(
+                    target.parentNode.id,
+                    this.tevoWindow.primaryTicketFill,
+                    'fill'
+                  )
+                }
+              } else {
+                if (parentColor.nodeValue === this.tevoWindow.hoverTicketFill) {
+                  target.parentNode.setAttribute(
+                    'fill',
+                    this.tevoWindow.primaryTicketFill
+                  )
+                }
+              }
+            }
           }
-        }
+        }, 20)
       })
 
     // activate/deactivate section
     rootElement &&
       rootElement.addEventListener('click', ({ target }: any) => {
         const fillColor = target.attributes.getNamedItem('fill')
+        const parentColor = target.parentNode.attributes.getNamedItem('fill')
 
-        if (fillColor) {
-          // don't want to select an unavailable section
-          if (fillColor !== '#6f6f6f') {
+        // check that we're clicking on a section, and that the section is not
+        // currently unavailable
+        if (this.state.isZoneToggled) {
+          if (this.isSectionOrZone(target.id)) {
+            if (fillColor) {
+              if (
+                [
+                  this.tevoWindow.primaryTicketFill,
+                  this.tevoWindow.selectedTicketFill,
+                  this.tevoWindow.hoverTicketFill
+                ].includes(fillColor.nodeValue) &&
+                fillColor.nodeValue !== '#6f6f6f'
+              ) {
+                // don't want to select an unavailable section
+                const isSectionSelected = this.state.selectedSections.includes(
+                  target.id
+                )
+
+                this.setAttrOnTargetedObjects(
+                  target.id,
+                  isSectionSelected ? '0.4' : '3',
+                  'stroke-width'
+                )
+                this.setAttrOnTargetedObjects(
+                  target.id,
+                  isSectionSelected
+                    ? this.tevoWindow.primaryTicketFill
+                    : this.tevoWindow.selectedTicketFill,
+                  'fill'
+                )
+                this.setAttrOnTargetedObjects(
+                  target.id,
+                  isSectionSelected ? '#555' : '#0125AC',
+                  'stroke'
+                )
+
+                const matchingSections = Object.keys(
+                  this.state.venueConfiguration.sectionZoneMetas
+                ).filter((key, index) => {
+                  if (
+                    this.state.venueConfiguration.sectionZoneMetas[target.id]
+                  ) {
+                    if (
+                      this.state.venueConfiguration.sectionZoneMetas[key]
+                        .zid ===
+                      this.state.venueConfiguration.sectionZoneMetas[target.id]
+                        .zid
+                    ) {
+                      return true
+                    }
+                  }
+                })
+
+                this.setState({
+                  selectedSections: isSectionSelected
+                    ? this.state.selectedSections.filter(
+                        el => !matchingSections.includes(el)
+                      )
+                    : this.state.selectedSections.concat(matchingSections)
+                })
+              }
+            }
+          } else if (this.isSectionOrZone(target.parentNode.id)) {
+            if (parentColor) {
+              if (
+                [
+                  this.tevoWindow.primaryTicketFill,
+                  this.tevoWindow.selectedTicketFill,
+                  this.tevoWindow.hoverTicketFill
+                ].includes(parentColor.nodeValue) &&
+                parentColor.nodeValue !== '#6f6f6f'
+              ) {
+                // don't want to select an unavailable section
+                const isSectionSelected = this.state.selectedSections.includes(
+                  target.parentNode.id
+                )
+
+                this.setAttrOnTargetedObjects(
+                  target.parentNode.id,
+                  isSectionSelected ? '0.4' : '3',
+                  'stroke-width'
+                )
+                this.setAttrOnTargetedObjects(
+                  target.parentNode.id,
+                  isSectionSelected
+                    ? this.tevoWindow.primaryTicketFill
+                    : this.tevoWindow.selectedTicketFill,
+                  'fill'
+                )
+                this.setAttrOnTargetedObjects(
+                  target.parentNode.id,
+                  isSectionSelected ? '#555' : '#0125AC',
+                  'stroke'
+                )
+
+                const matchingSections = Object.keys(
+                  this.state.venueConfiguration.sectionZoneMetas
+                ).filter((key, index) => {
+                  /* eslint-disable */
+                  if (
+                    this.state.venueConfiguration.sectionZoneMetas[
+                      target.parentNode.id
+                    ]
+                  ) {
+                    if (
+                      this.state.venueConfiguration.sectionZoneMetas[key]
+                        .zid ===
+                      this.state.venueConfiguration.sectionZoneMetas[
+                        target.parentNode.id
+                      ].zid
+                    ) {
+                      return true
+                    }
+                    /* eslint-enable */
+                  }
+                })
+
+                this.setState({
+                  selectedSections: isSectionSelected
+                    ? this.state.selectedSections.filter(
+                        el => !matchingSections.includes(el)
+                      )
+                    : this.state.selectedSections.concat(matchingSections)
+                })
+              }
+            }
+          }
+        } else {
+          if (this.isSectionOrZone(target.id)) {
+            if (fillColor) {
+              if (
+                [
+                  this.tevoWindow.primaryTicketFill,
+                  this.tevoWindow.selectedTicketFill,
+                  this.tevoWindow.hoverTicketFill
+                ].includes(fillColor.nodeValue) &&
+                fillColor.nodeValue !== '#6f6f6f'
+              ) {
+                // don't want to select an unavailable section
+                const isSectionSelected = this.state.selectedSections.includes(
+                  target.id
+                )
+                target.setAttribute(
+                  'fill',
+                  isSectionSelected
+                    ? this.tevoWindow.primaryTicketFill
+                    : this.tevoWindow.selectedTicketFill
+                )
+                target.setAttribute(
+                  'stroke-width',
+                  isSectionSelected ? '0.4' : '3'
+                )
+                target.setAttribute(
+                  'stroke',
+                  isSectionSelected ? '#555' : '#0125AC'
+                )
+
+                this.setState({
+                  selectedSections: isSectionSelected
+                    ? this.state.selectedSections.filter(e => e !== target.id)
+                    : [].concat(this.state.selectedSections, target.id)
+                })
+              }
+            }
+          } else if (this.isSectionOrZone(target.parentNode.id)) {
             if (
               [
                 this.tevoWindow.primaryTicketFill,
-                this.tevoWindow.selectedTicketFill
-              ].includes(fillColor.nodeValue)
+                this.tevoWindow.selectedTicketFill,
+                this.tevoWindow.hoverTicketFill
+              ].includes(parentColor.nodeValue) &&
+              parentColor.nodeValue !== '#6f6f6f'
             ) {
-              const isSectionSelected =
-                target.attributes.getNamedItem('stroke').nodeValue === '#0125AC'
+              // don't want to select an unavailable section
+              const isSectionSelected = this.state.selectedSections.includes(
+                target.parentNode.id
+              )
               target.setAttribute(
                 'fill',
                 isSectionSelected
@@ -212,6 +485,14 @@ export default class TicketMap extends Component<Props, State> {
                 'stroke',
                 isSectionSelected ? '#555' : '#0125AC'
               )
+
+              this.setState({
+                selectedSections: isSectionSelected
+                  ? this.state.selectedSections.filter(
+                      e => e !== target.parentNode.id
+                    )
+                  : [].concat(this.state.selectedSections, target.parentNode.id)
+              })
             }
           }
         }
@@ -223,6 +504,32 @@ export default class TicketMap extends Component<Props, State> {
       minZoom: 1,
       maxZoom: 10
     })
+  }
+
+  isSectionOrZone(id: string) {
+    return this.state.venueConfiguration.sectionZoneMetas[id]
+  }
+
+  setAttrOnTargetedObjects(target: number, color: string, type: string) {
+    const matchingSections = Object.keys(
+      this.state.venueConfiguration.sectionZoneMetas
+    ).filter((key, index) => {
+      if (this.state.venueConfiguration.sectionZoneMetas[target]) {
+        if (
+          this.state.venueConfiguration.sectionZoneMetas[key].zid ===
+          this.state.venueConfiguration.sectionZoneMetas[target].zid
+        ) {
+          return this.state.venueConfiguration.sectionZoneMetas[key]
+        }
+      }
+    })
+
+    if (matchingSections) {
+      matchingSections.forEach(obj => {
+        // $FlowFixMe
+        document.getElementById(`${obj}`).setAttribute(type, color)
+      })
+    }
   }
 
   renderHomeIcon() {
@@ -258,19 +565,6 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   render() {
-    const buttonStyle = {
-      width: '40px',
-      background: '#fff',
-      color: '#007879',
-      border: '1px solid #ccc',
-      borderRadius: '8px',
-      display: 'block',
-      textAlign: 'center',
-      fontSize: '24px',
-      textDecoration: 'none',
-      fontWeight: '500',
-      cursor: 'pointer'
-    }
     return (
       <div
         style={{
@@ -293,9 +587,88 @@ export default class TicketMap extends Component<Props, State> {
           <a onClick={() => this.mapZoom.zoomOut()} style={buttonStyle}>
             ‐
           </a>
-          <a style={buttonStyle} onClick={() => this.mapZoom.reset()}>
+          <a
+            style={Object.assign({}, buttonStyle, { paddingTop: '5px' })}
+            onClick={() => this.mapZoom.reset()}
+          >
             {this.renderHomeIcon()}
           </a>
+          <div
+            style={{
+              marginLeft: 'auto',
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <div
+              style={Object.assign({}, toggleText, {
+                color: this.state.isZoneToggled ? '#007879' : 'gray'
+              })}
+            >
+              Zone
+            </div>
+            <Toggle onToggle={on => this.setState({ isZoneToggled: !on })}>
+              {({ on, getTogglerProps }) => (
+                <span
+                  style={{
+                    position: 'relative',
+                    display: 'inline-block',
+                    width: '60px',
+                    height: '36px'
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      margin: 0
+                    }}
+                    {...getTogglerProps()}
+                  />
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      width: '100%',
+                      height: '100%',
+                      pointerEvents: 'none'
+                    }}
+                  >
+                    <span
+                      style={{
+                        flex: 1,
+                        height: '36px',
+                        borderRadius: '10px',
+                        background: 'gray'
+                      }}
+                    />
+                    <span
+                      style={{
+                        position: 'absolute',
+                        width: '26px',
+                        height: '30px',
+                        borderRadius: '8px',
+                        background: 'white',
+                        transition: 'transform 0.5s',
+                        transform: on ? 'translateX(32px)' : 'translateX(2px)'
+                      }}
+                    />
+                  </span>
+                </span>
+              )}
+            </Toggle>
+            <div
+              style={Object.assign({}, toggleText, {
+                color: this.state.isZoneToggled ? 'gray' : '#007879'
+              })}
+            >
+              Section
+            </div>
+          </div>
         </div>
         <div
           id={'mapRoot'}
@@ -304,17 +677,21 @@ export default class TicketMap extends Component<Props, State> {
             width: this.tevoWindow.containerWidth
           }}
         />
-        {/* Array of Selected Sections // Array of Unavailable Sections */}
+        {/* <div>Available Sections: </div>
+        <ul className="list--tags">
+          {this.state.availableSections.map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+        </ul>
+        <div>Unavailable Sections: {this.state.unavailableSections}</div> */}
         <div>
-          <div>Available Sections: </div>
+          Selected Sections:
           <ul className="list--tags">
-            {this.state.availableSections.map((item, i) => (
+            {this.state.selectedSections.map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
         </div>
-        <div>Unavailable Sections: {this.state.unavailableSections}</div>
-        <div>Selected Sections: {this.state.unavailableSections}</div>
       </div>
     )
   }

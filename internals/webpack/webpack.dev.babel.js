@@ -40,6 +40,7 @@ module.exports = require('./webpack.base.babel')({
     filename: '[name].js',
     chunkFilename: '[name].chunk.js'
   },
+  mode: 'development',
 
   // Add development plugins
   plugins: dependencyHandlers().concat(plugins),
