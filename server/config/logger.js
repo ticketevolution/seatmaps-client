@@ -22,9 +22,7 @@ const logger = {
       ${chalk.bold('Access URLs:')}${divider}
       Localhost: ${chalk.green(`http://localhost:${port}`)}
             LAN: ${chalk.green(`http://${ip.address()}:${port}`) +
-              (tunnelStarted
-                ? `\n    Proxy: ${chalk.magenta(tunnelStarted)}`
-                : '')}${divider}
+              (tunnelStarted ? `\n    Proxy: ${chalk.magenta(tunnelStarted)}` : '')}${divider}
       Welcome to: Ticket Evolution Local Development Server
       ${chalk.blue(`Press ${chalk.italic('CTRL-C')} to stop`)}
     `)

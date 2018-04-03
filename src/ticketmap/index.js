@@ -77,7 +77,7 @@ export default class TicketMap extends Component<Props, State> {
   mapZoom: any = null
   mouseOutTimeout: any
 
-  constructor(props: any) {
+  constructor (props: any) {
     super(props)
     this.state = {
       mapSvg: '',
@@ -90,10 +90,10 @@ export default class TicketMap extends Component<Props, State> {
       isZoneToggled: true,
       currentHoveredZone: ''
     }
-    this.mouseOutTimeout
+    this.mouseOutTimeout = null
   }
 
-  componentDidMount() {
+  componentDidMount () {
     // show spinner until map is loaded
     this.spinner = new Spinner({
       lines: 10, // The number of lines to draw
@@ -159,7 +159,7 @@ export default class TicketMap extends Component<Props, State> {
       .catch(e => console.log('Error Message: ', e))
   }
 
-  setupMap() {
+  setupMap () {
     // set font
     const rootElement = document && document.getElementById('rootElement')
     document
@@ -442,11 +442,11 @@ export default class TicketMap extends Component<Props, State> {
     })
   }
 
-  isSectionOrZone(id: string) {
+  isSectionOrZone (id: string) {
     return this.state.venueConfiguration.sectionZoneMetas[id]
   }
 
-  setAttrOnTargetedObjects(target: number, color: string, type: string) {
+  setAttrOnTargetedObjects (target: number, color: string, type: string) {
     const matchingSections = Object.keys(this.state.venueConfiguration.sectionZoneMetas).filter((key, index) => {
       if (this.state.venueConfiguration.sectionZoneMetas[target]) {
         if (
@@ -471,7 +471,7 @@ export default class TicketMap extends Component<Props, State> {
     }
   }
 
-  setColorScheme() {
+  setColorScheme () {
     COLOR_VARIABLES.forEach(attr => {
       if (!this.tevoWindow[attr].length) {
         this.tevoWindow[attr] = this.tevoWindow.theme === 'dark' ? DARK_THEME[attr] : LIGHT_THEME[attr]
@@ -479,18 +479,19 @@ export default class TicketMap extends Component<Props, State> {
     })
   }
 
-  renderHomeIcon() {
+  renderHomeIcon () {
     return (
       <svg
-        version="1.0"
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 200 200"
-        preserveAspectRatio="xMidYMid meet">
-        <g transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)" fill="#007879" stroke="none">
+        version='1.0'
+        xmlns='http://www.w3.org/2000/svg'
+        width='20'
+        height='20'
+        viewBox='0 0 200 200'
+        preserveAspectRatio='xMidYMid meet'
+      >
+        <g transform='translate(0.000000,200.000000) scale(0.100000,-0.100000)' fill='#007879' stroke='none'>
           <path
-            d="M666 1864 c-93 -20 -176 -56 -257 -110 -71 -47 -188 -164 -214 -214
+            d='M666 1864 c-93 -20 -176 -56 -257 -110 -71 -47 -188 -164 -214 -214
       l-16 -31 -54 30 c-44 25 -59 29 -79 21 -14 -5 -28 -20 -31 -33 -6 -22 93 -481
       115 -534 13 -31 46 -38 78 -17 26 17 341 308 375 346 21 25 22 61 2 78 -8 7
       -45 14 -82 17 -105 8 -106 12 -36 81 234 229 615 185 795 -92 98 -151 106
@@ -499,26 +500,28 @@ export default class TicketMap extends Component<Props, State> {
       -166 802 -21 l48 29 217 -214 c119 -118 226 -220 238 -226 34 -17 119 -13 161
       8 42 22 70 50 101 101 23 39 29 126 10 163 -6 12 -115 123 -242 248 l-231 225
       22 67 c82 250 38 510 -121 713 -93 118 -234 213 -377 254 -101 29 -279 36
-      -374 14z"
+      -374 14z'
           />
         </g>
       </svg>
     )
   }
 
-  render() {
+  render () {
     return (
       <div
         style={{
           width: `${this.tevoWindow.containerWidth}px`,
           display: 'flex',
           flexDirection: 'column'
-        }}>
+        }}
+      >
         <div ref={spinnerContainer => (this.spinnerContainer = spinnerContainer)} />
         <div
           style={{
             display: 'flex'
-          }}>
+          }}
+        >
           <a onClick={() => this.mapZoom.zoomIn()} style={buttonStyle}>
             +
           </a>
@@ -533,11 +536,13 @@ export default class TicketMap extends Component<Props, State> {
               marginLeft: 'auto',
               display: 'flex',
               alignItems: 'center'
-            }}>
+            }}
+          >
             <div
               style={Object.assign({}, toggleText, {
                 color: this.state.isZoneToggled ? '#007879' : 'gray'
-              })}>
+              })}
+            >
               Zone
             </div>
             <Toggle onToggle={on => this.setState({ isZoneToggled: !on })}>
@@ -548,9 +553,10 @@ export default class TicketMap extends Component<Props, State> {
                     display: 'inline-block',
                     width: '60px',
                     height: '36px'
-                  }}>
+                  }}
+                >
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     style={{
                       width: '100%',
                       height: '100%',
@@ -568,7 +574,8 @@ export default class TicketMap extends Component<Props, State> {
                       width: '100%',
                       height: '100%',
                       pointerEvents: 'none'
-                    }}>
+                    }}
+                  >
                     <span
                       style={{
                         flex: 1,
@@ -595,7 +602,8 @@ export default class TicketMap extends Component<Props, State> {
             <div
               style={Object.assign({}, toggleText, {
                 color: this.state.isZoneToggled ? 'gray' : '#007879'
-              })}>
+              })}
+            >
               Section
             </div>
           </div>
@@ -609,7 +617,7 @@ export default class TicketMap extends Component<Props, State> {
         />
         <div>
           Selected Sections:
-          <ul className="list--tags">{this.state.selectedSections.map((item, i) => <li key={i}>{item}</li>)}</ul>
+          <ul className='list--tags'>{this.state.selectedSections.map((item, i) => <li key={i}>{item}</li>)}</ul>
         </div>
       </div>
     )

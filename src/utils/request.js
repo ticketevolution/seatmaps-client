@@ -2,11 +2,7 @@
 
 import fetch from 'unfetch'
 
-export default function request (
-  url: string,
-  options: any,
-  contentType: any = 'application/json'
-) {
+export default function request (url: string, options: any, contentType: any = 'application/json') {
   return fetch(
     url,
     Object.assign({}, options, {

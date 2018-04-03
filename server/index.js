@@ -4,8 +4,7 @@ const argv = require('minimist')(process.argv.slice(2))
 const bodyParser = require('body-parser')
 const setup = require('./middlewares/frontendMiddleware')
 const isDev = process.env.NODE_ENV !== 'production'
-const ngrok =
-  (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false
+const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false
 const resolve = require('path').resolve
 const app = express()
 
