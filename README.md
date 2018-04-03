@@ -5,7 +5,6 @@
 <h1 align="center">Ticket Evolution Seatmaps</h1>
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![wercker status](https://app.wercker.com/status/e5732a1f468901f73c2d9b5267591f07/s/ 'wercker status')](https://app.wercker.com/project/byKey/e5732a1f468901f73c2d9b5267591f07)
 
 A client side JavaScript plugin that enables users to view seatmaps with available tickets for Ticket Evolution events.
 
