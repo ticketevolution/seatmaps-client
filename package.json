@@ -24,7 +24,7 @@
     "build":
       "yarn clean-build && cross-env NODE_ENV=production webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
     "build-dev":
-      "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p",
+      "cross-env webpack --config internals/webpack/webpack.prod.babel.js --color -p",
     "build:dll": "node ./internals/scripts/dependencies.js",
     "start":
       "yarn && yarn build:dll && cross-env NODE_ENV=development node server",
@@ -118,9 +118,11 @@
     "testRegex": "tests/.*\\.test\\.js$"
   },
   "dependencies": {
-    "panzoom": "4.3.1",
     "preact": "8.2.7",
     "preact-compat": "3.18.0",
+    "react-toggled": "1.2.6",
+    "spin.js": "3.1.0",
+    "svg-pan-zoom": "3.5.3",
     "unfetch": "3.0.0"
   },
   "devDependencies": {
@@ -154,7 +156,7 @@
     "exports-loader": "0.7.0",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.11",
-    "flow-bin": "0.68.0",
+    "flow-bin": "0.69.0",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "webpack-contrib/html-webpack-plugin",
     "image-webpack-loader": "4.2.0",
@@ -165,7 +167,7 @@
     "lint-staged": "7.0.0",
     "localStorage": "1.0.3",
     "null-loader": "0.1.1",
-    "parcel-bundler": "1.6.2",
+    "parcel-bundler": "1.7.0",
     "prettier-standard": "8.0.0",
     "shelljs": "0.8.1",
     "standard": "11.0.1",
@@ -174,9 +176,9 @@
     "stylelint-config-standard": "18.2.0",
     "uglifyjs-webpack-plugin": "1.2.4",
     "url-loader": "1.0.1",
-    "webpack": "4.2.0",
+    "webpack": "4.4.1",
     "webpack-cli": "2.0.13",
-    "webpack-dev-middleware": "3.0.1",
+    "webpack-dev-middleware": "3.1.0",
     "webpack-hot-middleware": "2.21.2"
   }
 }
