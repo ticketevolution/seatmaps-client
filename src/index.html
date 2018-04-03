@@ -10,7 +10,34 @@
     window._ticketEvolution = {
   access_token: '9ed38cfed5debc389d930e0e309ac8ee5eea68bf',
   apiVersion: '0.1',
-  rootId: 'root'
+  venueId: '110_8888881',
+  configurationId: 4567,
+  containerId: 'root',
+  containerWidth: '500',
+  emptySectionFill: '#6f6f6f',
+  primaryTicketFill: '#7ddaff',
+  cheapSectionFill: '#744542',
+  expensiveSectionFill: '',
+  selectedTicketFill: '#0099ff',
+  hoverTicketFill: '#0099ff',
+  showTooltip: true,
+  selectedSections: [],
+  mapFontFamily: 'courier',
+  tickets: [
+    {
+      // array of tickets as follows:
+      section: '120',
+      row: '1',
+      price: 359.95,
+      quantity: 4
+    },
+    {
+      section: '201',
+      row: '32',
+      price: 49.99,
+      quantity: 2
+    }
+  ]
 }
 </script>
     <!-- End Ticket Evolution Seatmaps -->
@@ -18,6 +45,8 @@
   <body>
     <noscript>If you're seeing this message, that means <strong>JavaScript has been disabled on your browser</strong>, please <strong>enable JS</strong> to make Smart Select work.</noscript>
     <div id="root" style="height: 100%;"></div>
-    <script src="./index.js"></script>
+    <!-- Parcel JS Build -->
+    <!-- <script src="./index.js"></script> -->
+    <!-- End Parcel JS Build -->
   </body>
 </html>

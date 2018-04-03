@@ -15,14 +15,19 @@
   "scripts": {
     "analyze": "node ./internals/scripts/analyze.js",
     "prebuild": "rm -rf ./build && yarn lint",
-    "parcel-build": "yarn clean-build && parcel build src/index.js --out-dir=./build",
+    "parcel-build":
+      "yarn clean-build && parcel build src/index.js --out-dir=./build",
     "parcel": "parcel ./src/index.html --out-dir=./build",
     "clean-build": "rm -rf ./build",
-    "format": "prettier-standard 'src/**/*.js' 'internals/**/*.js' 'server/**/*.js'",
-    "build": "yarn clean-build && cross-env NODE_ENV=production webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
-    "build-dev": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p",
+    "format":
+      "prettier-standard 'src/**/*.js' 'internals/**/*.js' 'server/**/*.js'",
+    "build":
+      "yarn clean-build && cross-env NODE_ENV=production webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
+    "build-dev":
+      "cross-env webpack --config internals/webpack/webpack.prod.babel.js --color -p",
     "build:dll": "node ./internals/scripts/dependencies.js",
-    "start": "yarn && yarn build:dll && cross-env NODE_ENV=development node server",
+    "start":
+      "yarn && yarn build:dll && cross-env NODE_ENV=development node server",
     "start:prod": "cross-env NODE_ENV=production node server",
     "deploy:production": "yarn build && yarn start:prod",
     "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
@@ -33,9 +38,7 @@
     "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll"
   },
   "standard": {
-    "plugins": [
-      "flowtype"
-    ],
+    "plugins": ["flowtype"],
     "parser": "babel-eslint",
     "globals": [
       "ga",
@@ -54,14 +57,11 @@
       "FormData",
       "XMLHttpRequest",
       "Response",
+      "SyntheticEvent",
+      "SyntheticInputEvent",
       "URL"
     ],
-    "ignore": [
-      ".git/",
-      "node_modules/",
-      "flow-typed/",
-      "examples/"
-    ]
+    "ignore": [".git/", "node_modules/", "flow-typed/", "examples/"]
   },
   "babel": {
     "presets": [
@@ -76,9 +76,7 @@
       "preact"
     ],
     "plugins": [
-      [
-        "transform-class-properties"
-      ],
+      ["transform-class-properties"],
       [
         "transform-react-jsx",
         {
@@ -88,36 +86,24 @@
     ],
     "env": {
       "production": {
-        "only": [
-          "src"
-        ],
+        "only": ["src"],
         "plugins": [
           "transform-react-remove-prop-types",
           "transform-react-constant-elements"
         ]
       },
       "test": {
-        "plugins": [
-          "transform-es2015-modules-commonjs",
-          "dynamic-import-node"
-        ]
+        "plugins": ["transform-es2015-modules-commonjs", "dynamic-import-node"]
       }
     }
   },
   "dllPlugin": {
     "path": "node_modules/seatmaps-dlls",
-    "exclude": [
-      "cross-env"
-    ],
-    "include": [
-      "core-js",
-      "preact"
-    ]
+    "exclude": ["cross-env"],
+    "include": ["core-js", "preact"]
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ],
+    "collectCoverageFrom": ["src/**/*.js"],
     "coverageThreshold": {
       "global": {
         "statements": 10,
@@ -126,26 +112,27 @@
         "lines": 10
       }
     },
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ],
-    "setupTestFrameworkScriptFile": "<rootDir>/internals/testing/test-bundler.js",
+    "moduleDirectories": ["node_modules", "src"],
+    "setupTestFrameworkScriptFile":
+      "<rootDir>/internals/testing/test-bundler.js",
     "testRegex": "tests/.*\\.test\\.js$"
   },
   "dependencies": {
     "preact": "8.2.7",
     "preact-compat": "3.18.0",
+    "react-toggled": "1.2.6",
+    "spin.js": "3.1.0",
+    "svg-pan-zoom": "3.5.3",
     "unfetch": "3.0.0"
   },
   "devDependencies": {
-    "add-asset-html-webpack-plugin": "2.1.2",
+    "add-asset-html-webpack-plugin": "2.1.3",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
-    "babel-loader": "7.1.3",
+    "babel-loader": "7.1.4",
     "babel-plugin-dynamic-import-node": "1.2.0",
     "babel-plugin-react-transform": "3.0.0",
-    "babel-plugin-styled-components": "1.5.0",
+    "babel-plugin-styled-components": "1.5.1",
     "babel-plugin-transform-class-properties": "6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
     "babel-plugin-transform-react-constant-elements": "6.23.0",
@@ -157,41 +144,41 @@
     "babel-preset-preact": "1.1.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
-    "circular-dependency-plugin": "4.4.0",
-    "compression-webpack-plugin": "1.1.10",
-    "cross-env": "5.1.3",
+    "circular-dependency-plugin": "5.0.1",
+    "compression-webpack-plugin": "1.1.11",
+    "cross-env": "5.1.4",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
-    "eslint": "4.18.1",
+    "eslint": "4.19.1",
     "eslint-plugin-flowtype": "2.46.1",
     "eventemitter3": "3.0.1",
     "eventsource-polyfill": "0.9.6",
     "exports-loader": "0.7.0",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.11",
-    "flow-bin": "0.66.0",
+    "flow-bin": "0.69.0",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "webpack-contrib/html-webpack-plugin",
-    "image-webpack-loader": "4.1.0",
+    "image-webpack-loader": "4.2.0",
     "imports-loader": "0.8.0",
-    "jest-cli": "22.4.2",
+    "jest-cli": "23.0.0-alpha.0",
     "jest-styled-components": "5.0.0",
     "json-loader": "0.5.7",
     "lint-staged": "7.0.0",
     "localStorage": "1.0.3",
     "null-loader": "0.1.1",
-    "parcel-bundler": "1.6.2",
+    "parcel-bundler": "1.7.0",
     "prettier-standard": "8.0.0",
     "shelljs": "0.8.1",
-    "standard": "11.0.0",
-    "style-loader": "0.20.2",
-    "stylelint": "9.1.1",
+    "standard": "11.0.1",
+    "style-loader": "0.20.3",
+    "stylelint": "9.1.3",
     "stylelint-config-standard": "18.2.0",
-    "uglifyjs-webpack-plugin": "1.2.2",
-    "url-loader": "0.6.2",
-    "webpack": "4.0.1",
-    "webpack-cli": "2.0.10",
-    "webpack-dev-middleware": "3.0.0",
-    "webpack-hot-middleware": "2.21.1"
+    "uglifyjs-webpack-plugin": "1.2.4",
+    "url-loader": "1.0.1",
+    "webpack": "4.4.1",
+    "webpack-cli": "2.0.13",
+    "webpack-dev-middleware": "3.1.0",
+    "webpack-hot-middleware": "2.21.2"
   }
 }

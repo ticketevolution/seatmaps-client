@@ -3,6 +3,7 @@
 
 import { h, render } from 'preact'
 import TicketMap from './ticketmap'
+import TicketEvolutionWindow from 'window'
 
 if (process.env.NODE_ENV === 'development') {
   // Enable preact devtools
@@ -10,9 +11,13 @@ if (process.env.NODE_ENV === 'development') {
   require('preact/devtools')
 }
 
-const root = document.getElementById(window._ticketEvolution.rootId)
+const root = document.getElementById(TicketEvolutionWindow.containerId)
 
 if (root) {
+  // we don't want pointer events on text elements
+  document.write(
+    '<style>#rootElement text { -webkit-touch-callout: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; pointer-events: none; }</style>'
+  )
   // $FlowFixMe
   render(<TicketMap />, root, root.lastChild)
 }
