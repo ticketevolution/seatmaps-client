@@ -30,10 +30,7 @@ if (dllPlugin) {
 }
 
 module.exports = require('./webpack.base.babel')({
-  entry: [
-    'webpack-hot-middleware/client?reload=true',
-    path.join(process.cwd(), 'src/index.js')
-  ],
+  entry: ['webpack-hot-middleware/client?reload=true', path.join(process.cwd(), 'src/index.js')],
 
   // Don't use hashes in dev mode for better performance
   output: {
@@ -68,10 +65,7 @@ function dependencyHandlers () {
     return []
   }
 
-  const dllPath = path.resolve(
-    process.cwd(),
-    dllPlugin.path || 'node_modules/seatmaps-dlls'
-  )
+  const dllPath = path.resolve(process.cwd(), dllPlugin.path || 'node_modules/seatmaps-dlls')
 
   /**
    * If DLLs aren't explicitly defined, we assume all production dependencies listed in package.json
@@ -81,9 +75,7 @@ function dependencyHandlers () {
     const manifestPath = path.resolve(dllPath, 'seatmapsDeps.json')
 
     if (!fs.existsSync(manifestPath)) {
-      logger.error(
-        'The DLL manifest is missing. Please run `npm run build:dll`'
-      )
+      logger.error('The DLL manifest is missing. Please run `npm run build:dll`')
       process.exit(0)
     }
 
@@ -96,18 +88,12 @@ function dependencyHandlers () {
   }
 
   // If DLLs are explicitly defined, we automatically create a DLLReferencePlugin for each of them.
-  const dllManifests = Object.keys(dllPlugin.dlls).map(name =>
-    path.join(dllPath, `/${name}.json`)
-  )
+  const dllManifests = Object.keys(dllPlugin.dlls).map(name => path.join(dllPath, `/${name}.json`))
 
   return dllManifests.map(manifestPath => {
     if (!fs.existsSync(path)) {
       if (!fs.existsSync(manifestPath)) {
-        logger.error(
-          `The following Webpack DLL manifest is missing: ${path.basename(
-            manifestPath
-          )}`
-        )
+        logger.error(`The following Webpack DLL manifest is missing: ${path.basename(manifestPath)}`)
         logger.error(`Expected to find it in ${dllPath}`)
         logger.error('Please run: npm run build:dll')
 

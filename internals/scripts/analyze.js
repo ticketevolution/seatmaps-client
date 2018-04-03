@@ -20,8 +20,6 @@ function callback () {
     '\n\nOpen ' +
       chalk.magenta('http://webpack.github.io/analyse/') +
       ' in your browser and upload the stats.json file!' +
-      chalk.blue(
-        '\n(Tip: ' + chalk.italic('CMD + double-click') + ' the link!)\n\n'
-      )
+      chalk.blue('\n(Tip: ' + chalk.italic('CMD + double-click') + ' the link!)\n\n')
   )
 }
