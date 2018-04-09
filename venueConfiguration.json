@@ -1,0 +1,881 @@
+{
+  "id": 123456,
+  "description": "Baseball",
+  "venueId": 123,
+  "active": true,
+  "staticImageUrl": "",
+  "generalAdmissionOnly": false,
+  "venueConfigurationVersion": 11,
+  "map": {
+    "mapFormatId": 5,
+    "mapType": 0,
+    "rowOverlaySwitch": false,
+    "viewFromSection": true,
+    "virtualRealityEnabled": true,
+    "sectionScrubbing": true,
+    "rowScrubbing": true
+  },
+  "seatLevelDataIndicator": false,
+  "isSectionMapped": true,
+  "eventId": 12345678,
+  "sectionZoneMetas": {
+    "119472": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 324",
+      "zname": "Infield Reserve"
+    },
+    "119473": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 325",
+      "zname": "Infield Reserve"
+    },
+    "119470": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 309",
+      "zname": "Infield Reserve"
+    },
+    "119476": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 328",
+      "zname": "Outfield Reserve"
+    },
+    "119477": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 329",
+      "zname": "Outfield Reserve"
+    },
+    "119474": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 326",
+      "zname": "Infield Reserve"
+    },
+    "119475": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 327",
+      "zname": "Infield Reserve"
+    },
+    "119478": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 330",
+      "zname": "Outfield Reserve"
+    },
+    "119479": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 331",
+      "zname": "Outfield Reserve"
+    },
+    "119471": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 323",
+      "zname": "Infield Reserve"
+    },
+    "464167": {
+      "c": "#47aa42",
+      "zid": "89615",
+      "name": "Homeplate Box M",
+      "zname": "Homeplate Box"
+    },
+    "464166": {
+      "c": "#47aa42",
+      "zid": "89615",
+      "name": "Homeplate Box H",
+      "zname": "Homeplate Box"
+    },
+    "464165": {
+      "c": "#47aa42",
+      "zid": "89615",
+      "name": "Homeplate Box L",
+      "zname": "Homeplate Box"
+    },
+    "464164": {
+      "c": "#47aa42",
+      "zid": "89615",
+      "name": "Homeplate Box I",
+      "zname": "Homeplate Box"
+    },
+    "464163": {
+      "c": "#47aa42",
+      "zid": "89615",
+      "name": "Homeplate Box G",
+      "zname": "Homeplate Box"
+    },
+    "464169": {
+      "c": "#47aa42",
+      "zid": "89615",
+      "name": "Homeplate Box K",
+      "zname": "Homeplate Box"
+    },
+    "464168": {
+      "c": "#47aa42",
+      "zid": "89615",
+      "name": "Homeplate Box J",
+      "zname": "Homeplate Box"
+    },
+    "119461": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 300 W",
+      "zname": "Outfield Reserve"
+    },
+    "119460": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 300",
+      "zname": "Outfield Reserve"
+    },
+    "119463": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 302",
+      "zname": "Outfield Reserve"
+    },
+    "119462": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 301",
+      "zname": "Outfield Reserve"
+    },
+    "119465": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 304",
+      "zname": "Outfield Reserve"
+    },
+    "119464": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 303",
+      "zname": "Outfield Reserve"
+    },
+    "119467": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 306",
+      "zname": "Infield Reserve"
+    },
+    "119466": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 305",
+      "zname": "Infield Reserve"
+    },
+    "119469": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 308",
+      "zname": "Infield Reserve"
+    },
+    "119468": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 307",
+      "zname": "Infield Reserve"
+    },
+    "119458": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 321",
+      "zname": "Infield Reserve"
+    },
+    "119459": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Baseline View 322",
+      "zname": "Infield Reserve"
+    },
+    "119454": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 317",
+      "zname": "Infield Reserve"
+    },
+    "119455": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 318",
+      "zname": "Infield Reserve"
+    },
+    "119456": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 319",
+      "zname": "Infield Reserve"
+    },
+    "119457": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 320",
+      "zname": "Infield Reserve"
+    },
+    "119450": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 313",
+      "zname": "Infield Reserve"
+    },
+    "119451": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 314",
+      "zname": "Infield Reserve"
+    },
+    "119452": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 315",
+      "zname": "Infield Reserve"
+    },
+    "119453": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 316",
+      "zname": "Infield Reserve"
+    },
+    "119380": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 142",
+      "zname": "Bleachers"
+    },
+    "119381": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 143",
+      "zname": "Bleachers"
+    },
+    "119382": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 144",
+      "zname": "Bleachers"
+    },
+    "119383": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 145 W",
+      "zname": "Bleachers"
+    },
+    "119384": {
+      "c": "#9a4d9e",
+      "zid": "20825",
+      "name": "PetSmart Patio",
+      "zname": "Left Field Picnic Pavilion"
+    },
+    "119385": {
+      "c": "#47aa42",
+      "zid": "20824",
+      "name": "Homerun Porch L",
+      "zname": "Homerun Porch"
+    },
+    "119386": {
+      "c": "#47aa42",
+      "zid": "20824",
+      "name": "Homerun Porch R",
+      "zname": "Homerun Porch"
+    },
+    "119387": {
+      "c": "#4e8abe",
+      "zid": "4042",
+      "name": "Friday's Front Row",
+      "zname": "Fridays Front Row"
+    },
+    "119388": {
+      "c": "#ed1848",
+      "zid": "4032",
+      "name": "Club Reserve 204",
+      "zname": "Club Reserve"
+    },
+    "119389": {
+      "c": "#47aa42",
+      "zid": "4034",
+      "name": "Bullpen Reserve 106",
+      "zname": "Bullpen Reserve"
+    },
+    "119449": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 312",
+      "zname": "Infield Reserve"
+    },
+    "119448": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 311",
+      "zname": "Infield Reserve"
+    },
+    "119443": {
+      "c": "#9a4d9e",
+      "zid": "20822",
+      "name": "All You Can Eat 221",
+      "zname": "All You Can Eat"
+    },
+    "119442": {
+      "c": "#3fa9ff",
+      "zid": "20823",
+      "name": "Club Bullpen 220",
+      "zname": "Club Bullpen"
+    },
+    "119441": {
+      "c": "#3fa9ff",
+      "zid": "20823",
+      "name": "Club Bullpen 219",
+      "zname": "Club Bullpen"
+    },
+    "119440": {
+      "c": "#ed1848",
+      "zid": "4032",
+      "name": "Club Reserve 218",
+      "zname": "Club Reserve"
+    },
+    "119447": {
+      "c": "#c0af00",
+      "zid": "4036",
+      "name": "Infield Reserve 310",
+      "zname": "Infield Reserve"
+    },
+    "119446": {
+      "c": "#3fa9ff",
+      "zid": "20823",
+      "name": "Club Bullpen 224 W",
+      "zname": "Club Bullpen"
+    },
+    "119445": {
+      "c": "#9a4d9e",
+      "zid": "20822",
+      "name": "All You Can Eat 223",
+      "zname": "All You Can Eat"
+    },
+    "119444": {
+      "c": "#9a4d9e",
+      "zid": "20822",
+      "name": "All You Can Eat 222",
+      "zname": "All You Can Eat"
+    },
+    "119396": {
+      "c": "#47aa42",
+      "zid": "4034",
+      "name": "Bullpen Reserve 138",
+      "zname": "Bullpen Reserve"
+    },
+    "119395": {
+      "c": "#47aa42",
+      "zid": "4034",
+      "name": "Bullpen Reserve 137",
+      "zname": "Bullpen Reserve"
+    },
+    "119394": {
+      "c": "#47aa42",
+      "zid": "4034",
+      "name": "Bullpen Reserve 136",
+      "zname": "Bullpen Reserve"
+    },
+    "119393": {
+      "c": "#e4b023",
+      "zid": "4030",
+      "name": "Baseline Reserve 135",
+      "zname": "Baseline Reserve"
+    },
+    "119392": {
+      "c": "#e4b023",
+      "zid": "4030",
+      "name": "Baseline Reserve 109",
+      "zname": "Baseline Reserve"
+    },
+    "119391": {
+      "c": "#47aa42",
+      "zid": "4034",
+      "name": "Bullpen Reserve 108",
+      "zname": "Bullpen Reserve"
+    },
+    "119390": {
+      "c": "#47aa42",
+      "zid": "4034",
+      "name": "Bullpen Reserve 107",
+      "zname": "Bullpen Reserve"
+    },
+    "119362": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 115",
+      "zname": "Infield Box"
+    },
+    "119363": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 116",
+      "zname": "Infield Box"
+    },
+    "119360": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 124",
+      "zname": "Infield Box"
+    },
+    "119361": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 125",
+      "zname": "Infield Box"
+    },
+    "119366": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 118",
+      "zname": "Infield Box"
+    },
+    "119367": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 126",
+      "zname": "Infield Box"
+    },
+    "119364": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 117",
+      "zname": "Infield Box"
+    },
+    "119365": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 119",
+      "zname": "Infield Box"
+    },
+    "119368": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 127",
+      "zname": "Infield Box"
+    },
+    "119369": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 128",
+      "zname": "Infield Box"
+    },
+    "192863": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Right Field Wall",
+      "zname": "Bleachers"
+    },
+    "119438": {
+      "c": "#ed1848",
+      "zid": "4032",
+      "name": "Club Reserve 203",
+      "zname": "Club Reserve"
+    },
+    "119439": {
+      "c": "#ed1848",
+      "zid": "4032",
+      "name": "Club Reserve 217",
+      "zname": "Club Reserve"
+    },
+    "119436": {
+      "c": "#3fa9ff",
+      "zid": "20823",
+      "name": "Club Bullpen 201",
+      "zname": "Club Bullpen"
+    },
+    "119437": {
+      "c": "#ed1848",
+      "zid": "4032",
+      "name": "Club Reserve 202",
+      "zname": "Club Reserve"
+    },
+    "119434": {
+      "c": "#eb6e1f",
+      "zid": "20821",
+      "name": "Club Terrace 210 I",
+      "zname": "Club Terrace"
+    },
+    "119435": {
+      "c": "#3fa9ff",
+      "zid": "20823",
+      "name": "Club Bullpen 200",
+      "zname": "Club Bullpen"
+    },
+    "119432": {
+      "c": "#eb6e1f",
+      "zid": "20821",
+      "name": "Club Terrace 210 G",
+      "zname": "Club Terrace"
+    },
+    "119433": {
+      "c": "#eb6e1f",
+      "zid": "20821",
+      "name": "Club Terrace 210 H",
+      "zname": "Club Terrace"
+    },
+    "119430": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box WC EW 210",
+      "zname": "Club Box"
+    },
+    "119431": {
+      "c": "#eb6e1f",
+      "zid": "20821",
+      "name": "Club Terrace 210 F",
+      "zname": "Club Terrace"
+    },
+    "119371": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 100 W",
+      "zname": "Bleachers"
+    },
+    "119370": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 129",
+      "zname": "Infield Box"
+    },
+    "119373": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 102",
+      "zname": "Bleachers"
+    },
+    "119372": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 101",
+      "zname": "Bleachers"
+    },
+    "119375": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 104",
+      "zname": "Bleachers"
+    },
+    "119374": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 103",
+      "zname": "Bleachers"
+    },
+    "119377": {
+      "c": "#3fa9ff",
+      "zid": "20826",
+      "name": "Home Run Patio",
+      "zname": "Homerun Patio"
+    },
+    "119376": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 105",
+      "zname": "Bleachers"
+    },
+    "119379": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 141",
+      "zname": "Bleachers"
+    },
+    "119378": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 140",
+      "zname": "Bleachers"
+    },
+    "119543": {
+      "c": "#3fa9ff",
+      "zid": "104150",
+      "name": "Strike Zone",
+      "zname": "Strike Zone"
+    },
+    "119546": {
+      "c": "#e4b023",
+      "zid": "4045",
+      "name": "Suite Lounge 214",
+      "zname": "Suite Lounge"
+    },
+    "119547": {
+      "c": "#e4b023",
+      "zid": "4045",
+      "name": "Suite Lounge 215",
+      "zname": "Suite Lounge"
+    },
+    "119429": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box WC DW 210",
+      "zname": "Club Box"
+    },
+    "119428": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box WC CW 210",
+      "zname": "Club Box"
+    },
+    "119425": {
+      "c": "#e4b023",
+      "zid": "4030",
+      "name": "Baseline Reserve 134",
+      "zname": "Baseline Reserve"
+    },
+    "119424": {
+      "c": "#e4b023",
+      "zid": "4030",
+      "name": "Baseline Reserve 133",
+      "zname": "Baseline Reserve"
+    },
+    "119427": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box WC BW 210",
+      "zname": "Club Box"
+    },
+    "119426": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box WC AW 210",
+      "zname": "Club Box"
+    },
+    "119421": {
+      "c": "#f05033",
+      "zid": "20830",
+      "name": "Baseline Box - Third Base Reserve 130",
+      "zname": "1st/3rd Baseline Box/Reserve"
+    },
+    "119420": {
+      "c": "#f05033",
+      "zid": "20830",
+      "name": "Baseline Box - First Base Reserve 114",
+      "zname": "1st/3rd Baseline Box/Reserve"
+    },
+    "119423": {
+      "c": "#f05033",
+      "zid": "20830",
+      "name": "Baseline Box 132",
+      "zname": "1st/3rd Baseline Box/Reserve"
+    },
+    "119422": {
+      "c": "#f05033",
+      "zid": "20830",
+      "name": "Baseline Box - Third Base Reserve 131",
+      "zname": "1st/3rd Baseline Box/Reserve"
+    },
+    "119344": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box 214",
+      "zname": "Club Box"
+    },
+    "119345": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box 211",
+      "zname": "Club Box"
+    },
+    "119346": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box 212",
+      "zname": "Club Box"
+    },
+    "119347": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box 213",
+      "zname": "Club Box"
+    },
+    "119342": {
+      "c": "#c0af00",
+      "zid": "4035",
+      "name": "Bleachers 139",
+      "zname": "Bleachers"
+    },
+    "119418": {
+      "c": "#f05033",
+      "zid": "20830",
+      "name": "Baseline Box 112",
+      "zname": "1st/3rd Baseline Box/Reserve"
+    },
+    "119419": {
+      "c": "#f05033",
+      "zid": "20830",
+      "name": "Baseline Box - First Base Reserve 113",
+      "zname": "1st/3rd Baseline Box/Reserve"
+    },
+    "119410": {
+      "c": "#ed1848",
+      "zid": "4027",
+      "name": "Dugout Box E",
+      "zname": "Dugout Box"
+    },
+    "119411": {
+      "c": "#ed1848",
+      "zid": "4027",
+      "name": "Dugout Box F",
+      "zname": "Dugout Box"
+    },
+    "119412": {
+      "c": "#ed1848",
+      "zid": "4027",
+      "name": "Dugout Box N",
+      "zname": "Dugout Box"
+    },
+    "119413": {
+      "c": "#ed1848",
+      "zid": "4027",
+      "name": "Dugout Box O",
+      "zname": "Dugout Box"
+    },
+    "119414": {
+      "c": "#ed1848",
+      "zid": "4027",
+      "name": "Dugout Box P",
+      "zname": "Dugout Box"
+    },
+    "119415": {
+      "c": "#ed1848",
+      "zid": "4027",
+      "name": "Dugout Box Q",
+      "zname": "Dugout Box"
+    },
+    "119416": {
+      "c": "#e4b023",
+      "zid": "4030",
+      "name": "Baseline Reserve 110",
+      "zname": "Baseline Reserve"
+    },
+    "119417": {
+      "c": "#e4b023",
+      "zid": "4030",
+      "name": "Baseline Reserve 111",
+      "zname": "Baseline Reserve"
+    },
+    "119498": {
+      "c": "#4e8abe",
+      "zid": "4043",
+      "name": "Pool Zone",
+      "zname": "Pool Zone"
+    },
+    "119359": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 123",
+      "zname": "Infield Box"
+    },
+    "119358": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 122",
+      "zname": "Infield Box"
+    },
+    "119353": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box 207",
+      "zname": "Club Box"
+    },
+    "119352": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box 209",
+      "zname": "Club Box"
+    },
+    "119351": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box 206",
+      "zname": "Club Box"
+    },
+    "119350": {
+      "c": "#ed1848",
+      "zid": "4032",
+      "name": "Club Reserve 205",
+      "zname": "Club Reserve"
+    },
+    "119357": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 121",
+      "zname": "Infield Box"
+    },
+    "119356": {
+      "c": "#eb6e1f",
+      "zid": "4029",
+      "name": "Infield Box 120",
+      "zname": "Infield Box"
+    },
+    "119354": {
+      "c": "#e4b023",
+      "zid": "4031",
+      "name": "Club Box 208",
+      "zname": "Club Box"
+    },
+    "119407": {
+      "c": "#37939b",
+      "zid": "4028",
+      "name": "Third Base Box S",
+      "zname": "1st/3rd Base Box"
+    },
+    "119406": {
+      "c": "#37939b",
+      "zid": "4028",
+      "name": "Third Base Box R",
+      "zname": "1st/3rd Base Box"
+    },
+    "119405": {
+      "c": "#37939b",
+      "zid": "4028",
+      "name": "First Base Box B",
+      "zname": "1st/3rd Base Box"
+    },
+    "119404": {
+      "c": "#37939b",
+      "zid": "4028",
+      "name": "First Base Box A",
+      "zname": "1st/3rd Base Box"
+    },
+    "119349": {
+      "c": "#ed1848",
+      "zid": "4032",
+      "name": "Club Reserve 216",
+      "zname": "Club Reserve"
+    },
+    "119409": {
+      "c": "#ed1848",
+      "zid": "4027",
+      "name": "Dugout Box D",
+      "zname": "Dugout Box"
+    },
+    "119408": {
+      "c": "#ed1848",
+      "zid": "4027",
+      "name": "Dugout Box C",
+      "zname": "Dugout Box"
+    },
+    "119483": {
+      "c": "#4e8abe",
+      "zid": "20819",
+      "name": "Batter's Box",
+      "zname": "Batters Box"
+    },
+    "119481": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 332 W",
+      "zname": "Outfield Reserve"
+    },
+    "119480": {
+      "c": "#37939b",
+      "zid": "4037",
+      "name": "Outfield Reserve 332",
+      "zname": "Outfield Reserve"
+    }
+  }
+}
