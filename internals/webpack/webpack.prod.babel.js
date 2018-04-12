@@ -5,7 +5,7 @@ module.exports = require('./webpack.base.babel')({
   entry: [path.join(process.cwd(), 'src/index.js')],
   mode: 'production',
   output: {
-    filename: '[name].js',
+    filename: 'tevomaps.js',
     chunkFilename: '[name].chunk.js'
   },
 
