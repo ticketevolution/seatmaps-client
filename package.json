@@ -14,7 +14,6 @@
   },
   "scripts": {
     "analyze": "node ./internals/scripts/analyze.js",
-    "prebuild": "rm -rf ./build && yarn lint",
     "clean-build": "rm -rf ./build",
     "format": "prettier-standard 'src/**/*.js' 'internals/**/*.js' 'server/**/*.js'",
     "build": "yarn clean-build && webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
@@ -137,6 +136,7 @@
     "preact": "8.2.7",
     "preact-compat": "3.18.0",
     "react-toggled": "1.2.6",
+    "react-transition-group": "^2.3.0",
     "spin.js": "3.1.0",
     "svg-pan-zoom": "3.5.3",
     "unfetch": "3.0.0"
@@ -180,11 +180,11 @@
     "jest-cli": "23.0.0-alpha.0",
     "jest-styled-components": "5.0.1",
     "json-loader": "0.5.7",
-    "lint-staged": "7.0.3",
+    "lint-staged": "7.0.4",
     "localStorage": "1.0.3",
     "null-loader": "0.1.1",
     "prettier": "1.11.1",
-    "prettier-standard": "8.0.0",
+    "prettier-standard": "8.0.1",
     "shelljs": "0.8.1",
     "standard": "11.0.1",
     "style-loader": "0.20.3",
@@ -192,9 +192,9 @@
     "stylelint-config-standard": "18.2.0",
     "uglifyjs-webpack-plugin": "1.2.4",
     "url-loader": "1.0.1",
-    "webpack": "4.4.1",
-    "webpack-cli": "2.0.13",
-    "webpack-dev-middleware": "3.1.0",
-    "webpack-hot-middleware": "2.21.2"
+    "webpack": "4.5.0",
+    "webpack-cli": "2.0.14",
+    "webpack-dev-middleware": "3.1.2",
+    "webpack-hot-middleware": "2.22.0"
   }
 }
