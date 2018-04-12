@@ -215,30 +215,38 @@ export default class TicketMap extends Component<*, State> {
       if (this.state.currentHoveredZone === this.state.venueConfiguration.sectionZoneMetas[id].zid) {
         clearTimeout(this.mouseOutTimeout)
       }
-      // cleanup needed
-      this.setState({
-        activeTooltip: true,
-        tooltipSectionName: this.state.venueConfiguration.sectionZoneMetas[id].name,
-        tooltipPrice: '$23.08', // need to calcuate the lowest price in the zone to display
-        tooltipX: event.clientX - 150 < 0 ? event.clientX + 10 : event.clientX - 150,
-        tooltipY: event.clientY - 100 < 0 ? event.clientY + 50 : event.clientY - 100,
-        currentHoveredZone: this.state.venueConfiguration.sectionZoneMetas[id].zid
-      })
+
+      this.setTooltipProps(
+        event,
+        this.state.venueConfiguration.sectionZoneMetas[id].name,
+        '$23.08',
+        this.state.venueConfiguration.sectionZoneMetas[id].zid
+      )
     } else {
       const section = this.state.availableTicketBlocks.find(block => {
         return parseInt(id) === block.sectionId
       })
-      this.setState({
-        activeTooltip: true,
-        tooltipSectionName: this.state.venueConfiguration.sectionZoneMetas[id].name,
-        // $FlowFixMe
-        tooltipPrice: `$ ${section.price}`,
-        tooltipX: event.clientX - 100 < 0 ? event.clientX + 10 : event.clientX - 100,
-        tooltipY: event.clientY - 100 < 0 ? event.clientY + 50 : event.clientY - 100,
-        currentHoveredZone: ''
-      })
+      // $FlowFixMe
+      this.setTooltipProps(event, this.state.venueConfiguration.sectionZoneMetas[id].name, section.price)
       return event.target.setAttribute('fill', this.tevoWindow.hoverSectionFill)
     }
+  }
+
+  setTooltipProps(event: any, name: string, price: string, zid?: string) {
+    return this.setState({
+      activeTooltip: true,
+      tooltipSectionName: name,
+      tooltipPrice: `$ ${price}`,
+      tooltipX:
+        event.clientX - 100 < 0
+          ? event.clientX
+          : // $FlowFixMe
+            document.body.clientWidth - 200 < event.clientX
+            ? event.clientX - 250
+            : event.clientX - 10,
+      tooltipY: event.clientY - 100 < 0 ? event.clientY + 50 : event.clientY - 100,
+      currentHoveredZone: ''
+    })
   }
 
   doHoverCleanup(target: HTMLElement, id: string) {
