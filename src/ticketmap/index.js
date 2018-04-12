@@ -11,6 +11,8 @@ import CSSTransition from 'react-transition-group/CSSTransition'
 import { COLOR_VARIABLES, LIGHT_THEME, DARK_THEME } from './themes'
 import { buttonStyle, toggleTextStyle, mainContainerStyle } from './styles'
 import MOCK_TICKET_ARRAY from '../utils/ticketRequest'
+const SCREEN_BUFFER = 100
+const TOOLTIP_BUFFER = 250
 
 type State = {
   mapSvg: string,
@@ -173,6 +175,9 @@ export default class TicketMap extends Component<*, State> {
         case 'empty':
           elem.setAttribute('fill', this.tevoWindow.emptySectionFill)
           break
+        case 'hover':
+          elem.setAttribute('fill', this.tevoWindow.hoverSectionFill)
+          break
       }
     }
   }
@@ -215,30 +220,39 @@ export default class TicketMap extends Component<*, State> {
       if (this.state.currentHoveredZone === this.state.venueConfiguration.sectionZoneMetas[id].zid) {
         clearTimeout(this.mouseOutTimeout)
       }
-      // cleanup needed
-      this.setState({
-        activeTooltip: true,
-        tooltipSectionName: this.state.venueConfiguration.sectionZoneMetas[id].name,
-        tooltipPrice: '$23.08', // need to calcuate the lowest price in the zone to display
-        tooltipX: event.clientX - 150 < 0 ? event.clientX + 10 : event.clientX - 150,
-        tooltipY: event.clientY - 100 < 0 ? event.clientY + 50 : event.clientY - 100,
-        currentHoveredZone: this.state.venueConfiguration.sectionZoneMetas[id].zid
-      })
+
+      this.setTooltipProps(
+        event,
+        this.state.venueConfiguration.sectionZoneMetas[id].name,
+        '$23.08',
+        this.state.venueConfiguration.sectionZoneMetas[id].zid
+      )
     } else {
       const section = this.state.availableTicketBlocks.find(block => {
         return parseInt(id) === block.sectionId
       })
-      this.setState({
-        activeTooltip: true,
-        tooltipSectionName: this.state.venueConfiguration.sectionZoneMetas[id].name,
-        // $FlowFixMe
-        tooltipPrice: `$ ${section.price}`,
-        tooltipX: event.clientX - 100 < 0 ? event.clientX + 10 : event.clientX - 100,
-        tooltipY: event.clientY - 100 < 0 ? event.clientY + 50 : event.clientY - 100,
-        currentHoveredZone: ''
-      })
-      return event.target.setAttribute('fill', this.tevoWindow.hoverSectionFill)
+      // $FlowFixMe
+      this.setTooltipProps(event, this.state.venueConfiguration.sectionZoneMetas[id].name, section.price)
+      // $FlowFixMe
+      return this.colorIn(id, 'hover')
     }
+  }
+
+  setTooltipProps(event: any, name: string, price: string, zid?: string) {
+    return this.setState({
+      activeTooltip: true,
+      tooltipSectionName: name,
+      tooltipPrice: `$ ${price}`,
+      tooltipX:
+        event.clientX - SCREEN_BUFFER < 0
+          ? event.clientX
+          : // $FlowFixMe
+            document.body.clientWidth - TOOLTIP_BUFFER < event.clientX
+            ? event.clientX - TOOLTIP_BUFFER
+            : event.clientX - 10,
+      tooltipY: event.clientY - SCREEN_BUFFER < 0 ? event.clientY + 50 : event.clientY - SCREEN_BUFFER,
+      currentHoveredZone: ''
+    })
   }
 
   doHoverCleanup(target: HTMLElement, id: string) {
@@ -253,19 +267,68 @@ export default class TicketMap extends Component<*, State> {
       } else {
         if (fillColor) {
           if (fillColor.nodeValue === this.tevoWindow.hoverSectionFill) {
-            target.setAttribute('fill', this.tevoWindow.primarySectionFill)
+            const section = this.state.availableTicketBlocks.find(block => {
+              return parseInt(id) === block.sectionId
+            })
+            // $FlowFixMe
+            this.colorIn(id, section.ticketType)
           }
         }
       }
     }
   }
 
+  isSectionOrZoneAvailable(id: number) {
+    return this.state.availableTicketBlocks.find(block => {
+      if (
+        this.state.venueConfiguration.sectionZoneMetas[block.sectionId] &&
+        this.state.venueConfiguration.sectionZoneMetas[id] &&
+        this.state.isZoneToggled
+      ) {
+        return (
+          this.state.venueConfiguration.sectionZoneMetas[block.sectionId].zid ===
+          this.state.venueConfiguration.sectionZoneMetas[id].zid
+        )
+      } else {
+        return id === block.sectionId
+      }
+    })
+  }
+
+  setAttrOnTargetedObjects(targetId: string, color: string, type: string) {
+    const matchingSections = this.matchingZoneSectionsBySectionId(targetId)
+
+    if (matchingSections) {
+      matchingSections.forEach(sectionId => {
+        const elem = document.getElementById(`${sectionId}`)
+        if (elem) {
+          // $FlowFixMe
+          document.getElementById(`${sectionId}`).setAttribute(type, color)
+        } else {
+          console.log('id not found: ', sectionId)
+        }
+      })
+    }
+  }
+
+  setColorScheme() {
+    COLOR_VARIABLES.forEach(colorVar => {
+      if (!this.tevoWindow[colorVar].length) {
+        this.tevoWindow[colorVar] = this.tevoWindow.theme === 'dark' ? DARK_THEME[colorVar] : LIGHT_THEME[colorVar]
+      }
+    })
+  }
+
   setupMap() {
-    // set font
     const rootElement = document && document.getElementById('rootElement')
-    document
-      .querySelectorAll('#rootElement text')
-      .forEach(elem => (elem.style.fontFamily = `${this.tevoWindow.mapFontFamily}`))
+
+    // set font if specified in config, if none is specified, leave as default
+    // font in the map
+    if (this.tevoWindow.mapFontFamily) {
+      document
+        .querySelectorAll('#rootElement text')
+        .forEach(elem => (elem.style.fontFamily = `${this.tevoWindow.mapFontFamily}`))
+    }
 
     // set all sections as empty/unavailable first, regardless of zone/sections
     this.state.venueSections.forEach(id => this.colorIn(id, 'empty'))
@@ -281,7 +344,7 @@ export default class TicketMap extends Component<*, State> {
         }
       })
 
-    // hover cleanup
+    // hover cleanup, which includes remove of tooltip
     rootElement &&
       rootElement.addEventListener('mouseout', ({ target }: any) => {
         this.mouseOutTimeout = setTimeout(() => {
@@ -449,47 +512,6 @@ export default class TicketMap extends Component<*, State> {
       center: true,
       fit: true,
       contain: false
-    })
-  }
-
-  isSectionOrZoneAvailable(id: number) {
-    return this.state.availableTicketBlocks.find(block => {
-      if (
-        this.state.venueConfiguration.sectionZoneMetas[block.sectionId] &&
-        this.state.venueConfiguration.sectionZoneMetas[id] &&
-        this.state.isZoneToggled
-      ) {
-        return (
-          this.state.venueConfiguration.sectionZoneMetas[block.sectionId].zid ===
-          this.state.venueConfiguration.sectionZoneMetas[id].zid
-        )
-      } else {
-        return id === block.sectionId
-      }
-    })
-  }
-
-  setAttrOnTargetedObjects(targetId: string, color: string, type: string) {
-    const matchingSections = this.matchingZoneSectionsBySectionId(targetId)
-
-    if (matchingSections) {
-      matchingSections.forEach(sectionId => {
-        const elem = document.getElementById(`${sectionId}`)
-        if (elem) {
-          // $FlowFixMe
-          document.getElementById(`${sectionId}`).setAttribute(type, color)
-        } else {
-          console.log('id not found: ', sectionId)
-        }
-      })
-    }
-  }
-
-  setColorScheme() {
-    COLOR_VARIABLES.forEach(colorVar => {
-      if (!this.tevoWindow[colorVar].length) {
-        this.tevoWindow[colorVar] = this.tevoWindow.theme === 'dark' ? DARK_THEME[colorVar] : LIGHT_THEME[colorVar]
-      }
     })
   }
 
