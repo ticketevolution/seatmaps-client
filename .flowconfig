@@ -1,7 +1,5 @@
 [ignore]
-.*/config-chain/test/broken.json
-.*/node_modules/stylelint/lib/utils/getPreviousNonSharedLineCommentNode.js
-.*/node_modules/stylelint/lib/utils/getNextNonSharedLineCommentNode.js
+.*/node_modules/.*[^e]\.json$
 
 [include]
 
