@@ -18,13 +18,12 @@ type State = {
   mapSvg: string,
   venueConfiguration: any,
   venueSections: Array<string>,
-  availableTicketBlocks: Array<*>,
-  availableZones: Array<*>,
+  availableTicketBlocks: Array<TicketBlockType>,
   selectedSections: Array<string>,
   isZoneToggled: boolean,
   currentHoveredZone: string,
   activeTooltip: boolean,
-  tooltipPrice: string,
+  tooltipPrice: number,
   tooltipSectionName: string,
   tooltipX: number,
   tooltipY: number,
@@ -48,7 +47,6 @@ export default class TicketMap extends Component<*, State> {
       venueSections: [],
       availableSections: [],
       availableTicketBlocks: [],
-      availableZones: [],
       selectedSections: [],
       isMapLoaded: false,
       isZoneToggled: this.tevoWindow.isZoneDefault || false,
@@ -56,7 +54,7 @@ export default class TicketMap extends Component<*, State> {
       activeTooltip: false,
       tooltipSectionName: '',
       tooltipZoneId: '',
-      tooltipPrice: '',
+      tooltipPrice: 0,
       tooltipListingCount: 0,
       tooltipX: 0,
       tooltipY: 0
@@ -162,14 +160,14 @@ export default class TicketMap extends Component<*, State> {
       .catch(e => console.log('Error Message: ', e))
   }
 
-  removeDuplicateProps(arr: Array<*>, prop: string) {
+  removeDuplicateProps(arr: Array<TicketBlockType>, prop: string): Array<TicketBlockType> {
     return arr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos
     })
   }
 
-  colorIn(id: string, ticketType: string) {
-    const elem = document.getElementById(id)
+  colorIn(id: number, ticketType: string): void {
+    const elem = document.getElementById(`${id}`)
     if (elem) {
       switch (ticketType) {
         case 'primary':
@@ -191,7 +189,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  matchingZoneSectionsBySectionId(sectionId: string) {
+  matchingZoneSectionsBySectionId(sectionId: number): Array<string> {
     return Object.keys(this.state.venueConfiguration.sectionZoneMetas).filter((key, index) => {
       if (this.state.venueConfiguration.sectionZoneMetas[sectionId]) {
         if (
@@ -204,14 +202,17 @@ export default class TicketMap extends Component<*, State> {
     })
   }
 
-  colorZones(availableTicketBlocks: Array<*>) {
+  colorZones(availableTicketBlocks: Array<TicketBlockType>): void {
     const availableZones = this.removeDuplicateProps(availableTicketBlocks, 'zoneId')
+    debugger
     availableZones.forEach(zoneBlock =>
-      this.matchingZoneSectionsBySectionId(zoneBlock.sectionId).forEach(id => this.colorIn(id, zoneBlock.ticketType))
+      this.matchingZoneSectionsBySectionId(zoneBlock.sectionId).forEach(id =>
+        this.colorIn(parseInt(id), zoneBlock.ticketType)
+      )
     )
   }
 
-  updateMap(availableTicketBlocks: Array<*>) {
+  updateMap(availableTicketBlocks: Array<TicketBlockType>): void {
     // does not take in to account same section blocks
     // i.e. if one is marked as cheap and one expensive, the last ticket_type
     // in the array will take precedent
@@ -223,7 +224,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  doHover(event: any, id: string) {
+  doHover(event: any, id: string): void {
     if (this.state.isZoneToggled) {
       this.setAttrOnTargetedObjects(id, this.tevoWindow.hoverSectionFill, 'fill')
       if (this.state.currentHoveredZone === this.state.venueConfiguration.sectionZoneMetas[id].zid) {
@@ -256,16 +257,16 @@ export default class TicketMap extends Component<*, State> {
         ),
         matchingSectionListings.length
       )
-      // $FlowFixMe
-      return this.colorIn(id, 'hover')
+
+      return this.colorIn(parseInt(id), 'hover')
     }
   }
 
-  setTooltipProps(event: any, name: string, price: string, count: number, zid?: string) {
+  setTooltipProps(event: any, name: string, price: number, count: number, zid?: string): void {
     return this.setState({
       activeTooltip: true,
       tooltipSectionName: name,
-      tooltipPrice: `$ ${price}`,
+      tooltipPrice: price,
       tooltipX:
         event.clientX - SCREEN_BUFFER < 0
           ? event.clientX
@@ -275,11 +276,11 @@ export default class TicketMap extends Component<*, State> {
             : event.clientX - 10,
       tooltipY: event.clientY - SCREEN_BUFFER < 0 ? event.clientY + 50 : event.clientY - SCREEN_BUFFER,
       currentHoveredZone: zid,
-      tooltipListingCount: `${count}`
+      tooltipListingCount: count
     })
   }
 
-  doHoverCleanup(target: HTMLElement, id: string) {
+  doHoverCleanup(target: HTMLElement, id: string): void {
     const fillColor = target.attributes.getNamedItem('fill')
     this.setState({
       activeTooltip: false
@@ -302,25 +303,27 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  isSectionOrZoneAvailable(id: number) {
-    return this.state.availableTicketBlocks.find(block => {
-      if (
-        this.state.venueConfiguration.sectionZoneMetas[block.sectionId] &&
-        this.state.venueConfiguration.sectionZoneMetas[id] &&
-        this.state.isZoneToggled
-      ) {
-        return (
-          this.state.venueConfiguration.sectionZoneMetas[block.sectionId].zid ===
-          this.state.venueConfiguration.sectionZoneMetas[id].zid
-        )
-      } else {
-        return id === block.sectionId
-      }
-    })
+  isSectionOrZoneAvailable(id: number): boolean {
+    return (
+      this.state.availableTicketBlocks.findIndex(block => {
+        if (
+          this.state.venueConfiguration.sectionZoneMetas[block.sectionId] &&
+          this.state.venueConfiguration.sectionZoneMetas[id] &&
+          this.state.isZoneToggled
+        ) {
+          return (
+            this.state.venueConfiguration.sectionZoneMetas[block.sectionId].zid ===
+            this.state.venueConfiguration.sectionZoneMetas[id].zid
+          )
+        } else {
+          return id === block.sectionId
+        }
+      }) > 0
+    )
   }
 
-  setAttrOnTargetedObjects(targetId: string, color: string, type: string) {
-    const matchingSections = this.matchingZoneSectionsBySectionId(targetId)
+  setAttrOnTargetedObjects(targetId: string, color: string, type: string): void {
+    const matchingSections = this.matchingZoneSectionsBySectionId(parseInt(targetId))
 
     if (matchingSections) {
       matchingSections.forEach(sectionId => {
@@ -335,7 +338,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  setColorScheme() {
+  setColorScheme(): void {
     COLOR_VARIABLES.forEach(colorVar => {
       if (!this.tevoWindow[colorVar].length) {
         this.tevoWindow[colorVar] = this.tevoWindow.theme === 'dark' ? DARK_THEME[colorVar] : LIGHT_THEME[colorVar]
@@ -343,7 +346,7 @@ export default class TicketMap extends Component<*, State> {
     })
   }
 
-  setupMap() {
+  setupMap(): void {
     const rootElement = document && document.getElementById('rootElement')
 
     // set font if specified in config, if none is specified, leave as default
@@ -355,11 +358,12 @@ export default class TicketMap extends Component<*, State> {
     }
 
     // set all sections as empty/unavailable first, regardless of zone/sections
-    this.state.venueSections.forEach(id => this.colorIn(id, 'empty'))
+    this.state.venueSections.forEach(id => this.colorIn(parseInt(id), 'empty'))
 
     // add hover styling, which includes tooltip
     rootElement &&
       rootElement.addEventListener('mouseover', (event: any) => {
+        debugger
         if (this.isSectionOrZoneAvailable(parseInt(event.target.id))) {
           this.doHover(event, event.target.id)
           // check if the parent has an id in the section configuration
@@ -437,7 +441,7 @@ export default class TicketMap extends Component<*, State> {
     })
   }
 
-  selectZone(target: HTMLElement) {
+  selectZone(target: HTMLElement): void {
     const fillColor = target.attributes.getNamedItem('fill')
     if (
       [
@@ -464,7 +468,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  selectSectionOrZone(target: HTMLElement) {
+  selectSectionOrZone(target: HTMLElement): void {
     const fillColor = target.attributes.getNamedItem('fill')
     if (fillColor) {
       if (
@@ -486,7 +490,7 @@ export default class TicketMap extends Component<*, State> {
         )
         this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '#555' : '#2f343b', 'stroke')
 
-        const matchingSections = this.matchingZoneSectionsBySectionId(target.id)
+        const matchingSections = this.matchingZoneSectionsBySectionId(parseInt(target.id))
         const selectedSections = isSectionSelected
           ? this.state.selectedSections.filter(el => !matchingSections.includes(el))
           : this.state.selectedSections.concat(matchingSections)
@@ -501,7 +505,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  renderHomeIcon() {
+  renderHomeIcon(): ?React$Element<any> {
     return (
       <svg
         version="1.0"
@@ -533,7 +537,7 @@ export default class TicketMap extends Component<*, State> {
     )
   }
 
-  render() {
+  render(): ?React$Element<any> {
     return (
       <div
         style={{
@@ -626,7 +630,7 @@ export default class TicketMap extends Component<*, State> {
               onToggle={on => {
                 this.setState({ isZoneToggled: on })
                 // reset map
-                this.state.venueSections.forEach(id => this.colorIn(id, 'empty'))
+                this.state.venueSections.forEach(id => this.colorIn(parseInt(id), 'empty'))
                 this.updateMap(this.state.availableTicketBlocks)
               }}
             >
