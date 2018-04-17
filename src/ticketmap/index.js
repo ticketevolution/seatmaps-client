@@ -1,11 +1,11 @@
 /* @flow */
-/** @jsx h */
 
-import { h, Component } from 'preact'
+import { h, Component } from 'preact' /** @jsx h */
 import fetch from 'unfetch'
-import { Spinner } from 'spin.js'
-import TicketEvolutionWindow from 'window'
-import Toggle from 'react-toggled'
+// hide for now, monitor time to load seatmap in production
+// import { Spinner } from 'spin.js'
+import TicketEvolutionWindow from '../window'
+import Toggle from 'react-toggled/preact'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import CSSTransition from 'react-transition-group/CSSTransition'
 import { COLOR_VARIABLES, LIGHT_THEME, DARK_THEME } from './themes'
@@ -57,7 +57,7 @@ export default class TicketMap extends Component<*, State> {
       tooltipSectionName: '',
       tooltipZoneId: '',
       tooltipPrice: '',
-      tooltipListingCount: '',
+      tooltipListingCount: 0,
       tooltipX: 0,
       tooltipY: 0
     }
@@ -90,14 +90,16 @@ export default class TicketMap extends Component<*, State> {
     }
 
     // show spinner until map is loaded
-    this.spinner = new Spinner({
-      lines: 10, // The number of lines to draw
-      speed: 2, // Rounds per second
-      className: 'spinner', // The CSS class to assign to the spinner
-      top: '150px', // Top position relative to parent
-      left: '50%', // Left position relative to parent
-      position: 'relative' // Element positioning
-    }).spin(document.getElementById('mapRoot'))
+
+    // hide for now, monitor time to load seatmap in production
+    // this.spinner = new Spinner({
+    //   lines: 10, // The number of lines to draw
+    //   speed: 2, // Rounds per second
+    //   className: 'spinner', // The CSS class to assign to the spinner
+    //   top: '150px', // Top position relative to parent
+    //   left: '50%', // Left position relative to parent
+    //   position: 'relative' // Element positioning
+    // }).spin(document.getElementById('mapRoot'))
 
     this.setColorScheme()
 
@@ -451,8 +453,8 @@ export default class TicketMap extends Component<*, State> {
         'fill',
         isSectionSelected ? this.tevoWindow.primarySectionFill : this.tevoWindow.selectedSectionFill
       )
-      target.setAttribute('stroke-width', isSectionSelected ? '0.4' : '3')
-      target.setAttribute('stroke', isSectionSelected ? '#555' : '#0125AC')
+      target.setAttribute('stroke-width', isSectionSelected ? '0.4' : '2')
+      target.setAttribute('stroke', isSectionSelected ? '#555' : '#2f343b')
       const selectedSections = isSectionSelected
         ? this.state.selectedSections.filter(e => e !== target.id)
         : [].concat(this.state.selectedSections, target.id)
@@ -476,13 +478,13 @@ export default class TicketMap extends Component<*, State> {
         // don't want to select an unavailable section
         const isSectionSelected = this.state.selectedSections.includes(target.id)
 
-        this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '0.4' : '3', 'stroke-width')
+        this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '0.4' : '2', 'stroke-width')
         this.setAttrOnTargetedObjects(
           target.id,
           isSectionSelected ? this.tevoWindow.primarySectionFill : this.tevoWindow.selectedSectionFill,
           'fill'
         )
-        this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '#555' : '#0125AC', 'stroke')
+        this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '#555' : '#2f343b', 'stroke')
 
         const matchingSections = this.matchingZoneSectionsBySectionId(target.id)
         const selectedSections = isSectionSelected
@@ -618,6 +620,7 @@ export default class TicketMap extends Component<*, State> {
             >
               Section
             </div>
+
             <Toggle
               defaultOn={this.state.isZoneToggled}
               onToggle={on => {
@@ -644,7 +647,7 @@ export default class TicketMap extends Component<*, State> {
                       margin: 0,
                       cursor: 'pointer'
                     }}
-                    {...getTogglerProps()}
+                    {...getTogglerProps({ id: 'sectionZone' })}
                   />
                   <span
                     style={{

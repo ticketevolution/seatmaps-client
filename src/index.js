@@ -1,7 +1,6 @@
 /* @flow */
-/** @jsx h */
 
-import { h, render } from 'preact'
+import { h, render } from 'preact' /** @jsx h */
 import TicketMap from './ticketmap'
 import TicketEvolutionWindow from 'window'
 
