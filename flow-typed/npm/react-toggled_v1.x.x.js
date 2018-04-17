@@ -1,5 +1,5 @@
-// flow-typed signature: 591cef519c516115162ba27ac989784d
-// flow-typed version: 48c34babb0/react-toggled_v1.x.x/flow_>=v0.54.1
+// flow-typed signature: 4854eed5106436eee5d1b3ae2a4ad005
+// flow-typed version: 3db99f5769/react-toggled_v1.x.x/flow_>=v0.54.1
 
 declare module 'react-toggled' {
   declare export type ToggledProps = {
@@ -28,7 +28,7 @@ declare module 'react-toggled' {
 
   declare type ReactToggledProps = {
     defaultOn?: boolean,
-    onToggle?: ({ on: boolean, p: ToggledProps }) => void,
+    onToggle?: (on: boolean, p: ToggledProps) => void,
     on?: boolean,
     children: (ToggledProps) => React$Node | React$Node
   };

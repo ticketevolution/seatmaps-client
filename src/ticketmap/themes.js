@@ -7,7 +7,7 @@ export const COLOR_VARIABLES = [
   'hoverSectionFill'
 ]
 
-export const LIGHT_THEME = {
+export const LIGHT_THEME: ColorVariableType = {
   emptySectionFill: '#9E9E9E',
   primarySectionFill: '#B1DDF1',
   cheapSectionFill: '#F7B267',
@@ -16,7 +16,7 @@ export const LIGHT_THEME = {
   hoverSectionFill: '#B5BA72'
 }
 
-export const DARK_THEME = {
+export const DARK_THEME: ColorVariableType = {
   emptySectionFill: '#E5E5E5',
   primarySectionFill: '#81A4CD',
   cheapSectionFill: '#C3A995',

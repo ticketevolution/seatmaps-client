@@ -21,8 +21,8 @@ if (root) {
   let styleSheet = document.createElement('style')
   styleSheet.type = 'text/css'
   styleSheet.appendChild(document.createTextNode(cssContent))
+  // $FlowFixMe
   head.appendChild(styleSheet)
-
   // $FlowFixMe
   render(<TicketMap />, root, root.lastChild)
 }
