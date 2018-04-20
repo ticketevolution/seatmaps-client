@@ -3,8 +3,7 @@ import chai from 'chai'
 import assertJsx, { options } from 'preact-jsx-chai'
 global.window._ticketEvolution = {
   apiVersion: '0.1',
-  venueId: '110_8888881',
-  configurationId: 4567,
+  configurationId: '110_8888881',
   containerId: 'root',
   containerWidth: '700',
   theme: 'dark',

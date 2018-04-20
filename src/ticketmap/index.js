@@ -101,8 +101,8 @@ export default class TicketMap extends Component<*, State> {
 
     this.setColorScheme()
 
-    const mapURL = this.tevoWindow.venueId
-      ? 'https://storage.googleapis.com/ticketevolution/maps/' + this.tevoWindow.venueId + '.svg'
+    const mapURL = this.tevoWindow.configurationId
+      ? 'https://storage.googleapis.com/ticketevolution/maps/' + this.tevoWindow.configurationId + '.svg'
       : 'https://storage.googleapis.com/ticketevolution/maps/not_available.svg'
     fetch(mapURL)
       .then(response => {
@@ -143,7 +143,7 @@ export default class TicketMap extends Component<*, State> {
         }
       })
       .then(() => {
-        if (this.tevoWindow.venueId) {
+        if (this.tevoWindow.configurationId) {
           this.setState({
             venueSections: Object.keys(this.state.venueConfiguration.sectionZoneMetas)
           })
