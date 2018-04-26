@@ -72,7 +72,8 @@ module.exports = options => ({
   mode: 'development' || options.mode,
   resolve: {
     alias: {
-      react: 'preact'
+      react: 'preact-compat',
+      'react-dom': 'preact-compat'
     },
     modules: ['src', 'node_modules'],
     extensions: ['.js', '.jsx', '.json'],

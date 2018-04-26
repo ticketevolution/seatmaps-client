@@ -1,12 +1,32 @@
-import Adapter from 'enzyme-adapter-react-16'
-import { ShallowWrapper } from 'enzyme'
-const Enzyme = require('enzyme')
-
-ShallowWrapper.prototype.instance = function () {
-  if (this.root !== this) {
-    throw new Error('ShallowWrapper::instance() can only be called on the root')
+import 'regenerator-runtime/runtime'
+import chai from 'chai'
+import assertJsx, { options } from 'preact-jsx-chai'
+global.window._ticketEvolution = {
+  apiVersion: '0.1',
+  venueId: '110_8888881',
+  configurationId: 4567,
+  containerId: 'root',
+  containerWidth: '700',
+  theme: 'dark',
+  isZoneDefault: true,
+  emptySectionFill: '',
+  primarySectionFill: '',
+  cheapSectionFill: '',
+  expensiveSectionFill: '',
+  selectedSectionFill: '',
+  hoverSectionFill: '',
+  mapFontFamily: 'courier',
+  showTooltip: true,
+  selectedSections: [],
+  onSelection: function(sectionsSelected) {
+    console.log('sections selected: ', sectionsSelected)
   }
-  return this.renderer._instance ? this.renderer._instance : null
 }
 
-Enzyme.configure({ adapter: new Adapter() })
+// when checking VDOM assertions, don't compare functions, just nodes and attributes:
+options.functions = false
+
+// activate the JSX assertion extension:
+chai.use(assertJsx)
+
+global.sleep = ms => new Promise(resolve => setTimeout(resolve, ms))

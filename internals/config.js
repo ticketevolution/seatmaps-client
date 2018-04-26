@@ -16,13 +16,13 @@ const seatmaps = {
        * Specify any additional dependencies here. We include core-js and lodash
        * since a lot of our dependencies depend on them and they get picked up by webpack.
        */
-      include: ['core-js', 'eventsource-polyfill', 'babel-polyfill', 'lodash'],
+      include: ['eventsource-polyfill', 'babel-polyfill'],
 
       // The path where the DLL manifest and bundle will get built
       path: resolve('../node_modules/seatmaps-dlls')
     },
 
-    entry (pkg) {
+    entry(pkg) {
       const dependencyNames = Object.keys(pkg.dependencies)
       const exclude = pkg.dllPlugin.exclude || seatmaps.dllPlugin.defaults.exclude
       const include = pkg.dllPlugin.include || seatmaps.dllPlugin.defaults.include

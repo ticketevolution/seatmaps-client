@@ -12,33 +12,21 @@
   venueId: '110_8888881',
   configurationId: 4567,
   containerId: 'root',
-  containerWidth: '500',
+  containerWidth: '700',
   theme: 'dark',
+  isZoneDefault: true,
   emptySectionFill: '',
-  primaryTicketFill: '',
+  primarySectionFill: '',
   cheapSectionFill: '',
   expensiveSectionFill: '',
-  selectedTicketFill: '',
-  hoverTicketFill: '',
+  selectedSectionFill: '',
+  hoverSectionFill: '',
   mapFontFamily: 'courier',
   showTooltip: true,
   selectedSections: [],
-
-  tickets: [
-    {
-      // array of tickets as follows:
-      section: '120',
-      row: '1',
-      price: 359.95,
-      quantity: 4
-    },
-    {
-      section: '201',
-      row: '32',
-      price: 49.99,
-      quantity: 2
-    }
-  ]
+  onSelection: function(sectionsSelected) {
+    console.log('sections selected: ', sectionsSelected)
+  }
 }
 </script>
     <!-- End Ticket Evolution Seatmaps -->

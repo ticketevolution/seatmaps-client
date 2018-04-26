@@ -2,16 +2,16 @@
 
 import fetch from 'unfetch'
 
-export default function request (url: string, options: any, contentType: any = 'application/json') {
+export default function request(url: string, options: any, contentType: string = 'application/json') {
   return fetch(
     url,
     Object.assign({}, options, {
       headers: {
         ...(contentType
           ? {
-            Accept: contentType,
-            'Content-Type': contentType
-          }
+              Accept: contentType,
+              'Content-Type': contentType
+            }
           : {})
       }
     })
