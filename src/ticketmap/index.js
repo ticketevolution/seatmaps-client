@@ -204,7 +204,6 @@ export default class TicketMap extends Component<*, State> {
 
   colorZones(availableTicketBlocks: Array<TicketBlockType>): void {
     const availableZones = this.removeDuplicateProps(availableTicketBlocks, 'zoneId')
-    debugger
     availableZones.forEach(zoneBlock =>
       this.matchingZoneSectionsBySectionId(zoneBlock.sectionId).forEach(id =>
         this.colorIn(parseInt(id), zoneBlock.ticketType)
@@ -363,7 +362,6 @@ export default class TicketMap extends Component<*, State> {
     // add hover styling, which includes tooltip
     rootElement &&
       rootElement.addEventListener('mouseover', (event: any) => {
-        debugger
         if (this.isSectionOrZoneAvailable(parseInt(event.target.id))) {
           this.doHover(event, event.target.id)
           // check if the parent has an id in the section configuration
