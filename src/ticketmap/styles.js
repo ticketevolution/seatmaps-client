@@ -9,18 +9,18 @@ export const buttonStyle = {
   fontSize: '24px',
   textDecoration: 'none',
   fontWeight: '500',
-  cursor: 'pointer'
+  cursor: 'pointer',
 }
 
 export const toggleTextStyle = {
   padding: '0 5px',
   fontFamily: 'sans-serif',
-  fontSize: '14px'
+  fontSize: '14px',
 }
 
 export const mainContainerStyle = {
   padding: '0 5px 10px',
   zIndex: '2',
   maxWidth: '214px',
-  position: 'fixed'
+  position: 'fixed',
 }

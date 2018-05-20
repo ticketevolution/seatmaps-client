@@ -1,5 +1,3 @@
-'use strict'
-
 const chalk = require('chalk')
 const ip = require('ip')
 const divider = chalk.gray('\n-----------------------------------')
@@ -26,7 +24,7 @@ const logger = {
       Welcome to: Ticket Evolution Local Development Server
       ${chalk.blue(`Press ${chalk.italic('CTRL-C')} to stop`)}
     `)
-  }
+  },
 }
 
 module.exports = logger

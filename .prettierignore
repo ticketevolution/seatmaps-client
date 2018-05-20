@@ -1,4 +1,5 @@
 package.json
 node_modules
+flow-typed
 build
 README.md

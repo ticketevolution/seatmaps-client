@@ -19,7 +19,7 @@ const seatmaps = {
       include: ['eventsource-polyfill', 'babel-polyfill'],
 
       // The path where the DLL manifest and bundle will get built
-      path: resolve('../node_modules/seatmaps-dlls')
+      path: resolve('../node_modules/seatmaps-dlls'),
     },
 
     entry(pkg) {
@@ -29,10 +29,10 @@ const seatmaps = {
       const includeDependencies = uniq(dependencyNames.concat(include))
 
       return {
-        seatmapsDeps: pullAll(includeDependencies, exclude)
+        seatmapsDeps: pullAll(includeDependencies, exclude),
       }
-    }
-  }
+    },
+  },
 }
 
 module.exports = seatmaps

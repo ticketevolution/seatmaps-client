@@ -28,7 +28,7 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
     expensiveSectionFill: '',
     selectedSectionFill: '',
     hoverSectionFill: '',
-    mapFontFamily: 'courier',
+    mapFontFamily: 'arial',
     isZoneDefault: true,
     showTooltip: true
   }
@@ -108,7 +108,7 @@ window._ticketEvolution = {
   // native browser fonts available, a list below is provided but results may
   // vary depending upon the browser and browser version
   // [Helvetica, Arial, Times, Times New Roman, Courier, Courier New, Verdana, Tahoma]
-  mapFontFamily: 'courier',
+  mapFontFamily: 'arial',
 
   // In Tevomaps you have the ability to view and browser available tickets by
   // either section or zone, this toggle gives you the ability to set a default

@@ -19,7 +19,7 @@ global.window._ticketEvolution = {
   selectedSections: [],
   onSelection: function(sectionsSelected) {
     console.log('sections selected: ', sectionsSelected)
-  }
+  },
 }
 
 // when checking VDOM assertions, don't compare functions, just nodes and attributes:
