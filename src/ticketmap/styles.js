@@ -1,8 +1,8 @@
 export const buttonStyle = {
   width: '40px',
-  background: '#fff',
-  color: '#007879',
-  border: '1px solid #ccc',
+  background: 'white',
+  color: '#4A4A4A',
+  border: '1px solid #E0E0E0',
   borderRadius: '8px',
   display: 'block',
   textAlign: 'center',

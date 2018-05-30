@@ -17,8 +17,8 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 <script src="https://maps.ticketevolution.com/tevomaps.js"></script>
 <script type="text/javascript">
   window._ticketEvolution = {
-    apiVersion: '9',
-    ticketMapId: '110_8888881',
+    venueId: '10',
+    configurationId: '1046',
     rootId: 'root'
     containerWidth: '700',
     theme: 'dark',
@@ -56,12 +56,11 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 
 ```javascript
 window._ticketEvolution = {
-  // Api Version to be utilized
-  apiVersion: '9',
+  // Ticket Map Venue ID
+  venueId: '10',
 
-  // Ticket Map ID List
-  // can be found in your Tevo Settings
-  ticketMapId: '110_8888881',
+  // Ticket Configuration ID
+  configurationId: '1046',
 
   // Root Element ID where the map will be
   // rendered in your HTML (should be unique)
@@ -73,17 +72,6 @@ window._ticketEvolution = {
 
 ```javascript
 window._ticketEvolution = {
-  // Access Token found in your Ticket Evolution settings
-  //  allowing you to utilize the client library
-  accessToken: '<access_token>',
-
-  // Api Version to be utilized
-  apiVersion: '11',
-
-  // Root Element ID where the map will be
-  // rendered in your HTML (should be unique)
-  rootId: 'root'
-
   // It is inferred that the width that is provided is in pixels
   // i.e. below would equal 500px
   width: '500',

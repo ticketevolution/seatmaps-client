@@ -1,6 +1,8 @@
 /* @flow */
 
 import { h, Component } from 'preact' /** @jsx h */
+// here to disable flow errors
+import * as React from 'react' //eslint-disable-line
 import fetch from 'unfetch'
 // hide for now, monitor time to load seatmap in production
 // import { Spinner } from 'spin.js'
@@ -100,10 +102,13 @@ export default class TicketMap extends Component<*, State> {
     // }).spin(document.getElementById('mapRoot'))
 
     this.setColorScheme()
-
     const mapURL = this.tevoWindow.configurationId
-      ? 'https://storage.googleapis.com/ticketevolution/maps/' + this.tevoWindow.configurationId + '.svg'
-      : 'https://storage.googleapis.com/ticketevolution/maps/not_available.svg'
+      ? 'https://maps.ticketevolution.com/maps/' +
+        this.tevoWindow.venueId +
+        '/' +
+        this.tevoWindow.configurationId +
+        '/map.svg'
+      : 'https://maps.ticketevolution.com/maps/not_available.svg'
     fetch(mapURL)
       .then(response => {
         if (response.ok) {
@@ -119,7 +124,13 @@ export default class TicketMap extends Component<*, State> {
       })
       .then(() => {
         // can be removed once a decision is made on how venueConfiguration is being received
-        return fetch('https://storage.googleapis.com/ticketevolution/venueDescription.json').then(response => {
+        return fetch(
+          'https://maps.ticketevolution.com/maps/' +
+            this.tevoWindow.venueId +
+            '/' +
+            this.tevoWindow.configurationId +
+            '/manifest.json'
+        ).then(response => {
           if (response.ok) {
             response.json().then(json => {
               this.setState({
@@ -506,7 +517,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  renderHomeIcon(): ?React$Element<any> {
+  renderResetZoom(): ?React$Element<any> {
     return (
       <svg
         version="1.0"
@@ -516,11 +527,7 @@ export default class TicketMap extends Component<*, State> {
         viewBox="0 0 200 200"
         preserveAspectRatio="xMidYMid meet"
       >
-        <g
-          transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)"
-          fill={this.tevoWindow.primarySectionFill}
-          stroke="none"
-        >
+        <g transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)" fill={'#4A4A4A'} stroke="none">
           <path
             d="M666 1864 c-93 -20 -176 -56 -257 -110 -71 -47 -188 -164 -214 -214
       l-16 -31 -54 30 c-44 25 -59 29 -79 21 -14 -5 -28 -20 -31 -33 -6 -22 93 -481
@@ -595,21 +602,15 @@ export default class TicketMap extends Component<*, State> {
             data-rh={'Default'}
             data-custom-at={'right'}
             onClick={() => this.mapZoom.zoomIn()}
-            style={Object.assign({}, buttonStyle, { color: this.tevoWindow.primarySectionFill })}
+            style={Object.assign({}, buttonStyle)}
           >
             +
           </a>
-          <a
-            onClick={() => this.mapZoom.zoomOut()}
-            style={Object.assign({}, buttonStyle, { color: this.tevoWindow.primarySectionFill })}
-          >
+          <a onClick={() => this.mapZoom.zoomOut()} style={Object.assign({}, buttonStyle)}>
             ‐
           </a>
-          <a
-            style={Object.assign({}, buttonStyle, { paddingTop: '5px', color: this.tevoWindow.primarySectionFill })}
-            onClick={() => this.mapZoom.reset()}
-          >
-            {this.renderHomeIcon()}
+          <a style={Object.assign({}, buttonStyle, { paddingTop: '5px' })} onClick={() => this.mapZoom.reset()}>
+            {this.renderResetZoom()}
           </a>
           <div
             style={{
@@ -620,7 +621,7 @@ export default class TicketMap extends Component<*, State> {
           >
             <div
               style={Object.assign({}, toggleTextStyle, {
-                color: this.state.isZoneToggled ? 'gray' : this.tevoWindow.primarySectionFill,
+                color: this.state.isZoneToggled ? '#181514' : '#3D5A80',
               })}
             >
               Section
@@ -672,7 +673,7 @@ export default class TicketMap extends Component<*, State> {
                         flex: 1,
                         height: '36px',
                         borderRadius: '10px',
-                        background: 'gray',
+                        background: '#9A9A9A',
                         cursor: 'pointer',
                       }}
                     />
@@ -693,7 +694,7 @@ export default class TicketMap extends Component<*, State> {
             </Toggle>
             <div
               style={Object.assign({}, toggleTextStyle, {
-                color: this.state.isZoneToggled ? this.tevoWindow.primarySectionFill : '#4A4A4A',
+                color: this.state.isZoneToggled ? '#3D5A80' : '#181514',
               })}
             >
               Zone
