@@ -4,23 +4,23 @@ export const COLOR_VARIABLES = [
   'cheapSectionFill',
   'expensiveSectionFill',
   'selectedSectionFill',
-  'hoverSectionFill'
+  'hoverSectionFill',
 ]
 
 export const LIGHT_THEME: ColorVariableType = {
   emptySectionFill: '#9E9E9E',
-  primarySectionFill: '#B1DDF1',
+  primarySectionFill: '#81A4CD',
   cheapSectionFill: '#F7B267',
   expensiveSectionFill: '#6699CC',
   selectedSectionFill: '#F06449',
-  hoverSectionFill: '#B5BA72'
+  hoverSectionFill: '#3D5A80',
 }
 
 export const DARK_THEME: ColorVariableType = {
-  emptySectionFill: '#E5E5E5',
-  primarySectionFill: '#81A4CD',
+  emptySectionFill: '#9E9E9E',
+  primarySectionFill: '#3D5A80',
   cheapSectionFill: '#C3A995',
   expensiveSectionFill: '#B1DDF1',
   selectedSectionFill: '#F06449',
-  hoverSectionFill: '#1D3461'
+  hoverSectionFill: '#81A4CD',
 }

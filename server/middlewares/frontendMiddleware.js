@@ -13,7 +13,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
   const middleware = webpackDevMiddleware(compiler, {
     publicPath: webpackConfig.output.publicPath,
     hot: true,
-    mode: 'development'
+    mode: 'development',
   })
 
   app.use(middleware)

@@ -10,10 +10,10 @@ export default function request(url: string, options: any, contentType: string =
         ...(contentType
           ? {
               Accept: contentType,
-              'Content-Type': contentType
+              'Content-Type': contentType,
             }
-          : {})
-      }
+          : {}),
+      },
     })
   )
     .then(response =>
@@ -21,7 +21,7 @@ export default function request(url: string, options: any, contentType: string =
         return {
           data: json,
           ok: response.ok,
-          status: response.status
+          status: response.status,
         }
       })
     )

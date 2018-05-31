@@ -14,8 +14,8 @@ const plugins = [
     title: 'Ticket Evolution Map',
     filename: 'index.html',
     inject: true,
-    template: 'src/index.html'
-  })
+    template: 'src/index.html',
+  }),
 ]
 
 if (dllPlugin) {
@@ -23,7 +23,7 @@ if (dllPlugin) {
     plugins.push(
       new AddAssetHtmlPlugin({
         filepath: dllPath,
-        includeSourcemap: false
+        includeSourcemap: false,
       })
     )
   })
@@ -35,7 +35,7 @@ module.exports = require('./webpack.base.babel')({
   // Don't use hashes in dev mode for better performance
   output: {
     filename: '[name].js',
-    chunkFilename: '[name].chunk.js'
+    chunkFilename: '[name].chunk.js',
   },
   mode: 'development',
 
@@ -46,8 +46,8 @@ module.exports = require('./webpack.base.babel')({
   devtool: 'source-map',
 
   performance: {
-    hints: false
-  }
+    hints: false,
+  },
 })
 
 /**
@@ -59,7 +59,7 @@ module.exports = require('./webpack.base.babel')({
  * will be used.
  *
  */
-function dependencyHandlers () {
+function dependencyHandlers() {
   // Don't do anything during the DLL Build step
   if (process.env.BUILDING_DLL) {
     return []
@@ -82,8 +82,8 @@ function dependencyHandlers () {
     return [
       new webpack.DllReferencePlugin({
         context: process.cwd(),
-        manifest: require(manifestPath)
-      })
+        manifest: require(manifestPath),
+      }),
     ]
   }
 
@@ -103,7 +103,7 @@ function dependencyHandlers () {
 
     return new webpack.DllReferencePlugin({
       context: process.cwd(),
-      manifest: require(manifestPath)
+      manifest: require(manifestPath),
     })
   })
 }

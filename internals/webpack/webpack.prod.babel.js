@@ -6,7 +6,7 @@ module.exports = require('./webpack.base.babel')({
   mode: 'production',
   output: {
     filename: 'tevomaps.js',
-    chunkFilename: '[name].chunk.js'
+    chunkFilename: '[name].chunk.js',
   },
 
   plugins: [
@@ -15,10 +15,10 @@ module.exports = require('./webpack.base.babel')({
       algorithm: 'gzip',
       test: /\.js$|\.css$|\.html$/,
       threshold: 10240,
-      minRatio: 0.8
-    })
+      minRatio: 0.8,
+    }),
   ],
   performance: {
-    assetFilter: assetFilename => !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)
-  }
+    assetFilter: assetFilename => !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
+  },
 })

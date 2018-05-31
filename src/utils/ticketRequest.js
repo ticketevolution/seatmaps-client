@@ -48,15 +48,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: true
+      natb_member: true,
     },
     {
       id: 457658755,
@@ -105,15 +105,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: true
+      natb_member: true,
     },
     {
       id: 449625448,
@@ -161,15 +161,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 436051338,
@@ -217,15 +217,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 436050796,
@@ -273,15 +273,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 443291881,
@@ -329,15 +329,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 453609584,
@@ -385,15 +385,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 4536777584,
@@ -441,15 +441,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 436049045,
@@ -497,15 +497,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 432444819,
@@ -553,15 +553,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 457640236,
@@ -609,15 +609,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 432444821,
@@ -665,15 +665,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 432444818,
@@ -721,15 +721,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 456824847,
@@ -764,7 +764,7 @@ export default {
         ['available', 'NULL'],
         ['available', 'NULL'],
         ['available', 'NULL'],
-        ['available', 'NULL']
+        ['available', 'NULL'],
       ],
       has_spec_tickets: false,
       featured: false,
@@ -785,15 +785,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 456824858,
@@ -826,7 +826,7 @@ export default {
         ['available', 'NULL'],
         ['available', 'NULL'],
         ['available', 'NULL'],
-        ['available', 'NULL']
+        ['available', 'NULL'],
       ],
       has_spec_tickets: false,
       featured: false,
@@ -847,15 +847,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 456824911,
@@ -903,15 +903,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
+      natb_member: false,
     },
     {
       id: 456824852,
@@ -947,7 +947,7 @@ export default {
         ['available', 'NULL'],
         ['available', 'NULL'],
         ['available', 'NULL'],
-        ['available', 'NULL']
+        ['available', 'NULL'],
       ],
       has_spec_tickets: false,
       featured: false,
@@ -968,15 +968,15 @@ export default {
         id: 1294624,
         url: '/events/1294624',
         name: 'San Diego Padres at Arizona Diamondbacks',
-        occurs_at: '2018-04-21T17:10:00Z'
+        occurs_at: '2018-04-21T17:10:00Z',
       },
       office: {
         id: 1692,
         url: '/offices/1692',
         name: 'Auto-Purchase',
-        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' }
+        brokerage: { id: 1700, url: '/brokerages/1700', name: 'Auto-Purchase', abbreviation: 'TEvo Seller' },
       },
-      natb_member: false
-    }
-  ]
+      natb_member: false,
+    },
+  ],
 }
