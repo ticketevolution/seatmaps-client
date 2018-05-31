@@ -1,8 +1,10 @@
-# .prettierrc
-printWidth: 120
-parser: flow
-tabWidth: 2
-useTabs: false
-semi: false
-singleQuote: true
-jsxBracketSameLine: false
+{
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 120,
+  "parser": flow,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": false,
+  "jsxBracketSameLine": false,
+}
