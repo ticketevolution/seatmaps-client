@@ -6,11 +6,9 @@ import * as React from 'react' //eslint-disable-line
 import fetch from 'unfetch'
 // hide for now, monitor time to load seatmap in production
 // import { Spinner } from 'spin.js'
-import TicketEvolutionWindow from '../window'
 import Toggle from 'react-toggled/preact'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import CSSTransition from 'react-transition-group/CSSTransition'
-import { COLOR_VARIABLES, LIGHT_THEME, DARK_THEME } from './themes'
 import { buttonStyle, toggleTextStyle, mainContainerStyle } from './styles'
 import MOCK_TICKET_ARRAY from '../utils/ticketRequest'
 const SCREEN_BUFFER = 100
@@ -34,7 +32,6 @@ type State = {
 
 export default class TicketMap extends Component<*, State> {
   state: State
-  tevoWindow = TicketEvolutionWindow
   spinnerContainer = null
   spinner = null
   mapZoom: any = null
@@ -51,7 +48,7 @@ export default class TicketMap extends Component<*, State> {
       availableTicketBlocks: [],
       selectedSections: [],
       isMapLoaded: false,
-      isZoneToggled: this.tevoWindow.isZoneDefault || false,
+      isZoneToggled: this.props.isZoneDefault || false,
       currentHoveredZone: '',
       activeTooltip: false,
       tooltipSectionName: '',
@@ -66,29 +63,6 @@ export default class TicketMap extends Component<*, State> {
   }
 
   componentDidMount() {
-    this.tevoWindow.setAvailableTicketsToBeDisplayed = availableTickets => {
-      const cleanAvailableTicketBlocks = availableTickets.reduce((data, block) => {
-        if (this.state.venueConfiguration.sectionZoneMetas[block.section_id]) {
-          data.push({
-            sectionId: block.section_id,
-            ticketType: block.ticket_type,
-            price: block.retail_price,
-            zoneId: this.state.venueConfiguration.sectionZoneMetas[block.section_id].zid,
-          })
-        } else {
-          console.log(`Section _${block.section_id}_ not found. Please verify it exists in the venue manifest`)
-        }
-        return data
-      }, [])
-      this.updateMap(cleanAvailableTicketBlocks)
-      this.setState({ availableTicketBlocks: cleanAvailableTicketBlocks })
-    }
-
-    this.tevoWindow.setSelectedTicketsToBeDisplayed = ticketsSelected => {
-      // the client filtered, select these tickets
-      this.setState({ selectedSections: ticketsSelected })
-    }
-
     // show spinner until map is loaded
 
     // hide for now, monitor time to load seatmap in production
@@ -101,34 +75,29 @@ export default class TicketMap extends Component<*, State> {
     //   position: 'relative' // Element positioning
     // }).spin(document.getElementById('mapRoot'))
 
-    this.setColorScheme()
-    const mapURL = this.tevoWindow.configurationId
-      ? 'https://maps.ticketevolution.com/maps/' +
-        this.tevoWindow.venueId +
-        '/' +
-        this.tevoWindow.configurationId +
-        '/map.svg'
+    const mapURL = this.props.configurationId
+      ? `https://maps.ticketevolution.com/maps/${this.props.venueId}/${this.props.configurationId}/map.svg`
       : 'https://maps.ticketevolution.com/maps/not_available.svg'
     fetch(mapURL)
       .then(response => {
-        if (response.ok) {
-          response.text().then(mapHtmlString => {
-            let mapRoot = document.getElementById('mapRoot')
-            if (mapRoot) {
-              mapRoot.innerHTML = mapHtmlString
-            }
-          })
-        } else {
+        if (!response.ok) {
           throw Error('There was an error with your request, please try again')
+        }
+        return response.text()
+      })
+      .then(mapHtmlString => {
+        let mapRoot = document.getElementById('mapRoot')
+        if (mapRoot) {
+          mapRoot.innerHTML = mapHtmlString
         }
       })
       .then(() => {
         // can be removed once a decision is made on how venueConfiguration is being received
         return fetch(
           'https://maps.ticketevolution.com/maps/' +
-            this.tevoWindow.venueId +
+            this.props.venueId +
             '/' +
-            this.tevoWindow.configurationId +
+            this.props.configurationId +
             '/manifest.json'
         ).then(response => {
           if (response.ok) {
@@ -142,7 +111,7 @@ export default class TicketMap extends Component<*, State> {
       })
       .then(() => {
         // check if a seatmaps container width is set in the config then resize the map accordingly
-        const mapWidth = this.tevoWindow.containerWidth ? this.tevoWindow.containerWidth : window.innerWidth
+        const mapWidth = this.props.containerWidth ? this.props.containerWidth : window.innerWidth
         const mapSvg = document.querySelector('#mapRoot > svg')
         if (mapSvg && mapSvg.attributes.length) {
           mapSvg.setAttribute('width', `${mapWidth}`)
@@ -154,7 +123,7 @@ export default class TicketMap extends Component<*, State> {
         }
       })
       .then(() => {
-        if (this.tevoWindow.configurationId) {
+        if (this.props.configurationId) {
           this.setState({
             venueSections: Object.keys(this.state.venueConfiguration.sectionZoneMetas),
           })
@@ -166,9 +135,27 @@ export default class TicketMap extends Component<*, State> {
         // this request plays off of the following request:
         // https://friends.ticketevolution.com/api/v9/ticket_groups?event_id=1294624&order_by=retail_price&type=event
         // it includes a new field: section_id, which is what we need
-        window._ticketEvolution.setAvailableTicketsToBeDisplayed(MOCK_TICKET_ARRAY.ticket_groups)
+        this.setAvailableTicketsToBeDisplayed(MOCK_TICKET_ARRAY.ticket_groups)
       })
-      .catch(e => console.log('Error Message: ', e))
+      .catch(console.error)
+  }
+
+  setAvailableTicketsToBeDisplayed = (availableTickets: any) => {
+    const cleanAvailableTicketBlocks = availableTickets.reduce((data, block) => {
+      if (this.state.venueConfiguration.sectionZoneMetas[block.section_id]) {
+        data.push({
+          sectionId: block.section_id,
+          ticketType: block.ticket_type,
+          price: block.retail_price,
+          zoneId: this.state.venueConfiguration.sectionZoneMetas[block.section_id].zid,
+        });
+      } else {
+        console.log(`Section _${block.section_id}_ not found. Please verify it exists in the venue manifest`)
+      }
+      return data;
+    }, [])
+    this.updateMap(cleanAvailableTicketBlocks)
+    this.setState({ availableTicketBlocks: cleanAvailableTicketBlocks })
   }
 
   removeDuplicateProps(arr: Array<TicketBlockType>, prop: string): Array<TicketBlockType> {
@@ -182,19 +169,19 @@ export default class TicketMap extends Component<*, State> {
     if (elem) {
       switch (ticketType) {
         case 'primary':
-          elem.setAttribute('fill', this.tevoWindow.primarySectionFill)
+          elem.setAttribute('fill', this.props.primarySectionFill)
           break
         case 'cheap':
-          elem.setAttribute('fill', this.tevoWindow.cheapSectionFill)
+          elem.setAttribute('fill', this.props.cheapSectionFill)
           break
         case 'expensive':
-          elem.setAttribute('fill', this.tevoWindow.expensiveSectionFill)
+          elem.setAttribute('fill', this.props.expensiveSectionFill)
           break
         case 'empty':
-          elem.setAttribute('fill', this.tevoWindow.emptySectionFill)
+          elem.setAttribute('fill', this.props.emptySectionFill)
           break
         case 'hover':
-          elem.setAttribute('fill', this.tevoWindow.hoverSectionFill)
+          elem.setAttribute('fill', this.props.hoverSectionFill)
           break
         default:
           console.log('no color defined')
@@ -239,7 +226,7 @@ export default class TicketMap extends Component<*, State> {
 
   doHover(event: any, id: string): void {
     if (this.state.isZoneToggled) {
-      this.setAttrOnTargetedObjects(id, this.tevoWindow.hoverSectionFill, 'fill')
+      this.setAttrOnTargetedObjects(id, this.props.hoverSectionFill, 'fill')
       if (this.state.currentHoveredZone === this.state.venueConfiguration.sectionZoneMetas[id].zid) {
         clearTimeout(this.mouseOutTimeout)
       }
@@ -304,7 +291,7 @@ export default class TicketMap extends Component<*, State> {
         this.colorZones(this.state.availableTicketBlocks)
       } else {
         if (fillColor) {
-          if (fillColor.nodeValue === this.tevoWindow.hoverSectionFill) {
+          if (fillColor.nodeValue === this.props.hoverSectionFill) {
             const section = this.state.availableTicketBlocks.find(block => {
               return parseInt(id) === block.sectionId
             })
@@ -351,23 +338,15 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  setColorScheme(): void {
-    COLOR_VARIABLES.forEach(colorVar => {
-      if (!this.tevoWindow[colorVar].length) {
-        this.tevoWindow[colorVar] = this.tevoWindow.theme === 'dark' ? DARK_THEME[colorVar] : LIGHT_THEME[colorVar]
-      }
-    })
-  }
-
   setupMap(): void {
     const rootElement = document && document.getElementById('rootElement')
 
     // set font if specified in config, if none is specified, leave as default
     // font in the map
-    if (this.tevoWindow.mapFontFamily) {
+    if (this.props.mapFontFamily) {
       document
         .querySelectorAll('#rootElement text')
-        .forEach(elem => (elem.style.fontFamily = `${this.tevoWindow.mapFontFamily}`))
+        .forEach(elem => (elem.style.fontFamily = `${this.props.mapFontFamily}`))
     }
 
     // set all sections as empty/unavailable first, regardless of zone/sections
@@ -457,9 +436,9 @@ export default class TicketMap extends Component<*, State> {
     const fillColor = target.attributes.getNamedItem('fill')
     if (
       [
-        this.tevoWindow.primarySectionFill,
-        this.tevoWindow.selectedSectionFill,
-        this.tevoWindow.hoverSectionFill,
+        this.props.primarySectionFill,
+        this.props.selectedSectionFill,
+        this.props.hoverSectionFill,
       ].includes(fillColor.nodeValue) &&
       fillColor.nodeValue !== '#6f6f6f'
     ) {
@@ -467,7 +446,7 @@ export default class TicketMap extends Component<*, State> {
       const isSectionSelected = this.state.selectedSections.includes(target.id)
       target.setAttribute(
         'fill',
-        isSectionSelected ? this.tevoWindow.primarySectionFill : this.tevoWindow.selectedSectionFill
+        isSectionSelected ? this.props.primarySectionFill : this.props.selectedSectionFill
       )
       target.setAttribute('stroke-width', isSectionSelected ? '0.4' : '2')
       target.setAttribute('stroke', isSectionSelected ? '#555' : '#2f343b')
@@ -485,9 +464,9 @@ export default class TicketMap extends Component<*, State> {
     if (fillColor) {
       if (
         [
-          this.tevoWindow.primarySectionFill,
-          this.tevoWindow.selectedSectionFill,
-          this.tevoWindow.hoverSectionFill,
+          this.props.primarySectionFill,
+          this.props.selectedSectionFill,
+          this.props.hoverSectionFill,
         ].includes(fillColor.nodeValue) &&
         fillColor.nodeValue !== '#6f6f6f'
       ) {
@@ -497,7 +476,7 @@ export default class TicketMap extends Component<*, State> {
         this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '0.4' : '2', 'stroke-width')
         this.setAttrOnTargetedObjects(
           target.id,
-          isSectionSelected ? this.tevoWindow.primarySectionFill : this.tevoWindow.selectedSectionFill,
+          isSectionSelected ? this.props.primarySectionFill : this.props.selectedSectionFill,
           'fill'
         )
         this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '#555' : '#2f343b', 'stroke')
@@ -507,8 +486,8 @@ export default class TicketMap extends Component<*, State> {
           ? this.state.selectedSections.filter(el => !matchingSections.includes(el))
           : this.state.selectedSections.concat(matchingSections)
 
-        if (typeof this.tevoWindow.onTicketsSelected === 'function') {
-          this.tevoWindow.onSelection(selectedSections)
+        if (typeof this.props.onTicketsSelected === 'function') {
+          this.props.onSelection(selectedSections)
         }
         this.setState({
           selectedSections,
@@ -549,7 +528,7 @@ export default class TicketMap extends Component<*, State> {
     return (
       <div
         style={{
-          width: `${this.tevoWindow.containerWidth}px`,
+          width: `${this.props.containerWidth}px`,
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -702,10 +681,10 @@ export default class TicketMap extends Component<*, State> {
           </div>
         </div>
         <div
-          id={'mapRoot'}
+          id='mapRoot'
           style={{
             cursor: '-webkit-grab',
-            width: this.tevoWindow.containerWidth,
+            width: this.props.containerWidth,
           }}
         />
       </div>

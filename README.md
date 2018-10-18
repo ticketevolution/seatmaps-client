@@ -16,22 +16,26 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 <!-- Ticket Evolution Seatmaps -->
 <script src="https://maps.ticketevolution.com/tevomaps.js"></script>
 <script type="text/javascript">
-  window._ticketEvolution = {
+  var seatmap = new Seatmap({
     venueId: '10',
     configurationId: '1046',
-    rootId: 'root'
     containerWidth: '700',
-    theme: 'dark',
+    theme: 'light',
+    isZoneDefault: true,
     emptySectionFill: '',
     primarySectionFill: '',
     cheapSectionFill: '',
     expensiveSectionFill: '',
     selectedSectionFill: '',
     hoverSectionFill: '',
-    mapFontFamily: 'arial',
-    isZoneDefault: true,
-    showTooltip: true
-  }
+    mapFontFamily: 'courier',
+    showTooltip: true,
+    selectedSections: [],
+    onSelection: function (sectionsSelected) {
+      console.log('sections selected: ', sectionsSelected)
+    }
+  });
+  seatmap.init(document.getElementById('root'));
 </script>
 <!-- End Ticket Evolution Seatmaps -->
 ```
@@ -48,30 +52,26 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 <script src="https://maps.ticketevolution.com/tevomaps.js"></script>
 ```
 
-### 2. Include the Ticket Evolution window object on your page
+### 2. Instantiate the Seatmaps object on your page
 
 # Configuration
 
 ## Required Configuration
 
 ```javascript
-window._ticketEvolution = {
+{
   // Ticket Map Venue ID
   venueId: '10',
 
   // Ticket Configuration ID
-  configurationId: '1046',
-
-  // Root Element ID where the map will be
-  // rendered in your HTML (should be unique)
-  rootId: 'root'
+  configurationId: '1046'
 }
 ```
 
 ## Additional Configuration
 
 ```javascript
-window._ticketEvolution = {
+{
   // It is inferred that the width that is provided is in pixels
   // i.e. below would equal 500px
   width: '500',
