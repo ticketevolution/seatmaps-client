@@ -108,3 +108,17 @@ window._ticketEvolution = {
   showTooltip: true
 }
 ```
+# Contributing
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+## Prerequisites
+- Node
+
+## Getting Started
+We've made the startup process simple by using a Makefile for all common workflows.
+
+To see what Makefile commands are available, in your terminal shell run `make` or `make help`. It will list all the available Makefile commands with their descriptions, such as
+```Makefile
+install                        Install client and server side packages for development
+start                          Start the development server
+```

@@ -13,20 +13,15 @@
     "npm": ">=8"
   },
   "scripts": {
-    "analyze": "node ./internals/scripts/analyze.js",
-    "clean-build": "rm -rf ./build",
-    "prebuild": "yarn test",
-    "build": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
-    "build:dll": "node ./internals/scripts/dependencies.js",
-    "start": "yarn && yarn build:dll && cross-env NODE_ENV=development node server",
+    "prebuild": "node ./internals/scripts/buildDllManifest.js",
+    "build": "cross-env BUILDING_DLL=true webpack --config internals/webpack/webpack.dll.babel.js --color",
+    "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
+    "start": "cross-env NODE_ENV=development node server",
     "start:prod": "cross-env NODE_ENV=production node server",
-    "deploy:production": "yarn build && yarn start:prod",
-    "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
-    "flow": "flow",
-    "pretest": "yarn flow && yarn test:clean",
-    "test:clean": "rm -rf ./coverage",
+    "pretest": "flow",
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
-    "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll"
+    "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
+    "analyze": "webpack --config internals/webpack/webpack.prod.babel.js --profile --json > stats.json"
   },
   "babel": {
     "presets": [
