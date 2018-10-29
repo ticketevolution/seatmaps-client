@@ -35,7 +35,7 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
       console.log('sections selected: ', sectionsSelected)
     }
   });
-  seatmap.init(document.getElementById('root'));
+  seatmap.init('root');
 </script>
 <!-- End Ticket Evolution Seatmaps -->
 ```

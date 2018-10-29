@@ -5,7 +5,6 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="mobile-web-app-capable" content="yes">
   <title>Ticket Evolution - Local</title>
@@ -15,29 +14,31 @@
   <noscript>If you're seeing this message, that means <strong>JavaScript has been disabled on your browser</strong>,
     please <strong>enable JS</strong> to make Smart Select work.</noscript>
   <div id="root" style="height: 100%;"></div>
+
+  <script>
+    window.addEventListener('load', function () {
+      var seatmapFactory = new SeatmapFactory({
+        venueId: '10',
+        configurationId: '1046',
+        containerWidth: '700',
+        theme: 'light',
+        isZoneDefault: true,
+        emptySectionFill: '',
+        primarySectionFill: '',
+        cheapSectionFill: '',
+        expensiveSectionFill: '',
+        selectedSectionFill: '',
+        hoverSectionFill: '',
+        mapFontFamily: 'courier',
+        showTooltip: true,
+        selectedSections: [],
+        onSelection: function (sectionsSelected) {
+          console.log('sections selected: ', sectionsSelected)
+        }
+      });
+      var seatmap = seatmapFactory.build('root');
+    });
+  </script>
 </body>
-<script>
-  var seatmap = new Seatmap({
-    venueId: '10',
-    configurationId: '1046',
-    containerId: 'root',
-    containerWidth: '700',
-    theme: 'light',
-    isZoneDefault: true,
-    emptySectionFill: '',
-    primarySectionFill: '',
-    cheapSectionFill: '',
-    expensiveSectionFill: '',
-    selectedSectionFill: '',
-    hoverSectionFill: '',
-    mapFontFamily: 'courier',
-    showTooltip: true,
-    selectedSections: [],
-    onSelection: function (sectionsSelected) {
-      console.log('sections selected: ', sectionsSelected)
-    }
-  });
-  seatmap.init(document.getElementById('root'));
-</script>
 
 </html>
