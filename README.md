@@ -16,22 +16,26 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 <!-- Ticket Evolution Seatmaps -->
 <script src="https://maps.ticketevolution.com/tevomaps.js"></script>
 <script type="text/javascript">
-  window._ticketEvolution = {
+  var seatmap = new Seatmap({
     venueId: '10',
     configurationId: '1046',
-    rootId: 'root'
     containerWidth: '700',
-    theme: 'dark',
+    theme: 'light',
+    isZoneDefault: true,
     emptySectionFill: '',
     primarySectionFill: '',
     cheapSectionFill: '',
     expensiveSectionFill: '',
     selectedSectionFill: '',
     hoverSectionFill: '',
-    mapFontFamily: 'arial',
-    isZoneDefault: true,
-    showTooltip: true
-  }
+    mapFontFamily: 'courier',
+    showTooltip: true,
+    selectedSections: [],
+    onSelection: function (sectionsSelected) {
+      console.log('sections selected: ', sectionsSelected)
+    }
+  });
+  seatmap.init('root');
 </script>
 <!-- End Ticket Evolution Seatmaps -->
 ```
@@ -48,30 +52,26 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 <script src="https://maps.ticketevolution.com/tevomaps.js"></script>
 ```
 
-### 2. Include the Ticket Evolution window object on your page
+### 2. Instantiate the Seatmaps object on your page
 
 # Configuration
 
 ## Required Configuration
 
 ```javascript
-window._ticketEvolution = {
+{
   // Ticket Map Venue ID
   venueId: '10',
 
   // Ticket Configuration ID
-  configurationId: '1046',
-
-  // Root Element ID where the map will be
-  // rendered in your HTML (should be unique)
-  rootId: 'root'
+  configurationId: '1046'
 }
 ```
 
 ## Additional Configuration
 
 ```javascript
-window._ticketEvolution = {
+{
   // It is inferred that the width that is provided is in pixels
   // i.e. below would equal 500px
   width: '500',
@@ -107,4 +107,18 @@ window._ticketEvolution = {
   // section or zone, default is true
   showTooltip: true
 }
+```
+# Contributing
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+## Prerequisites
+- Node
+
+## Getting Started
+We've made the startup process simple by using a Makefile for all common workflows.
+
+To see what Makefile commands are available, in your terminal shell run `make` or `make help`. It will list all the available Makefile commands with their descriptions, such as
+```Makefile
+install                        Install client and server side packages for development
+start                          Start the development server
 ```

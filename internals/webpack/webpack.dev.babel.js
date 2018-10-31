@@ -30,7 +30,7 @@ if (dllPlugin) {
 }
 
 module.exports = require('./webpack.base.babel')({
-  entry: ['webpack-hot-middleware/client?reload=true', path.join(process.cwd(), 'src/index.js')],
+  entry: ['babel-polyfill', 'webpack-hot-middleware/client?reload=true', path.join(process.cwd(), 'src/index.js')],
 
   // Don't use hashes in dev mode for better performance
   output: {

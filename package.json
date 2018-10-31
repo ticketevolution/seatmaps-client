@@ -13,20 +13,15 @@
     "npm": ">=8"
   },
   "scripts": {
-    "analyze": "node ./internals/scripts/analyze.js",
-    "clean-build": "rm -rf ./build",
-    "prebuild": "yarn test",
-    "build": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
-    "build:dll": "node ./internals/scripts/dependencies.js",
-    "start": "yarn && yarn build:dll && cross-env NODE_ENV=development node server",
+    "prebuild": "node ./internals/scripts/buildDllManifest.js",
+    "build": "cross-env BUILDING_DLL=true webpack --config internals/webpack/webpack.dll.babel.js --color",
+    "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
+    "start": "cross-env NODE_ENV=development node server",
     "start:prod": "cross-env NODE_ENV=production node server",
-    "deploy:production": "yarn build && yarn start:prod",
-    "clean:all": "yarn analyze:clean && yarn test:clean && yarn build:clean",
-    "flow": "flow",
-    "pretest": "yarn flow && yarn test:clean",
-    "test:clean": "rm -rf ./coverage",
+    "pretest": "flow",
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
-    "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll"
+    "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
+    "analyze": "webpack --config internals/webpack/webpack.prod.babel.js --profile --json > stats.json"
   },
   "babel": {
     "presets": [
@@ -38,7 +33,8 @@
       ],
       "stage-0",
       "flow",
-      "preact"
+      "preact",
+      "es2015"
     ],
     "plugins": [
       [
@@ -113,6 +109,7 @@
   "dependencies": {
     "preact": "8.2.9",
     "preact-compat": "3.18.0",
+    "react-inlinesvg": "^0.8.2",
     "react-toggled": "1.2.6",
     "react-transition-group": "2.3.1",
     "spin.js": "3.1.0",
@@ -120,11 +117,11 @@
     "unfetch": "3.0.0"
   },
   "devDependencies": {
-    "add-asset-html-webpack-plugin": "2.1.3",
+    "add-asset-html-webpack-plugin": "^3.0.0",
     "babel-cli": "^6.24.1",
-    "babel-core": "6.26.3",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.2",
-    "babel-loader": "7.1.4",
+    "babel-loader": "^7.1.4",
     "babel-plugin-dynamic-import-node": "1.2.0",
     "babel-plugin-react-transform": "3.0.0",
     "babel-plugin-styled-components": "1.5.1",
@@ -133,11 +130,12 @@
     "babel-plugin-transform-react-constant-elements": "6.23.0",
     "babel-plugin-transform-react-inline-elements": "6.22.0",
     "babel-plugin-transform-react-remove-prop-types": "0.4.13",
-    "babel-polyfill": "6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "1.7.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "6.23.0",
     "babel-preset-preact": "1.1.0",
-    "babel-preset-stage-0": "6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "chai": "4.1.2",
     "compression-webpack-plugin": "1.1.11",
     "cross-env": "5.1.5",
@@ -152,6 +150,7 @@
     "eslint-plugin-react": "^7.1.0",
     "eslint-plugin-standard": "^3.0.1",
     "exports-loader": "0.7.0",
+    "expose-loader": "^0.7.5",
     "file-loader": "1.1.11",
     "flow-bin": "0.72.0",
     "html-loader": "0.5.5",

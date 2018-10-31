@@ -1,33 +1,62 @@
 /* @flow */
 
+import React from 'react'
 import { h, render } from 'preact' /** @jsx h */
 import TicketMap from './ticketmap'
-import TicketEvolutionWindow from 'window'
 
-if (process.env.NODE_ENV === 'development') {
-  // Enable preact devtools
-  // eslint-disable-next-line import/no-unassigned-import
-  require('preact/devtools')
-}
+export default window.SeatmapFactory = class SeatmapFactory {
+    configuration: any;
 
-const root = document.getElementById(TicketEvolutionWindow.containerId)
+    static requiredConfigKeys = [
+        'venueId',
+        'configurationId'
+    ];
 
-if (root) {
-  // we don't want pointer events on text elements
-  // also include css for tooltips
-  const cssContent =
-    '#rootElement text{-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none} .message-enter{opacity:.01}.message-enter-active{opacity:1;transition:all .3s ease-out}.message-exit{opacity:1}.message-exit-active{opacity:.01;transition:all .3s ease-out}'
-  const head = document.head
-  let styleSheet = document.createElement('style')
-  styleSheet.type = 'text/css'
-  styleSheet.appendChild(document.createTextNode(cssContent))
-  // $FlowFixMe
-  head.appendChild(styleSheet)
-  // $FlowFixMe
-  render(<TicketMap />, root, root.lastChild)
-}
+    static optionalConfigKeys = [
+        'containerWidth',
+        'theme',
+        'isZoneDefault',
+        'emptySectionFill',
+        'primarySectionFill',
+        'cheapSectionFill',
+        'expensiveSectionFill',
+        'selectedSectionFill',
+        'hoverSectionFill',
+        'mapFontFamily',
+        'showTooltip',
+        'selectedSections',
+        'onSelection'
+    ];
 
-// Hot Module Replacement
-if (module.hot) {
-  module.hot.accept()
+    constructor(options = {}) {
+        this.validateOptions(options);
+        this.configuration = this.extractConfigurationFromOptions(options);
+    }
+
+    extractConfigurationFromOptions(options) {
+        return Object.keys(options).reduce((memo, key) => [...SeatmapFactory.requiredConfigKeys, ...SeatmapFactory.optionalConfigKeys].includes(key) ? { ...memo, [key]: options[key] } : memo, {});
+    }
+
+    validateOptions(options) {
+        for (let key of SeatmapFactory.requiredConfigKeys) {
+            if (!options.hasOwnProperty(key)) {
+                throw new Error(`Seatmap configuration requires a '${key}' value.`);
+            }
+        }
+    }
+
+    build(rootElementId: string) {
+        if (!rootElementId) {
+            throw new Error('Seatmaps must be initialized with a DOM element.')
+        }
+
+        const rootElement = document.getElementById(rootElementId);
+        if (!rootElement) {
+            throw new Error('Seatmaps must be initialized with a DOM element.')
+        }
+
+        let componentRef;
+        render(<TicketMap {...this.configuration} ref={component => componentRef = component} />, rootElement);
+        return componentRef.publicApi;
+    }
 }

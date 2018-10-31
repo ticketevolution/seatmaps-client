@@ -11,6 +11,7 @@ build
 
 # local development
 .cache
+stats.json
 
 # misc
 .DS_Store
