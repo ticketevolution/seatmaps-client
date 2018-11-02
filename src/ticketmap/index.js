@@ -125,7 +125,7 @@ export default class TicketMap extends Component<*, State> {
   }
 
   async fetchMap() {
-    const mapSvgUrl = `https://maps.ticketevolution.com/maps/${this.props.venueId}/${this.props.configurationId}/map.svg`;
+    const mapSvgUrl = `https://maps.ticketevolution.com/${this.props.venueId}/${this.props.configurationId}/map.svg`;
     const mapNotAvailableUrl = 'https://maps.ticketevolution.com/maps/not_available.svg';
     const mapResponse = await fetch(this.props.configurationId ? mapSvgUrl : mapNotAvailableUrl);
     if (!mapResponse.ok) {
