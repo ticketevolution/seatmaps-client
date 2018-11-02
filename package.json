@@ -16,7 +16,7 @@
     "prebuild": "node ./internals/scripts/buildDllManifest.js",
     "build": "cross-env BUILDING_DLL=true webpack --config internals/webpack/webpack.dll.babel.js --color",
     "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
-    "start": "cross-env NODE_ENV=development node server",
+    "start": "cross-env NODE_ENV=development PORT=3000 node server",
     "start:prod": "cross-env NODE_ENV=production node server",
     "pretest": "flow",
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache",

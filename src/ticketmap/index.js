@@ -140,7 +140,7 @@ export default class TicketMap extends Component<*, State> {
   }
 
   async fetchManifest() {
-    const manifestResponse = await fetch(`https://maps.ticketevolution.com/maps/${this.props.venueId}/${this.props.configurationId}/manifest.json`);
+    const manifestResponse = await fetch(`https://maps.ticketevolution.com/${this.props.venueId}/${this.props.configurationId}/manifest.json`);
     if (!manifestResponse.ok) {
       throw Error('There was an error fetching the venue map data, please try again')
     }
@@ -196,42 +196,30 @@ export default class TicketMap extends Component<*, State> {
 
   colorIn(id: number, ticketType: string): void {
     const elem = document.getElementById(`${id}`)
-    if (elem) {
-      switch (ticketType) {
-        case 'primary':
-          elem.setAttribute('fill', this.state.primarySectionFill)
-          break
-        case 'cheap':
-          elem.setAttribute('fill', this.state.cheapSectionFill)
-          break
-        case 'expensive':
-          elem.setAttribute('fill', this.state.expensiveSectionFill)
-          break
-        case 'empty':
-          elem.setAttribute('fill', this.state.emptySectionFill)
-          break
-        case 'hover':
-          elem.setAttribute('fill', this.state.hoverSectionFill)
-          break
-        default:
-          console.log('no color defined')
-      }
+    if (!elem) {
+      return;
+    }
+    switch (ticketType) {
+      case 'primary': return elem.setAttribute('fill', this.state.primarySectionFill)
+      case 'cheap': return elem.setAttribute('fill', this.state.cheapSectionFill)
+      case 'expensive': return elem.setAttribute('fill', this.state.expensiveSectionFill)
+      case 'empty': return elem.setAttribute('fill', this.state.emptySectionFill)
+      case 'hover': return elem.setAttribute('fill', this.state.hoverSectionFill)
+      default: console.log('no color defined')
     }
   }
 
   matchingZoneSectionsBySectionId(sectionId: number): Array<string> {
-    return Object.keys(this.state.venueConfiguration.sectionZoneMetas).filter((key) => {
-      return this.state.venueConfiguration.sectionZoneMetas[sectionId] &&
-          this.state.venueConfiguration.sectionZoneMetas[key].zid ===
-          this.state.venueConfiguration.sectionZoneMetas[sectionId].zid;
-    })
+    const { sectionZoneMetas } = this.state.venueConfiguration;
+    const zoneMeta = sectionZoneMetas[sectionId];
+    return Object.keys(sectionZoneMetas).filter((key) => zoneMeta && sectionZoneMetas[key].zid === zoneMeta.zid)
   }
 
   colorZones(availableTicketBlocks: Array<TicketBlockType>): void {
-    const availableZones = this.removeDuplicateProps(availableTicketBlocks, 'zoneId')
-    availableZones.forEach(zoneBlock =>
-      this.matchingZoneSectionsBySectionId(zoneBlock.sectionId).forEach(id =>
-        this.colorIn(parseInt(id), zoneBlock.ticketType))
+    this.removeDuplicateProps(availableTicketBlocks, 'zoneId')
+      .forEach(zoneBlock =>
+        this.matchingZoneSectionsBySectionId(zoneBlock.sectionId).forEach(id =>
+          this.colorIn(parseInt(id), zoneBlock.ticketType))
     )
   }
 
@@ -248,41 +236,23 @@ export default class TicketMap extends Component<*, State> {
   }
 
   doHover(event: any, id: string): void {
+    const { zid, name } = this.state.venueConfiguration.sectionZoneMetas[id];
     if (this.state.isZoneToggled) {
       this.setAttrOnTargetedObjects(id, this.state.hoverSectionFill, 'fill')
-      if (this.state.currentHoveredZone === this.state.venueConfiguration.sectionZoneMetas[id].zid) {
+      if (this.state.currentHoveredZone === zid) {
         clearTimeout(this.mouseOutTimeout)
       }
 
-      const matchingZoneListings = this.state.availableTicketBlocks.filter(section => {
-        return section.zoneId === this.state.venueConfiguration.sectionZoneMetas[id].zid
-      })
-
-      this.setTooltipProps(
-        event,
-        this.state.venueConfiguration.sectionZoneMetas[id].name,
-        // lowest price
-        matchingZoneListings.reduce(
-          (min, section) => (section.price < min ? section.price : min),
-          matchingZoneListings[0].price
-        ),
-        matchingZoneListings.length,
-        this.state.venueConfiguration.sectionZoneMetas[id].zid
-      )
-    } else {
-      const matchingSectionListings = this.state.availableTicketBlocks.filter(block => block.sectionId === parseInt(id))
-      this.setTooltipProps(
-        event,
-        this.state.venueConfiguration.sectionZoneMetas[id].name,
-        matchingSectionListings.reduce(
-          (min, section) => (section.price < min ? section.price : min),
-          matchingSectionListings[0].price
-        ),
-        matchingSectionListings.length
-      )
-
-      return this.colorIn(parseInt(id), 'hover')
+      const matchingListings = this.state.availableTicketBlocks.filter(section => section.zoneId === zid)
+      const lowestPrice = matchingListings.reduce((min, section) => (section.price < min) ? section.price : min, matchingListings[0].price);
+      return this.setTooltipProps(event, name, lowestPrice, matchingListings.length, zid)
     }
+
+    const matchingListings = this.state.availableTicketBlocks.filter(block => block.sectionId === parseInt(id))
+    const lowestPrice = matchingListings.reduce((min, section) => (section.price < min) ? section.price : min, matchingListings[0].price);
+    this.setTooltipProps(event, name, lowestPrice, matchingListings.length);
+
+    return this.colorIn(parseInt(id), 'hover')
   }
 
   setTooltipProps(event: any, name: string, price: number, count: number, zid?: string): void {
@@ -293,8 +263,7 @@ export default class TicketMap extends Component<*, State> {
       tooltipX:
         event.clientX - SCREEN_BUFFER < 0
           ? event.clientX
-          : // $FlowFixMe
-            document.body.clientWidth - TOOLTIP_BUFFER < event.clientX
+          : document.body.clientWidth - TOOLTIP_BUFFER < event.clientX
             ? event.clientX - TOOLTIP_BUFFER
             : event.clientX - 10,
       tooltipY: event.clientY - SCREEN_BUFFER < 0 ? event.clientY + 50 : event.clientY - SCREEN_BUFFER,
@@ -305,24 +274,17 @@ export default class TicketMap extends Component<*, State> {
 
   doHoverCleanup(target: HTMLElement, id: string): void {
     const fillColor = target.attributes.getNamedItem('fill')
-    this.setState({
-      activeTooltip: false,
-    })
+    this.setState({ activeTooltip: false })
 
-    if (fillColor) {
-      if (this.state.isZoneToggled) {
-        this.colorZones(this.state.availableTicketBlocks)
-      } else {
-        if (fillColor) {
-          if (fillColor.nodeValue === this.state.hoverSectionFill) {
-            const section = this.state.availableTicketBlocks.find(block => {
-              return parseInt(id) === block.sectionId
-            })
-            // $FlowFixMe
-            this.colorIn(id, section.ticketType)
-          }
-        }
-      }
+    if (!fillColor) {
+      return;
+    }
+    if (this.state.isZoneToggled) {
+      return this.colorZones(this.state.availableTicketBlocks);
+    }
+    if (fillColor.nodeValue === this.state.hoverSectionFill) {
+      const section = this.state.availableTicketBlocks.find(block => parseInt(id) === block.sectionId)
+      this.colorIn(id, section.ticketType)
     }
   }
 
@@ -337,19 +299,15 @@ export default class TicketMap extends Component<*, State> {
   }
 
   setAttrOnTargetedObjects(targetId: string, color: string, type: string): void {
-    const matchingSections = this.matchingZoneSectionsBySectionId(parseInt(targetId))
-
-    if (matchingSections) {
-      matchingSections.forEach(sectionId => {
+    this.matchingZoneSectionsBySectionId(parseInt(targetId))
+      .forEach(sectionId => {
         const elem = document.getElementById(`${sectionId}`)
         if (elem) {
-          // $FlowFixMe
-          document.getElementById(`${sectionId}`).setAttribute(type, color)
+          elem.setAttribute(type, color)
         } else {
           console.log('id not found: ', sectionId)
         }
       })
-    }
   }
 
   setupMap(): void {
@@ -443,67 +401,47 @@ export default class TicketMap extends Component<*, State> {
 
   selectZone(target: HTMLElement): void {
     const fillColor = target.attributes.getNamedItem('fill')
-    if (
-      [
-        this.state.primarySectionFill,
-        this.state.selectedSectionFill,
-        this.state.hoverSectionFill,
-      ].includes(fillColor.nodeValue) &&
-      fillColor.nodeValue !== '#6f6f6f'
-    ) {
-      // don't want to select an unavailable section
-      const isSectionSelected = this.state.selectedSections.includes(target.id)
-      target.setAttribute(
-        'fill',
-        isSectionSelected ? this.state.primarySectionFill : this.state.selectedSectionFill
-      )
-      target.setAttribute('stroke-width', isSectionSelected ? '0.4' : '2')
-      target.setAttribute('stroke', isSectionSelected ? '#555' : '#2f343b')
-      const selectedSections = isSectionSelected
-        ? this.state.selectedSections.filter(e => e !== target.id)
-        : [].concat(this.state.selectedSections, target.id)
-      this.setState({
-        selectedSections,
-      })
+    if (!fillColor || this.isSectionUnavailable(fillColor.nodeValue)) {
+      return;
     }
+    // don't want to select an unavailable section
+    const isSectionSelected = this.state.selectedSections.includes(target.id)
+
+    target.setAttribute('fill', isSectionSelected ? this.state.primarySectionFill : this.state.selectedSectionFill)
+    target.setAttribute('stroke-width', isSectionSelected ? '0.4' : '2')
+    target.setAttribute('stroke', isSectionSelected ? '#555' : '#2f343b')
+
+    this.setState({
+      selectedSections: isSectionSelected
+        ? this.state.selectedSections.filter(e => e !== target.id)
+        : [ ...this.state.selectedSections, target.id ]
+    });
   }
 
   selectSectionOrZone(target: HTMLElement): void {
     const fillColor = target.attributes.getNamedItem('fill')
-    if (fillColor) {
-      if (
-        [
-          this.state.primarySectionFill,
-          this.state.selectedSectionFill,
-          this.state.hoverSectionFill,
-        ].includes(fillColor.nodeValue) &&
-        fillColor.nodeValue !== '#6f6f6f'
-      ) {
-        // don't want to select an unavailable section
-        const isSectionSelected = this.state.selectedSections.includes(target.id)
-
-        this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '0.4' : '2', 'stroke-width')
-        this.setAttrOnTargetedObjects(
-          target.id,
-          isSectionSelected ? this.state.primarySectionFill : this.state.selectedSectionFill,
-          'fill'
-        )
-        this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '#555' : '#2f343b', 'stroke')
-
-        const matchingSections = this.matchingZoneSectionsBySectionId(parseInt(target.id))
-        const selectedSections = isSectionSelected
-          ? this.state.selectedSections.filter(el => !matchingSections.includes(el))
-          : this.state.selectedSections.concat(matchingSections)
-
-        if (typeof this.props.onTicketsSelected === 'function') {
-          this.props.onSelection(selectedSections)
-        }
-        this.setState({
-          selectedSections,
-        })
-      }
+    if (!fillColor || this.isSectionUnavailable(fillColor.nodeValue)) {
+      return;
     }
+    // don't want to select an unavailable section
+    const isSectionSelected = this.state.selectedSections.includes(target.id)
+
+    this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '0.4' : '2', 'stroke-width')
+    this.setAttrOnTargetedObjects(target.id, isSectionSelected ? this.state.primarySectionFill : this.state.selectedSectionFill, 'fill')
+    this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '#555' : '#2f343b', 'stroke')
+
+    const matchingSections = this.matchingZoneSectionsBySectionId(parseInt(target.id))
+    const selectedSections = isSectionSelected
+      ? this.state.selectedSections.filter(el => !matchingSections.includes(el))
+      : this.state.selectedSections.concat(matchingSections)
+
+    if (typeof this.props.onTicketsSelected === 'function') {
+      this.props.onSelection(selectedSections)
+    }
+    this.setState({ selectedSections });
   }
+
+  isSectionUnavailable = (fillColor) => [ this.state.primarySectionFill, this.state.selectedSectionFill, this.state.hoverSectionFill, '#6f6f6f' ].includes(fillColor.nodeValue);
 
   render(): ?React$Element<any> {
     return (

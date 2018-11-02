@@ -32,7 +32,7 @@ clean-all: clean ## Remove all temporary files plus installed dependencies
 	rm -rf ./server/node_modules
 
 start: install clean ## Start the development server
-	yarn test
+	# yarn test
 	@echo "\n\n\nStarting development server...\n\n\n"
 	yarn build
 	yarn start
