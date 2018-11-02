@@ -4,7 +4,7 @@ import React from 'react'
 import { h, render } from 'preact' /** @jsx h */
 import TicketMap from './ticketmap'
 
-export default window.SeatmapFactory = class SeatmapFactory {
+export default class SeatmapFactory {
     configuration: any;
 
     static requiredConfigKeys = [
@@ -57,6 +57,7 @@ export default window.SeatmapFactory = class SeatmapFactory {
 
         let componentRef;
         render(<TicketMap {...this.configuration} ref={component => componentRef = component} />, rootElement);
+
         return componentRef.publicApi;
     }
 }

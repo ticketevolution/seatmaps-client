@@ -7,6 +7,8 @@ module.exports = options => ({
     {
       path: path.resolve(process.cwd(), 'build'),
       publicPath: '/',
+      library: 'ticket-evolution-seatmaps',
+      libraryTarget: 'umd'
     },
     options.output
   ), // Merge with env dependent settings
