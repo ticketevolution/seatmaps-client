@@ -5,7 +5,7 @@ declare var module: {
   },
 }
 
-type TicketBlockType = {
+type TicketGroupType = {
   sectionId: number,
   ticketType: string,
   price: number,
@@ -14,9 +14,6 @@ type TicketBlockType = {
 
 type ColorVariableType = {
   emptySectionFill: string,
-  primarySectionFill: string,
-  cheapSectionFill: string,
-  expensiveSectionFill: string,
   selectedSectionFill: string,
   hoverSectionFill: string,
 }

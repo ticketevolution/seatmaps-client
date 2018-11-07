@@ -19,13 +19,9 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
   var seatmap = new Seatmap({
     venueId: '10',
     configurationId: '1046',
-    containerWidth: '700',
     theme: 'light',
     isZoneDefault: true,
     emptySectionFill: '',
-    primarySectionFill: '',
-    cheapSectionFill: '',
-    expensiveSectionFill: '',
     selectedSectionFill: '',
     hoverSectionFill: '',
     mapFontFamily: 'courier',
@@ -72,10 +68,6 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 
 ```javascript
 {
-  // It is inferred that the width that is provided is in pixels
-  // i.e. below would equal 500px
-  width: '500',
-
   // if you would like to use a color palette our Ticket Evolution Design team
   // has tested and optimized, please select from ('light' or 'dark')
   // should you require any of the color variables defined in the themes
@@ -86,11 +78,22 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
   // Color customization options for the different tiers of tickets available
   // Please use Hex Color format i.e (#B1DDF1)
   emptySectionFill: '#9E9E9E',
-  primarySectionFill: '#B1DDF1',
-  cheapSectionFill: '#F7B267',
-  expensiveSectionFill: '#6699CC',
   selectedSectionFill: '#F06449',
   hoverSectionFill: '#B5BA72',
+  
+  /* Define percentiles for ticket group prices. Ticket groups which fall within a given
+   * range will display the associated color on the map.
+   * 
+   * ie. Given a minimum event price of $10 and a maximum event price of $100, a ticket
+   * group whose price is $12 will be displayed as red, an a price of $77 will be
+   * displayed as green.
+   */
+  sectionPercentiles: {
+    '0.25': 'red',
+    '0.5': 'blue',
+    '0.75': 'green',
+    '1': 'yellow'
+  },
 
   // Set a default font for the map
   // native browser fonts available, a list below is provided but results may

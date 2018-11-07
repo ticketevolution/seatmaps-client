@@ -4,19 +4,15 @@ import assertJsx, { options } from 'preact-jsx-chai'
 global.window._ticketEvolution = {
   configurationId: '110_8888881',
   containerId: 'root',
-  containerWidth: '700',
   theme: 'dark',
   isZoneDefault: true,
   emptySectionFill: '',
-  primarySectionFill: '',
-  cheapSectionFill: '',
-  expensiveSectionFill: '',
   selectedSectionFill: '',
   hoverSectionFill: '',
   mapFontFamily: 'courier',
   showTooltip: true,
   selectedSections: [],
-  onSelection: function(sectionsSelected) {
+  onSelection: function (sectionsSelected) {
     console.log('sections selected: ', sectionsSelected)
   },
 }

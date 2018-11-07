@@ -7,7 +7,11 @@ module.exports = options => ({
     {
       path: path.resolve(process.cwd(), 'build'),
       publicPath: '/',
-      library: 'ticket-evolution-seatmaps',
+      library: {
+        root: 'Tevomaps',
+        amd: 'ticket-evolution-seatmaps',
+        commonjs: 'ticket-evolution-seatmaps'
+      },
       libraryTarget: 'umd'
     },
     options.output

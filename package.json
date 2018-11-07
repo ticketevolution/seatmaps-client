@@ -97,7 +97,7 @@
       "node_modules"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/internals/testing/test-bundler.js",
-    "testRegex": "tests/.*\\.test\\.js$",
+    "testRegex": ".*\\.test\\.js$",
     "globals": {
       "window": {
         "_ticketEvolution": {

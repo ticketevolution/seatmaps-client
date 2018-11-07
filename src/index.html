@@ -17,21 +17,17 @@
 
   <script>
     window.addEventListener('load', function () {
-      var seatmapFactory = new SeatmapFactory({
-        venueId: '1859',
-        configurationId: '15464',
-        containerWidth: '700',
+      var seatmapFactory = new Tevomaps.default({
+        venueId: '810',
+        configurationId: '3789',
         theme: 'light',
-        isZoneDefault: true,
-        emptySectionFill: '',
-        primarySectionFill: '',
-        cheapSectionFill: '',
-        expensiveSectionFill: '',
-        selectedSectionFill: '',
-        hoverSectionFill: '',
         mapFontFamily: 'courier',
         showTooltip: true,
         selectedSections: [],
+        sectionPercentiles: {
+          '0.5': '#2A6EBB',
+          '1': '#0CACCE'
+        },
         onSelection: function (sectionsSelected) {
           console.log('sections selected: ', sectionsSelected)
         }

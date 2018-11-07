@@ -13,19 +13,17 @@ export default class SeatmapFactory {
     ];
 
     static optionalConfigKeys = [
-        'containerWidth',
         'theme',
         'isZoneDefault',
         'emptySectionFill',
-        'primarySectionFill',
-        'cheapSectionFill',
-        'expensiveSectionFill',
         'selectedSectionFill',
         'hoverSectionFill',
         'mapFontFamily',
         'showTooltip',
         'selectedSections',
-        'onSelection'
+        'onSelection',
+        'ticketGroups',
+        'sectionPercentiles'
     ];
 
     constructor(options = {}) {
