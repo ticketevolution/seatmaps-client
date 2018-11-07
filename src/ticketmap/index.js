@@ -163,9 +163,9 @@ export default class TicketMap extends Component<*, State> {
         price: block.retail_price,
         zoneId: sectionZoneMeta.zid,
       });
-      console.log(`Section ${block.tevo_section_name} was successfully mapped!`)
+      // console.log(`Section ${block.tevo_section_name} was successfully mapped!`)
     } else {
-      console.warn(`Section ${block.tevo_section_name} not found. Please verify it exists in the venue manifest`)
+      // console.warn(`Section ${block.tevo_section_name} not found. Please verify it exists in the venue manifest`)
     }
     return memo;
   }, []);
