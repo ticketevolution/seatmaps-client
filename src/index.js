@@ -20,6 +20,7 @@ export default class SeatmapFactory {
         'hoverSectionFill',
         'mapFontFamily',
         'showTooltip',
+        'showPriceLegend',
         'selectedSections',
         'onSelection',
         'ticketGroups',
