@@ -16,6 +16,7 @@ import resetZoom from './resetZoom';
 
 const SCREEN_BUFFER = 100
 const TOOLTIP_BUFFER = 250
+const DOMAIN = 'https://maps-dev.ticketevolution.com';
 
 type State = {
   mapHtml: string,
@@ -132,9 +133,13 @@ export default class TicketMap extends Component<*, State> {
     return Object.keys(this.venueSectionMetas);
   }
 
+  get configFilePath() {
+    return `${DOMAIN}/${this.props.venueId}/${this.props.configurationId}`;
+  }
+
   async fetchMap() {
-    const mapSvgUrl = `https://maps-dev.ticketevolution.com/${this.props.venueId}/${this.props.configurationId}/map.svg`;
-    const mapNotAvailableUrl = 'https://maps.ticketevolution.com/maps/not_available.svg';
+    const mapSvgUrl = `${this.configFilePath}/map.svg`;
+    const mapNotAvailableUrl = `${DOMAIN}/maps/not_available.svg`;
     const mapResponse = await fetch(this.props.configurationId ? mapSvgUrl : mapNotAvailableUrl);
     if (!mapResponse.ok) {
       throw Error('There was an error fetching the venue map, please try again')
@@ -148,7 +153,7 @@ export default class TicketMap extends Component<*, State> {
   }
 
   async fetchManifest() {
-    const manifestResponse = await fetch(`https://maps-dev.ticketevolution.com/${this.props.venueId}/${this.props.configurationId}/manifest.json`);
+    const manifestResponse = await fetch(`${this.configFilePath}/manifest.json`);
     if (!manifestResponse.ok) {
       throw Error('There was an error fetching the venue map data, please try again')
     }
@@ -389,34 +394,17 @@ export default class TicketMap extends Component<*, State> {
     this.setFont();
     this.resetMap();
 
-    // Experimenting with zoom boundaries
-
-    // const beforePan = function (oldPan, newPan) {
-    //   let stopHorizontal = false,
-    //     stopVertical = false,
-    //     gutterWidth = 100,
-    //     gutterHeight = 100,
-    //     // Computed letiables
-    //     sizes = this.getSizes(),
-    //     leftLimit = -((sizes.viewBox.x + sizes.viewBox.width) * sizes.realZoom) + gutterWidth,
-    //     rightLimit = sizes.width - gutterWidth - sizes.viewBox.x * sizes.realZoom,
-    //     topLimit = -((sizes.viewBox.y + sizes.viewBox.height) * sizes.realZoom) + gutterHeight,
-    //     bottomLimit = sizes.height - gutterHeight - sizes.viewBox.y * sizes.realZoom
-    //   let customPan = {}
-    //   customPan.x = Math.max(leftLimit, Math.min(rightLimit, newPan.x))
-    //   customPan.y = Math.max(topLimit, Math.min(bottomLimit, newPan.y))
-    //   return customPan
-    // }
-
     this.mapZoom = svgPanZoom(mapSvg, {
       zoomScaleSensitivity: 0.3,
       minZoom: 0.8,
       maxZoom: 10,
-      // beforePan: beforePan,
       center: true,
       fit: true,
       contain: false,
     })
+
+    // Fix the image paths embedded in the SVGs
+    mapSvg.querySelectorAll('image').forEach(image => image.setAttribute('xlink:href', `${this.configFilePath}/${image.getAttribute('xlink:href')}`));
 
     this.setState({ isMapLoaded: true });
   }
