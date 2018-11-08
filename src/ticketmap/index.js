@@ -476,8 +476,7 @@ export default class TicketMap extends Component<*, State> {
                 filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
                 fontFamily: 'Open Sans, sans-serif',
                 padding: '20px',
-                position: 'relative',
-                width: '12.5em',
+                position: 'relative'
               }}
             >
               <div style={{ color: '#181514', display: 'flex', flexDirection: 'column' }}>
