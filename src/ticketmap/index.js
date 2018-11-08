@@ -38,7 +38,6 @@ export default class TicketMap extends Component<*, State> {
   spinnerContainer = null
   spinner = null
   mapZoom: any = null
-  mouseOutTimeout: any = null
   currentTooltip: any = null
 
   static defaultProps = {
@@ -154,10 +153,6 @@ export default class TicketMap extends Component<*, State> {
       throw Error('There was an error fetching the venue map data, please try again')
     }
     const venueConfiguration = await manifestResponse.json();
-
-    // TESTING: MUTATE VENUE CONFIG
-    // venueConfiguration.sectionZoneMetas = Object.keys(venueConfiguration.sectionZoneMetas).reduce((memo, sectionId) => ({ ...memo, [sectionId.split('-').pop()]: venueConfiguration.sectionZoneMetas[sectionId] }), {});
-
     this.setState({ venueConfiguration });
   }
 
@@ -191,28 +186,20 @@ export default class TicketMap extends Component<*, State> {
     })
   }
 
-  fillSection(id, color) {
+  fillSection(id, color, type = 'fill') {
     if (!color) {
       throw Error('Color is undefined for this section.');
     }
     const elem = document.querySelector(`[data-section-id="${id}"]`);
     // const elem = document.getElementById(`${id}`);
     if (elem) {
-      elem.setAttribute('fill', color);
-      elem.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
+      elem.setAttribute(type, color);
+      elem.querySelectorAll('path').forEach(path => path.setAttribute(type, color));
     }
   }
 
   colorIn(id: number, lowestTicketPrice: number): void {
     this.fillSection(id, getSectionColor.call(this, lowestTicketPrice));
-  }
-
-  matchingZoneSectionsBySectionId(sectionId: number): Array<string> {
-    const zoneMeta = this.sectionZoneMetas[sectionId];
-    if (!zoneMeta) {
-      return [];
-    }
-    return this.venueSections.filter((key) => this.sectionZoneMetas[key].zid === zoneMeta.zid)
   }
 
   colorZones(availableTicketGroups: Array<TicketGroupType>): void {
@@ -221,6 +208,19 @@ export default class TicketMap extends Component<*, State> {
         this.matchingZoneSectionsBySectionId(zoneBlock.sectionId)
           .forEach(id =>
             this.colorIn(id, zoneBlock.price)))
+  }
+
+  setAttrOnTargetedObjects(targetId: string, color: string, type: string): void {
+    this.matchingZoneSectionsBySectionId(targetId)
+      .forEach(sectionId => this.fillSection(sectionId, color, type));
+  }
+
+  matchingZoneSectionsBySectionId(sectionId: number): Array<string> {
+    const zoneMeta = this.venueSectionMetas[sectionId];
+    if (!zoneMeta) {
+      return [];
+    }
+    return this.venueSections.filter((key) => this.venueSectionMetas[key].zid === zoneMeta.zid)
   }
 
   updateMap(availableTicketGroups: Array<TicketGroupType> = this.state.availableTicketGroups): void {
@@ -240,9 +240,9 @@ export default class TicketMap extends Component<*, State> {
     const { zid, name } = this.venueSectionMetas[id];
     if (this.state.isZoneToggled) {
       this.setAttrOnTargetedObjects(id, this.state.hoverSectionFill, 'fill')
-      if (this.state.currentHoveredZone === zid) {
-        clearTimeout(this.mouseOutTimeout)
-      }
+      // if (this.state.currentHoveredZone === zid) {
+      //   clearTimeout(this.mouseOutTimeout)
+      // }
 
       const matchingListings = this.state.availableTicketGroups.filter(section => section.zoneId === zid)
       const lowestPrice = matchingListings.reduce((min, section) => (section.price < min) ? section.price : min, matchingListings[0].price);
@@ -268,7 +268,9 @@ export default class TicketMap extends Component<*, State> {
       tooltipListingCount: matchingListings.length,
     });
 
-    this.fillSection(id, this.state.hoverSectionFill);
+    if (!this.state.selectedSections.includes(id)) {
+      this.fillSection(id, this.state.hoverSectionFill);
+    }
   }
 
   getTooltipX = (clientX) => {
@@ -300,27 +302,12 @@ export default class TicketMap extends Component<*, State> {
   }
 
   isSectionOrZoneAvailable(id: any): boolean {
-    if (!this.sectionZoneMeta) {
-      return;
-    }
-    return this.state.availableTicketGroups.some(block => {
-      if (this.sectionZoneMetas[block.sectionId] && this.sectionZoneMetas[id] && this.state.isZoneToggled) {
-        return this.sectionZoneMetas[block.sectionId].zid === this.sectionZoneMetas[id].zid;
+    return this.venueSectionMetas && this.state.availableTicketGroups.some(block => {
+      if (!this.state.isZoneToggled) {
+        return id === block.sectionId;
       }
-      return id === block.sectionId;
+      return this.venueSectionMetas[block.sectionId] && this.venueSectionMetas[id] && this.venueSectionMetas[block.sectionId].zid === this.venueSectionMetas[id].zid;
     })
-  }
-
-  setAttrOnTargetedObjects(targetId: string, color: string, type: string): void {
-    this.matchingZoneSectionsBySectionId(targetId)
-      .forEach(sectionId => {
-        const elem = document.querySelector(`[data-section-id="${sectionId}"]`)
-        if (elem) {
-          elem.setAttribute(type, color)
-        } else {
-          console.warn('id not found: ', sectionId)
-        }
-      })
   }
 
   resetMap() {
@@ -338,46 +325,35 @@ export default class TicketMap extends Component<*, State> {
   }
 
   onMouseOver = ({ clientX, clientY, target }: any) => {
-    // console.log(target.id)
-    if (this.isSectionOrZoneAvailable(target.id)) {
-      this.doHover(clientX, clientY, target.id)
-      // check if the parent has an id in the section configuration
-    } else if (this.isSectionOrZoneAvailable(target.parentNode.id)) {
-      this.doHover(clientX, clientY, target.parentNode.id)
+    if (target.hasAttribute('data-section-id')) {
+      const id = target.getAttribute('data-section-id');
+      if (this.isSectionOrZoneAvailable(id)) {
+        return this.doHover(clientX, clientY, id)
+      }
+    } else if (target !== this.rootRef) {
+      return this.onMouseOver({ clientX, clientY, target: target.parentNode });
     }
   }
 
   onMouseOut = ({ target }: any) => {
-    this.mouseOutTimeout = setTimeout(() => {
-      if (this.isSectionOrZoneAvailable(target.id) && !this.state.selectedSections.includes(target.id)) {
-        this.doHoverCleanup(target, target.id)
-      } else if (
-        this.isSectionOrZoneAvailable(target.parentNode.id) &&
-        !this.state.selectedSections.includes(target.parentNode.id)
-      ) {
-        this.doHoverCleanup(target.parentNode, target.parentNode.id)
+    if (target.hasAttribute('data-section-id')) {
+      const id = target.getAttribute('data-section-id');
+      if (this.isSectionOrZoneAvailable(id) && !this.state.selectedSections.includes(id)) {
+        return this.doHoverCleanup(target, id)
       }
-    }, 20)
+    } else if (target !== this.rootRef) {
+      return this.onMouseOut({ target: target.parentNode });
+    }
   }
 
   onClick = ({ target }: any) => {
-    // const fillColor = target.attributes.getNamedItem('fill')
-    // const parentColor = target.parentNode.attributes.getNamedItem('fill')
-
-    // check that we're clicking on a section, and that the section is not
-    // currently unavailable
-    if (this.state.isZoneToggled) {
-      if (this.isSectionOrZoneAvailable(target.id)) {
-        this.selectSectionOrZone(target)
-      } else if (this.isSectionOrZoneAvailable(target.parentNode.id)) {
-        this.selectSectionOrZone(target.parentNode)
+    if (target.hasAttribute('data-section-id')) {
+      const id = target.getAttribute('data-section-id');
+      if (this.isSectionOrZoneAvailable(id)) {
+        return this.selectSectionOrZone(target);
       }
-    } else {
-      if (this.isSectionOrZoneAvailable(target.id)) {
-        this.selectZone(target)
-      } else if (this.isSectionOrZoneAvailable(target.parentNode.id)) {
-        this.selectZone(target.parentNode)
-      }
+    } else if (target !== this.rootRef) {
+      return this.onClick({ target: target.parentNode });
     }
   }
 
@@ -423,40 +399,26 @@ export default class TicketMap extends Component<*, State> {
     this.setState({ isMapLoaded: true });
   }
 
-  selectZone(target: HTMLElement): void {
-    const fillColor = target.attributes.getNamedItem('fill')
-    if (!fillColor || this.isSectionUnavailable(fillColor.nodeValue)) {
-      return;
-    }
-    // don't want to select an unavailable section
-    const isSectionSelected = this.state.selectedSections.includes(target.id)
-
-    target.setAttribute('fill', this.state.selectedSectionFill)
-    target.setAttribute('stroke-width', isSectionSelected ? '0.4' : '2')
-    target.setAttribute('stroke', isSectionSelected ? '#555' : '#2f343b')
-
-    const selectedSections = isSectionSelected
-      ? this.state.selectedSections.filter(e => e !== target.id)
-      : [...this.state.selectedSections, target.id]
-
-    this.setState({ selectedSections });
-  }
-
   selectSectionOrZone(target: HTMLElement): void {
     const fillColor = target.attributes.getNamedItem('fill')
     if (!fillColor || this.isSectionUnavailable(fillColor.nodeValue)) {
       return;
     }
+    const id = target.getAttribute('data-section-id');
     // don't want to select an unavailable section
-    const isSectionSelected = this.state.selectedSections.includes(target.id)
+    const isCurrentlyDeselecting = this.state.selectedSections.includes(id)
 
-    this.setAttrOnTargetedObjects(target.id, this.state.selectedSectionFill, 'fill')
-    this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '0.4' : '2', 'stroke-width')
-    this.setAttrOnTargetedObjects(target.id, isSectionSelected ? '#555' : '#2f343b', 'stroke')
+    const matchingSections = this.state.isZoneToggled ? this.matchingZoneSectionsBySectionId(id) : [id];
+    const defaultColor = getSectionColor.call(this, this.state.availableTicketGroups.find(block => id === block.sectionId).price);
 
-    const matchingSections = this.matchingZoneSectionsBySectionId(target.id)
-    const selectedSections = isSectionSelected
-      ? this.state.selectedSections.filter(el => !matchingSections.includes(el))
+    matchingSections.forEach(sectionId => {
+      this.fillSection(sectionId, isCurrentlyDeselecting ? defaultColor : this.state.selectedSectionFill, 'fill')
+      this.fillSection(sectionId, isCurrentlyDeselecting ? '0.4' : '2', 'stroke-width')
+      this.fillSection(sectionId, isCurrentlyDeselecting ? '#fff' : '#2f343b', 'stroke')
+    });
+
+    const selectedSections = isCurrentlyDeselecting
+      ? this.state.selectedSections.filter(section => !matchingSections.includes(section))
       : this.state.selectedSections.concat(matchingSections)
 
     this.props.onSelection(selectedSections);
