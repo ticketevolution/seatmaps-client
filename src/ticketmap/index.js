@@ -95,10 +95,6 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  get venueSections() {
-    return Object.keys(this.state.venueConfiguration.sectionZoneMetas);
-  }
-
   async componentDidMount() {
     // show spinner until map is loaded
 
@@ -124,6 +120,17 @@ export default class TicketMap extends Component<*, State> {
 
   componentWillReceiveProps(props) {
     this.updateTicketGroups(props.ticketGroups);
+  }
+
+  get venueSectionMetas() {
+    if (!this.state.venueConfiguration) {
+      return {};
+    }
+    return this.state.venueConfiguration.sectionZoneMetas;
+  }
+
+  get venueSections() {
+    return Object.keys(this.venueSectionMetas);
   }
 
   async fetchMap() {
@@ -155,7 +162,7 @@ export default class TicketMap extends Component<*, State> {
   }
 
   getAvailableTicketGroups = (availableTickets = []) => availableTickets.reduce((memo, block) => {
-    const sectionZoneMeta = this.state.venueConfiguration.sectionZoneMetas[block.tevo_section_name];
+    const sectionZoneMeta = this.venueSectionMetas[block.tevo_section_name];
     if (sectionZoneMeta) {
       memo.push({
         sectionId: block.tevo_section_name,
@@ -163,9 +170,9 @@ export default class TicketMap extends Component<*, State> {
         price: block.retail_price,
         zoneId: sectionZoneMeta.zid,
       });
-      // console.log(`Section ${block.tevo_section_name} was successfully mapped!`)
+      console.log(`Section ${block.tevo_section_name} was successfully mapped!`)
     } else {
-      // console.warn(`Section ${block.tevo_section_name} not found. Please verify it exists in the venue manifest`)
+      console.warn(`Section ${block.tevo_section_name} not found. Please verify it exists in the venue manifest`)
     }
     return memo;
   }, []);
@@ -192,6 +199,7 @@ export default class TicketMap extends Component<*, State> {
     // const elem = document.getElementById(`${id}`);
     if (elem) {
       elem.setAttribute('fill', color);
+      elem.querySelectorAll('path').forEach(path => path.setAttribute('fill', color));
     }
   }
 
@@ -200,12 +208,11 @@ export default class TicketMap extends Component<*, State> {
   }
 
   matchingZoneSectionsBySectionId(sectionId: number): Array<string> {
-    const { sectionZoneMetas } = this.state.venueConfiguration;
-    const zoneMeta = sectionZoneMetas[sectionId];
+    const zoneMeta = this.sectionZoneMetas[sectionId];
     if (!zoneMeta) {
       return [];
     }
-    return Object.keys(sectionZoneMetas).filter((key) => sectionZoneMetas[key].zid === zoneMeta.zid)
+    return this.venueSections.filter((key) => this.sectionZoneMetas[key].zid === zoneMeta.zid)
   }
 
   colorZones(availableTicketGroups: Array<TicketGroupType>): void {
@@ -230,7 +237,7 @@ export default class TicketMap extends Component<*, State> {
 
   doHover(clientX: any, clientY: any, id: string): void {
     // console.log('hover');
-    const { zid, name } = this.state.venueConfiguration.sectionZoneMetas[id];
+    const { zid, name } = this.venueSectionMetas[id];
     if (this.state.isZoneToggled) {
       this.setAttrOnTargetedObjects(id, this.state.hoverSectionFill, 'fill')
       if (this.state.currentHoveredZone === zid) {
@@ -293,14 +300,12 @@ export default class TicketMap extends Component<*, State> {
   }
 
   isSectionOrZoneAvailable(id: any): boolean {
-    if (!this.state.venueConfiguration) {
+    if (!this.sectionZoneMeta) {
       return;
     }
-    const { sectionZoneMetas } = this.state.venueConfiguration;
-    // console.log(sectionZoneMetas)
     return this.state.availableTicketGroups.some(block => {
-      if (sectionZoneMetas[block.sectionId] && sectionZoneMetas[id] && this.state.isZoneToggled) {
-        return sectionZoneMetas[block.sectionId].zid === sectionZoneMetas[id].zid;
+      if (this.sectionZoneMetas[block.sectionId] && this.sectionZoneMetas[id] && this.state.isZoneToggled) {
+        return this.sectionZoneMetas[block.sectionId].zid === this.sectionZoneMetas[id].zid;
       }
       return id === block.sectionId;
     })
@@ -378,23 +383,17 @@ export default class TicketMap extends Component<*, State> {
 
   setupMap(): void {
     const mapSvg = this.mapRootRef.querySelector('svg');
-    mapSvg.setAttribute('width', '100%');
-    mapSvg.setAttribute('height', '100%');
-
-    // TESTING: MUTATE SVG IDS
-    // this.venueSections.forEach(section => {
-    //   const sectionElement = mapSvg.querySelector(`[id$="-${section}"]`);
-    //   if (sectionElement) {
-    //     sectionElement.setAttribute('id', section);
-    //   }
-    // });
+    mapSvg.style.width = 'inherit';
+    mapSvg.style.height = 'inherit';
+    mapSvg.style.minWidth = 'inherit';
+    mapSvg.style.minHeight = 'inherit';
 
     this.setFont();
     this.resetMap();
 
     // Experimenting with zoom boundaries
 
-    // const beforePan = function(oldPan, newPan) {
+    // const beforePan = function (oldPan, newPan) {
     //   let stopHorizontal = false,
     //     stopVertical = false,
     //     gutterWidth = 100,
@@ -411,7 +410,7 @@ export default class TicketMap extends Component<*, State> {
     //   return customPan
     // }
 
-    this.mapZoom = svgPanZoom(this.mapRootRef.querySelector('svg'), {
+    this.mapZoom = svgPanZoom(mapSvg, {
       zoomScaleSensitivity: 0.3,
       minZoom: 0.8,
       maxZoom: 10,
@@ -420,6 +419,8 @@ export default class TicketMap extends Component<*, State> {
       fit: true,
       contain: false,
     })
+
+    this.setState({ isMapLoaded: true });
   }
 
   selectZone(target: HTMLElement): void {
@@ -471,6 +472,7 @@ export default class TicketMap extends Component<*, State> {
         onMouseOver={this.onMouseOver.bind(this)}
         onMouseOut={this.onMouseOut.bind(this)}
         onClick={this.onClick.bind(this)}
+        style={{ height: 'inherit', width: 'inherit', minHeight: 'inherit', minWidth: 'inherit' }}
       >
         <CSSTransition in={this.state.activeTooltip} timeout={300} classNames="message" unmountOnExit>
           <div
@@ -618,7 +620,7 @@ export default class TicketMap extends Component<*, State> {
         </div>
         <div
           ref={element => this.mapRootRef = element}
-          style={{ cursor: '-webkit-grab' }}
+          style={{ cursor: '-webkit-grab', height: 'inherit', width: 'inherit', minHeight: 'inherit', minWidth: 'inherit', opacity: this.state.isMapLoaded ? 1 : 0 }}
         />
       </div>
     )
