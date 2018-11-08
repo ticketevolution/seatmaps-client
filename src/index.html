@@ -16,6 +16,7 @@
   <div id="root" style="height: 100%;"></div>
 
   <script>
+    var seatmap;
     window.addEventListener('load', function () {
       var seatmapFactory = new Tevomaps.default({
         venueId: '896',
@@ -32,7 +33,7 @@
           console.log('sections selected: ', sectionsSelected)
         }
       });
-      var seatmap = seatmapFactory.build('root');
+      seatmap = seatmapFactory.build('root');
     });
   </script>
 </body>

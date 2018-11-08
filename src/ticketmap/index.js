@@ -81,16 +81,20 @@ export default class TicketMap extends Component<*, State> {
         return { ...memo, [colorVar]: this.props[colorVar] || defaultColor };
       }, {})
     }
-    this.setupMap = this.setupMap.bind(this)
-    this.fetchMap = this.fetchMap.bind(this)
-    this.fetchManifest = this.fetchManifest.bind(this)
-    this.updateTicketGroups = this.updateTicketGroups.bind(this)
+    this.setupMap = this.setupMap.bind(this);
+    this.fetchMap = this.fetchMap.bind(this);
+    this.fetchManifest = this.fetchManifest.bind(this);
+    this.updateTicketGroups = this.updateTicketGroups.bind(this);
+    this.highlightSection = this.highlightSection.bind(this);
+    this.unhighlightSection = this.unhighlightSection.bind(this);
 
     this.publicApi = {
       fetchMap: this.fetchMap,
       fetchManifest: this.fetchManifest,
       fetchData: this.fetchData,
-      updateTicketGroups: this.updateTicketGroups
+      updateTicketGroups: this.updateTicketGroups,
+      highlightSection: this.highlightSection,
+      unhighlightSection: this.unhighlightSection
     }
   }
 
@@ -115,10 +119,6 @@ export default class TicketMap extends Component<*, State> {
     } catch (error) {
       console.error(error);
     }
-  }
-
-  componentWillReceiveProps(props) {
-    this.updateTicketGroups(props.ticketGroups);
   }
 
   get venueSectionMetas() {
@@ -154,6 +154,22 @@ export default class TicketMap extends Component<*, State> {
     }
     const venueConfiguration = await manifestResponse.json();
     this.setState({ venueConfiguration });
+  }
+
+  unhighlightSection(id) {
+    const isAnAvailableSectionToHighlight = !!id && !!this.getAvailableTicketGroup(id);
+    const isNotSelected = !!id && !this.state.selectedSections.includes(id);
+    if (isAnAvailableSectionToHighlight && isNotSelected) {
+      this.fillSection(id, this.getDefaultColor(id));
+    }
+  }
+
+  highlightSection(id) {
+    const isAnAvailableSectionToHighlight = !!id && !!this.getAvailableTicketGroup(id);
+    const isNotSelected = !!id && !this.state.selectedSections.includes(id);
+    if (isAnAvailableSectionToHighlight && isNotSelected) {
+      this.fillSection(id, this.state.hoverSectionFill);
+    }
   }
 
   getAvailableTicketGroups = (availableTickets = []) => availableTickets.reduce((memo, block) => {
@@ -208,6 +224,14 @@ export default class TicketMap extends Component<*, State> {
         this.matchingZoneSectionsBySectionId(zoneBlock.sectionId)
           .forEach(id =>
             this.colorIn(id, zoneBlock.price)))
+  }
+
+  getAvailableTicketGroup(id) {
+    return this.state.availableTicketGroups.find(block => id === block.sectionId);
+  }
+
+  getDefaultColor(id) {
+    return getSectionColor.call(this, this.getAvailableTicketGroup(id).price)
   }
 
   setAttrOnTargetedObjects(targetId: string, color: string, type: string): void {
@@ -268,9 +292,7 @@ export default class TicketMap extends Component<*, State> {
       tooltipListingCount: matchingListings.length,
     });
 
-    if (!this.state.selectedSections.includes(id)) {
-      this.fillSection(id, this.state.hoverSectionFill);
-    }
+    this.highlightSection(id);
   }
 
   getTooltipX = (clientX) => {
@@ -409,7 +431,7 @@ export default class TicketMap extends Component<*, State> {
     const isCurrentlyDeselecting = this.state.selectedSections.includes(id)
 
     const matchingSections = this.state.isZoneToggled ? this.matchingZoneSectionsBySectionId(id) : [id];
-    const defaultColor = getSectionColor.call(this, this.state.availableTicketGroups.find(block => id === block.sectionId).price);
+    const defaultColor = this.getDefaultColor(id);
 
     matchingSections.forEach(sectionId => {
       this.fillSection(sectionId, isCurrentlyDeselecting ? defaultColor : this.state.selectedSectionFill, 'fill')
@@ -434,7 +456,12 @@ export default class TicketMap extends Component<*, State> {
         onMouseOver={this.onMouseOver.bind(this)}
         onMouseOut={this.onMouseOut.bind(this)}
         onClick={this.onClick.bind(this)}
-        style={{ height: 'inherit', width: 'inherit', minHeight: 'inherit', minWidth: 'inherit' }}
+        style={{
+          height: 'inherit',
+          width: 'inherit',
+          minHeight: 'inherit',
+          minWidth: 'inherit'
+        }}
       >
         <CSSTransition in={this.state.activeTooltip} timeout={300} classNames="message" unmountOnExit>
           <div
@@ -582,7 +609,14 @@ export default class TicketMap extends Component<*, State> {
         </div>
         <div
           ref={element => this.mapRootRef = element}
-          style={{ cursor: '-webkit-grab', height: 'inherit', width: 'inherit', minHeight: 'inherit', minWidth: 'inherit', opacity: this.state.isMapLoaded ? 1 : 0 }}
+          style={{
+            cursor: '-webkit-grab',
+            height: 'inherit',
+            width: 'inherit',
+            minHeight: 'inherit',
+            minWidth: 'inherit',
+            opacity: this.state.isMapLoaded ? 1 : 0
+          }}
         />
       </div>
     )
