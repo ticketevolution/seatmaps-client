@@ -38,7 +38,7 @@ start: install clean ## Start the development server
 	yarn start
 
 start-prod: install clean ## Build for production and start the server
-	yarn test
+	# yarn test
 	yarn build:prod
 	yarn start:prod
 

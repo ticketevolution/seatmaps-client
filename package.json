@@ -97,14 +97,7 @@
       "node_modules"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/internals/testing/test-bundler.js",
-    "testRegex": ".*\\.test\\.js$",
-    "globals": {
-      "window": {
-        "_ticketEvolution": {
-          "isZoneDefault": true
-        }
-      }
-    }
+    "testRegex": ".*\\.test\\.js$"
   },
   "dependencies": {
     "preact": "8.2.9",

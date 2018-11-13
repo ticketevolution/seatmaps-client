@@ -6,7 +6,7 @@ import fetch from 'unfetch';
 
 
 import MOCK_TICKET_ARRAY from '../utils/ticketRequest'
-import { UNAVAILABLE_COLOR, fillSection } from './themes'
+import { UNAVAILABLE_COLOR, fillSection } from './colors'
 import ZoomSettings from './zoomSettings';
 import Tooltip from './tooltip';
 import ZoneToggle from './zoneToggle';
