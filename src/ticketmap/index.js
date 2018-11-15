@@ -18,6 +18,7 @@ type State = {
   selectedSections: Array<string>,
   isZoneToggled: boolean,
   currentHoveredZone: string,
+  currentHoveredSection: string,
   activeTooltip: boolean,
   tooltipSectionName: string,
   tooltipZoneId: string,
@@ -49,7 +50,8 @@ export default class TicketMap extends Component<*, State> {
       availableTicketGroups: [],
       selectedSections: [],
       isZoneToggled: this.props.isZoneDefault,
-      currentHoveredZone: '',
+      currentHoveredZone: null,
+      currentHoveredSection: null,
       activeTooltip: false,
       tooltipSectionName: '',
       tooltipZoneId: '',
@@ -131,7 +133,12 @@ export default class TicketMap extends Component<*, State> {
     this.resetMap();
 
     // Fix the image paths embedded in the SVGs
-    mapSvg.querySelectorAll('image').forEach(image => image.setAttribute('xlink:href', `${this.configFilePath}/${image.getAttribute('xlink:href')}`));
+    mapSvg.querySelectorAll('image').forEach(image => {
+      let uri = image.getAttribute('xlink:href');
+      if (!uri.startsWith('http') && !uri.startsWith('data:')) {
+        image.setAttribute('xlink:href', `${this.configFilePath}/${uri}`);
+      }
+    });
 
     this.setState({ mapSvg });
   }
@@ -292,26 +299,17 @@ export default class TicketMap extends Component<*, State> {
    * Coloring
    */
 
-  colorSection(sectionId) {
-    fillSection(sectionId, this.getDefaultColor(sectionId));
-  }
-
-  getSectionColor(lowestSectionPrice) {
+  getDefaultColor(sectionId, ticketGroups) {
     const { sectionPercentiles } = this.props;
-    const sortedTicketGroupPrices = this.sortedTicketGroupPrices;
-    const percentile = sortedTicketGroupPrices.indexOf(lowestSectionPrice) / sortedTicketGroupPrices.length;
+    ticketGroups = Array.isArray(ticketGroups) ? ticketGroups : this.ticketGroupsBySection[sectionId];
+    const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0];
+    const percentile = this.sortedTicketGroupPrices.indexOf(lowestTicketPriceInSection) / this.sortedTicketGroupPrices.length;
     const sectionPercentileKeys = Object.keys(sectionPercentiles).map(key => +key).sort();
     for (const key of sectionPercentileKeys) {
       if (percentile <= key) {
         return sectionPercentiles[key];
       }
     }
-  }
-
-  getDefaultColor(sectionId, ticketGroups) {
-    ticketGroups = Array.isArray(ticketGroups) ? ticketGroups : this.ticketGroupsBySection[sectionId];
-    const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0];
-    return this.getSectionColor(lowestTicketPriceInSection);
   }
 
   /**
@@ -356,13 +354,13 @@ export default class TicketMap extends Component<*, State> {
    */
 
   doHover(tooltipX: any, tooltipY: any, id: string): void {
-    const { zid, name } = this.venueSectionMetas[id];
+    const { zid, name: tooltipSectionName } = this.venueSectionMetas[id];
 
     const newState = {
       activeTooltip: true,
       tooltipX,
       tooltipY,
-      tooltipSectionName: name
+      tooltipSectionName
     };
 
     if (this.state.isZoneToggled) {
