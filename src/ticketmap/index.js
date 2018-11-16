@@ -244,7 +244,7 @@ export default class TicketMap extends Component<*, State> {
 
   getAvailableTicketGroups = (availableTicketGroups = []) =>
     availableTicketGroups.reduce((memo, { tevo_section_name, ticket_type, retail_price }) => {
-      const sectionZoneMeta = this.venueSectionMetas[tevo_section_name];
+      const sectionZoneMeta = Object.values(this.venueSectionMetas).find(meta => meta.name === tevo_section_name);
       if (sectionZoneMeta) {
         memo.push({
           sectionId: tevo_section_name,
