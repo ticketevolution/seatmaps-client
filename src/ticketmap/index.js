@@ -4,7 +4,6 @@ import { h, Component } from 'preact';
 import * as React from 'react';
 import fetch from 'unfetch';
 
-
 import MOCK_TICKET_ARRAY from '../utils/ticketRequest'
 import { UNAVAILABLE_COLOR, fillSection } from './colors'
 import ZoomSettings from './zoomSettings';
@@ -185,7 +184,8 @@ export default class TicketMap extends Component<*, State> {
     if (!this.state.venueConfiguration) {
       return {};
     }
-    return this.state.venueConfiguration.sectionZoneMetas;
+    // return this.state.venueConfiguration.sectionZoneMetas;
+    return Object.values(this.state.venueConfiguration.sectionZoneMetas).reduce((memo, section) => ({ ...memo, [section.name]: section }), {});
   }
 
   get venueSections() {
@@ -244,7 +244,8 @@ export default class TicketMap extends Component<*, State> {
 
   getAvailableTicketGroups = (availableTicketGroups = []) =>
     availableTicketGroups.reduce((memo, { tevo_section_name, ticket_type, retail_price }) => {
-      const sectionZoneMeta = Object.values(this.venueSectionMetas).find(meta => meta.name === tevo_section_name);
+      // const sectionZoneMeta = Object.values(this.venueSectionMetas).find(meta => meta.name === tevo_section_name);
+      const sectionZoneMeta = this.venueSectionMetas[tevo_section_name];
       if (sectionZoneMeta) {
         memo.push({
           sectionId: tevo_section_name,
@@ -430,14 +431,14 @@ export default class TicketMap extends Component<*, State> {
         />
         <div style={{ display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
-          <ZoneToggle
+          {/* <ZoneToggle
             isZoneToggled={this.state.isZoneToggled}
             onToggle={isZoneToggled => {
               this.setState({ isZoneToggled });
               this.resetMap();
               this.updateMap();
             }}
-          />
+          /> */}
         </div>
         <div
           ref={element => this.mapRootRef = element}
