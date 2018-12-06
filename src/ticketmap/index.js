@@ -11,7 +11,7 @@ import ZoneToggle from './zoneToggle';
 
 type State = {
   mapSvg: string,
-  venueConfiguration: any,
+  sectionZoneMapping: any,
   availableTicketGroups: Array<TicketGroupType>,
   selectedSections: Array<string>,
   isZoneToggled: boolean,
@@ -47,7 +47,7 @@ export default class TicketMap extends Component<*, State> {
     super(props);
     this.state = {
       mapSvg: '',
-      venueConfiguration: null,
+      sectionZoneMapping: {},
       availableTicketGroups: [],
       selectedSections: this.props.selectedSections,
       isZoneToggled: this.props.isZoneDefault,
@@ -119,8 +119,16 @@ export default class TicketMap extends Component<*, State> {
     if (!manifestResponse.ok) {
       throw Error('There was an error fetching the venue map data, please try again')
     }
-    const venueConfiguration = await manifestResponse.json();
-    this.setState({ venueConfiguration });
+    const { sections } = await manifestResponse.json();
+    this.setState({
+      sectionZoneMapping: Object.entries(sections)
+        .reduce((memo, [sectionName, section]) => ({
+          ...memo,
+          [sectionName]: {
+            zone: section.zone_name
+          }
+        }), {})
+    });
   }
 
   setupMap(): void {
@@ -156,16 +164,13 @@ export default class TicketMap extends Component<*, State> {
 
   get ticketGroupsBySectionByZone() {
     const ticketGroupsBySection = this.ticketGroupsBySection;
-    return this.venueSections.reduce((memo, sectionId) => {
-      const zoneId = this.venueSectionMetas[sectionId].zid;
-      if (!memo.hasOwnProperty(zoneId)) {
-        memo[zoneId] = {};
-      }
+    return Object.keys(ticketGroupsBySection).reduce((memo, section) => {
+      const { zone } = this.state.sectionZoneMapping[section];
       return {
         ...memo,
-        [zoneId]: {
-          ...memo[zoneId],
-          [sectionId]: ticketGroupsBySection[sectionId]
+        [zone]: {
+          ...(memo[zone] || {}),
+          [section]: ticketGroupsBySection[section]
         }
       };
     }, {});
@@ -173,21 +178,15 @@ export default class TicketMap extends Component<*, State> {
 
   get ticketGroupsBySection() {
     return this.state.availableTicketGroups.reduce((memo, ticketGroup) => {
-      const { sectionId } = ticketGroup;
-      if (!memo.hasOwnProperty(sectionId)) {
-        memo[sectionId] = [];
-      }
-      memo[sectionId].push(ticketGroup);
-      return memo;
+      const { section } = ticketGroup;
+      return {
+        ...memo,
+        [section]: [
+          ...(memo[section] || []),
+          ticketGroup
+        ]
+      };
     }, {});
-  }
-
-  get venueSectionMetas() {
-    if (!this.state.venueConfiguration) {
-      return {};
-    }
-    // return this.state.venueConfiguration.sectionZoneMetas;
-    return Object.values(this.state.venueConfiguration.sectionZoneMetas).reduce((memo, section) => ({ ...memo, [section.name]: section }), {});
   }
 
   get venueSections() {
@@ -202,37 +201,37 @@ export default class TicketMap extends Component<*, State> {
    * Public Methods
    */
 
-  highlightSection(sectionId, ticketGroups) {
-    return this.toggleSection(sectionId, true, ticketGroups);
+  highlightSection(section, ticketGroups) {
+    return this.toggleSection(section, true, ticketGroups);
   }
 
-  unhighlightSection(sectionId, ticketGroups) {
-    return this.toggleSection(sectionId, false, ticketGroups);
+  unhighlightSection(section, ticketGroups) {
+    return this.toggleSection(section, false, ticketGroups);
   }
 
-  toggleSection(sectionId, shouldHighlight = true, ticketGroups) {
-    if (!sectionId) {
+  toggleSection(section, shouldHighlight = true, ticketGroups) {
+    if (!section) {
       return;
     }
-    const isAnAvailableSection = this.venueSections.includes(sectionId);
+    const isAnAvailableSection = this.venueSections.includes(section);
     if (isAnAvailableSection) {
-      fillSection(sectionId, this.getDefaultColor(sectionId, ticketGroups), 'fill');
-      fillSection(sectionId, shouldHighlight ? '1' : '0.6', 'opacity');
+      fillSection(section, this.getDefaultColor(section, ticketGroups), 'fill');
+      fillSection(section, shouldHighlight ? '1' : '0.6', 'opacity');
     }
   }
 
-  highlightZone(zoneId) {
-    return this.toggleZone(zoneId, true);
+  highlightZone(zone) {
+    return this.toggleZone(zone, true);
   }
 
-  unhighlightZone(zoneId) {
-    return this.toggleZone(zoneId, false);
+  unhighlightZone(zone) {
+    return this.toggleZone(zone, false);
   }
 
-  toggleZone(zoneId, shouldHighlight = true) {
-    const ticketGroupsBySection = this.ticketGroupsBySectionByZone[zoneId];
+  toggleZone(zone, shouldHighlight = true) {
+    const ticketGroupsBySection = this.ticketGroupsBySectionByZone[zone];
     const allTicketGroupsInZone = Object.values(ticketGroupsBySection).reduce((memo, ticketGroupsInSection) => [...memo, ...ticketGroupsInSection], []);
-    Object.keys(ticketGroupsBySection).forEach(sectionId => this.toggleSection(sectionId, shouldHighlight, allTicketGroupsInZone));
+    Object.keys(ticketGroupsBySection).forEach(section => this.toggleSection(section, shouldHighlight, allTicketGroupsInZone));
   }
 
   updateTicketGroups = (ticketGroups: any = this.props.ticketGroups) => {
@@ -245,54 +244,52 @@ export default class TicketMap extends Component<*, State> {
    */
 
   getAvailableTicketGroups = (availableTicketGroups = []) =>
-    availableTicketGroups.reduce((memo, { tevo_section_name, retail_price }) => {
-      const sectionZoneMeta = this.venueSectionMetas[tevo_section_name];
+    availableTicketGroups.reduce((memo, { tevo_section_name: section, retail_price: price }) => {
+      const sectionZoneMeta = this.state.sectionZoneMapping[section];
       if (sectionZoneMeta) {
-        memo.push({
-          sectionId: tevo_section_name,
-          price: retail_price,
-          zoneId: sectionZoneMeta.zid,
-        });
-        console.log(`Section ${tevo_section_name} was successfully mapped!`)
+        memo.push({ section, price, zone: sectionZoneMeta.zone });
+        console.log(`Section ${section} was successfully mapped!`)
       } else {
-        console.warn(`Section ${tevo_section_name} not found. Please verify it exists in the venue manifest`)
+        console.warn(`Section ${section} not found. Please verify it exists in the venue manifest`)
       }
       return memo;
     }, []);
 
-  getAllSectionsInZoneBySectionId(sectionId: number): Array<string> {
-    const zoneMeta = this.venueSectionMetas[sectionId] || {};
-    return this.venueSections.filter((sectionId) => this.venueSectionMetas[sectionId].zid === zoneMeta.zid)
+  getAllSectionsInZoneBySectionId(section: number): Array<string> {
+    const zoneMeta = this.state.sectionZoneMapping[section] || {};
+    return this.venueSections.filter((venueSection) => this.state.sectionZoneMapping[venueSection].zid === zoneMeta.zid)
   }
 
-  areAllSectionsInTheZoneSelected(zoneId: number): boolean {
-    return Object.keys(this.ticketGroupsBySectionByZone[zoneId])
-      .every(sectionId => this.state.selectedSections.includes(sectionId));
+  areAllSectionsInTheZoneSelected(zone: number): boolean {
+    return Object.keys(this.ticketGroupsBySectionByZone[zone])
+      .every(section => this.state.selectedSections.includes(section));
   }
 
   updateMap(): void {
     if (this.state.isZoneToggled) {
-      Object.keys(this.ticketGroupsBySectionByZone).forEach(zoneId => {
-        const shouldHighight = this.areAllSectionsInTheZoneSelected(zoneId);
-        this.toggleZone(zoneId, shouldHighight);
+      Object.keys(this.ticketGroupsBySectionByZone).forEach(zone => {
+        const shouldHighight = this.areAllSectionsInTheZoneSelected(zone);
+        this.toggleZone(zone, shouldHighight);
       });
     } else {
-      Object.keys(this.ticketGroupsBySection).forEach(sectionId => {
-        const shouldHighight = this.state.selectedSections.includes(sectionId);
-        this.toggleSection(sectionId, shouldHighight);
+      Object.keys(this.ticketGroupsBySection).forEach(section => {
+        const shouldHighight = this.state.selectedSections.includes(section);
+        this.toggleSection(section, shouldHighight);
       });
     }
   }
 
   resetMap() {
-    this.venueSections.forEach(id => fillSection(id, this.props.emptySectionFill));
+    this.venueSections.forEach(section => fillSection(section, this.props.emptySectionFill));
   }
 
   setFont() {
     if (this.props.mapFontFamily) {
       this.rootRef
         .querySelectorAll('text')
-        .forEach(elem => (elem.style.fontFamily = `${this.props.mapFontFamily}`))
+        .forEach(elem => {
+          elem.style.fontFamily = `${this.props.mapFontFamily}`
+        });
     }
   }
 
@@ -300,9 +297,9 @@ export default class TicketMap extends Component<*, State> {
    * Coloring
    */
 
-  getDefaultColor(sectionId, ticketGroups) {
+  getDefaultColor(section, ticketGroups) {
     const { sectionPercentiles } = this.props;
-    ticketGroups = Array.isArray(ticketGroups) ? ticketGroups : this.ticketGroupsBySection[sectionId];
+    ticketGroups = Array.isArray(ticketGroups) ? ticketGroups : this.ticketGroupsBySection[section];
     const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0];
     const percentile = this.sortedTicketGroupPrices.indexOf(lowestTicketPriceInSection) / this.sortedTicketGroupPrices.length;
     const sectionPercentileKeys = Object.keys(sectionPercentiles).map(key => +key).sort();
@@ -319,9 +316,9 @@ export default class TicketMap extends Component<*, State> {
 
   onMouseOver = ({ clientX, clientY, target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const id = target.getAttribute('data-section-id');
-      if (this.venueSections.includes(id)) {
-        return this.doHover(clientX, clientY, id)
+      const section = target.getAttribute('data-section-id');
+      if (this.venueSections.includes(section)) {
+        return this.doHover(clientX, clientY, section)
       }
     } else if (target !== this.rootRef) {
       return this.onMouseOver({ clientX, clientY, target: target.parentNode });
@@ -330,9 +327,9 @@ export default class TicketMap extends Component<*, State> {
 
   onMouseOut = ({ target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const id = target.getAttribute('data-section-id');
-      if (this.venueSections.includes(id)) {
-        return this.doHoverCleanup(id)
+      const section = target.getAttribute('data-section-id');
+      if (this.venueSections.includes(section)) {
+        return this.doHoverCleanup(section)
       }
     } else if (target !== this.rootRef) {
       return this.onMouseOut({ target: target.parentNode });
@@ -341,9 +338,9 @@ export default class TicketMap extends Component<*, State> {
 
   onClick = ({ target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const id = target.getAttribute('data-section-id');
-      if (this.venueSections.includes(id)) {
-        return this.selectSectionOrZone(id);
+      const section = target.getAttribute('data-section-id');
+      if (this.venueSections.includes(section)) {
+        return this.selectSectionOrZone(section);
       }
     } else if (target !== this.rootRef) {
       return this.onClick({ target: target.parentNode });
@@ -354,51 +351,51 @@ export default class TicketMap extends Component<*, State> {
    * Interactions
    */
 
-  doHover(tooltipX: any, tooltipY: any, id: string): void {
-    const { zid, name: tooltipSectionName } = this.venueSectionMetas[id];
+  doHover(tooltipX: any, tooltipY: any, section: string): void {
+    const { zone } = this.state.sectionZoneMapping[section];
 
     const newState = {
       activeTooltip: true,
       tooltipX,
       tooltipY,
-      tooltipSectionName
+      tooltipSectionName: section
     };
 
     if (this.state.isZoneToggled) {
-      newState.currentHoveredZone = zid;
-      this.highlightZone(zid);
+      newState.currentHoveredZone = zone;
+      this.highlightZone(zone);
     } else {
-      newState.currentHoveredSection = id;
-      this.highlightSection(id);
+      newState.currentHoveredSection = section;
+      this.highlightSection(section);
     }
 
     this.setState(newState);
   }
 
-  doHoverCleanup(id: string): void {
+  doHoverCleanup(section: string): void {
     this.setState({ activeTooltip: false })
 
-    if (this.state.selectedSections.includes(id)) {
+    if (this.state.selectedSections.includes(section)) {
       return;
     }
 
     if (this.state.isZoneToggled) {
-      return this.unhighlightZone(this.venueSectionMetas[id].zid);
+      return this.unhighlightZone(this.state.sectionZoneMapping[section].zone);
     }
 
-    this.unhighlightSection(id);
+    this.unhighlightSection(section);
   }
 
-  selectSectionOrZone(sectionId: string): void {
-    const zoneId = this.venueSectionMetas[sectionId].zid;
+  selectSectionOrZone(section: string): void {
+    const { zone } = this.state.sectionZoneMapping[section];
 
-    const matchingSections = this.state.isZoneToggled ? this.getAllSectionsInZoneBySectionId(sectionId) : [sectionId];
-    const isCurrentlyDeselecting = matchingSections.every(sectionId => this.state.selectedSections.includes(sectionId));
+    const matchingSections = this.state.isZoneToggled ? this.getAllSectionsInZoneBySectionId(section) : [section];
+    const isCurrentlyDeselecting = matchingSections.every(section => this.state.selectedSections.includes(section));
 
     if (this.state.isZoneToggled) {
-      this.toggleZone(zoneId, !isCurrentlyDeselecting);
+      this.toggleZone(zone, !isCurrentlyDeselecting);
     } else {
-      this.toggleSection(sectionId, !isCurrentlyDeselecting);
+      this.toggleSection(section, !isCurrentlyDeselecting);
     }
 
     const selectedSections = isCurrentlyDeselecting
@@ -427,7 +424,7 @@ export default class TicketMap extends Component<*, State> {
           clientX={this.state.tooltipX}
           clientY={this.state.tooltipY}
           name={this.state.tooltipSectionName}
-          ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.sectionId === this.state.currentHoveredSection)}
+          ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
         <div style={{ display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
