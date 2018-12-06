@@ -29,7 +29,7 @@ export default class TicketMap extends Component<*, State> {
   mapZoom: any = null
 
   static defaultProps = {
-    mapsDomain: 'https://maps-dev.ticketevolution.com',
+    mapsDomain: 'https://maps.ticketevolution.com',
     onSelection: () => undefined,
     isZoneDefault: false,
     selectedSections: [],
