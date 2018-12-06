@@ -4,7 +4,7 @@ import { h, Component } from 'preact';
 import * as React from 'react';
 import fetch from 'unfetch';
 
-import { UNAVAILABLE_COLOR, fillSection } from './colors'
+import { fillSection, setUnavailableColors, fillUnavailableColors } from './colors'
 import ZoomSettings from './zoomSettings';
 import Tooltip from './tooltip';
 import ZoneToggle from './zoneToggle';
@@ -32,7 +32,6 @@ export default class TicketMap extends Component<*, State> {
     mapsDomain: 'https://maps-dev.ticketevolution.com',
     onSelection: () => undefined,
     isZoneDefault: false,
-    emptySectionFill: UNAVAILABLE_COLOR,
     selectedSections: [],
     sectionPercentiles: {
       '0.2': '#FFC515',
@@ -139,7 +138,7 @@ export default class TicketMap extends Component<*, State> {
     mapSvg.style.minHeight = 'inherit';
 
     this.setFont();
-    this.resetMap();
+    setUnavailableColors();
 
     // Fix the image paths embedded in the SVGs
     mapSvg.querySelectorAll('image').forEach(image => {
@@ -283,10 +282,6 @@ export default class TicketMap extends Component<*, State> {
         this.toggleSection(section, shouldHighight);
       });
     }
-  }
-
-  resetMap() {
-    this.venueSections.forEach(section => fillSection(section, this.props.emptySectionFill));
   }
 
   setFont() {
@@ -437,7 +432,7 @@ export default class TicketMap extends Component<*, State> {
             isZoneToggled={this.state.isZoneToggled}
             onToggle={isZoneToggled => {
               this.setState({ isZoneToggled });
-              this.resetMap();
+              fillUnavailableColors();
               this.updateMap();
             }}
           /> */}
