@@ -85,8 +85,8 @@ export default class TicketMap extends Component<*, State> {
   async componentDidMount() {
     try {
       await this.fetchMap()
-      await this.fetchManifest()
       await this.setupMap()
+      await this.fetchManifest()
       await this.updateTicketGroups()
     } catch (error) {
       console.error(error);
@@ -101,10 +101,10 @@ export default class TicketMap extends Component<*, State> {
 
   async fetchMap() {
     const mapSvgUrl = `${this.configFilePath}/map.svg`;
-    const mapNotAvailableUrl = `${this.props.mapsDomain}/maps/not_available.svg`;
-    const mapResponse = await fetch(this.props.configurationId ? mapSvgUrl : mapNotAvailableUrl);
+    const mapNotAvailableUrl = `https://maps.ticketevolution.com/maps/not_available.svg`; // Only exists on prod
+    let mapResponse = await fetch(mapSvgUrl);
     if (!mapResponse.ok) {
-      throw Error('There was an error fetching the venue map, please try again')
+      mapResponse = await fetch(mapNotAvailableUrl);
     }
     const mapHtml = await mapResponse.text();
     // Can't use dangerouslySetInnerHTML={{ __html: this.state.mapHtml }} in this case because
@@ -134,7 +134,7 @@ export default class TicketMap extends Component<*, State> {
     const mapSvg = this.mapRootRef.querySelector('svg');
     mapSvg.style.width = 'inherit';
     mapSvg.style.height = 'inherit';
-    mapSvg.style.minWidth = 'inherit';
+    mapSvg.style.minWidth = '100%';
     mapSvg.style.minHeight = 'inherit';
 
     this.setFont();
