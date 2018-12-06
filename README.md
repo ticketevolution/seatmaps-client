@@ -52,7 +52,7 @@ var seatmap = new Tevomaps({
   venueId: '10',
   configurationId: '1046',
 });
-var seatmapApi = seatmap.build('interactiveChart');
+var seatmapApi = seatmap.build('map-root-element-id');
 seatmapApi.highlightSection('section-id');
 ```
 
