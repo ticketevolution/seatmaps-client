@@ -8,37 +8,20 @@
 
 A client side JavaScript plugin that enables users to view seatmaps in relation to available tickets for Ticket Evolution events.
 
-* **Help:** [TicketEvolution](http://www.ticketevolution.com/contact-us/)
+Once instantiated, this plugin will
 
-# Quick Look
+1. Fetch the map SVG and manifest JSON, with the given `venueId` and `configurationId`, from Ticket Evolution AWS S3 buckets using the `mapsDomain`.
+2. Render the map in the provided DOM element
+3. Color map sections according to the `sectionPercentile` configurations and the available `ticketGroups` (and any `selectedSections` if provided).
+4. Render a tooltip when the user hovers over a section, which will provide quantity and price information.
 
-```html
-<!-- Ticket Evolution Seatmaps -->
-<script src="https://maps.ticketevolution.com/tevomaps.js"></script>
-<script type="text/javascript">
-  var seatmap = new Seatmap({
-    venueId: '10',
-    configurationId: '1046',
-    theme: 'light',
-    isZoneDefault: true,
-    emptySectionFill: '',
-    selectedSectionFill: '',
-    hoverSectionFill: '',
-    mapFontFamily: 'courier',
-    showTooltip: true,
-    selectedSections: [],
-    onSelection: function (sectionsSelected) {
-      console.log('sections selected: ', sectionsSelected)
-    }
-  });
-  seatmap.init('root');
-</script>
-<!-- End Ticket Evolution Seatmaps -->
-```
+After Instantiation, a [public API](#public-api) is available with a limited number of functions to interact with the map.
 
-# Loading and utilizing Ticket Evolution Seatmaps
+**Help:** [Ticket Evolution](http://www.ticketevolution.com/contact-us/)
 
-### 1. Load Seatmaps via `<script>` tag:
+# Installation
+
+## Load Seatmaps via `<script>` tag:
 
 ```html
 <!-- Development -->
@@ -48,69 +31,58 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 <script src="https://maps.ticketevolution.com/tevomaps.js"></script>
 ```
 
-### 2. Instantiate the Seatmaps object on your page
+## CommonJS
+
+### 1. Install via NPM
+
+```bash
+npm install --save ticketevolution/ticket-evolution-seatmaps
+```
+
+### 2. Import into modules
+
+```javascript
+import Tevomaps from 'ticket-evolution-seatmaps';
+```
+
+# Instantiation
+
+```javascript
+var seatmap = new Tevomaps({
+  venueId: '10',
+  configurationId: '1046',
+});
+var seatmapApi = seatmap.build('interactiveChart');
+seatmapApi.highlightSection('section-id');
+```
+
+*Note: The value provided to `build` is an element ID used in `document.getElementById`. The map will be rendered inside this element.*
 
 # Configuration
 
-## Required Configuration
+| Name | Required | Default Value | Description |
+| - | :-: | - | - |
+| venueId | X | | Ticket Map Venue ID |
+| configurationId | X | | Ticket Map Configuration ID |
+| sectionPercentiles | |  `{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`'0.2': '#FFC515',`<br>&nbsp;&nbsp;&nbsp;&nbsp;`'0.4': '#f2711c',`<br>&nbsp;&nbsp;&nbsp;&nbsp;`'0.6': '#D6226A',`<br>&nbsp;&nbsp;&nbsp;&nbsp;`'0.8': '#a333c8',`<br>&nbsp;&nbsp;&nbsp;&nbsp;`'1': '#2A6EBB'`<br>`}` | Define percentiles to color sections based on their average ticket group price. Ticket groups which fall within a given range will display the associated color on the map for their section.<br><br>ie. Given an event with 100 ticket groups, with each ticket group price incrementing by $1 from $100 to $200, a section whose average ticket group price is $110 will be displayed as `#FFC515`, and a section whose average price of $175 will be displayed as `#a333c8`. |
+| mapFontFamily | | | Set a default font for the map. Native browser fonts available, a list below is provided but results may vary depending upon the browser and browser version.<br><br>• Helvetica<br>• Arial<br>• Times<br>• Times New Roman<br>• Courier<br>• Courier New<br>• Verdana<br>• Tahoma |
+| mapsDomain | | `https://maps.ticketevolution.com` | The domain from which map SVGs and manifests will be fetched. |
+| onSelection | | `() => void` | A function which will be called by Tevomaps when a section of the map has been clicked. It will pass as arguments an array of all currently selected section IDs and expect nothing back.<br><br>`onSelection: function (sectionIds) {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`console.log(sectionIds); //=> ['id-1','id-2']`<br>`}`<br><br>*Note: This method is also called when a section is deselected. If all sections are deselected, the `sectionIds` array will be empty.* |
+| selectedSections | | `[]` | An array of section IDs for the map to initially highlight by default when it is rendered. |
+| ticketGroups | | `[]` | An array of ticket groups to be used for section pricing. Expects each ticket group to adhere to the following interface:<br><br>`interface TicketGroup {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`tevo_section_name: string;`<br>&nbsp;&nbsp;&nbsp;&nbsp;`retail_price: number;`<br>`}` |
 
-```javascript
-{
-  // Ticket Map Venue ID
-  venueId: '10',
+# Public API
 
-  // Ticket Configuration ID
-  configurationId: '1046'
-}
-```
+| Name | Input | Output |
+| - | - | - |
+| updateTicketGroups | `ticketGroups: TicketGroup[]` | `void`
+| highlightSection |
+| unhighlightSection |
+| toggleSection |
+| highlightZone |
+| unhighlightZone |
+| toggleZone |
 
-## Additional Configuration
-
-```javascript
-{
-  // if you would like to use a color palette our Ticket Evolution Design team
-  // has tested and optimized, please select from ('light' or 'dark')
-  // should you require any of the color variables defined in the themes
-  // you may override them by simply including their hex value below
-  // default is light
-  theme: 'light',
-
-  // Color customization options for the different tiers of tickets available
-  // Please use Hex Color format i.e (#B1DDF1)
-  emptySectionFill: '#9E9E9E',
-  selectedSectionFill: '#F06449',
-  hoverSectionFill: '#B5BA72',
-  
-  /* Define percentiles for ticket group prices. Ticket groups which fall within a given
-   * range will display the associated color on the map.
-   * 
-   * ie. Given a minimum event price of $10 and a maximum event price of $100, a ticket
-   * group whose price is $12 will be displayed as red, an a price of $77 will be
-   * displayed as green.
-   */
-  sectionPercentiles: {
-    '0.25': 'red',
-    '0.5': 'blue',
-    '0.75': 'green',
-    '1': 'yellow'
-  },
-
-  // Set a default font for the map
-  // native browser fonts available, a list below is provided but results may
-  // vary depending upon the browser and browser version
-  // [Helvetica, Arial, Times, Times New Roman, Courier, Courier New, Verdana, Tahoma]
-  mapFontFamily: 'arial',
-
-  // In Tevomaps you have the ability to view and browser available tickets by
-  // either section or zone, this toggle gives you the ability to set a default
-  // default is false
-  isZoneDefault: false,
-
-  // Controls whether tooltips are shown when hovering over the available ticketed
-  // section or zone, default is true
-  showTooltip: true
-}
-```
 # Contributing
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 

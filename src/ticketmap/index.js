@@ -4,7 +4,6 @@ import { h, Component } from 'preact';
 import * as React from 'react';
 import fetch from 'unfetch';
 
-import MOCK_TICKET_ARRAY from '../utils/ticketRequest'
 import { UNAVAILABLE_COLOR, fillSection } from './colors'
 import ZoomSettings from './zoomSettings';
 import Tooltip from './tooltip';
@@ -34,11 +33,14 @@ export default class TicketMap extends Component<*, State> {
     onSelection: () => undefined,
     isZoneDefault: false,
     emptySectionFill: UNAVAILABLE_COLOR,
-    // this mimics the client setting the array of tickets available.
-    // this request plays off of the following request:
-    // https://friends.ticketevolution.com/api/v9/ticket_groups?event_id=1294624&order_by=retail_price&type=event
-    // it includes a new field: section_id, which is what we need
-    ticketGroups: MOCK_TICKET_ARRAY.ticket_groups
+    selectedSections: [],
+    sectionPercentiles: {
+      '0.2': '#FFC515',
+      '0.4': '#f2711c',
+      '0.6': '#D6226A',
+      '0.8': '#a333c8',
+      '1': '#2A6EBB',
+    }
   }
 
   constructor(props: any) {
@@ -47,7 +49,7 @@ export default class TicketMap extends Component<*, State> {
       mapSvg: '',
       venueConfiguration: null,
       availableTicketGroups: [],
-      selectedSections: [],
+      selectedSections: this.props.selectedSections,
       isZoneToggled: this.props.isZoneDefault,
       currentHoveredZone: null,
       currentHoveredSection: null,
@@ -147,8 +149,8 @@ export default class TicketMap extends Component<*, State> {
    */
 
   get sortedTicketGroupPrices() {
-    return this.props.ticketGroups
-      .map(group => group.retail_price)
+    return this.state.availableTicketGroups
+      .map(group => group.price)
       .sort((a, b) => a - b);
   }
 
@@ -243,13 +245,11 @@ export default class TicketMap extends Component<*, State> {
    */
 
   getAvailableTicketGroups = (availableTicketGroups = []) =>
-    availableTicketGroups.reduce((memo, { tevo_section_name, ticket_type, retail_price }) => {
-      // const sectionZoneMeta = Object.values(this.venueSectionMetas).find(meta => meta.name === tevo_section_name);
+    availableTicketGroups.reduce((memo, { tevo_section_name, retail_price }) => {
       const sectionZoneMeta = this.venueSectionMetas[tevo_section_name];
       if (sectionZoneMeta) {
         memo.push({
           sectionId: tevo_section_name,
-          ticketType: ticket_type,
           price: retail_price,
           zoneId: sectionZoneMeta.zid,
         });
