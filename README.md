@@ -69,19 +69,28 @@ seatmapApi.highlightSection('section-id');
 | mapsDomain | | `https://maps.ticketevolution.com` | The domain from which map SVGs and manifests will be fetched. |
 | onSelection | | `() => void` | A function which will be called by Tevomaps when a section of the map has been clicked. It will pass as arguments an array of all currently selected section IDs and expect nothing back.<br><br>`onSelection: function (sectionIds) {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`console.log(sectionIds); //=> ['id-1','id-2']`<br>`}`<br><br>*Note: This method is also called when a section is deselected. If all sections are deselected, the `sectionIds` array will be empty.* |
 | selectedSections | | `[]` | An array of section IDs for the map to initially highlight by default when it is rendered. |
-| ticketGroups | | `[]` | An array of ticket groups to be used for section pricing. Expects each ticket group to adhere to the following interface:<br><br>`interface TicketGroup {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`tevo_section_name: string;`<br>&nbsp;&nbsp;&nbsp;&nbsp;`retail_price: number;`<br>`}` |
+| ticketGroups | | `[]` | An array of ticket groups to be used for section pricing. Expects each ticket group to adhere to the [TicketGroup interface](#interfaces). |
 
 # Public API
 
-| Name | Input | Output |
-| - | - | - |
-| updateTicketGroups | `ticketGroups: TicketGroup[]` | `void`
-| highlightSection |
-| unhighlightSection |
-| toggleSection |
-| highlightZone |
-| unhighlightZone |
-| toggleZone |
+| Name | Input | Output | Notes
+| - | - | - | - |
+| updateTicketGroups | `TicketGroup[]` | `void` | Changes the collection of ticket groups in the map used to calculate available sections and section prices. Useful if you have a feature for filtering ticket groups and you want the map to update.
+| highlightSection | `Section` | `void` | Colors the given section by making it more opaque. This is the same effect used for hovering/clicking on a section. |
+| unhighlightSection | `Section` | `void` | Removes the highlight effect of the given section by reverting it back to its base transparency. This is the same effect used for hovering off on a section. |
+| toggleSection | `Section, ShouldHighlight` | `void` | Alias for `highlightSection` and `unhighlightSection`. `ShouldHighlight` defaults to `true` and is used to determine which above method to call. |
+| highlightZone | `Zone` | `void` | Colors the given zone by making it more opaque. This is the same effect used for hovering/clicking on a zone. |
+| unhighlightZone | `Zone` | `void` | Removes the highlight effect of the given zone by reverting it back to its base transparency. This is the same effect used for hovering off on a zone. |
+| toggleZone | `Zone, ShouldHighlight` | `void` | Alias for `highlightZone` and `unhighlightZone`. `ShouldHighlight` defaults to `true` and is used to determine which above method to call. |
+
+# Interfaces
+
+| Name | Properties |
+| - | - |
+| TicketGroup | `{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`tevo_section_name: string;`<br>&nbsp;&nbsp;&nbsp;&nbsp;`retail_price: number;`<br>`}` |
+| Section | `string` |
+| Zone | `string` |
+| ShouldHighlight | `boolean` |
 
 # Contributing
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.

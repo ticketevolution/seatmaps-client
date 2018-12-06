@@ -201,21 +201,21 @@ export default class TicketMap extends Component<*, State> {
    * Public Methods
    */
 
-  highlightSection(section, ticketGroups) {
-    return this.toggleSection(section, true, ticketGroups);
+  highlightSection(section) {
+    return this.toggleSection(section, true);
   }
 
-  unhighlightSection(section, ticketGroups) {
-    return this.toggleSection(section, false, ticketGroups);
+  unhighlightSection(section) {
+    return this.toggleSection(section, false);
   }
 
-  toggleSection(section, shouldHighlight = true, ticketGroups) {
+  toggleSection(section, shouldHighlight = true) {
     if (!section) {
       return;
     }
     const isAnAvailableSection = this.venueSections.includes(section);
     if (isAnAvailableSection) {
-      fillSection(section, this.getDefaultColor(section, ticketGroups), 'fill');
+      fillSection(section, this.getDefaultColor(this.ticketGroupsBySection[section]), 'fill');
       fillSection(section, shouldHighlight ? '1' : '0.6', 'opacity');
     }
   }
@@ -231,7 +231,13 @@ export default class TicketMap extends Component<*, State> {
   toggleZone(zone, shouldHighlight = true) {
     const ticketGroupsBySection = this.ticketGroupsBySectionByZone[zone];
     const allTicketGroupsInZone = Object.values(ticketGroupsBySection).reduce((memo, ticketGroupsInSection) => [...memo, ...ticketGroupsInSection], []);
-    Object.keys(ticketGroupsBySection).forEach(section => this.toggleSection(section, shouldHighlight, allTicketGroupsInZone));
+    Object.keys(ticketGroupsBySection).forEach(section => {
+      const isAnAvailableSection = this.venueSections.includes(section);
+      if (isAnAvailableSection) {
+        fillSection(section, this.getDefaultColor(allTicketGroupsInZone), 'fill');
+        fillSection(section, shouldHighlight ? '1' : '0.6', 'opacity');
+      }
+    });
   }
 
   updateTicketGroups = (ticketGroups: any = this.props.ticketGroups) => {
@@ -297,9 +303,8 @@ export default class TicketMap extends Component<*, State> {
    * Coloring
    */
 
-  getDefaultColor(section, ticketGroups) {
+  getDefaultColor(ticketGroups) {
     const { sectionPercentiles } = this.props;
-    ticketGroups = Array.isArray(ticketGroups) ? ticketGroups : this.ticketGroupsBySection[section];
     const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0];
     const percentile = this.sortedTicketGroupPrices.indexOf(lowestTicketPriceInSection) / this.sortedTicketGroupPrices.length;
     const sectionPercentileKeys = Object.keys(sectionPercentiles).map(key => +key).sort();
