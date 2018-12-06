@@ -76,9 +76,10 @@ seatmapApi.highlightSection('section-id');
 | Name | Input | Output | Notes
 | - | - | - | - |
 | updateTicketGroups | `TicketGroup[]` | `void` | Changes the collection of ticket groups in the map used to calculate available sections and section prices. Useful if you have a feature for filtering ticket groups and you want the map to update.
-| highlightSection | `Section` | `void` | Colors the given section by making it more opaque. This is the same effect used for hovering/clicking on a section. |
-| unhighlightSection | `Section` | `void` | Removes the highlight effect of the given section by reverting it back to its base transparency. This is the same effect used for hovering off on a section. |
-| toggleSection | `Section, ShouldHighlight` | `void` | Alias for `highlightSection` and `unhighlightSection`. `ShouldHighlight` defaults to `true` and is used to determine which above method to call. |
+| highlightSection | `Section` | `void` | Temporarily colors the given section by making it more opaque. This is the same effect used for hovering on a section. |
+| unhighlightSection | `Section` | `void` | Removes the highlight effect of the given section, if it's not selected, by reverting it back to its base transparency. This is the same effect used for hovering off on a section. |
+| selectSection | `Section` | `void` | This is the same effect used for clicking on a section to select it. It colors the section and will not revert back by hovering off it or calling `unhighlightSection`. Calls the `onSelection` callback with the updated array of selected sections. |
+| deselectSection | `Section` | `void` | This is the same effect used for clicking on a section to deselect it. It reverts the color of the section and is the only way to unhighlight a selected section. Calls the `onSelection` callback with the updated array of selected sections. |
 
 # Interfaces
 
@@ -86,7 +87,6 @@ seatmapApi.highlightSection('section-id');
 | - | - |
 | TicketGroup | `{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`tevo_section_name: string;`<br>&nbsp;&nbsp;&nbsp;&nbsp;`retail_price: number;`<br>`}` |
 | Section | `string` |
-| ShouldHighlight | `boolean` |
 
 # Contributing
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
