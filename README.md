@@ -11,7 +11,7 @@ A client side JavaScript plugin that enables users to view seatmaps in relation 
 Once instantiated, this plugin will
 
 1. Fetch the map SVG and manifest JSON, with the given `venueId` and `configurationId`, from Ticket Evolution AWS S3 buckets using the `mapsDomain`.
-2. Render the map in the provided DOM element
+2. Render the map in the provided DOM element.
 3. Color map sections according to the `sectionPercentile` configurations and the available `ticketGroups` (and any `selectedSections` if provided).
 4. Render a tooltip when the user hovers over a section, which will provide quantity and price information.
 
@@ -79,9 +79,6 @@ seatmapApi.highlightSection('section-id');
 | highlightSection | `Section` | `void` | Colors the given section by making it more opaque. This is the same effect used for hovering/clicking on a section. |
 | unhighlightSection | `Section` | `void` | Removes the highlight effect of the given section by reverting it back to its base transparency. This is the same effect used for hovering off on a section. |
 | toggleSection | `Section, ShouldHighlight` | `void` | Alias for `highlightSection` and `unhighlightSection`. `ShouldHighlight` defaults to `true` and is used to determine which above method to call. |
-| highlightZone | `Zone` | `void` | Colors the given zone by making it more opaque. This is the same effect used for hovering/clicking on a zone. |
-| unhighlightZone | `Zone` | `void` | Removes the highlight effect of the given zone by reverting it back to its base transparency. This is the same effect used for hovering off on a zone. |
-| toggleZone | `Zone, ShouldHighlight` | `void` | Alias for `highlightZone` and `unhighlightZone`. `ShouldHighlight` defaults to `true` and is used to determine which above method to call. |
 
 # Interfaces
 
@@ -89,7 +86,6 @@ seatmapApi.highlightSection('section-id');
 | - | - |
 | TicketGroup | `{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`tevo_section_name: string;`<br>&nbsp;&nbsp;&nbsp;&nbsp;`retail_price: number;`<br>`}` |
 | Section | `string` |
-| Zone | `string` |
 | ShouldHighlight | `boolean` |
 
 # Contributing
