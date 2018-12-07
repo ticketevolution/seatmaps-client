@@ -30,6 +30,7 @@ After Instantiation, a [public API](#public-api) is available with a limited num
 <!-- Production -->
 <script src="https://maps.ticketevolution.com/tevomaps.js"></script>
 ```
+> **NOTE:** We are working on a CI/CD pipeline to push the build to a publicly accessible S3 bucket, for now if you wish to embed in the browser you can download the build file [here](build/tevomaps.js) or the gzip [here](build/tevomaps.js.gz)
 
 ## CommonJS
 
