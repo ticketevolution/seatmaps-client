@@ -70,7 +70,7 @@ seatmapApi.highlightSection('section-id');
 | mapsDomain | | `https://maps.ticketevolution.com` | The domain from which map SVGs and manifests will be fetched. |
 | onSelection | | `() => void` | A function which will be called by Tevomaps when a section of the map has been clicked. It will pass as arguments an array of all currently selected section IDs and expect nothing back.<br><br>`onSelection: function (sectionIds) {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`console.log(sectionIds); //=> ['id-1','id-2']`<br>`}`<br><br>*Note: This method is also called when a section is deselected. If all sections are deselected, the `sectionIds` array will be empty.* |
 | selectedSections | | `[]` | An array of section IDs for the map to initially highlight by default when it is rendered. |
-| ticketGroups | | `[]` | An array of ticket groups to be used for section pricing. Expects each ticket group to adhere to the [TicketGroup interface](#interfaces). |
+| ticketGroups | | `[]` | An array of ticket groups to be used for section pricing. This API was designed for you to directly pass into the client library the response from the [Ticket Evolution `/v9/ticket_groups` endpoint](https://ticketevolution.atlassian.net/wiki/spaces/API/pages/9469962/Ticket+Groups+Index). Expects each ticket group to adhere to the [TicketGroup interface](#interfaces). |
 
 # Public API
 
