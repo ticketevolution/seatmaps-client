@@ -1,81 +1,21 @@
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
-import path from 'path'
+import merge from 'webpack-merge'
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
+import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
+import config from './webpack.config.common.babel'
 
-const absolute = (...p) => path.join(__dirname, ...p)
-
-export default {
-    mode: 'development',
-    entry: absolute('main.js'),
-    devtool: 'cheap-eval-source-map',
-    output: {
-        path: absolute('dist'),
-        filename: '[name].[chunkhash].js'
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            title: 'Sitemaps Example',
-            template: absolute('index.html')
-        }),
-        new MiniCssExtractPlugin({
-            filename: '[name].[contentHash].css'
-        })
-    ],
+export default merge(config, {
+    mode: 'production',
+    devtool: 'none',
     optimization: {
+        minimizer: [
+          new UglifyJsPlugin({
+            cache: true,
+            parallel: true
+          }),
+          new OptimizeCssAssetsPlugin()
+        ],
         splitChunks: {
-            chunks: 'all'
+          chunks: 'all'
         }
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [
-                            ['@babel/preset-env', {
-                                useBuiltIns: 'entry'
-                            }],
-                            '@babel/preset-flow',
-                        ],
-                        plugins: [
-                            '@babel/plugin-proposal-class-properties',
-                            '@babel/plugin-syntax-jsx',
-                            ['@babel/plugin-transform-react-jsx', {
-                                pragma: 'h',
-                            }]
-                        ]
-                    }
-                }
-            }, {
-                test: /\.s?css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            localIdentName: '[path][name]-[local]-[hash:base64:5]'
-                        }
-                    },
-                    'sass-loader'
-                ]
-            }, {
-                test: /\.html$/,
-                use: {
-                    loader: 'html-loader',
-                    options: {
-                        minimize: true
-                    }
-                }
-            }
-        ]
-    },
-    resolve: {
-        alias: {
-            'react': 'preact-compat',
-            'react-dom': 'preact-compat'
-        }
-    }
-}
+      }
+})
