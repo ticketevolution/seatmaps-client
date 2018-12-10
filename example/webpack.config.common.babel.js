@@ -5,7 +5,9 @@ import path from 'path'
 export const absolute = (...p) => path.join(__dirname, ...p)
 
 export default {
-    entry: absolute('main.js'),
+    entry: {
+        example: absolute('main.js')
+    },
     output: {
         path: absolute('dist'),
         filename: '[name].[chunkhash].js'
