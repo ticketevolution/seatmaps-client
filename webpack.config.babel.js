@@ -6,7 +6,9 @@ export const absolute = (...p) => path.join(__dirname, ...p)
 export default {
     mode: 'production',
     devtool: 'none',
-    entry: absolute('lib', 'index.js'),
+    entry: {
+        seatmaps: absolute('lib', 'index.js'),
+    },
     output: {
         path: absolute('dist'),
         filename: '[name].min.js'
