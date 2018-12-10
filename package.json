@@ -1,13 +1,13 @@
 {
   "name": "ticket-evolution-seatmaps",
   "version": "0.0.1",
-  "description": "interactive seatmaps",
+  "description": "Interactive seatmaps",
   "repository": {
     "url": "git@github.com:ticketevolution/seatmaps-client.git",
     "type": "git"
   },
-  "main": "build/tevomaps.js",
-  "author": "BRAD LARSON",
+  "main": "lib/index.js",
+  "author": "Ticket Evolution",
   "license": "UNLICENSED",
   "engines": {
     "npm": ">=8"
@@ -25,40 +25,6 @@
     "example:dev": "cd example && webpack-dev-server --config webpack.config.dev.babel.js --progress",
     "example:clean": "rm -rf example/dist",
     "example:analyze": "cd example && webpack --profile --json >> stats.json"
-  },
-  "dllPlugin": {
-    "path": "node_modules/seatmaps-dlls",
-    "exclude": [
-      "cross-env"
-    ],
-    "include": [
-      "core-js",
-      "preact"
-    ]
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy",
-      "^react$": "preact-compat",
-      "^react-dom$": "preact-compat"
-    },
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "statements": 0,
-        "branches": 0,
-        "functions": 0,
-        "lines": 0
-      }
-    },
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "setupTestFrameworkScriptFile": "<rootDir>/internals/testing/test-bundler.js",
-    "testRegex": ".*\\.test\\.js$"
   },
   "dependencies": {
     "preact": "8.2.9",
