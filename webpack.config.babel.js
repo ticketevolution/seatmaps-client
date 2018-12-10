@@ -9,7 +9,7 @@ export default {
     entry: absolute('lib', 'index.js'),
     output: {
         path: absolute('dist'),
-        filename: '[name].js'
+        filename: '[name].min.js'
     },
     module: {
         rules: [
