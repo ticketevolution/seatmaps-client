@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://storage.googleapis.com/ticketevolution/logo.jpg" alt="Ticket Evolution logo" height="200" />
+  <img src="https://www.ticketevolution.com/wp-content/uploads/2017/04/cropped-ticket-evolution.png" alt="Ticket Evolution logo" height="200" />
 </p>
 
 <h1 align="center">Ticket Evolution Seatmaps</h1>
