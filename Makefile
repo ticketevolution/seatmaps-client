@@ -37,9 +37,11 @@ start: install clean ## Start the development server
 	yarn build
 	yarn start
 
-start-prod: install clean ## Build for production and start the server
+build-prod: install clean ## Build for production
 	# yarn test
 	yarn build:prod
+
+start-prod: build-prod ## Build for production and start the server
 	yarn start:prod
 
 analyze: ## Run the webpack analyzer
