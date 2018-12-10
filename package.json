@@ -22,6 +22,7 @@
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
     "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
     "analyze": "webpack --config internals/webpack/webpack.prod.babel.js --profile --json > stats.json",
+    "example": "cd example && webpack-cli --progress",
     "example:build": "cd example && webpack-cli --progress",
     "example:dev": "cd example && webpack-cli --config webpack.config.dev.babel.js --progress --watch",
     "example:clean": "rm -rf example/dist",
