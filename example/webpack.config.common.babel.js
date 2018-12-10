@@ -1,8 +1,7 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
-
-export const absolute = (...p) => path.join(__dirname, ...p)
+import { absolute } from '../webpack.config.babel'
 
 export default {
     entry: {

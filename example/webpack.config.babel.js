@@ -7,15 +7,16 @@ export default merge(config, {
     mode: 'production',
     devtool: 'none',
     optimization: {
-        minimizer: [
-          new UglifyJsPlugin({
-            cache: true,
-            parallel: true
-          }),
-          new OptimizeCssAssetsPlugin()
-        ],
-        splitChunks: {
-          chunks: 'all'
-        }
+      minimizer: [
+        new UglifyJsPlugin({
+          cache: true,
+          parallel: true
+        }),
+        new OptimizeCssAssetsPlugin()
+      ],
+      splitChunks: {
+        chunks: 'all'
       }
-})
+    }
+  }
+)

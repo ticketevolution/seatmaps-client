@@ -13,13 +13,8 @@
     "npm": ">=8"
   },
   "scripts": {
-    "prebuild": "node ./internals/scripts/buildDllManifest.js",
-    "build": "cross-env BUILDING_DLL=true webpack --config internals/webpack/webpack.dll.babel.js --color",
-    "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
-    "pretest": "flow",
-    "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
-    "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
-    "analyze": "webpack --config internals/webpack/webpack.prod.babel.js --profile --json > stats.json",
+    "build": "webpack-cli --progress",
+    "clean": "rm -rf dist",
     "example": "cd example && webpack-cli --progress",
     "example:build": "cd example && webpack-cli --progress",
     "example:dev": "cd example && webpack-dev-server --config webpack.config.dev.babel.js --progress",
