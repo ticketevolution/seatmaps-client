@@ -2,18 +2,20 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
 
+const absolute = (...p) => path.join(__dirname, ...p)
+
 export default {
     mode: 'development',
-    entry: path.join(__dirname, 'main.js'),
+    entry: absolute('main.js'),
     devtool: 'cheap-eval-source-map',
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: absolute('dist'),
         filename: '[name].[chunkhash].js'
     },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Sitemaps Example',
-            template: path.join(__dirname, 'app', 'index.html')
+            template: absolute('index.html')
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[contentHash].css'
@@ -32,12 +34,17 @@ export default {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            "@babel/preset-env",
-                            "@babel/preset-flow",
-                            "@babel/preset-react"
+                            ['@babel/preset-env', {
+                                useBuiltIns: 'entry'
+                            }],
+                            '@babel/preset-flow',
                         ],
                         plugins: [
-                            "@babel/plugin-proposal-class-properties"
+                            '@babel/plugin-proposal-class-properties',
+                            '@babel/plugin-syntax-jsx',
+                            ['@babel/plugin-transform-react-jsx', {
+                                pragma: 'h',
+                            }]
                         ]
                     }
                 }

@@ -1,6 +1,5 @@
 /* @flow */
 
-import React from 'react'
 import { h, render } from 'preact' /** @jsx h */
 import TicketMap from './ticketmap'
 

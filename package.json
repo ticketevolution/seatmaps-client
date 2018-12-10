@@ -23,6 +23,7 @@
     "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
     "analyze": "webpack --config internals/webpack/webpack.prod.babel.js --profile --json > stats.json",
     "example:build": "cd example && webpack-cli --progress",
+    "example:dev": "cd example && webpack-cli --progress --watch",
     "example:clean": "rm -rf example/dist"
   },
   "dllPlugin": {
@@ -75,6 +76,8 @@
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "@babel/plugin-syntax-jsx": "^7.2.0",
+    "@babel/plugin-transform-react-jsx": "^7.2.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-flow": "^7.0.0",
@@ -83,6 +86,7 @@
     "add-asset-html-webpack-plugin": "^3.0.0",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^8.0.4",
+    "babel-preset-preact": "^1.1.0",
     "chai": "4.1.2",
     "compression-webpack-plugin": "1.1.11",
     "cross-env": "5.1.5",

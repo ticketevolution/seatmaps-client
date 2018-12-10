@@ -1,7 +1,8 @@
+import '@babel/polyfill'
 import Tevomaps from '../src/index'
 
 window.addEventListener('load', function () {
-  new Tevomaps.default({
+  new Tevomaps({
     venueId: '896',
     configurationId: '14341',
     mapFontFamily: 'Open Sans',
