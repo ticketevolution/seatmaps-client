@@ -63,12 +63,9 @@
   "dependencies": {
     "preact": "8.2.9",
     "preact-compat": "3.18.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
     "react-inlinesvg": "^0.8.2",
     "react-toggled": "1.2.6",
     "react-transition-group": "2.3.1",
-    "spin.js": "3.1.0",
     "svg-pan-zoom": "3.5.3",
     "unfetch": "3.0.0"
   },
