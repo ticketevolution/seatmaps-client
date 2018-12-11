@@ -92,6 +92,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Prerequisites
 - Node
+- Git
 
 ## Getting Started
 We've made the startup process simple by using a Makefile for all common workflows.
