@@ -24,13 +24,9 @@ After Instantiation, a [public API](#public-api) is available with a limited num
 ## Load Seatmaps via `<script>` tag:
 
 ```html
-<!-- Development -->
-<script src="https://maps.ticketevolution.com/dev/tevomaps.js"></script>
-
-<!-- Production -->
-<script src="https://maps.ticketevolution.com/tevomaps.js"></script>
+<script src="https://raw.githubusercontent.com/ticketevolution/seatmaps-client/master/build/tevomaps.js"></script>
 ```
-> **NOTE:** We are working on a CI/CD pipeline to push the build to a publicly accessible S3 bucket, for now if you wish to embed in the browser you can download the build file [here](build/tevomaps.js) or the gzip [here](build/tevomaps.js.gz)
+*Note: There's also a gzipped version of the minified build available [here](https://github.com/ticketevolution/seatmaps-client/blob/master/build/tevomaps.js.gz).*
 
 ## CommonJS
 
@@ -58,6 +54,8 @@ seatmapApi.highlightSection('section-id');
 ```
 
 *Note: The value provided to `build` is an element ID used in `document.getElementById`. The map will be rendered inside this element.*
+
+*Also, if you are loading the library through a script tag embedded on the page, remember to instantiate the library **after** the script has loaded.*
 
 # Configuration
 
