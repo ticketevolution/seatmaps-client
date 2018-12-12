@@ -48,13 +48,10 @@
   "dependencies": {
     "preact": "8.2.9",
     "preact-compat": "3.18.0",
-    "react-inlinesvg": "^0.8.2",
     "react-toggled": "1.2.6",
     "react-transition-group": "2.3.1",
-    "spin.js": "3.1.0",
     "svg-pan-zoom": "3.5.3",
-    "unfetch": "3.0.0",
-    "webpack-merge": "^4.1.5"
+    "unfetch": "3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",
@@ -64,7 +61,6 @@
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "add-asset-html-webpack-plugin": "^3.0.0",
     "babel-loader": "^8.0.4",
     "chai": "4.1.2",
     "compression-webpack-plugin": "1.1.11",
@@ -79,16 +75,9 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.1.0",
     "eslint-plugin-standard": "^3.0.1",
-    "exports-loader": "0.7.0",
-    "expose-loader": "^0.7.5",
-    "file-loader": "1.1.11",
-    "flow-bin": "0.72.0",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
-    "image-webpack-loader": "4.2.0",
-    "imports-loader": "0.8.0",
     "jest-cli": "23.0.0-alpha.0",
-    "localStorage": "1.0.3",
     "null-loader": "0.1.1",
     "preact-jsx-chai": "2.2.1",
     "prettier": "1.12.1",
@@ -96,6 +85,7 @@
     "url-loader": "1.0.1",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.5"
   }
 }
