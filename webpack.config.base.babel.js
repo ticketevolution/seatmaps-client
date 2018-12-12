@@ -11,7 +11,9 @@ export default {
       amd: 'ticket-evolution-seatmaps',
       commonjs: 'ticket-evolution-seatmaps'
     },
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    filename: 'tevomaps.js',
+    chunkFilename: '[name].chunk.js',
   }, // Merge with env dependent settings
   module: {
     rules: [

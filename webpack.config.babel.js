@@ -4,10 +4,6 @@ import base from './webpack.config.base.babel'
 
 export default merge(base, {
   mode: 'production',
-  output: {
-    filename: 'tevomaps.js',
-    chunkFilename: '[name].chunk.js',
-  },
   plugins: [
     new CompressionPlugin({
       asset: '[path].gz[query]',

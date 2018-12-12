@@ -4,11 +4,6 @@ import merge from 'webpack-merge'
 import base from './webpack.config.base.babel'
 
 export default merge(base, {
-  // Don't use hashes in dev mode for better performance
-  output: {
-    filename: '[name].js',
-    chunkFilename: '[name].chunk.js',
-  },
   mode: 'development',
 
   // Add development plugins
