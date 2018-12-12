@@ -1,6 +1,6 @@
 import CompressionPlugin from 'compression-webpack-plugin'
 import merge from 'webpack-merge'
-import base from './webpack.base.babel'
+import base from './webpack.config.base.babel'
 
 export default merge(base, {
   mode: 'production',

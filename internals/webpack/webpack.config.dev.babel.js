@@ -1,7 +1,7 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import merge from 'webpack-merge'
-import base from './webpack.base.babel'
+import base from './webpack.config.base.babel'
 
 export default merge(base, {
   // Don't use hashes in dev mode for better performance
