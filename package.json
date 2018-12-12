@@ -17,7 +17,7 @@
     "build": "cross-env BUILDING_DLL=true webpack --config internals/webpack/webpack.dll.babel.js --color",
     "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
     "start": "webpack-dev-server --config internals/webpack/webpack.dev.babel.js --hot",
-    "start:prod": "cross-env NODE_ENV=production node server",
+    "start:prod": "webpack-dev-server --config internals/webpack/webpack.prod.babel.js",
     "pretest": "flow",
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
     "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
