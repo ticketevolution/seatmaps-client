@@ -27,4 +27,9 @@ export default merge(base, {
   performance: {
     hints: false,
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
 })
