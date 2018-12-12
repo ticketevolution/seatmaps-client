@@ -2,7 +2,7 @@ import path from 'path'
 import webpack from 'webpack'
 
 export default options => ({
-  entry: options.entry,
+  entry: ['babel-polyfill', path.join(process.cwd(), 'src/index.js')],
   output: {
     ...options.output,
     path: path.resolve(process.cwd(), 'build'),
