@@ -1,21 +1,19 @@
-const path = require('path')
-const webpack = require('webpack')
+import path from 'path'
+import webpack from 'webpack'
 
-module.exports = options => ({
+export default options => ({
   entry: options.entry,
-  output: Object.assign(
-    {
-      path: path.resolve(process.cwd(), 'build'),
-      publicPath: '/',
-      library: {
-        root: 'Tevomaps',
-        amd: 'ticket-evolution-seatmaps',
-        commonjs: 'ticket-evolution-seatmaps'
-      },
-      libraryTarget: 'umd'
+  output: {
+    ...options.output,
+    path: path.resolve(process.cwd(), 'build'),
+    publicPath: '/',
+    library: {
+      root: 'Tevomaps',
+      amd: 'ticket-evolution-seatmaps',
+      commonjs: 'ticket-evolution-seatmaps'
     },
-    options.output
-  ), // Merge with env dependent settings
+    libraryTarget: 'umd'
+  }, // Merge with env dependent settings
   module: {
     rules: [
       {
@@ -23,7 +21,12 @@ module.exports = options => ({
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: options.babelQuery,
+          options: {
+            presets: ["env", "preact", "flow"],
+            plugins: [
+              "transform-class-properties"
+            ]
+          },
         },
       },
       {
