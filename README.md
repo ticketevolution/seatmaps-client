@@ -30,13 +30,13 @@ After Instantiation, a [public API](#public-api) is available with a limited num
 ### 1. Install via `npm` or `yarn`
 
 ```sh
-npm install --save @tevo/seatmap
+npm install --save ticketevolution/seatmaps-client
 ```
 
-or 
+or
 
 ```sh
-yarn add @tevo/seatmap
+yarn add ticketevolution/seatmaps-client
 ```
 
 ### 2. Create a script that includes `@tevo/seatmap`
