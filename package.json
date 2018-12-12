@@ -21,48 +21,6 @@
     "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
     "analyze": "webpack --config internals/webpack/webpack.prod.babel.js --profile --json > stats.json"
   },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "modules": false
-        }
-      ],
-      "stage-0",
-      "flow",
-      "preact",
-      "es2015"
-    ],
-    "plugins": [
-      [
-        "transform-class-properties"
-      ],
-      [
-        "transform-react-jsx",
-        {
-          "pragma": "h"
-        }
-      ]
-    ],
-    "env": {
-      "production": {
-        "only": [
-          "src"
-        ],
-        "plugins": [
-          "transform-react-remove-prop-types",
-          "transform-react-constant-elements"
-        ]
-      },
-      "test": {
-        "plugins": [
-          "transform-es2015-modules-commonjs",
-          "dynamic-import-node"
-        ]
-      }
-    }
-  },
   "jest": {
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
@@ -88,6 +46,7 @@
     "testRegex": ".*\\.test\\.js$"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "preact": "8.2.9",
     "preact-compat": "3.18.0",
     "react-inlinesvg": "^0.8.2",
