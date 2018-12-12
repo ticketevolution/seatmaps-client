@@ -1,9 +1,7 @@
-import path from 'path'
 import CompressionPlugin from 'compression-webpack-plugin'
 import base from './webpack.base.babel'
 
 export default base({
-  entry: [path.join(process.cwd(), 'src/index.js')],
   mode: 'production',
   output: {
     filename: 'tevomaps.js',
