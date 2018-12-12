@@ -2,7 +2,7 @@ import path from 'path'
 import webpack from 'webpack'
 
 export default {
-  entry: ['babel-polyfill', path.join(__dirname, 'src', 'index.js')],
+  entry: ['@babel/polyfill', path.join(__dirname, 'src', 'index.js')],
   output: {
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
@@ -23,9 +23,10 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ["env", "preact", "flow"],
+            presets: ["@babel/preset-env", "@babel/preset-flow"],
             plugins: [
-              "transform-class-properties"
+              "@babel/plugin-proposal-class-properties",
+              ["@babel/plugin-transform-react-jsx", { "pragma": "h" }]
             ]
           },
         },
