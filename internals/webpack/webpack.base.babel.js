@@ -1,10 +1,10 @@
 import path from 'path'
 import webpack from 'webpack'
 
-export default options => ({
+export default ({ output, plugins, ...options }) => ({
   entry: ['babel-polyfill', path.join(process.cwd(), 'src', 'index.js')],
   output: {
-    ...options.output,
+    ...output,
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
     library: {
@@ -67,7 +67,7 @@ export default options => ({
       },
     ],
   },
-  plugins: options.plugins.concat([
+  plugins: plugins.concat([
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
@@ -78,7 +78,7 @@ export default options => ({
       },
     }),
   ]),
-  mode: 'development' || options.mode,
+  mode: 'development',
   resolve: {
     alias: {
       react: 'preact-compat',
@@ -88,7 +88,7 @@ export default options => ({
     extensions: ['.js', '.jsx', '.json'],
     mainFields: ['jsnext:main', 'main'],
   },
-  devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
-  performance: options.performance || {},
+  performance: {},
+  ...options
 })
