@@ -31,42 +31,10 @@ export default {
         },
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        use: 'file-loader',
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        use: [
-          'file-loader',
-          {
-            loader: 'image-webpack-loader',
-            query: {
-              pngquant: {
-                quality: '65-90',
-                speed: 4,
-              },
-              optipng: {
-                optimizationLevel: 7,
-              },
-              mozjpeg: {
-                progressive: true,
-              },
-              gifsicle: {
-                interlaced: false,
-              },
-            },
-          },
-        ],
-      },
-      {
         test: /\.html$/,
         use: 'html-loader',
-      },
-      {
-        test: /\.(mp4|webm)$/,
-        use: 'url-loader?limit=10000',
-      },
-    ],
+      }
+    ]
   },
   plugins: [
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
