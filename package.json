@@ -13,8 +13,6 @@
     "npm": ">=8"
   },
   "scripts": {
-    "prebuild": "node ./internals/scripts/buildDllManifest.js",
-    "build": "cross-env BUILDING_DLL=true webpack --config internals/webpack/webpack.dll.babel.js --color",
     "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
     "start": "webpack-dev-server --config internals/webpack/webpack.dev.babel.js --hot",
     "start:prod": "webpack-dev-server --config internals/webpack/webpack.prod.babel.js",
@@ -64,16 +62,6 @@
         ]
       }
     }
-  },
-  "dllPlugin": {
-    "path": "node_modules/seatmaps-dlls",
-    "exclude": [
-      "cross-env"
-    ],
-    "include": [
-      "core-js",
-      "preact"
-    ]
   },
   "jest": {
     "moduleNameMapper": {
