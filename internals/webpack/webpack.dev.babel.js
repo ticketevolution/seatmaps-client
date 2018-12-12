@@ -1,3 +1,4 @@
+import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import base from './webpack.base.babel'
 
@@ -15,7 +16,7 @@ export default base({
       title: 'Ticket Evolution Map',
       filename: 'index.html',
       inject: true,
-      template: 'src/index.html',
+      template: path.join(process.cwd(), 'src', 'index.html'),
     }),
   ],
 
