@@ -114,7 +114,6 @@ This is the same effect used for clicking on a section to deselect it. It revert
 | Name        | Properties                                                                                                            |
 |-------------|-----------------------------------------------------------------------------------------------------------------------|
 | TicketGroup | `{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`tevo_section_name: string;`<br>&nbsp;&nbsp;&nbsp;&nbsp;`retail_price: number;`<br>`}` |
-| Section     | `string`                                                                                                              |
 
 # Contributing
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
