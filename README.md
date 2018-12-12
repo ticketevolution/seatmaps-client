@@ -22,7 +22,7 @@ After Instantiation, a [public API](#public-api) is available with a limited num
 ## Load `seatmaps-client` via `<script>` html tag
 
 ```html
-<script src="https://raw.githubusercontent.com/ticketevolution/seatmaps-client/master/dist/tevomaps.min.js"></script>
+<script src="https://raw.githubusercontent.com/ticketevolution/seatmaps-client/master/build/tevomaps.js"></script>
 ```
 
 ## CommonJS
@@ -71,7 +71,7 @@ seatmapApi.highlightSection('1234')
 
 ### `class Seatmap`
 
-#### `new Seatmap(options: Map)`
+#### `new Seatmap(options: object)`
 
 Options:
 
@@ -90,19 +90,19 @@ Options:
 
 Changes the collection of ticket groups in the map used to calculate available sections and section prices. Useful if you have a feature for filtering ticket groups and you want the map to update.
 
-#### `highlightSection()`
+#### `highlightSection(section: string)`
 
 Temporarily colors the given section by making it more opaque. This is the same effect used for hovering on a section.
 
-#### `unhighlightSection()`
+#### `unhighlightSection(section: string)`
 
 Removes the highlight effect of the given section, if it's not selected, by reverting it back to its base transparency. This is the same effect used for hovering off on a section.
 
-#### `selectSection()`
+#### `selectSection(section: string)`
 
 This is the same effect used for clicking on a section to select it. It colors the section and will not revert back by hovering off it or calling `unhighlightSection`. Calls the `onSelection` callback with the updated array of selected sections.
 
-#### `deselectSection()`
+#### `deselectSection(section: string)`
 
 This is the same effect used for clicking on a section to deselect it. It reverts the color of the section and is the only way to unhighlight a selected section. Calls the `onSelection` callback with the updated array of selected sections.
 
@@ -119,6 +119,7 @@ These instructions will get you a copy of the project up and running on your loc
 ## System Prerequisites
 - `node`
 - `make`
+- `git`
 
 ## Getting Started
 We've made the startup process simple by using a Makefile for all common workflows.
