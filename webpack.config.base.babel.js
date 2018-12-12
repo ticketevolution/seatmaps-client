@@ -32,7 +32,12 @@ export default {
       },
       {
         test: /\.html$/,
-        use: 'html-loader',
+        use: {
+          loader: 'html-loader',
+          options: {
+            minimize: true
+          }
+        }
       }
     ]
   },
