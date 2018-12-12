@@ -13,7 +13,7 @@
     "npm": ">=8"
   },
   "scripts": {
-    "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
+    "build": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
     "start": "webpack-dev-server --config internals/webpack/webpack.dev.babel.js --hot",
     "start:prod": "webpack-dev-server --config internals/webpack/webpack.prod.babel.js",
     "pretest": "flow",
