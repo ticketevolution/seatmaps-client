@@ -1,4 +1,3 @@
-import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import base from './webpack.base.babel'
 
@@ -12,7 +11,6 @@ export default base({
 
   // Add development plugins
   plugins: [
-    new webpack.HotModuleReplacementPlugin(), // Tell webpack we want hot reloading
     new HtmlWebpackPlugin({
       title: 'Ticket Evolution Map',
       filename: 'index.html',
