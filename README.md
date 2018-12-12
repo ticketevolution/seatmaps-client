@@ -72,9 +72,9 @@ seatmapApi.highlightSection('1234')
 
 ## API Reference
 
-### `class Seatmap`
+### `class Tevomap`
 
-#### `new Seatmap(options: object)`
+#### `new Tevomap(options: object)`
 
 Options:
 
