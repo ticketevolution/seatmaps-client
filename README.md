@@ -32,7 +32,9 @@ After Instantiation, a [public API](#public-api) is available with a limited num
 ```sh
 npm install --save @tevo/seatmap
 ```
+
 or 
+
 ```sh
 yarn add @tevo/seatmap
 ```
@@ -58,6 +60,7 @@ seatmapApi.highlightSection('1234')
 ```
 
 ### 3. Create a page that loads your script
+
 ```html
 <!-- index.html -->
 <html>
@@ -116,17 +119,21 @@ This is the same effect used for clicking on a section to deselect it. It revert
 | TicketGroup | `{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`tevo_section_name: string;`<br>&nbsp;&nbsp;&nbsp;&nbsp;`retail_price: number;`<br>`}` |
 
 # Contributing
+
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ## System Prerequisites
+
 - `node`
 - `make`
 - `git`
 
 ## Getting Started
+
 We've made the startup process simple by using a Makefile for all common workflows.
 
 To see what Makefile commands are available, in your terminal shell run `make` or `make help`. It will list all the available Makefile commands with their descriptions, such as
+
 ```Makefile
 install                        Install client and server side packages for development
 start                          Start the development server
