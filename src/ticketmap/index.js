@@ -455,6 +455,7 @@ export default class TicketMap extends Component<*, State> {
         onMouseOver={this.onMouseOver.bind(this)}
         onMouseOut={this.onMouseOut.bind(this)}
         onClick={this.onClick.bind(this)}
+        onTouchStart={this.onClick.bind(this)}
         style={{
           height: 'inherit',
           minHeight: 'inherit',
