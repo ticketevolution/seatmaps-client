@@ -1,7 +1,8 @@
 import CompressionPlugin from 'compression-webpack-plugin'
+import merge from 'webpack-merge'
 import base from './webpack.base.babel'
 
-export default base({
+export default merge(base, {
   mode: 'production',
   output: {
     filename: 'tevomaps.js',

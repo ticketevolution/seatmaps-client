@@ -1,10 +1,9 @@
 import path from 'path'
 import webpack from 'webpack'
 
-export default ({ output, plugins, ...options }) => ({
+export default {
   entry: ['babel-polyfill', path.join(process.cwd(), 'src', 'index.js')],
   output: {
-    ...output,
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
     library: {
@@ -67,7 +66,7 @@ export default ({ output, plugins, ...options }) => ({
       },
     ],
   },
-  plugins: plugins.concat([
+  plugins: [
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
@@ -77,7 +76,7 @@ export default ({ output, plugins, ...options }) => ({
         API_ENDPOINT: JSON.stringify(process.env.API_ENDPOINT),
       },
     }),
-  ]),
+  ],
   mode: 'development',
   resolve: {
     alias: {
@@ -89,6 +88,5 @@ export default ({ output, plugins, ...options }) => ({
     mainFields: ['jsnext:main', 'main'],
   },
   target: 'web', // Make web variables accessible to webpack, e.g. window
-  performance: {},
-  ...options
-})
+  performance: {}
+}
