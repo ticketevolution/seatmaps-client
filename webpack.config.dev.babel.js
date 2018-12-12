@@ -21,5 +21,18 @@ export default merge(base, {
     splitChunks: {
       chunks: 'all'
     }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.html$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            minimize: true
+          }
+        }
+      }
+    ]
   }
 })
