@@ -41,14 +41,17 @@ yarn add @tevo/seatmap
 
 ```js
 // main.js
-import { Seatmap } from '@tevo/seatmap'
+
+import Tevomaps from '@tevo/seatmap'
+
+// create a new seatmap
+const seatmap = new Tevomaps({
+  venueId: '10',
+  configurationId: '1046',
+});
 
 // turn 'my-map' into a seatmap for venue 10
-const seatmap = new Seatmap({
-  root: document.getElementById('my-map'),
-  venueId: '10',
-  configurationId: '1046'
-})
+const seatmapApi = seatmap.build('my-map');
 
 // perform some actions, like highlighting section 1234
 seatmapApi.highlightSection('1234')
@@ -59,7 +62,7 @@ seatmapApi.highlightSection('1234')
 <!-- index.html -->
 <html>
   <body>
-    <div id="map"></div>
+    <div id="my-map"></div>
     <script src="main.js"></script>
   </body>
 </html>
