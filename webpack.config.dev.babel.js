@@ -5,8 +5,6 @@ import base from './webpack.config.base.babel'
 
 export default merge(base, {
   mode: 'development',
-
-  // Add development plugins
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Ticket Evolution Map',
@@ -15,10 +13,7 @@ export default merge(base, {
       template: path.join(__dirname, 'src', 'index.html'),
     }),
   ],
-
-  // Emit a source map for easier debugging
   devtool: 'source-map',
-
   performance: {
     hints: false,
   },

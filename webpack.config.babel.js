@@ -15,5 +15,5 @@ export default merge(base, {
   ],
   performance: {
     assetFilter: assetFilename => !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
-  },
+  }
 })

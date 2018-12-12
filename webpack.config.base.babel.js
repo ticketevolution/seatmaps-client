@@ -14,11 +14,11 @@ export default {
     libraryTarget: 'umd',
     filename: 'tevomaps.js',
     chunkFilename: '[name].chunk.js',
-  }, // Merge with env dependent settings
+  },
   module: {
     rules: [
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
