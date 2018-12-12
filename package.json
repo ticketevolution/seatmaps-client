@@ -13,12 +13,12 @@
     "npm": ">=8"
   },
   "scripts": {
-    "build": "webpack --mode=production --config internals/webpack/webpack.config.babel.js --color --progress",
-    "start": "webpack-dev-server --config internals/webpack/webpack.config.dev.babel.js --hot --progress",
+    "build": "webpack --mode=production --color --progress",
+    "start": "webpack-dev-server --config webpack.config.dev.babel.js --hot --progress",
     "pretest": "flow",
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
     "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
-    "analyze": "webpack --config internals/webpack/webpack.config.babel.js --profile --json --progress > stats.json"
+    "analyze": "webpack --profile --json --progress > stats.json"
   },
   "jest": {
     "moduleNameMapper": {

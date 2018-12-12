@@ -17,7 +17,7 @@ export default merge(base, {
       title: 'Ticket Evolution Map',
       filename: 'index.html',
       inject: true,
-      template: path.join(process.cwd(), 'src', 'index.html'),
+      template: path.join(__dirname, 'src', 'index.html'),
     }),
   ],
 

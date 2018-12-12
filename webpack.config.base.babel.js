@@ -2,7 +2,7 @@ import path from 'path'
 import webpack from 'webpack'
 
 export default {
-  entry: ['babel-polyfill', path.join(process.cwd(), 'src', 'index.js')],
+  entry: ['babel-polyfill', path.join(__dirname, 'src', 'index.js')],
   output: {
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
