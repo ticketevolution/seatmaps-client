@@ -116,8 +116,8 @@ export default class TicketMap extends Component<*, State> {
       sectionZoneMapping: Object.entries(sections)
         .reduce((memo, [sectionName, section]) => ({
           ...memo,
-          [sectionName]: {
-            zone: section.zone_name
+          [sectionName.toLowerCase()]: {
+            zone: section.zone_name.toLowerCase()
           }
         }), {})
     });
@@ -182,7 +182,7 @@ export default class TicketMap extends Component<*, State> {
   }
 
   get venueSections() {
-    return Object.keys(this.ticketGroupsBySection);
+    return Object.keys(this.ticketGroupsBySection).map(section => section.toLowerCase());
   }
 
   get configFilePath() {
@@ -205,11 +205,11 @@ export default class TicketMap extends Component<*, State> {
     if (!section) {
       return;
     }
-    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.includes(section);
+    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.includes(section.toLowerCase());
     if (isUnhighlightingSelectedSection) {
       return;
     }
-    return this.fillSection(section, shouldHighlight);
+    return this.fillSection(section.toLowerCase(), shouldHighlight);
   }
 
   selectSection(section) {
@@ -225,11 +225,11 @@ export default class TicketMap extends Component<*, State> {
       return;
     }
 
-    this.fillSection(section, shouldHighlight);
+    this.fillSection(section.toLowerCase(), shouldHighlight);
 
     const selectedSections = shouldHighlight
-      ? [...this.state.selectedSections, section]
-      : this.state.selectedSections.filter(selectedSection => section !== selectedSection);
+      ? [...this.state.selectedSections, section.toLowerCase()]
+      : this.state.selectedSections.filter(selectedSection => section.toLowerCase() !== selectedSection);
 
     this.setState({ selectedSections });
   }
@@ -246,11 +246,11 @@ export default class TicketMap extends Component<*, State> {
     if (!zone) {
       return;
     }
-    const isUnhighlightingSelectedZone = !shouldHighlight && this.areAllSectionsInTheZoneSelected(zone);
+    const isUnhighlightingSelectedZone = !shouldHighlight && this.areAllSectionsInTheZoneSelected(zone.toLowerCase());
     if (isUnhighlightingSelectedZone) {
       return;
     }
-    return this.fillZone(zone, shouldHighlight);
+    return this.fillZone(zone.toLowerCase(), shouldHighlight);
   }
 
   selectZone(zone) {
@@ -266,9 +266,9 @@ export default class TicketMap extends Component<*, State> {
       return;
     }
 
-    this.fillZone(zone, shouldHighlight);
+    this.fillZone(zone.toLowerCase(), shouldHighlight);
 
-    const sections = Object.keys(this.ticketGroupsBySectionByZone[zone]);
+    const sections = Object.keys(this.ticketGroupsBySectionByZone[zone.toLowerCase()]);
     const selectedSections = shouldHighlight
       ? this.state.selectedSections.concat(sections)
       : this.state.selectedSections.filter(section => !sections.includes(section));
@@ -373,7 +373,7 @@ export default class TicketMap extends Component<*, State> {
 
   onMouseOver = ({ clientX, clientY, target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const section = target.getAttribute('data-section-id');
+      const section = target.getAttribute('data-section-id').toLowerCase();
       if (this.venueSections.includes(section)) {
         return this.doHover(clientX, clientY, section)
       }
@@ -384,7 +384,7 @@ export default class TicketMap extends Component<*, State> {
 
   onMouseOut = ({ target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const section = target.getAttribute('data-section-id');
+      const section = target.getAttribute('data-section-id').toLowerCase();
       if (this.venueSections.includes(section)) {
         return this.doHoverCleanup(section)
       }
@@ -395,7 +395,7 @@ export default class TicketMap extends Component<*, State> {
 
   onClick = ({ target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const section = target.getAttribute('data-section-id');
+      const section = target.getAttribute('data-section-id').toLowerCase();
       if (this.venueSections.includes(section)) {
         return this.selectSectionOrZone(section);
       }
