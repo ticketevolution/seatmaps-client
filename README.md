@@ -29,7 +29,7 @@ After instantiation, a [public API](#public-api) is available with a limited num
 <script src="https://raw.githubusercontent.com/ticketevolution/seatmaps-client/master/build/tevomaps.js"></script>
 ```
 
-### 2. Create a script block to instantiate the Tevomaps 
+### 2. Create a script block to instantiate the Tevomaps
 
 ```html
 <script>
