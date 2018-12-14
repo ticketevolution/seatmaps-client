@@ -1,0 +1,18 @@
+.legend {
+  cursor: pointer;
+  border: 1px solid black;
+
+  .toggle, .options > * {
+    padding: 10px;
+  }
+
+  .options {
+
+  }
+
+  &:not(.open) {
+    .options {
+      display: none;
+    }
+  }
+}

@@ -9,7 +9,7 @@ export default merge(base, {
   entry: [
     'unfetch/polyfill',
     path.join(__dirname, 'main.js'),
-    path.join(__dirname, 'main.css')
+    path.join(__dirname, 'main.scss')
   ],
   plugins: [
     new HtmlWebpackPlugin({
@@ -38,18 +38,6 @@ export default merge(base, {
             minimize: true
           }
         }
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
-          }
-        ]
       }
     ]
   }
