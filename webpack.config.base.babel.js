@@ -30,6 +30,22 @@ export default {
       {
         test: /\.svg$/,
         use: 'url-loader'
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              modules: true,
+              localIdentName: '[path][name]_[local]_[hash:base64:5]'
+            }
+          },
+          'postcss-loader',
+          'sass-loader'
+        ]
       }
     ]
   },

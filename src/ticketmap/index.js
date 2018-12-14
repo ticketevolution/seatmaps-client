@@ -5,6 +5,7 @@ import fetch from 'unfetch'
 import { fillSection, setUnavailableColors } from './colors'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
+import Legend from './Legend'
 
 type State = {
   mapSvg: string,
@@ -304,7 +305,6 @@ export default class TicketMap extends Component<*, State> {
       const sectionZoneMeta = this.state.sectionZoneMapping[section]
       if (sectionZoneMeta) {
         memo.push({ section, price, zone: sectionZoneMeta.zone })
-        console.log(`Section ${section} was successfully mapped!`)
       } else {
         console.warn(`Section ${section} not found. Please verify it exists in the venue manifest`)
       }
@@ -421,7 +421,6 @@ export default class TicketMap extends Component<*, State> {
   /**
    * Interactions
    */
-
   doHover (tooltipX: any, tooltipY: any, section: string): void {
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
@@ -489,6 +488,7 @@ export default class TicketMap extends Component<*, State> {
           name={this.state.tooltipSectionName}
           ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
+        <Legend />
         <div style={{ display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
           {/* <ZoneToggle
