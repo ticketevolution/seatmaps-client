@@ -2,6 +2,7 @@
   "extends": [
     "standard",
     "standard-react",
+    "standard-flow",
     "plugin:flowtype/recommended"
   ],
   "plugins": ["flowtype"]
