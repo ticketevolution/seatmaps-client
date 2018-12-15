@@ -13,8 +13,8 @@
     "npm": ">=8"
   },
   "scripts": {
+    "build": "webpack --mode=production --color --progress",
     "watch": "npm run build -- --watch",
-    "build": "webpack --mode=production --progress",
     "start": "webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module --open",
     "analyze": "webpack --profile --json --progress > stats.json"
   },
