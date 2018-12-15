@@ -5,5 +5,7 @@
     "standard-flow",
     "plugin:flowtype/recommended"
   ],
-  "plugins": ["flowtype"]
+  "plugins": [
+    "flowtype"
+  ]
 }
