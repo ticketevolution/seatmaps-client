@@ -20,3 +20,4 @@ yarn-error.log
 notes.txt
 cors.json
 src/parse.js
+.eslintcache
