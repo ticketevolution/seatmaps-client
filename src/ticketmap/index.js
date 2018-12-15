@@ -91,7 +91,7 @@ export default class TicketMap extends Component<*, State> {
 
   async fetchMap () {
     const mapSvgUrl = `${this.configFilePath}/map.svg`
-    const mapNotAvailableUrl = `https://maps.ticketevolution.com/maps/not_available.svg` // Only exists on prod
+    const mapNotAvailableUrl = 'https://maps.ticketevolution.com/maps/not_available.svg' // Only exists on prod
     let mapResponse = await fetch(mapSvgUrl)
     if (!mapResponse.ok) {
       mapResponse = await fetch(mapNotAvailableUrl)
