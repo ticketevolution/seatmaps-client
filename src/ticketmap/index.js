@@ -1,7 +1,6 @@
 /* @flow */
 
-import { h, Component } from 'preact';
-import * as React from 'react';
+import React, { Component } from 'react';
 import fetch from 'unfetch';
 
 import { fillSection, setUnavailableColors, fillUnavailableColors } from './colors'
