@@ -2,18 +2,18 @@
 
 import fetch from 'unfetch'
 
-export default function request(url: string, options: any, contentType: string = 'application/json') {
+export default function request (url: string, options: any, contentType: string = 'application/json') {
   return fetch(
     url,
     Object.assign({}, options, {
       headers: {
         ...(contentType
           ? {
-              Accept: contentType,
-              'Content-Type': contentType,
-            }
-          : {}),
-      },
+            Accept: contentType,
+            'Content-Type': contentType
+          }
+          : {})
+      }
     })
   )
     .then(response =>
@@ -21,7 +21,7 @@ export default function request(url: string, options: any, contentType: string =
         return {
           data: json,
           ok: response.ok,
-          status: response.status,
+          status: response.status
         }
       })
     )
