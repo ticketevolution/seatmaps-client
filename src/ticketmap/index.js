@@ -5,7 +5,6 @@ import fetch from 'unfetch';
 import { fillSection, setUnavailableColors, fillUnavailableColors } from './colors'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
-import ZoneToggle from './zoneToggle'
 
 type State = {
   mapSvg: string,
@@ -449,10 +448,10 @@ export default class TicketMap extends Component<*, State> {
   render (): ?React$Element<any> {
     return (
       <div
-        ref={element => this.rootRef = element}
-        onMouseOver={this.onMouseOver.bind(this)}
-        onMouseOut={this.onMouseOut.bind(this)}
-        onClick={this.onClick.bind(this)}
+        ref={element => { this.rootRef = element }}
+        onMouseOver={this.onMouseOver}
+        onMouseOut={this.onMouseOut}
+        onClick={this.onClick}
         style={{
           height: 'inherit',
           minHeight: 'inherit',
@@ -478,7 +477,7 @@ export default class TicketMap extends Component<*, State> {
           /> */}
         </div>
         <div
-          ref={element => this.mapRootRef = element}
+          ref={element => { this.mapRootRef = element }}
           style={{
             cursor: '-webkit-grab',
             height: 'inherit',
