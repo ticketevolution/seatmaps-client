@@ -15,9 +15,6 @@
   "scripts": {
     "build": "webpack --mode=production --color --progress",
     "start": "webpack-dev-server --config webpack.config.dev.babel.js --hot --progress",
-    "pretest": "flow",
-    "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
-    "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
     "analyze": "webpack --profile --json --progress > stats.json"
   },
   "jest": {
@@ -61,7 +58,6 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/register": "^7.0.0",
     "babel-loader": "^8.0.4",
-    "chai": "4.2.0",
     "compression-webpack-plugin": "2.0.0",
     "cross-env": "5.2.0",
     "eslint": "^5.10.0",
@@ -78,7 +74,6 @@
     "html-webpack-plugin": "3.2.0",
     "jest-cli": "23.6.0",
     "null-loader": "0.1.1",
-    "preact-jsx-chai": "2.2.1",
     "prettier": "1.15.3",
     "shelljs": "0.8.3",
     "url-loader": "1.1.2",
