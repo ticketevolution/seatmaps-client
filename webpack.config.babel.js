@@ -27,8 +27,5 @@ export default merge(base, {
       cache: true,
       minRatio: 0.8
     })
-  ],
-  performance: {
-    assetFilter: assetFilename => !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)
-  }
+  ]
 })
