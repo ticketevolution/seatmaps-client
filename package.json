@@ -13,7 +13,7 @@
     "npm": ">=8"
   },
   "scripts": {
-    "build": "webpack --mode=production --progress",
+    "build": "webpack --progress",
     "start": "./node_modules/.bin/webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module --open",
     "analyze": "webpack --profile --json --progress > stats.json",
     "lint": "eslint . --cache && stylelint **/*.scss --cache"
