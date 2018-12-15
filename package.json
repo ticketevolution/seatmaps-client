@@ -15,7 +15,7 @@
   "scripts": {
     "build": "webpack --mode=production --color --progress",
     "watch": "npm run build -- --watch",
-    "start": "./node_modules/.bin/webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module",
+    "start": "./node_modules/.bin/webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module --open",
     "analyze": "webpack --profile --json --progress > stats.json"
   },
   "jest": {
