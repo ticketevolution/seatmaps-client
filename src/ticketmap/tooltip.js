@@ -1,4 +1,5 @@
-import CSSTransition from 'react-transition-group/CSSTransition';
+import PropTypes from 'prop-types'
+import CSSTransition from 'react-transition-group/CSSTransition'
 import { mainContainerStyle } from './styles'
 
 const SCREEN_BUFFER = 100
@@ -13,7 +14,7 @@ export const getTooltipX = (clientX) =>
 
 export const getTooltipY = (clientY) => clientY - SCREEN_BUFFER < 0 ? clientY + 50 : clientY - SCREEN_BUFFER
 
-export default ({ isActive, clientX, clientY, name, ticketGroups }) => {
+const Tooltip = ({ isActive, clientX, clientY, name, ticketGroups }) => {
   const prices = ticketGroups
     .map(ticketGroup => parseFloat(ticketGroup.price))
     .sort((a, b) => a - b)
@@ -40,12 +41,9 @@ export default ({ isActive, clientX, clientY, name, ticketGroups }) => {
                 <div style={{ fontWeight: '400' }}>{name}</div>
                 <div style={{ fontWeight: '400' }}>
                   <span>
-                      {prices.length} listing{prices.length > 1 ? 's' : ''}
-                    </span>{' '}
-                                    &#9679;{' '}
-                  <span>
-                                        Starting at <span style={{ fontWeight: '700' }}>{prices[0]}</span>
-                    </span>
+                    {prices.length} listing{prices.length > 1 ? 's' : ''}
+                  </span>{' '}&#9679;{' '}
+                  <span>Starting at <span style={{ fontWeight: '700' }}>{prices[0]}</span></span>
                 </div>
               </div>
             </div>
@@ -55,3 +53,19 @@ export default ({ isActive, clientX, clientY, name, ticketGroups }) => {
     </CSSTransition>
   )
 }
+
+Tooltip.propTypes = {
+  clientX: PropTypes.number.isRequired,
+  clientY: PropTypes.number.isRequired,
+  ticketGroups: PropTypes.arrayOf(PropTypes.shape({
+    price: PropTypes.string.isRequired
+  })).isRequired,
+  name: PropTypes.string,
+  isActive: PropTypes.bool
+}
+
+Tooltip.defaultProps = {
+  isActive: false
+}
+
+export default Tooltip
