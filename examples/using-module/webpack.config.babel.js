@@ -1,19 +1,23 @@
-import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import merge from 'webpack-merge'
-import base from './webpack.config.base.babel'
+import path from 'path'
+import base from '../../webpack.config.base.babel'
 
 export default merge(base, {
   mode: 'development',
+  devtool: 'source-map',
+  entry: [
+    'unfetch/polyfill',
+    path.join(__dirname, 'main.js')
+  ],
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Ticket Evolution Map',
       filename: 'index.html',
       inject: true,
-      template: path.join(__dirname, 'src', 'index.html')
+      template: 'index.html'
     })
   ],
-  devtool: 'source-map',
   performance: {
     hints: false
   },
