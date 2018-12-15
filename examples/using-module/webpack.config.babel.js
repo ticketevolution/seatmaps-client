@@ -1,6 +1,7 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import merge from 'webpack-merge'
 import path from 'path'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import base from '../../webpack.config.base.babel'
 
 export default merge(base, {
@@ -8,7 +9,8 @@ export default merge(base, {
   devtool: 'source-map',
   entry: [
     'unfetch/polyfill',
-    path.join(__dirname, 'main.js')
+    path.join(__dirname, 'main.js'),
+    path.join(__dirname, 'main.scss')
   ],
   plugins: [
     new HtmlWebpackPlugin({
@@ -16,6 +18,9 @@ export default merge(base, {
       filename: 'index.html',
       inject: true,
       template: 'index.html'
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
     })
   ],
   performance: {
@@ -36,6 +41,19 @@ export default merge(base, {
             minimize: true
           }
         }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          'sass-loader'
+        ]
       }
     ]
   }
