@@ -16,7 +16,7 @@
     "build": "webpack --mode=production --progress",
     "start": "./node_modules/.bin/webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module --open",
     "analyze": "webpack --profile --json --progress > stats.json",
-    "lint": "eslint ."
+    "lint": "eslint . --cache && stylelint **/*.scss --cache"
   },
   "jest": {
     "moduleNameMapper": {
@@ -79,6 +79,8 @@
     "node-sass": "^4.11.0",
     "normalize-scss": "^7.0.1",
     "sass-loader": "^7.1.0",
+    "stylelint": "^9.9.0",
+    "stylelint-config-standard": "^18.2.0",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
