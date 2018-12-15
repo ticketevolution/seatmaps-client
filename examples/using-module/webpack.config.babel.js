@@ -15,9 +15,10 @@ export default merge(base, {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Ticket Evolution Map',
-      filename: 'index.html',
-      inject: true,
-      template: 'index.html'
+      template: 'index.html',
+      meta: {
+        viewport: 'width=device-width, initial-scale=1'
+      }
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css'
