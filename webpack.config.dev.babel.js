@@ -10,12 +10,12 @@ export default merge(base, {
       title: 'Ticket Evolution Map',
       filename: 'index.html',
       inject: true,
-      template: path.join(__dirname, 'src', 'index.html'),
-    }),
+      template: path.join(__dirname, 'src', 'index.html')
+    })
   ],
   devtool: 'source-map',
   performance: {
-    hints: false,
+    hints: false
   },
   optimization: {
     splitChunks: {
