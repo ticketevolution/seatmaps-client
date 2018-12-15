@@ -53,7 +53,6 @@ const Tooltip = ({ isActive, clientX, clientY, name, ticketGroups }) => {
     </CSSTransition>
   )
 }
-
 Tooltip.propTypes = {
   clientX: PropTypes.number.isRequired,
   clientY: PropTypes.number.isRequired,

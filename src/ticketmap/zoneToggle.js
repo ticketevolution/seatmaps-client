@@ -14,7 +14,7 @@ export default ({ isZoneToggled, onToggle }) => (
         color: isZoneToggled ? '#181514' : '#3D5A80'
       })}
     >
-            Section
+      Section
     </div>
 
     <Toggle
@@ -82,7 +82,7 @@ export default ({ isZoneToggled, onToggle }) => (
         color: isZoneToggled ? '#3D5A80' : '#181514'
       })}
     >
-            Zone
+      Zone
     </div>
   </div>
 )

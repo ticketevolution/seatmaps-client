@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import { buttonStyle } from './styles'
