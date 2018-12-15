@@ -49,7 +49,10 @@ export default class SeatmapFactory {
       }
 
       let componentRef
-      render(<TicketMap {...this.configuration} ref={component => componentRef = component} />, rootElement)
+      render(<TicketMap
+        {...this.configuration}
+        ref={component => { componentRef = component }}
+      />, rootElement)
 
       return componentRef.publicApi
     }
