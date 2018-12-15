@@ -13,7 +13,7 @@ export default {
     },
     libraryTarget: 'umd',
     filename: 'tevomaps.js',
-    chunkFilename: '[name].chunk.js',
+    chunkFilename: '[name].chunk.js'
   },
   module: {
     rules: [
@@ -23,13 +23,13 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-flow"],
+            presets: ['@babel/preset-env', '@babel/preset-flow'],
             plugins: [
-              "@babel/plugin-proposal-class-properties",
-              ["@babel/plugin-transform-react-jsx", { "pragma": "h" }]
+              '@babel/plugin-proposal-class-properties',
+              ['@babel/plugin-transform-react-jsx', { 'pragma': 'h' }]
             ]
-          },
-        },
+          }
+        }
       }
     ]
   },
@@ -40,19 +40,19 @@ export default {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        API_ENDPOINT: JSON.stringify(process.env.API_ENDPOINT),
-      },
-    }),
+        API_ENDPOINT: JSON.stringify(process.env.API_ENDPOINT)
+      }
+    })
   ],
   mode: 'development',
   resolve: {
     alias: {
       react: 'preact-compat',
-      'react-dom': 'preact-compat',
+      'react-dom': 'preact-compat'
     },
     modules: ['src', 'node_modules'],
     extensions: ['.js', '.jsx', '.json'],
-    mainFields: ['jsnext:main', 'main'],
+    mainFields: ['jsnext:main', 'main']
   },
   target: 'web', // Make web variables accessible to webpack, e.g. window
   performance: {}
