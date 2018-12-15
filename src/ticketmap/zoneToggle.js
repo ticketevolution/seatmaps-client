@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import React from 'react'
 import Toggle from 'react-toggled/preact';
 
 import { toggleTextStyle } from './styles'
