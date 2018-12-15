@@ -4,7 +4,8 @@
 
 <h1 align="center">Ticket Evolution Seatmaps</h1>
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
 
 A client side JavaScript library that enables users to view seatmaps for available tickets on Ticket Evolution.
 
