@@ -1,20 +1,6 @@
-import path from 'path'
-import webpack from 'webpack'
+import { DefinePlugin } from 'webpack'
 
 export default {
-  entry: [path.join(__dirname, 'src', 'index.js')],
-  output: {
-    path: path.resolve(process.cwd(), 'build'),
-    publicPath: '/',
-    library: {
-      root: 'Tevomaps',
-      amd: 'ticket-evolution-seatmaps',
-      commonjs: 'ticket-evolution-seatmaps'
-    },
-    libraryTarget: 'umd',
-    filename: 'tevomaps.js',
-    chunkFilename: '[name].chunk.js'
-  },
   module: {
     rules: [
       {
@@ -32,7 +18,9 @@ export default {
             ],
             plugins: [
               '@babel/plugin-proposal-class-properties',
-              ['@babel/plugin-transform-react-jsx', { 'pragma': 'h' }]
+              ['@babel/plugin-transform-react-jsx', {
+                'pragma': 'h'
+              }]
             ]
           }
         }
@@ -43,23 +31,17 @@ export default {
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         API_ENDPOINT: JSON.stringify(process.env.API_ENDPOINT)
       }
     })
   ],
-  mode: 'development',
   resolve: {
     alias: {
       react: 'preact-compat',
       'react-dom': 'preact-compat'
-    },
-    modules: ['src', 'node_modules'],
-    extensions: ['.js', '.jsx', '.json'],
-    mainFields: ['jsnext:main', 'main']
-  },
-  target: 'web', // Make web variables accessible to webpack, e.g. window
-  performance: {}
+    }
+  }
 }
