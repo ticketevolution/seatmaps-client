@@ -3,10 +3,9 @@
 import { Component } from 'react'
 import fetch from 'unfetch'
 
-import { fillSection, setUnavailableColors, fillUnavailableColors } from './colors'
+import { fillSection, setUnavailableColors } from './colors'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
-import ZoneToggle from './zoneToggle'
 
 type State = {
   mapSvg: string,
