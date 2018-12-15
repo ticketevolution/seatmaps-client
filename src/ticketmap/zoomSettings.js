@@ -31,7 +31,7 @@ export const resetZoom = (
 
 export default class ZoomSettings extends Component {
   static propTypes = {
-    mapSvg: PropTypes.any.isReqruied
+    mapSvg: PropTypes.any.isRequired
   }
 
   constructor (props) {
