@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import fetch from 'unfetch';
 
 import { fillSection, setUnavailableColors, fillUnavailableColors } from './colors'

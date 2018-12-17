@@ -15,6 +15,7 @@ export default {
               '@babel/preset-flow'
             ],
             plugins: [
+              'babel-plugin-react-require',
               '@babel/plugin-proposal-class-properties',
               '@babel/plugin-transform-react-jsx'
             ]

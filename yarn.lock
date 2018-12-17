@@ -1123,6 +1123,11 @@ babel-loader@^8.0.4:
     mkdirp "^0.5.1"
     util.promisify "^1.0.0"
 
+babel-plugin-react-require@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-react-require/-/babel-plugin-react-require-3.0.1.tgz#bd052971cc32a3a4450234ae0a252402e7394900"
+  integrity sha512-NAOj+5m+2Y125igiveyBzvSTz8Mv21idmYkmkxFX6aUVRXEmGGaFpuQ347GwSoZgrYmyal3aFw4F6/F6ZmIzUg==
+
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
