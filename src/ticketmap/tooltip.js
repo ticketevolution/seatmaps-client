@@ -1,4 +1,3 @@
-import React from 'react'
 import CSSTransition from 'react-transition-group/CSSTransition';
 
 import { mainContainerStyle } from './styles';
