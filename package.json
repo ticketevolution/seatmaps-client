@@ -16,8 +16,8 @@
     "prebuild": "node ./internals/scripts/buildDllManifest.js",
     "build": "cross-env BUILDING_DLL=true webpack --config internals/webpack/webpack.dll.babel.js --color",
     "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
-    "start": "cross-env NODE_ENV=development PORT=3000 node server",
-    "start:prod": "cross-env NODE_ENV=production node server",
+    "start": "webpack-dev-server --config internals/webpack/webpack.dev.babel.js --hot",
+    "start:prod": "webpack-dev-server --config internals/webpack/webpack.prod.babel.js",
     "pretest": "flow",
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
     "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
@@ -159,7 +159,6 @@
     "url-loader": "1.0.1",
     "webpack": "4.8.3",
     "webpack-cli": "2.1.3",
-    "webpack-dev-middleware": "3.1.3",
-    "webpack-hot-middleware": "2.22.2"
+    "webpack-dev-server": "^3.1.10"
   }
 }
