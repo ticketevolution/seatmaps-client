@@ -41,7 +41,7 @@ export default class ZoomSettings extends Component {
       contain: false
     })
   }
-  
+
   render () {
     return (
       <div style={{ display: 'flex' }}>

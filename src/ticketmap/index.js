@@ -1,8 +1,8 @@
 /* @flow */
 
-import { Component } from 'react';
-import fetch from 'unfetch';
-import { fillSection, setUnavailableColors, fillUnavailableColors } from './colors'
+import { Component } from 'react'
+import fetch from 'unfetch'
+import { fillSection, setUnavailableColors } from './colors'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
 
