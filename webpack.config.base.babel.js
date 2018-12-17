@@ -2,7 +2,7 @@ import path from 'path'
 import webpack from 'webpack'
 
 export default {
-  entry: ['babel-polyfill', path.join(process.cwd(), 'src', 'index.js')],
+  entry: ['babel-polyfill', path.join(__dirname, 'src', 'index.js')],
   output: {
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
@@ -11,12 +11,14 @@ export default {
       amd: 'ticket-evolution-seatmaps',
       commonjs: 'ticket-evolution-seatmaps'
     },
-    libraryTarget: 'umd'
-  }, // Merge with env dependent settings
+    libraryTarget: 'umd',
+    filename: 'tevomaps.js',
+    chunkFilename: '[name].chunk.js',
+  },
   module: {
     rules: [
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -27,44 +29,8 @@ export default {
             ]
           },
         },
-      },
-      {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        use: 'file-loader',
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        use: [
-          'file-loader',
-          {
-            loader: 'image-webpack-loader',
-            query: {
-              pngquant: {
-                quality: '65-90',
-                speed: 4,
-              },
-              optipng: {
-                optimizationLevel: 7,
-              },
-              mozjpeg: {
-                progressive: true,
-              },
-              gifsicle: {
-                interlaced: false,
-              },
-            },
-          },
-        ],
-      },
-      {
-        test: /\.html$/,
-        use: 'html-loader',
-      },
-      {
-        test: /\.(mp4|webm)$/,
-        use: 'url-loader?limit=10000',
-      },
-    ],
+      }
+    ]
   },
   plugins: [
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
