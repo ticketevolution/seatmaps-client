@@ -1,8 +1,9 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import merge from 'webpack-merge'
 import base from './webpack.base.babel'
 
-export default base({
+export default merge(base, {
   // Don't use hashes in dev mode for better performance
   output: {
     filename: '[name].js',
