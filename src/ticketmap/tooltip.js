@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import CSSTransition from 'react-transition-group/CSSTransition'
 import { mainContainerStyle } from './styles'
 
@@ -52,20 +51,6 @@ const Tooltip = ({ isActive, clientX, clientY, name, ticketGroups }) => {
       </div>
     </CSSTransition>
   )
-}
-
-Tooltip.propTypes = {
-  clientX: PropTypes.number.isRequired,
-  clientY: PropTypes.number.isRequired,
-  ticketGroups: PropTypes.arrayOf(PropTypes.shape({
-    price: PropTypes.string.isRequired
-  })).isRequired,
-  name: PropTypes.string,
-  isActive: PropTypes.bool
-}
-
-Tooltip.defaultProps = {
-  isActive: false
 }
 
 export default Tooltip
