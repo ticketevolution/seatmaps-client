@@ -32,7 +32,7 @@ export default class TicketMap extends Component<*, State> {
     mapsDomain: 'https://maps.ticketevolution.com',
     onSelection: () => undefined,
     isZoneDefault: false,
-    selectedSections: new Set(),
+    selectedSections: [],
     sectionPercentiles: {
       '0.2': '#FFC515',
       '0.4': '#f2711c',
