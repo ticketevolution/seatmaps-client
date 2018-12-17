@@ -1,14 +1,12 @@
-const path = require('path')
-const CompressionPlugin = require('compression-webpack-plugin')
+import CompressionPlugin from 'compression-webpack-plugin'
+import base from './webpack.base.babel'
 
-module.exports = require('./webpack.base.babel')({
-  entry: [path.join(process.cwd(), 'src/index.js')],
+export default base({
   mode: 'production',
   output: {
     filename: 'tevomaps.js',
     chunkFilename: '[name].chunk.js',
   },
-
   plugins: [
     new CompressionPlugin({
       asset: '[path].gz[query]',

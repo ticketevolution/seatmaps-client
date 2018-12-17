@@ -1,21 +1,19 @@
-const path = require('path')
-const webpack = require('webpack')
+import path from 'path'
+import webpack from 'webpack'
 
-module.exports = options => ({
-  entry: options.entry,
-  output: Object.assign(
-    {
-      path: path.resolve(process.cwd(), 'build'),
-      publicPath: '/',
-      library: {
-        root: 'Tevomaps',
-        amd: 'ticket-evolution-seatmaps',
-        commonjs: 'ticket-evolution-seatmaps'
-      },
-      libraryTarget: 'umd'
+export default ({ output, plugins, ...options }) => ({
+  entry: ['babel-polyfill', path.join(process.cwd(), 'src', 'index.js')],
+  output: {
+    ...output,
+    path: path.resolve(process.cwd(), 'build'),
+    publicPath: '/',
+    library: {
+      root: 'Tevomaps',
+      amd: 'ticket-evolution-seatmaps',
+      commonjs: 'ticket-evolution-seatmaps'
     },
-    options.output
-  ), // Merge with env dependent settings
+    libraryTarget: 'umd'
+  }, // Merge with env dependent settings
   module: {
     rules: [
       {
@@ -23,7 +21,12 @@ module.exports = options => ({
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: options.babelQuery,
+          options: {
+            presets: ["env", "preact", "flow"],
+            plugins: [
+              "transform-class-properties"
+            ]
+          },
         },
       },
       {
@@ -64,7 +67,7 @@ module.exports = options => ({
       },
     ],
   },
-  plugins: options.plugins.concat([
+  plugins: plugins.concat([
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
@@ -75,7 +78,7 @@ module.exports = options => ({
       },
     }),
   ]),
-  mode: 'development' || options.mode,
+  mode: 'development',
   resolve: {
     alias: {
       react: 'preact-compat',
@@ -85,7 +88,7 @@ module.exports = options => ({
     extensions: ['.js', '.jsx', '.json'],
     mainFields: ['jsnext:main', 'main'],
   },
-  devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
-  performance: options.performance || {},
+  performance: {},
+  ...options
 })

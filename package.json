@@ -13,67 +13,13 @@
     "npm": ">=8"
   },
   "scripts": {
-    "prebuild": "node ./internals/scripts/buildDllManifest.js",
-    "build": "cross-env BUILDING_DLL=true webpack --config internals/webpack/webpack.dll.babel.js --color",
-    "build:prod": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
+    "build": "webpack --mode=production --config internals/webpack/webpack.prod.babel.js --color",
     "start": "webpack-dev-server --config internals/webpack/webpack.dev.babel.js --hot",
-    "start:prod": "webpack-dev-server --config internals/webpack/webpack.prod.babel.js",
+    "watch": "npm run build -- --watch",
     "pretest": "flow",
     "test": "cross-env NODE_ENV=test jest --coverage --no-cache",
     "test:watch": "cross-env NODE_ENV=test jest --no-cache --watchAll",
     "analyze": "webpack --config internals/webpack/webpack.prod.babel.js --profile --json > stats.json"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "modules": false
-        }
-      ],
-      "stage-0",
-      "flow",
-      "preact",
-      "es2015"
-    ],
-    "plugins": [
-      [
-        "transform-class-properties"
-      ],
-      [
-        "transform-react-jsx",
-        {
-          "pragma": "h"
-        }
-      ]
-    ],
-    "env": {
-      "production": {
-        "only": [
-          "src"
-        ],
-        "plugins": [
-          "transform-react-remove-prop-types",
-          "transform-react-constant-elements"
-        ]
-      },
-      "test": {
-        "plugins": [
-          "transform-es2015-modules-commonjs",
-          "dynamic-import-node"
-        ]
-      }
-    }
-  },
-  "dllPlugin": {
-    "path": "node_modules/seatmaps-dlls",
-    "exclude": [
-      "cross-env"
-    ],
-    "include": [
-      "core-js",
-      "preact"
-    ]
   },
   "jest": {
     "moduleNameMapper": {
@@ -100,6 +46,7 @@
     "testRegex": ".*\\.test\\.js$"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "preact": "8.2.9",
     "preact-compat": "3.18.0",
     "react-inlinesvg": "^0.8.2",
