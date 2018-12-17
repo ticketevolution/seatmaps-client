@@ -116,8 +116,9 @@ export default class TicketMap extends Component<*, State> {
       sectionZoneMapping: Object.entries(sections)
         .reduce((memo, [sectionName, section]) => ({
           ...memo,
-          [sectionName]: {
-            zone: section.zone_name
+          [sectionName.toLowerCase()]: {
+            sectionName,
+            zone: section.zone_name ? section.zone_name.toLowerCase() : undefined
           }
         }), {})
     });
@@ -205,11 +206,12 @@ export default class TicketMap extends Component<*, State> {
     if (!section) {
       return;
     }
-    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.includes(section);
+    const sectionId = section.toLowerCase();
+    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.includes(sectionId);
     if (isUnhighlightingSelectedSection) {
       return;
     }
-    return this.fillSection(section, shouldHighlight);
+    return this.fillSection(sectionId, shouldHighlight);
   }
 
   selectSection(section) {
@@ -225,11 +227,12 @@ export default class TicketMap extends Component<*, State> {
       return;
     }
 
-    this.fillSection(section, shouldHighlight);
+    const sectionId = section.toLowerCase();
+    this.fillSection(sectionId, shouldHighlight);
 
     const selectedSections = shouldHighlight
-      ? [...this.state.selectedSections, section]
-      : this.state.selectedSections.filter(selectedSection => section !== selectedSection);
+      ? [...this.state.selectedSections, sectionId]
+      : this.state.selectedSections.filter(selectedSection => sectionId !== selectedSection);
 
     this.setState({ selectedSections });
   }
@@ -246,11 +249,12 @@ export default class TicketMap extends Component<*, State> {
     if (!zone) {
       return;
     }
-    const isUnhighlightingSelectedZone = !shouldHighlight && this.areAllSectionsInTheZoneSelected(zone);
+    const zoneId = zone.toLowerCase();
+    const isUnhighlightingSelectedZone = !shouldHighlight && this.areAllSectionsInTheZoneSelected(zoneId);
     if (isUnhighlightingSelectedZone) {
       return;
     }
-    return this.fillZone(zone, shouldHighlight);
+    return this.fillZone(zoneId, shouldHighlight);
   }
 
   selectZone(zone) {
@@ -266,9 +270,10 @@ export default class TicketMap extends Component<*, State> {
       return;
     }
 
-    this.fillZone(zone, shouldHighlight);
+    const zoneId = zone.toLowerCase();
+    this.fillZone(zoneId, shouldHighlight);
 
-    const sections = Object.keys(this.ticketGroupsBySectionByZone[zone]);
+    const sections = Object.keys(this.ticketGroupsBySectionByZone[zoneId]);
     const selectedSections = shouldHighlight
       ? this.state.selectedSections.concat(sections)
       : this.state.selectedSections.filter(section => !sections.includes(section));
@@ -286,7 +291,8 @@ export default class TicketMap extends Component<*, State> {
    */
 
   getAvailableTicketGroups = (availableTicketGroups = []) =>
-    availableTicketGroups.reduce((memo, { tevo_section_name: section, retail_price: price }) => {
+    availableTicketGroups.reduce((memo, { tevo_section_name, retail_price: price }) => {
+      const section = tevo_section_name.toLowerCase();
       const sectionZoneMeta = this.state.sectionZoneMapping[section];
       if (sectionZoneMeta) {
         memo.push({ section, price, zone: sectionZoneMeta.zone });
@@ -373,7 +379,7 @@ export default class TicketMap extends Component<*, State> {
 
   onMouseOver = ({ clientX, clientY, target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const section = target.getAttribute('data-section-id');
+      const section = target.getAttribute('data-section-id').toLowerCase();
       if (this.venueSections.includes(section)) {
         return this.doHover(clientX, clientY, section)
       }
@@ -384,7 +390,7 @@ export default class TicketMap extends Component<*, State> {
 
   onMouseOut = ({ target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const section = target.getAttribute('data-section-id');
+      const section = target.getAttribute('data-section-id').toLowerCase();
       if (this.venueSections.includes(section)) {
         return this.doHoverCleanup(section)
       }
@@ -395,7 +401,7 @@ export default class TicketMap extends Component<*, State> {
 
   onClick = ({ target }: any) => {
     if (target.hasAttribute('data-section-id')) {
-      const section = target.getAttribute('data-section-id');
+      const section = target.getAttribute('data-section-id').toLowerCase();
       if (this.venueSections.includes(section)) {
         return this.selectSectionOrZone(section);
       }
@@ -409,13 +415,13 @@ export default class TicketMap extends Component<*, State> {
    */
 
   doHover(tooltipX: any, tooltipY: any, section: string): void {
-    const { zone } = this.state.sectionZoneMapping[section];
+    const { zone, sectionName } = this.state.sectionZoneMapping[section];
 
     const newState = {
       activeTooltip: true,
       tooltipX,
       tooltipY,
-      tooltipSectionName: section
+      tooltipSectionName: sectionName
     };
 
     if (this.state.isZoneToggled) {

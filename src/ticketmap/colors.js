@@ -14,5 +14,5 @@ export const fillUnavailableColors = () => {
 }
 
 export const getAllPaths = (id) =>
-  Array.from(document.querySelectorAll(`[data-section-id${!!id ? `="${id}"` : ''}]`))
+  Array.from(document.querySelectorAll(`[data-section-id${!!id ? `="${id}" i` : ''}]`))
     .reduce((memo, element) => [...memo, element, ...element.querySelectorAll('path')], []);
