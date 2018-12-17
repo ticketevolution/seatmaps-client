@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import { buttonStyle } from './styles'
 
@@ -30,10 +29,6 @@ export const resetZoom = (
 )
 
 export default class ZoomSettings extends Component {
-  static propTypes = {
-    mapSvg: PropTypes.any.isRequired
-  }
-
   constructor (props) {
     super(props)
 
@@ -46,6 +41,7 @@ export default class ZoomSettings extends Component {
       contain: false
     })
   }
+  
   render () {
     return (
       <div style={{ display: 'flex' }}>
