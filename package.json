@@ -60,6 +60,7 @@
     "@babel/register": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
+    "babel-plugin-react-require": "^3.0.1",
     "compression-webpack-plugin": "2.0.0",
     "css-loader": "^2.0.1",
     "eslint": "^5.10.0",
