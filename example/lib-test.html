@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="../build/tevomaps.js"></script>
+    <script>
+      window.onload = function () {
+        new Tevomaps.default({
+          venueId: '1947',
+          configurationId: '5842',
+          mapFontFamily: 'Open Sans'
+        }).build('map')
+      }
+    </script>
+  </body>
+</html>
