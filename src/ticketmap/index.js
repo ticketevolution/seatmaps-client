@@ -461,7 +461,13 @@ export default class TicketMap extends Component<*, State> {
         onMouseOver={this.onMouseOver.bind(this)}
         onMouseOut={this.onMouseOut.bind(this)}
         onClick={this.onClick.bind(this)}
-        onTouchStart={this.onClick.bind(this)}
+        onTouchMove={() => this.setState({ isDragging: true })}
+        onTouchEnd={(event) => {
+          if (!this.state.isDragging) {
+            this.onClick(event)
+          }
+          this.setState({ isDragging: false })
+        }}
         style={{
           height: 'inherit',
           minHeight: 'inherit',
