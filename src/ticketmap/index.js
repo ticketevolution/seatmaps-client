@@ -13,7 +13,7 @@ type State = {
   mapSvg: string,
   sectionZoneMapping: any,
   availableTicketGroups: Array<TicketGroupType>,
-  selectedSections: Array<string>,
+  selectedSections: Set<string>,
   isZoneToggled: boolean,
   currentHoveredZone: string,
   currentHoveredSection: string,
@@ -32,7 +32,7 @@ export default class TicketMap extends Component<*, State> {
     mapsDomain: 'https://maps.ticketevolution.com',
     onSelection: () => undefined,
     isZoneDefault: false,
-    selectedSections: [],
+    selectedSections: new Set(),
     sectionPercentiles: {
       '0.2': '#FFC515',
       '0.4': '#f2711c',
@@ -48,7 +48,7 @@ export default class TicketMap extends Component<*, State> {
       mapSvg: '',
       sectionZoneMapping: {},
       availableTicketGroups: [],
-      selectedSections: this.props.selectedSections.filter(section => !!section),
+      selectedSections: new Set(this.props.selectedSections.filter(section => !!section)),
       isZoneToggled: this.props.isZoneDefault,
       currentHoveredZone: null,
       currentHoveredSection: null,
@@ -88,7 +88,7 @@ export default class TicketMap extends Component<*, State> {
       this.updateMap()
     }
     if (this.state.selectedSections !== prevState.selectedSections) {
-      this.props.onSelection(this.state.selectedSections);
+      this.props.onSelection(Array.from(this.state.selectedSections));
     }
   }
 
@@ -207,7 +207,7 @@ export default class TicketMap extends Component<*, State> {
       return;
     }
     const sectionId = section.toLowerCase();
-    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.includes(sectionId);
+    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.has(sectionId);
     if (isUnhighlightingSelectedSection) {
       return;
     }
@@ -230,9 +230,12 @@ export default class TicketMap extends Component<*, State> {
     const sectionId = section.toLowerCase();
     this.fillSection(sectionId, shouldHighlight);
 
-    const selectedSections = shouldHighlight
-      ? [...this.state.selectedSections, sectionId]
-      : this.state.selectedSections.filter(selectedSection => sectionId !== selectedSection);
+    const selectedSections = new Set(this.state.selectedSections);
+    if (shouldHighlight) {
+      selectedSections.add(sectionId);
+    } else {
+      selectedSections.delete(sectionId);
+    }
 
     this.setState({ selectedSections });
   }
@@ -274,9 +277,12 @@ export default class TicketMap extends Component<*, State> {
     this.fillZone(zoneId, shouldHighlight);
 
     const sections = Object.keys(this.ticketGroupsBySectionByZone[zoneId]);
-    const selectedSections = shouldHighlight
-      ? this.state.selectedSections.concat(sections)
-      : this.state.selectedSections.filter(section => !sections.includes(section));
+    const selectedSections = new Set(this.state.selectedSections);
+    if (shouldHighlight) {
+      sections.forEach(section => selectedSections.add(section));
+    } else {
+      sections.forEach(section => selectedSections.delete(section));
+    }
 
     this.setState({ selectedSections });
   }
@@ -310,7 +316,7 @@ export default class TicketMap extends Component<*, State> {
 
   areAllSectionsInTheZoneSelected(zone: number): boolean {
     return Object.keys(this.ticketGroupsBySectionByZone[zone])
-      .every(section => this.state.selectedSections.includes(section));
+      .every(section => this.state.selectedSections.has(section));
   }
 
   updateMap(): void {
@@ -321,7 +327,7 @@ export default class TicketMap extends Component<*, State> {
       });
     } else {
       Object.keys(this.ticketGroupsBySection).forEach(section => {
-        const shouldHighight = this.state.selectedSections.includes(section);
+        const shouldHighight = this.state.selectedSections.has(section);
         this.toggleSectionSelect(section, shouldHighight);
       });
     }
@@ -450,7 +456,7 @@ export default class TicketMap extends Component<*, State> {
       const { zone } = this.state.sectionZoneMapping[section];
       this.toggleZoneSelect(zone, !this.areAllSectionsInTheZoneSelected(zone));
     } else {
-      this.toggleSectionSelect(section, !this.state.selectedSections.includes(section));
+      this.toggleSectionSelect(section, !this.state.selectedSections.has(section));
     }
   }
 
