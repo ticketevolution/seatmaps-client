@@ -50,11 +50,11 @@ export default class ZoomSettings extends Component {
                     data-custom-at='right'
                     onClick={() => this.mapZoom.zoomIn()}
                     style={buttonStyle}
-                >+</a>
+                >&plus;</a>
                 <a
                     onClick={() => this.mapZoom.zoomOut()}
                     style={buttonStyle}
-                >‐</a>
+                >&minus;</a>
                 <a
                     style={{ ...buttonStyle, paddingTop: '5px' }}
                     onClick={() => this.mapZoom.reset()}
