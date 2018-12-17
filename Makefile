@@ -32,15 +32,13 @@ clean-all: clean ## Remove all temporary files plus installed dependencies
 start: install clean ## Start the development server
 	# yarn test
 	@echo "\n\n\nStarting development server...\n\n\n"
-	yarn build
 	yarn start
 
-build-prod: install clean ## Build for production
-	# yarn test
-	yarn build:prod
+build: install clean ## Build the project
+	yarn build
 
-start-prod: build-prod ## Build for production and start the server
-	yarn start:prod
+watch: ## Build, then rebuild on changes indefinitely
+	yarn watch
 
 analyze: ## Run the webpack analyzer
 	yarn analyze
