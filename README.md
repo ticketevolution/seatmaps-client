@@ -13,16 +13,42 @@ A client side JavaScript library that enables users to view seatmaps for availab
 1. Color map sections according to the `sectionPercentile` configurations and the available `ticketGroups` (and any `selectedSections` if provided).
 1. Render a tooltip when the user hovers over a section, which will provide quantity and price information.
 
-After Instantiation, a [public API](#public-api) is available with a limited number of functions to interact with the map.
+*Note: Sections will not color and you will not be able to highlight/toggle sections via the map or the API until ticket groups are supplied to the map, either through `ticketGroups` configuration or `updateTicketGroups` API.*
+
+After instantiation, a [public API](#public-api) is available with a limited number of functions to interact with the map.
 
 **Help:** [Ticket Evolution](http://www.ticketevolution.com/contact-us/)
 
 # Installation and Usage Options
 
-## Load `seatmaps-client` via `<script>` html tag
+## Window Object
+
+### 1. Load `seatmaps-client` via `<script>` html tag
 
 ```html
 <script src="https://raw.githubusercontent.com/ticketevolution/seatmaps-client/master/build/tevomaps.js"></script>
+```
+
+### 2. Create a script block to instantiate the Tevomaps 
+
+```html
+<script>
+  // create a new seatmap
+  var seatmap = new Tevomaps.default({
+    venueId: '10',
+    configurationId: '1046',
+    ticketGroups: [{
+      tevo_section_name: 'Upper 1234',
+      price: 100
+    }]
+  });
+
+  // turn element with ID of 'my-map' into a seatmap for config 1046
+  var seatmapApi = seatmap.build('my-map');
+
+  // perform some actions, like highlighting section 1234
+  seatmapApi.highlightSection('Upper 1234');
+</script>
 ```
 
 ## CommonJS
@@ -39,45 +65,35 @@ or
 yarn add ticketevolution/seatmaps-client
 ```
 
-### 2. Create a script that includes `@tevo/seatmap`
+### 2. Create a script that includes `ticket-evolution-seatmaps`
 
 ```js
 // main.js
 
-import Tevomaps from '@tevo/seatmap'
+import Tevomaps from 'ticket-evolution-seatmaps'
 
 // create a new seatmap
 const seatmap = new Tevomaps({
   venueId: '10',
   configurationId: '1046',
+  ticketGroups: [{
+    tevo_section_name: 'Upper 1234',
+    price: 100
+  }]
 });
 
-// turn 'my-map' into a seatmap for venue 10
+// turn element with ID of 'my-map' into a seatmap for config 1046
 const seatmapApi = seatmap.build('my-map');
 
 // perform some actions, like highlighting section 1234
-seatmapApi.highlightSection('1234')
+seatmapApi.highlightSection('Upper 1234')
 ```
-
-### 3. Create a page that loads your script
-
-```html
-<!-- index.html -->
-<html>
-  <body>
-    <div id="my-map"></div>
-    <script src="main.js"></script>
-  </body>
-</html>
-```
-
-### 4. Use `webpack` or `browserify` to resolve the import statements via bundling
 
 ## API Reference
 
-### `class Tevomap`
+### `class Tevomaps`
 
-#### `new Tevomap(options: object)`
+#### `new Tevomaps(options: object)`
 
 Options:
 
