@@ -1,7 +1,6 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import merge from 'webpack-merge'
 import path from 'path'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import base from '../../webpack.config.base.babel'
 
 export default merge(base, {
@@ -19,9 +18,6 @@ export default merge(base, {
       meta: {
         viewport: 'width=device-width, initial-scale=1'
       }
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css'
     })
   ],
   performance: {
@@ -46,7 +42,7 @@ export default merge(base, {
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
