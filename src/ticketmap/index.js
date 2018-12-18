@@ -476,11 +476,6 @@ export default class TicketMap extends Component<*, State> {
           }
           this.setState({ isDragging: false })
         }}
-        style={{
-          height: 'inherit',
-          minHeight: 'inherit',
-          minWidth: 'inherit'
-        }}
         className={c.map}
       >
         <Tooltip
