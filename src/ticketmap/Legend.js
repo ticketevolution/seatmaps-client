@@ -9,23 +9,14 @@ const Swatch = ({ color, name }) => (
 )
 
 export default class Legend extends Component {
-  static defaultProps = {
-    options: [
-      { color: '#000000', name: 'foo' },
-      { color: '#000000', name: 'foo' },
-      { color: '#000000', name: 'foo' },
-      { color: '#000000', name: 'foo' },
-      { color: '#000000', name: 'foo' }
-    ]
-  }
-
   state = {
     open: true
   }
 
-  render() {
+  render () {
     const { open } = this.state
-    const { options, className } = this.props
+    const { costRanges, className } = this.props
+    console.log(costRanges)
 
     return (
       <div className={classnames(c.legend, open && c.open, className)}>
@@ -33,10 +24,10 @@ export default class Legend extends Component {
           <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />
           <span>{open ? 'Hide' : 'Show'} Map Legend</span>
         </div>
-        {options.map(option => (
+        {costRanges.map(costRange => (
           <div className={c.option}>
-            <Swatch color={option.color} />
-            <span>{option.name}</span>
+            <Swatch color={costRange.color} />
+            <span>${Math.floor(costRange.min)} - ${Math.ceil(costRange.max)}</span>
           </div>
         ))}
       </div>

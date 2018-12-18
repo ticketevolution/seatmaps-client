@@ -485,7 +485,11 @@ export default class TicketMap extends Component<*, State> {
           name={this.state.tooltipSectionName}
           ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
-        <Legend className={c.legend} />
+        <Legend className={c.legend} costRanges={Object.values(this.props.sectionPercentiles).map(color => ({
+          color,
+          min: 0,
+          max: 0
+        }))} />
         {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} className={c.zoom} />}
         {/* <ZoneToggle
             isZoneToggled={this.state.isZoneToggled}
