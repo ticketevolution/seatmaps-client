@@ -18,7 +18,7 @@ export default class Legend extends Component {
   }
 
   state = {
-    open: false
+    open: true
   }
 
   render () {
@@ -28,16 +28,14 @@ export default class Legend extends Component {
     return (
       <div className={classnames(c.legend, open && c.open, className)}>
         <div className={c.toggle} onClick={() => this.setState({ open: !open })}>
-          <span>{open ? 'Hide' : 'Show'} Legend</span>
+          <span>{open ? 'Hide' : 'Show'} Map Legend</span>
         </div>
-        <div className={c.options}>
-          {options.map(option => (
-            <div>
-              <Swatch color={option.color} />
-              <span>{option.name}</span>
-            </div>
-          ))}
-        </div>
+        {options.map(option => (
+          <div className={c.option}>
+            <Swatch color={option.color} />
+            <span>{option.name}</span>
+          </div>
+        ))}
       </div>
     )
   }

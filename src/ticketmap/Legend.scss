@@ -1,18 +1,29 @@
 .legend {
   cursor: pointer;
-  border: 1px solid black;
+  border: 1px solid rgb(224, 224, 224);
+  border-radius: 4px;
 
-  .toggle, .options > * {
+  > .toggle,
+  > .option {
     padding: 10px;
   }
 
-  .options {
-
+  &:not(.open) {
+    > .option {
+      display: none;
+    }
   }
 
-  &:not(.open) {
-    .options {
-      display: none;
+  > .option {
+    display: flex;
+
+    > .swatch {
+      height: 20px;
+      width: 20px;
+    }
+
+    > :not(:first-child) {
+      margin-left: 6px;
     }
   }
 }
