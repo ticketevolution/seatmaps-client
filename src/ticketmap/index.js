@@ -6,6 +6,7 @@ import { fillSection, setUnavailableColors } from './colors'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
 import Legend from './Legend'
+import c from './TicketMap.scss'
 
 type State = {
   mapSvg: string,
@@ -480,6 +481,7 @@ export default class TicketMap extends Component<*, State> {
           minHeight: 'inherit',
           minWidth: 'inherit'
         }}
+        className={c.map}
       >
         <Tooltip
           isActive={this.state.activeTooltip}
