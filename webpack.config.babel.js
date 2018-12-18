@@ -18,6 +18,7 @@ export default merge(base, {
       commonjs: 'ticket-evolution-seatmaps'
     },
     libraryTarget: 'umd',
+    libraryExport: 'default',
     filename: 'tevomaps.js'
   },
   plugins: [

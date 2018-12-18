@@ -35,7 +35,7 @@ After instantiation, a [public API](#public-api) is available with a limited num
 ```html
 <script>
   // create a new seatmap
-  var seatmap = new Tevomaps.default({
+  var seatmap = new Tevomaps({
     venueId: '10',
     configurationId: '1046',
     ticketGroups: [{
