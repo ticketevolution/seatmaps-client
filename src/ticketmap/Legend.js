@@ -1,9 +1,9 @@
-import { h, Component } from 'preact'
+import { Component } from 'preact'
 import classnames from 'classnames'
 import c from './Legend.scss'
 
-const Swatch = ({ color, name, ...props }) => (
-  <div class={c.swatch} style={{ backgroundColor: color }} />
+const Swatch = ({ color, name }) => (
+  <div className={c.swatch} style={{ backgroundColor: color }} />
 )
 
 export default class Legend extends Component {
@@ -16,11 +16,12 @@ export default class Legend extends Component {
       { color: '#000000', name: 'foo' }
     ]
   }
+
   state = {
     open: false
   }
 
-  render() {
+  render () {
     const { open } = this.state
     const { options, className } = this.props
 
