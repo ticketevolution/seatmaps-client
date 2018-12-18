@@ -422,6 +422,7 @@ export default class TicketMap extends Component<*, State> {
   /**
    * Interactions
    */
+  
   doHover (tooltipX: any, tooltipY: any, section: string): void {
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
@@ -485,10 +486,9 @@ export default class TicketMap extends Component<*, State> {
           name={this.state.tooltipSectionName}
           ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
-        <Legend />
-        <div style={{ display: 'flex' }}>
-          {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
-          {/* <ZoneToggle
+        <Legend className={c.legend} />
+        {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} className={c.zoom} />}
+        {/* <ZoneToggle
             isZoneToggled={this.state.isZoneToggled}
             onToggle={isZoneToggled => {
               this.setState({ isZoneToggled });
@@ -496,7 +496,6 @@ export default class TicketMap extends Component<*, State> {
               this.updateMap();
             }}
           /> */}
-        </div>
         <div
           ref={element => { this.mapRootRef = element }}
           style={{

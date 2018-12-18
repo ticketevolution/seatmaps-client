@@ -19,7 +19,7 @@ export default class ZoomSettings extends Component {
 
   render () {
     return (
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex' }} className={this.props.className}>
         <a
           data-rh='Default'
           data-custom-at='right'

@@ -5,4 +5,18 @@
     height: inherit;
     min-height: inherit;
     min-width: inherit;
+    position: relative;
+
+    > .zoom, .legend {
+        position: fixed;
+        top: 10px;
+    }
+
+    > .zoom {
+        left: 10px;
+    }
+
+    > .legend {
+        right: 10px;
+    }
 }
