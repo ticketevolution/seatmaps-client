@@ -19,30 +19,6 @@
     "analyze": "webpack --profile --json --progress > stats.json",
     "lint": "eslint . --cache && stylelint **/*.scss --cache"
   },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy",
-      "^react$": "preact-compat",
-      "^react-dom$": "preact-compat"
-    },
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "statements": 0,
-        "branches": 0,
-        "functions": 0,
-        "lines": 0
-      }
-    },
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "setupTestFrameworkScriptFile": "<rootDir>/internals/testing/test-bundler.js",
-    "testRegex": ".*\\.test\\.js$"
-  },
   "dependencies": {
     "preact": "8.4.2",
     "preact-compat": "3.18.4",
