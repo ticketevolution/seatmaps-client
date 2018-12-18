@@ -10,7 +10,7 @@ export default merge(base, {
   entry: [
     'unfetch/polyfill',
     path.join(__dirname, 'main.js'),
-    path.join(__dirname, 'main.scss')
+    path.join(__dirname, 'main.css')
   ],
   plugins: [
     new HtmlWebpackPlugin({
@@ -44,7 +44,7 @@ export default merge(base, {
         }
       },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
           {
@@ -53,7 +53,6 @@ export default merge(base, {
               sourceMap: true
             }
           },
-          'sass-loader'
         ]
       }
     ]
