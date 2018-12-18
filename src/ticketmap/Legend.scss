@@ -6,6 +6,12 @@
   > .toggle,
   > .option {
     padding: 10px;
+    display: flex;
+    align-items: center;
+    
+    > :not(:first-child) {
+      margin-left: 6px;
+    }
   }
 
   &:not(.open) {
@@ -13,17 +19,11 @@
       display: none;
     }
   }
-
-  > .option {
-    display: flex;
-
-    > .swatch {
-      height: 20px;
-      width: 20px;
-    }
-
-    > :not(:first-child) {
-      margin-left: 6px;
-    }
-  }
 }
+
+.swatch {
+  height: 14px;
+  width: 14px;
+  border-radius: 4px;
+}
+
