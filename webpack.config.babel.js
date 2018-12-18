@@ -18,8 +18,7 @@ export default merge(base, {
       commonjs: 'ticket-evolution-seatmaps'
     },
     libraryTarget: 'umd',
-    filename: 'tevomaps.js',
-    chunkFilename: '[name].chunk.js'
+    filename: 'tevomaps.js'
   },
   plugins: [
     new CompressionPlugin({
