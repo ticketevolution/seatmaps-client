@@ -1,6 +1,4 @@
-/* @flow */
-
-export default function request (url: string, options: any, contentType: string = 'application/json') {
+export default function request(url, options, contentType = 'application/json') {
   return fetch(
     url,
     Object.assign({}, options, {

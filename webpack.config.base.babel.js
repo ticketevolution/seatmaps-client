@@ -4,7 +4,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.m?js$/,
+        test: /\.m?(js|ts)$/,
         include: [
           path.resolve(__dirname, 'src'),
           path.resolve(__dirname, 'node_modules/unfetch')
@@ -16,8 +16,7 @@ export default {
               ['@babel/preset-env', {
                 targets: 'last 2 versions',
                 useBuiltIns: 'usage'
-              }],
-              '@babel/preset-flow'
+              }]
             ],
             plugins: [
               'babel-plugin-react-require',

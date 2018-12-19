@@ -1,28 +1,8 @@
-/* @flow */
-
 import { Component } from 'react'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
 
-type State = {
-  mapSvg: string,
-  sectionZoneMapping: any,
-  availableTicketGroups: Array<TicketGroupType>,
-  selectedSections: Set<string>,
-  isZoneToggled: boolean,
-  currentHoveredZone: string,
-  currentHoveredSection: string,
-  activeTooltip: boolean,
-  tooltipSectionName: string,
-  tooltipZoneId: string,
-  tooltipX: number,
-  tooltipY: number,
-}
-
-export default class TicketMap extends Component<*, State> {
-  state: State
-  mapZoom: any = null
-
+export default class TicketMap extends Component {
   static defaultProps = {
     mapsDomain: 'https://maps.ticketevolution.com',
     onSelection: () => undefined,
@@ -37,7 +17,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  constructor (props: any) {
+  constructor (props) {
     super(props)
     this.state = {
       mapSvg: '',
@@ -119,7 +99,7 @@ export default class TicketMap extends Component<*, State> {
     })
   }
 
-  setupMap (): void {
+  setupMap () {
     const mapSvg = this.mapRootRef.querySelector('svg')
     mapSvg.style.width = 'inherit'
     mapSvg.style.height = 'inherit'
@@ -278,7 +258,7 @@ export default class TicketMap extends Component<*, State> {
     this.setState({ selectedSections })
   }
 
-  updateTicketGroups = (ticketGroups: any = this.props.ticketGroups) => {
+  updateTicketGroups = (ticketGroups = this.props.ticketGroups) => {
     const availableTicketGroups = this.getAvailableTicketGroups(ticketGroups)
     this.setState({ availableTicketGroups })
   }
@@ -332,17 +312,17 @@ export default class TicketMap extends Component<*, State> {
     return result
   }
 
-  getAllSectionsInZoneBySectionId (section: number): Array<string> {
+  getAllSectionsInZoneBySectionId (section) {
     const zoneMeta = this.state.sectionZoneMapping[section] || {}
     return this.venueSections.filter((venueSection) => this.state.sectionZoneMapping[venueSection].zone === zoneMeta.zone)
   }
 
-  areAllSectionsInTheZoneSelected (zone: number): boolean {
+  areAllSectionsInTheZoneSelected (zone) {
     return Object.keys(this.ticketGroupsBySectionByZone[zone])
       .every(section => this.state.selectedSections.has(section))
   }
 
-  updateMap (): void {
+  updateMap () {
     if (this.state.isZoneToggled) {
       Object.keys(this.ticketGroupsBySectionByZone).forEach(zone => {
         const shouldHighight = this.areAllSectionsInTheZoneSelected(zone)
@@ -406,7 +386,7 @@ export default class TicketMap extends Component<*, State> {
    * Interation Callbacks
    */
 
-  onMouseOver = ({ clientX, clientY, target }: any) => {
+  onMouseOver = ({ clientX, clientY, target }) => {
     if (target.hasAttribute('data-section-id')) {
       const section = target.getAttribute('data-section-id').toLowerCase()
       if (this.venueSections.includes(section)) {
@@ -417,7 +397,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  onMouseOut = ({ target }: any) => {
+  onMouseOut = ({ target }) => {
     if (target.hasAttribute('data-section-id')) {
       const section = target.getAttribute('data-section-id').toLowerCase()
       if (this.venueSections.includes(section)) {
@@ -428,7 +408,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  onClick = ({ target }: any) => {
+  onClick = ({ target }) => {
     if (target.hasAttribute('data-section-id')) {
       const section = target.getAttribute('data-section-id').toLowerCase()
       if (this.venueSections.includes(section)) {
@@ -443,7 +423,7 @@ export default class TicketMap extends Component<*, State> {
    * Interactions
    */
 
-  doHover (tooltipX: any, tooltipY: any, section: string): void {
+  doHover (tooltipX, tooltipY, section) {
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
     const newState = {
@@ -464,7 +444,7 @@ export default class TicketMap extends Component<*, State> {
     this.setState(newState)
   }
 
-  doHoverCleanup (section: string): void {
+  doHoverCleanup (section) {
     this.setState({ activeTooltip: false })
 
     if (this.state.isZoneToggled) {
@@ -474,7 +454,7 @@ export default class TicketMap extends Component<*, State> {
     this.unhighlightSection(section)
   }
 
-  selectSectionOrZone (section: string): void {
+  selectSectionOrZone (section) {
     if (this.state.isZoneToggled) {
       const { zone } = this.state.sectionZoneMapping[section]
       this.toggleZoneSelect(zone, !this.areAllSectionsInTheZoneSelected(zone))
@@ -483,7 +463,7 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  render (): ?React$Element<any> {
+  render () {
     return (
       <div
         ref={element => { this.rootRef = element }}

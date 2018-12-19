@@ -1,16 +1,13 @@
 {
+  "parser": "babel-eslint",
   "extends": [
     "standard",
-    "standard-react",
-    "standard-flow",
-    "plugin:flowtype/recommended"
-  ],
-  "plugins": [
-    "flowtype"
+    "standard-react"
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "camelcase": "off"
   },
   "env": {
     "browser": true
