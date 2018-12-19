@@ -2,6 +2,7 @@
 
 import { Component } from 'react'
 import fetch from 'unfetch'
+import { createSelector } from 'reselect'
 import { fillSection, setUnavailableColors } from './colors'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
@@ -22,6 +23,13 @@ type State = {
   tooltipX: number,
   tooltipY: number,
 }
+
+const $ticketGroups = state => state.ticketGroups
+
+const $priceSortedTicketGroups = createSelector(
+  $ticketGroups,
+  ticketGroups => ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
+)
 
 export default class TicketMap extends Component<*, State> {
   state: State
@@ -473,7 +481,7 @@ export default class TicketMap extends Component<*, State> {
       }))
       .sort((a, b) => a.percentile - b.percentile)
 
-    const ticketGroups = this.props.ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
+    const ticketGroups = $priceSortedTicketGroups(this.props)
 
     for (let i = 0; i < ticketGroups.length; i++) {
       const percentile = i / ticketGroups.length

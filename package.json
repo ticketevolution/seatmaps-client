@@ -25,6 +25,7 @@
     "preact-compat": "3.18.4",
     "react-toggled": "1.2.7",
     "react-transition-group": "2.5.1",
+    "reselect": "^4.0.0",
     "sass-loader": "^7.1.0",
     "svg-pan-zoom": "^3.6.0",
     "unfetch": "^4.0.1"
