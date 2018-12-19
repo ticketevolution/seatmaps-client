@@ -468,9 +468,29 @@ export default class TicketMap extends Component<*, State> {
         percentile,
         color,
         min: 0,
-        max: 0
+        max: 0,
+        ticketGroups: []
       }))
       .sort((a, b) => a.percentile - b.percentile)
+
+    const ticketGroups = this.props.ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
+
+    for (let i = 0; i < ticketGroups.length; i++) {
+      const percentile = i / ticketGroups.length
+      for (const costRange of costRanges) {
+        if (costRange.percentile > percentile) {
+          costRange.ticketGroups.push(ticketGroups[i])
+          break
+        }
+      }
+    }
+
+    costRanges.forEach(costRange => {
+      if (costRange.ticketGroups.length > 0) {
+        costRange.min = costRange.ticketGroups[0].retail_price
+        costRange.max = costRange.ticketGroups[costRange.ticketGroups.length - 1].retail_price
+      }
+    })
 
     return (
       <div

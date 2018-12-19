@@ -16,7 +16,6 @@ export default class Legend extends Component {
   render () {
     const { open } = this.state
     const { costRanges, className } = this.props
-    console.log(costRanges)
 
     return (
       <div className={classnames(c.legend, open && c.open, className)}>
