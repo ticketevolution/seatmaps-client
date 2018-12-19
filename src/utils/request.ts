@@ -1,7 +1,12 @@
-export default function request(url, options, contentType = 'application/json') {
+interface Options {
+
+}
+
+export default function request(url: string, options: Options, contentType = 'application/json') {
   return fetch(
     url,
-    Object.assign({}, options, {
+    {
+      ...options,
       headers: {
         ...(contentType
           ? {
@@ -10,7 +15,7 @@ export default function request(url, options, contentType = 'application/json') 
           }
           : {})
       }
-    })
+    }
   )
     .then(response =>
       response.json().then(json => {

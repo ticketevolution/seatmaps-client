@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "module": "esNext",
+        "target": "es6",
+        "allowJs": true,
+        "noImplicitAny": false,
+        "jsx": "preserve",
+        "moduleResolution": "node",
+        "lib": [
+            "esnext",
+            "dom",
+            "es2017.object"
+        ]
+    },
+}

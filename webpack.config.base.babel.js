@@ -4,7 +4,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.m?(js|ts)$/,
+        test: /\.m?(js|jsx|ts|tsx)$/,
         include: [
           path.resolve(__dirname, 'src'),
           path.resolve(__dirname, 'node_modules/unfetch')
@@ -34,6 +34,7 @@ export default {
     ]
   },
   resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
       react: 'preact-compat',
       'react-dom': 'preact-compat'
