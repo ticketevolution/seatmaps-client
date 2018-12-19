@@ -16,7 +16,8 @@ export default {
               ['@babel/preset-env', {
                 targets: 'last 2 versions',
                 useBuiltIns: 'usage'
-              }]
+              }],
+              '@babel/preset-typescript'
             ],
             plugins: [
               'babel-plugin-react-require',
