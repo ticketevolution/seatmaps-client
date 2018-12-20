@@ -9,9 +9,6 @@
   "main": "build/tevomaps.js",
   "author": "BRAD LARSON",
   "license": "UNLICENSED",
-  "engines": {
-    "npm": ">=8"
-  },
   "scripts": {
     "build": "webpack --progress",
     "watch": "npm run build -- --watch",
