@@ -1,9 +1,14 @@
+import path from 'path'
+
 export default {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
+        test: /\.m?js$/,
+        include: [
+          path.resolve(__dirname, 'src'),
+          path.resolve(__dirname, 'node_modules/unfetch')
+        ],
         use: {
           loader: 'babel-loader',
           options: {
