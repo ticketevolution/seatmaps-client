@@ -139,6 +139,10 @@ export default class TicketMap extends Component<*, State> {
       }
     })
 
+    for (const path of mapSvg.querySelectorAll('path[data-section-id]')) {
+      path.setAttribute('data-section-id', path.getAttribute('data-section-id').toLowerCase())
+    }
+
     this.setState({ mapSvg })
   }
 
