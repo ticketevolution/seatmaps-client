@@ -147,13 +147,27 @@ These instructions will get you a copy of the project up and running on your loc
 - `make`
 - `git`
 
-## Getting Started
+## Using `make`
 
 We've made the startup process simple by using a Makefile for all common workflows.
 
-To see what Makefile commands are available, in your terminal shell run `make` or `make help`. It will list all the available Makefile commands with their descriptions, such as
+To see what Makefile commands are available, in your terminal shell run `make` or `make help`. It will list all the available Makefile 
+commands with their descriptions.
 
-```Makefile
-install                        Install client and server side packages for development
-start                          Start the development server
-```
+| Target    | Effect                                                  |
+|-----------|---------------------------------------------------------|
+| `help`    | Display all other make targets and their effects        |
+| `install` | Install client and server side packages for development |
+| `start`   | Start the development server                            |
+
+## Using `yarn` or `npm`
+
+A slew of npm/yarn scripts are also present to make development a bit easier:
+
+| Script    | Effect                                                                              |
+|-----------|-------------------------------------------------------------------------------------|
+| `build`   | Compiles and bundles all source into `build/tevomaps.js` and `build/tevomaps.js.gz` |
+| `watch`   | Builds the project, then watches source files for changes (rebuilds on each change) |
+| `start`   | Starts the `using-module` example using `webpack-dev-server`                        |
+| `analyze` | Analyses the build process that would create `build/tevomaps.js`                    |
+| `lint`    | Uses `eslint` to lint all source code                                               |
