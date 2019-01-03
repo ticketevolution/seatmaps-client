@@ -5,6 +5,7 @@
 <h1 align="center">Ticket Evolution Seatmaps</h1>
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![Known Vulnerabilities](https://snyk.io/test/github/ticketevolution/seatmaps-client/badge.svg?targetFile=package.json)](https://snyk.io/test/github/ticketevolution/seatmaps-client?targetFile=package.json)
 
 
 A client side JavaScript library that enables users to view seatmaps for available tickets on Ticket Evolution.
