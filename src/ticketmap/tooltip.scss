@@ -1,0 +1,32 @@
+$tooltip-black: #181514;
+
+.tooltip {
+    position: fixed;
+    color: $tooltip-black;
+    background-color: white;
+    border-radius: 4px;
+    display: inlineBlock;
+    filter: drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px);
+    padding: 20px;
+    font-size: 12px;
+    transition: opacity 300ms;
+    opacity: 0;
+    
+    &::after {
+        border: 10px solid;
+        border-color: white transparent transparent;
+        content: "";
+        left: 50%;
+        margin-left: -10px;
+        position: absolute;
+        top: 100%;
+    }
+
+    &.visible {
+        opacity: 1;
+    }
+    
+    .price {
+        font-weight: bold;
+    }
+}
