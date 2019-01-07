@@ -544,8 +544,7 @@ export default class TicketMap extends Component<Props, State> {
   render() {
     return (
       <div
-        ref={element => { this.rootRef = element }
-        }
+        ref={element => { this.rootRef = element }}
         onMouseOver={this.onMouseOver}
         onMouseOut={this.onMouseOut}
         onClick={this.onClick}
@@ -580,7 +579,7 @@ export default class TicketMap extends Component<Props, State> {
             }}
           /> */}
         </div>
-        < div
+        <div
           ref={element => { this.mapRootRef = element }}
           style={{
             cursor: '-webkit-grab',
