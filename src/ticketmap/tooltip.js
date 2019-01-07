@@ -5,9 +5,6 @@ import c from './tooltip.scss'
 export default class Tooltip extends Component {
   render () {
     let { visible, name, ticketGroups, className, x, y } = this.props
-    // isActive=true
-    // x=100
-    // y=100
 
     const prices = ticketGroups
       .map(ticketGroup => parseFloat(ticketGroup.price))
@@ -16,7 +13,6 @@ export default class Tooltip extends Component {
     const containerStyle = {}
 
     if (this.container && x !== undefined && y !== undefined) {
-      console.log(this.container.clientHeight)
       containerStyle.top = y - this.container.clientHeight
       containerStyle.left = x - Math.floor(this.container.clientWidth / 2)
     }

@@ -170,8 +170,6 @@ export default class TicketMap extends Component<*, State> {
     mapSvg.style.height = 'inherit'
     mapSvg.style.minWidth = '100%'
     mapSvg.style.minHeight = 'inherit'
-
-    this.setFont()
     setUnavailableColors()
 
     // Fix the image paths embedded in the SVGs
@@ -376,16 +374,6 @@ export default class TicketMap extends Component<*, State> {
     }
   }
 
-  setFont () {
-    if (this.props.mapFontFamily) {
-      this.rootRef
-        .querySelectorAll('text')
-        .forEach(elem => {
-          elem.style.fontFamily = `${this.props.mapFontFamily}`
-        })
-    }
-  }
-
   fillSection (section, shouldHighlight = true) {
     const isAnAvailableSection = this.venueSections.includes(section)
     if (isAnAvailableSection) {
@@ -509,6 +497,12 @@ export default class TicketMap extends Component<*, State> {
   }
 
   render (): ?React$Element<any> {
+    const containerStyle = {}
+
+    if (this.props.mapFontFamily) {
+      containerStyle.fontFamily = this.props.mapFontFamily
+    }
+
     return (
       <div
         ref={element => { this.rootRef = element }}
@@ -524,6 +518,7 @@ export default class TicketMap extends Component<*, State> {
           this.setState({ isDragging: false })
         }}
         className={c.map}
+        style={containerStyle}
       >
         <Tooltip
           visible={this.state.tooltipVisible}
