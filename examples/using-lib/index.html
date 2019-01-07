@@ -3,16 +3,19 @@
 
 <head>
   <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 </head>
 
 <body>
   <div id="map"></div>
   <script src="../../build/tevomaps.js"></script>
   <script>
-    window.onload = function () {
+    window.onload=function() {
       new Tevomaps({
         venueId: '1947',
-        configurationId: '5842'
+        configurationId: '5842',
+        ticketGroups: [],
+        mapFontFamily: "'Open Sans', sans-serif"
       }).build('map')
     }
   </script>

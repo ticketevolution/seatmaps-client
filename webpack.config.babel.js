@@ -5,6 +5,7 @@ import base from './webpack.config.base.babel'
 
 export default merge(base, {
   mode: 'production',
+  devtool: 'source-maps',
   entry: [
     'unfetch/polyfill',
     path.join(__dirname, 'src', 'index.js')

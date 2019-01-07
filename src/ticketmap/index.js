@@ -76,6 +76,7 @@ export default class TicketMap extends Component<*, State> {
     onSelection: () => undefined,
     isZoneDefault: false,
     selectedSections: [],
+    ticketGroups: [],
     sectionPercentiles: {
       '0.2': '#FFC515',
       '0.4': '#f2711c',
@@ -180,8 +181,11 @@ export default class TicketMap extends Component<*, State> {
       }
     })
 
-    for (const path of mapSvg.querySelectorAll('*[data-section-id]')) {
-      path.setAttribute('data-section-id', path.getAttribute('data-section-id').toLowerCase())
+    for (const display of mapSvg.querySelectorAll('*[data-section-id]')) {
+      const sectionId = display.getAttribute('data-section-id').toLowerCase()
+      display.setAttribute('data-section-id', sectionId)
+
+      display.classList.add(c.section)
     }
 
     this.setState({ mapSvg })
@@ -367,10 +371,19 @@ export default class TicketMap extends Component<*, State> {
         this.toggleZoneSelect(zone, shouldHighight)
       })
     } else {
-      Object.keys(this.ticketGroupsBySection).forEach(section => {
-        const shouldHighight = this.state.selectedSections.has(section)
-        this.toggleSectionSelect(section, shouldHighight)
+      Object.keys(this.ticketGroupsBySection).forEach(sectionId => {
+        const available = this.state.selectedSections.has(sectionId)
+        this.toggleSectionSelect(sectionId, available)
       })
+    }
+
+    for (const display of this.mapRootRef.querySelectorAll('svg *[data-section-id]')) {
+      const sectionId = display.getAttribute('data-section-id')
+
+      display.classList.add(c.section)
+      if (sectionId in this.ticketGroupsBySection) {
+        display.classList.add(c.available)
+      }
     }
   }
 
@@ -498,6 +511,7 @@ export default class TicketMap extends Component<*, State> {
 
   render (): ?React$Element<any> {
     const containerStyle = {}
+    console.log(this.ticketGroupsBySectionByZone)
 
     if (this.props.mapFontFamily) {
       containerStyle.fontFamily = this.props.mapFontFamily

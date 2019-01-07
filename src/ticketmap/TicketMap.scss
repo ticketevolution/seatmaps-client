@@ -17,4 +17,12 @@
     > .legend {
         right: 10px;
     }
+
+    .section {
+        cursor: not-allowed;
+
+        &.available {
+            cursor: pointer;
+        }
+    }
 }
