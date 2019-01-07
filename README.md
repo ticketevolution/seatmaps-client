@@ -40,16 +40,16 @@ After instantiation, a [public API](#public-api) is available with a limited num
     venueId: '10',
     configurationId: '1046',
     ticketGroups: [{
-      tevo_section_name: 'Upper 1234',
-      price: 100
+      tevo_section_name: 'upper end zone 232',
+      retail_price: 100
     }]
   });
 
   // turn element with ID of 'my-map' into a seatmap for config 1046
   var seatmapApi = seatmap.build('my-map');
 
-  // perform some actions, like highlighting section 1234
-  seatmapApi.highlightSection('Upper 1234');
+  // perform some actions, like highlighting section "upper end zone 232"
+  seatmapApi.highlightSection('upper end zone 232');
 </script>
 ```
 
@@ -79,16 +79,16 @@ const seatmap = new Tevomaps({
   venueId: '10',
   configurationId: '1046',
   ticketGroups: [{
-    tevo_section_name: 'Upper 1234',
-    price: 100
+    tevo_section_name: 'upper end zone 232',
+    retail_price: 100
   }]
 });
 
 // turn element with ID of 'my-map' into a seatmap for config 1046
 const seatmapApi = seatmap.build('my-map');
 
-// perform some actions, like highlighting section 1234
-seatmapApi.highlightSection('Upper 1234')
+// perform some actions, like highlighting section "upper end zone 232"
+seatmapApi.highlightSection('upper end zone 232')
 ```
 
 ## API Reference
@@ -108,7 +108,7 @@ Options:
 | `mapsDomain`         |          | `https://maps.ticketevolution.com`                                                                                                                                                                                                                 | The domain from which map SVGs and manifests will be fetched.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | `onSelection`        |          |                                                                                                                                                                                                                                                    | A function which will be called by Tevomaps when a section of the map has been clicked. It will pass as arguments an array of all currently selected section IDs and expect nothing back.<br><br>`onSelection: function (sectionIds) {`<br>&nbsp;&nbsp;&nbsp;&nbsp;`console.log(sectionIds); //=> ['id-1','id-2']`<br>`}`<br><br>*Note: This method is also called when a section is deselected. If all sections are deselected, the `sectionIds` array will be empty.*<br><br>*Note: This method will always return lower case section names, you will need to take that in consideration when you do string comparisons.* |
 | `selectedSections`   |          | `[]`                                                                                                                                                                                                                                               | An array of section IDs for the map to initially highlight by default when it is rendered.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `ticketGroups`       |          | `[]`                                                                                                                                                                                                                                               | An array of ticket groups to be used for section pricing. This API was designed for you to directly pass into the client library the response from the [Ticket Evolution `/v9/ticket_groups` endpoint](https://ticketevolution.atlassian.net/wiki/spaces/API/pages/9469962/Ticket+Groups+Index). Expects each ticket group to adhere to the [TicketGroup interface](#interfaces).                                                                                                                                                                                                                                           |
+| `ticketGroups`       |          | `[]`                                                                                                                                                                                                                                               | An array of ticket groups to be used for section pricing. Expects each ticket group to adhere to the [TicketGroup interface](#interfaces). This API was designed for you to directly pass into the client library the response from the [Ticket Evolution `/v9/ticket_groups` endpoint](https://ticketevolution.atlassian.net/wiki/spaces/API/pages/9469962/Ticket+Groups+Index). *Note that `include_tevo_section_mappings` must be `true` in that API request.*                                                                                                                                                                                                                                            
 
 #### `updateTicketGroups(groups: TicketGroup[])`
 
