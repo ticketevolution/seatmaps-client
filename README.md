@@ -151,8 +151,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 We've made the startup process simple by using a Makefile for all common workflows.
 
-To see what Makefile commands are available, in your terminal shell run `make` or `make help`. It will list all the available Makefile 
-commands with their descriptions.
+To see what Makefile commands are available, in your terminal shell run `make` or `make help`. It will list all the available Makefile commands with their descriptions.
 
 | Target    | Effect                                                  |
 |-----------|---------------------------------------------------------|
