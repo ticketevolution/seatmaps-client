@@ -3,8 +3,11 @@ import classnames from 'classnames'
 import c from './tooltip.scss'
 
 export default class Tooltip extends Component {
-  render() {
-    const { isActive, name, ticketGroups, className, x, y } = this.props
+  render () {
+    let { isActive, name, ticketGroups, className, x, y } = this.props
+    // isActive=true
+    // x=100
+    // y=100
 
     const prices = ticketGroups
       .map(ticketGroup => parseFloat(ticketGroup.price))
@@ -13,22 +16,26 @@ export default class Tooltip extends Component {
     const containerStyle = {}
 
     if (this.container && x !== undefined && y !== undefined) {
-      containerStyle.top = y - this.container.clientHeight - 20
-      containerStyle.left = x - (this.container.clientWidth / 2)
+      console.log(this.container.clientHeight)
+      containerStyle.top = y - this.container.clientHeight
+      containerStyle.left = x - Math.floor(this.container.clientWidth / 2)
     }
 
     return (
       <div
         ref={element => { this.container = element }}
-        className={classnames(c.tooltip, isActive && c.visible, className)}
+        className={classnames(c.container, isActive && c.visible, className)}
         style={containerStyle}
       >
-        <div>{name}</div>
-        <div>
-          {prices.length} listing{prices.length === 1 ? '' : 's'}
-          {' ● '}
-          Starting at <span className={c.price}>${prices[0]}</span>
+        <div className={c.tooltip}>
+          <div>{name}</div>
+          <div>
+            {prices.length} listing{prices.length === 1 ? '' : 's'}
+            {' ● '}
+            Starting at <span className={c.price}>${prices[0]}</span>
+          </div>
         </div>
+        <div className={c.triangle} />
       </div>
     )
   }
