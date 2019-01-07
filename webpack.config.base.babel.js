@@ -34,7 +34,6 @@ export default {
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true,
               modules: true,
               localIdentName: '[path][name]_[local]_[hash:base64:5]'
             }
