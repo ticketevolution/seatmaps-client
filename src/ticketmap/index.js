@@ -16,7 +16,7 @@ type State = {
   isZoneToggled: boolean,
   currentHoveredZone: string,
   currentHoveredSection: string,
-  activeTooltip: boolean,
+  tooltipVisible: boolean,
   tooltipSectionName: string,
   tooltipZoneId: string,
   tooltipX: number,
@@ -95,11 +95,8 @@ export default class TicketMap extends Component<*, State> {
       isZoneToggled: this.props.isZoneDefault,
       currentHoveredZone: null,
       currentHoveredSection: null,
-      activeTooltip: false,
       tooltipSectionName: '',
-      tooltipZoneId: '',
-      tooltipX: 0,
-      tooltipY: 0
+      tooltipZoneId: ''
     }
 
     this.publicApi = {
@@ -429,14 +426,14 @@ export default class TicketMap extends Component<*, State> {
    * Interation Callbacks
    */
 
-  onMouseOver = ({ clientX, clientY, target }: any) => {
+  onMouseOver = ({ target }: any) => {
     if (target.hasAttribute('data-section-id')) {
       const section = target.getAttribute('data-section-id').toLowerCase()
       if (this.venueSections.includes(section)) {
-        return this.doHover(clientX, clientY, section)
+        return this.doHover(section)
       }
     } else if (target !== this.rootRef) {
-      return this.onMouseOver({ clientX, clientY, target: target.parentNode })
+      return this.onMouseOver({ target: target.parentNode })
     }
   }
 
@@ -473,13 +470,11 @@ export default class TicketMap extends Component<*, State> {
    * Interactions
    */
 
-  doHover (tooltipX: any, tooltipY: any, section: string): void {
+  doHover (section: string): void {
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
     const newState = {
-      activeTooltip: true,
-      tooltipX,
-      tooltipY,
+      tooltipVisible: true,
       tooltipSectionName: sectionName
     }
 
@@ -495,7 +490,7 @@ export default class TicketMap extends Component<*, State> {
   }
 
   doHoverCleanup (section: string): void {
-    this.setState({ activeTooltip: false })
+    this.setState({ tooltipVisible: false })
 
     if (this.state.isZoneToggled) {
       return this.unhighlightZone(this.state.sectionZoneMapping[section].zone)
@@ -531,7 +526,7 @@ export default class TicketMap extends Component<*, State> {
         className={c.map}
       >
         <Tooltip
-          isActive={this.state.activeTooltip}
+          visible={this.state.tooltipVisible}
           x={this.state.tooltipX}
           y={this.state.tooltipY}
           name={this.state.tooltipSectionName}

@@ -3,6 +3,7 @@ $tooltip-black: #181514;
 .container {
     position: fixed;
     color: $tooltip-black;
+    transition: opacity 300ms;
     opacity: 0;
     filter: drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px);
     display: flex;
@@ -12,7 +13,6 @@ $tooltip-black: #181514;
 
     &.visible {
         opacity: 1;
-        transition: opacity 300ms;
     }
 
     > .tooltip {

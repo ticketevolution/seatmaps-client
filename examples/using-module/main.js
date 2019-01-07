@@ -6,9 +6,10 @@ import ticketGroups from './ticket-groups-1591449'
 //   configurationId: '5842',
 //   ticketGroups
 // }).build('map')
-
+// window.onload = () => {
 window.seatmap = new Tevomaps({
   venueId: '896',
   configurationId: '14341',
   ticketGroups
 }).build('map')
+// }

@@ -4,7 +4,7 @@ import c from './tooltip.scss'
 
 export default class Tooltip extends Component {
   render () {
-    let { isActive, name, ticketGroups, className, x, y } = this.props
+    let { visible, name, ticketGroups, className, x, y } = this.props
     // isActive=true
     // x=100
     // y=100
@@ -24,7 +24,7 @@ export default class Tooltip extends Component {
     return (
       <div
         ref={element => { this.container = element }}
-        className={classnames(c.container, isActive && c.visible, className)}
+        className={classnames(c.container, visible && c.visible, className)}
         style={containerStyle}
       >
         <div className={c.tooltip}>
