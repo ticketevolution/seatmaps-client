@@ -459,7 +459,7 @@ export default class TicketMap extends Component<Props, State> {
       if (this.venueSections.includes(section)) {
         return this.doHover(event.clientX, event.clientY, section)
       }
-    } else if (event.target !== this.rootRef) {
+    } else if (element !== this.rootRef) {
       return this.onMouseOver({
         ...event,
         target: element.parentNode
