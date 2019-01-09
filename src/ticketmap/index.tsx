@@ -122,7 +122,7 @@ export default class TicketMap extends Component<Props, State> {
     }
   }
 
-  componentDidUpdate(_: Props, prevState: State) {
+  componentDidUpdate(_prevProps: Props, prevState: State) {
     if (JSON.stringify(this.state.availableTicketGroups) !== JSON.stringify(prevState.availableTicketGroups)) {
       this.updateMap()
     }
