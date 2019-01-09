@@ -48,7 +48,7 @@ export default merge(base, {
             options: {
               sourceMap: true
             }
-          },
+          }
         ]
       }
     ]
