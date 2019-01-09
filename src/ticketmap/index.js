@@ -317,7 +317,6 @@ export default class TicketMap extends Component<*, State> {
       const sectionZoneMeta = this.state.sectionZoneMapping[section]
       if (sectionZoneMeta) {
         memo.push({ section, price, zone: sectionZoneMeta.zone })
-        console.log(`Section ${section} was successfully mapped!`)
       } else {
         console.warn(`Section ${section} not found. Please verify it exists in the venue manifest`)
       }
