@@ -11,6 +11,12 @@
             "esnext",
             "dom",
             "es2017.object"
-        ]
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "react-dom": [
+                "node_modules/preact-compat"
+            ]
+        }
     },
 }
