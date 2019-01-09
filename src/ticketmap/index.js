@@ -298,6 +298,7 @@ export default class TicketMap extends Component<*, State> {
    */
 
   getAvailableTicketGroups = (availableTicketGroups = []) =>
+    // eslint-disable-next-line camelcase
     availableTicketGroups.reduce((memo, { tevo_section_name, retail_price: price }) => {
       const section = tevo_section_name.toLowerCase()
       const sectionZoneMeta = this.state.sectionZoneMapping[section]
