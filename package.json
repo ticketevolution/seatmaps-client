@@ -14,7 +14,8 @@
     "watch": "npm run build -- --watch",
     "start": "webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module --open",
     "analyze": "webpack --profile --json --progress > stats.json",
-    "lint": "eslint . --cache && stylelint **/*.scss --cache"
+    "lint": "eslint . --cache",
+    "fix": "yarn lint --fix"
   },
   "dependencies": {
     "preact": "8.4.2",
