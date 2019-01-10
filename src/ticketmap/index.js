@@ -130,14 +130,6 @@ export default class TicketMap extends Component<*, State> {
     this.setFont()
     setUnavailableColors()
 
-    // Fix the image paths embedded in the SVGs
-    mapSvg.querySelectorAll('image').forEach(image => {
-      let uri = image.getAttribute('xlink:href')
-      if (!uri.startsWith('http') && !uri.startsWith('data:')) {
-        image.setAttribute('xlink:href', `${this.configFilePath}/${uri}`)
-      }
-    })
-
     for (const path of mapSvg.querySelectorAll('*[data-section-id]')) {
       path.setAttribute('data-section-id', path.getAttribute('data-section-id').toLowerCase())
     }

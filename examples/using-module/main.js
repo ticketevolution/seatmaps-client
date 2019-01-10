@@ -1,14 +1,8 @@
 import Tevomaps from '../../src/index'
 import ticketGroups from './ticket-groups-1591449'
 
-// window.seatmap = new Tevomaps({
-//   venueId: '1947',
-//   configurationId: '5842',
-//   ticketGroups
-// }).build('map')
-
 window.seatmap = new Tevomaps({
-  venueId: '896',
-  configurationId: '14341',
+  venueId: '4797',
+  configurationId: '4543',
   ticketGroups
 }).build('map')
