@@ -1,7 +1,6 @@
 /* @flow */
 
 import { Component } from 'react'
-import { fillSection, setUnavailableColors } from './colors'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
 
@@ -128,7 +127,7 @@ export default class TicketMap extends Component<*, State> {
     mapSvg.style.minHeight = 'inherit'
 
     this.setFont()
-    setUnavailableColors()
+    this.setUnavailableColors()
 
     for (const path of mapSvg.querySelectorAll('*[data-section-id]')) {
       path.setAttribute('data-section-id', path.getAttribute('data-section-id').toLowerCase())
@@ -285,6 +284,29 @@ export default class TicketMap extends Component<*, State> {
   }
 
   /**
+   * Colors
+   */
+
+  fillPath = (id, color, type = 'fill') => {
+    if (!color) {
+      throw Error('Color is undefined for this section.')
+    }
+    this.getAllPaths(id).forEach(element => element.setAttribute(type, color))
+  }
+
+  setUnavailableColors = () => {
+    this.getAllPaths().forEach(element => element.setAttribute('data-unavailable-color', element.getAttribute('fill')))
+  }
+
+  fillUnavailableColors = () => {
+    this.getAllPaths().forEach(element => element.setAttribute('fill', element.getAttribute('data-unavailable-color')))
+  }
+
+  getAllPaths = (id) =>
+    Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
+      .reduce((memo, element) => [...memo, element, ...element.querySelectorAll('path')], [])
+
+  /**
    * Helpers
    */
 
@@ -339,8 +361,8 @@ export default class TicketMap extends Component<*, State> {
   fillSection (section, shouldHighlight = true) {
     const isAnAvailableSection = this.venueSections.includes(section)
     if (isAnAvailableSection) {
-      fillSection(section, this.getDefaultColor(this.ticketGroupsBySection[section]), 'fill')
-      fillSection(section, shouldHighlight ? '1' : '0.6', 'opacity')
+      this.fillPath(section, this.getDefaultColor(this.ticketGroupsBySection[section]), 'fill')
+      this.fillPath(section, shouldHighlight ? '1' : '0.6', 'opacity')
     }
   }
 
@@ -350,8 +372,8 @@ export default class TicketMap extends Component<*, State> {
     Object.keys(ticketGroupsBySection).forEach(section => {
       const isAnAvailableSection = this.venueSections.includes(section)
       if (isAnAvailableSection) {
-        fillSection(section, this.getDefaultColor(allTicketGroupsInZone), 'fill')
-        fillSection(section, shouldHighlight ? '1' : '0.6', 'opacity')
+        this.fillPath(section, this.getDefaultColor(allTicketGroupsInZone), 'fill')
+        this.fillPath(section, shouldHighlight ? '1' : '0.6', 'opacity')
       }
     })
   }
