@@ -1,7 +1,5 @@
 /* @flow */
 
-import fetch from 'unfetch'
-
 export default function request (url: string, options: any, contentType: string = 'application/json') {
   return fetch(
     url,
