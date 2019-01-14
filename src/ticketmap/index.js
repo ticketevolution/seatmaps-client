@@ -310,19 +310,27 @@ export default class TicketMap extends Component<*, State> {
    * Helpers
    */
 
-  getAvailableTicketGroups = (availableTicketGroups = []) =>
+  getAvailableTicketGroups = (availableTicketGroups = []) => {
+    const unknownSectionNames = []
+
     // eslint-disable-next-line camelcase
-    availableTicketGroups.reduce((memo, { tevo_section_name, retail_price: price }) => {
+    const result = availableTicketGroups.reduce((memo, { tevo_section_name, retail_price: price }) => {
       const section = tevo_section_name.toLowerCase()
       const sectionZoneMeta = this.state.sectionZoneMapping[section]
       if (sectionZoneMeta) {
         memo.push({ section, price, zone: sectionZoneMeta.zone })
-        console.log(`Section ${section} was successfully mapped!`)
       } else {
-        console.warn(`Section ${section} not found. Please verify it exists in the venue manifest`)
+        unknownSectionNames.push(section)
       }
       return memo
-    }, []);
+    }, [])
+
+    if (unknownSectionNames.length > 0) {
+      console.warn('Unknown section names found in ticket groups: %o', unknownSectionNames)
+    }
+
+    return result
+  }
 
   getAllSectionsInZoneBySectionId (section: number): Array<string> {
     const zoneMeta = this.state.sectionZoneMapping[section] || {}
