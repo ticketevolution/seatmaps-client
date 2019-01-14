@@ -326,7 +326,7 @@ export default class TicketMap extends Component<*, State> {
     }, [])
 
     if (unknownSectionNames.length > 0) {
-      console.error('Unknown section names found in ticket groups: %o', unknownSectionNames)
+      console.warn('Unknown section names found in ticket groups: %o', unknownSectionNames)
     }
 
     return result
