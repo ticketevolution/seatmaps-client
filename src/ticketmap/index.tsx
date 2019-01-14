@@ -423,6 +423,7 @@ export default class TicketMap extends Component<Props, State> {
   fillZone(zone: string, shouldHighlight = true) {
     const ticketGroupsBySection = this.ticketGroupsBySectionByZone[zone]
     const allTicketGroupsInZone = Object.values(ticketGroupsBySection)
+      .reduce((memo, ticketGroupsInSection) => [...memo, ...ticketGroupsInSection], [])
     Object.keys(ticketGroupsBySection).forEach(section => {
       const isAnAvailableSection = this.venueSections.includes(section)
       if (isAnAvailableSection) {
