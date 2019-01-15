@@ -27,6 +27,7 @@ export default class Tooltip extends Component<Props> {
       flexDirection: 'column',
       alignItems: 'center',
       filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
+      pointerEvents: 'none'
     }
 
     if (this.container && x !== undefined && x !== undefined) {
