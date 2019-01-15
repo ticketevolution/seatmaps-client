@@ -571,12 +571,11 @@ export default class TicketMap extends Component<Props, State> {
           }
           this.setState({ isDragging: false })
         }}
-        
       >
         <Tooltip
           isActive={this.state.tooltipActive}
-          clientX={this.state.tooltipX}
-          clientY={this.state.tooltipY}
+          x={this.state.tooltipX}
+          y={this.state.tooltipY}
           name={this.state.tooltipSectionName}
           ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />

@@ -4,8 +4,8 @@ import { TicketGroup } from './index'
 interface Props {
   isActive: boolean
   ticketGroups: TicketGroup[],
-  clientX: number
-  clientY: number
+  x: number
+  y: number
   name: string
 }
 
@@ -13,13 +13,13 @@ export default class Tooltip extends Component<Props> {
   container: HTMLElement
 
   render() {
-    const { isActive, ticketGroups, clientX, clientY, name } = this.props
+    const { isActive, ticketGroups, x, y, name } = this.props
     const prices = ticketGroups.map(ticketGroup => ticketGroup.price).sort((a, b) => a - b)
 
     const containerStyle = {
       position: 'fixed',
-      left: clientX,
-      top: clientY,
+      left: x,
+      top: y,
       transition: 'opacity .3s',
       opacity: isActive ? 1 : 0,
       padding: '5px 20px',
@@ -29,9 +29,9 @@ export default class Tooltip extends Component<Props> {
       filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
     }
 
-    if (this.container && clientX !== undefined && clientX !== undefined) {
-      containerStyle.top = clientY - this.container.clientHeight
-      containerStyle.left = clientX - Math.floor(this.container.clientWidth / 2)
+    if (this.container && x !== undefined && x !== undefined) {
+      containerStyle.top = y - this.container.clientHeight
+      containerStyle.left = x - Math.floor(this.container.clientWidth / 2)
     }
 
     return (
