@@ -13,7 +13,7 @@ export default class Tooltip extends Component<Props> {
   container: HTMLElement
 
   render() {
-    const { isActive, ticketGroups, x, y, name } = this.props
+    const { isActive, ticketGroups, x, y, name, color } = this.props
     const prices = ticketGroups.map(ticketGroup => ticketGroup.price).sort((a, b) => a - b)
 
     const containerStyle = {
@@ -42,7 +42,19 @@ export default class Tooltip extends Component<Props> {
           borderRadius: 4,
           padding: 20,
         }}>
-          <div>{name}</div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            <div style={{
+              width: 10,
+              height: 10,
+              backgroundColor: color,
+              display: 'inline-block',
+              marginRight: 5
+            }}/>
+              {name}
+            </div>
           <div>
             {prices.length} listing{prices.length !== 1 ? 's' : ''}
             {' ● '}

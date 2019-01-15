@@ -578,6 +578,7 @@ export default class TicketMap extends Component<Props, State> {
           y={this.state.tooltipY}
           name={this.state.tooltipSectionName}
           ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
+          color={this.state.currentHoveredSection && this.getDefaultColor(this.ticketGroupsBySection[this.state.currentHoveredSection])}
         />
         <div style={{ display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
