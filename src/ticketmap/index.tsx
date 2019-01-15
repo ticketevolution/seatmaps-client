@@ -32,7 +32,7 @@ interface State {
   isDragging: boolean
   currentHoveredZone: string
   currentHoveredSection: string
-  activeTooltip: boolean
+  tooltipActive: boolean
   tooltipSectionName: string
   tooltipZoneId: string
   tooltipX: number
@@ -91,7 +91,7 @@ export default class TicketMap extends Component<Props, State> {
       isDragging: false,
       currentHoveredZone: null,
       currentHoveredSection: null,
-      activeTooltip: false,
+      tooltipActive: false,
       tooltipSectionName: '',
       tooltipZoneId: '',
       tooltipX: 0,
@@ -501,7 +501,7 @@ export default class TicketMap extends Component<Props, State> {
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
     const newState: any = {
-      activeTooltip: true,
+      tooltipActive: true,
       tooltipX,
       tooltipY,
       tooltipSectionName: sectionName
@@ -520,7 +520,7 @@ export default class TicketMap extends Component<Props, State> {
 
   doHoverCleanup(section: string): void {
     this.setState({
-      activeTooltip: false,
+      tooltipActive: false,
       currentHoveredZone: null,
       currentHoveredSection: null
     })
@@ -562,7 +562,7 @@ export default class TicketMap extends Component<Props, State> {
         }}
       >
         <Tooltip
-          isActive={this.state.activeTooltip}
+          isActive={this.state.tooltipActive}
           clientX={this.state.tooltipX}
           clientY={this.state.tooltipY}
           name={this.state.tooltipSectionName}
