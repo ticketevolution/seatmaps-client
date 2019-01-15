@@ -1,4 +1,4 @@
-export const buttonStyle = {
+export const buttonStyle: React.CSSProperties = {
   width: '40px',
   background: 'white',
   color: '#4A4A4A',
@@ -8,19 +8,19 @@ export const buttonStyle = {
   textAlign: 'center',
   fontSize: '24px',
   textDecoration: 'none',
-  fontWeight: '500',
+  fontWeight: 500,
   cursor: 'pointer'
 }
 
-export const toggleTextStyle = {
+export const toggleTextStyle: React.CSSProperties = {
   padding: '0 5px',
   fontFamily: 'sans-serif',
   fontSize: '14px'
 }
 
-export const mainContainerStyle = {
+export const mainContainerStyle: React.CSSProperties = {
   padding: '0 5px 10px',
-  zIndex: '2',
+  zIndex: 2,
   maxWidth: '214px',
   position: 'fixed'
 }

@@ -1,4 +1,4 @@
-export const fillSection = (id, color, type = 'fill') => {
+export const fillSection = (id: string, color: string, type = 'fill') => {
   if (!color) {
     throw Error('Color is undefined for this section.')
   }
@@ -13,6 +13,6 @@ export const fillUnavailableColors = () => {
   getAllPaths().forEach(element => element.setAttribute('fill', element.getAttribute('data-unavailable-color')))
 }
 
-export const getAllPaths = (id) =>
+export const getAllPaths = (id?: string) =>
   Array.from(document.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
-    .reduce((memo, element) => [...memo, element, ...element.querySelectorAll('path')], [])
+    .reduce((memo, element) => [...memo, element, ...Array.from(element.querySelectorAll('path'))], [])

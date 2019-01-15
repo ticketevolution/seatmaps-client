@@ -7,7 +7,7 @@ export default merge(base, {
   mode: 'production',
   entry: [
     'unfetch/polyfill',
-    path.join(__dirname, 'src', 'index.js')
+    path.join(__dirname, 'src', 'index.tsx')
   ],
   output: {
     path: path.resolve(__dirname, 'build'),

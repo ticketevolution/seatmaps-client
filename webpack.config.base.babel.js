@@ -4,7 +4,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.m?js$/,
+        test: /\.m?(js|jsx|ts|tsx)$/,
         include: [
           path.resolve(__dirname, 'src'),
           path.resolve(__dirname, 'node_modules/unfetch')
@@ -17,7 +17,7 @@ export default {
                 targets: 'last 2 versions',
                 useBuiltIns: 'usage'
               }],
-              '@babel/preset-flow'
+              '@babel/preset-typescript'
             ],
             plugins: [
               'babel-plugin-react-require',
@@ -50,6 +50,7 @@ export default {
     ]
   },
   resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
       react: 'preact-compat',
       'react-dom': 'preact-compat'

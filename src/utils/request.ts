@@ -1,9 +1,10 @@
-/* @flow */
+interface Options {}
 
-export default function request (url: string, options: any, contentType: string = 'application/json') {
+export default function request(url: string, options: Options, contentType = 'application/json') {
   return fetch(
     url,
-    Object.assign({}, options, {
+    {
+      ...options,
       headers: {
         ...(contentType
           ? {
@@ -12,7 +13,7 @@ export default function request (url: string, options: any, contentType: string 
           }
           : {})
       }
-    })
+    }
   )
     .then(response =>
       response.json().then(json => {
