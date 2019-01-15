@@ -6,7 +6,8 @@ interface Props {
   ticketGroups: TicketGroup[],
   x: number
   y: number
-  name: string
+  name: string,
+  color: string,
 }
 
 export default class Tooltip extends Component<Props> {
