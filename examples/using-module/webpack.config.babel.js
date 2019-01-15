@@ -28,6 +28,9 @@ export default merge(base, {
       chunks: 'all'
     }
   },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
+  },
   module: {
     rules: [
       {
