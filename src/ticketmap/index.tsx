@@ -172,7 +172,6 @@ export default class TicketMap extends Component<Props, State> {
     mapSvg.style.minWidth = '100%'
     mapSvg.style.minHeight = 'inherit'
 
-    this.setFont()
     this.setUnavailableColors()
 
     for (const path of mapSvg.querySelectorAll('*[data-section-id]')) {
@@ -402,16 +401,6 @@ export default class TicketMap extends Component<Props, State> {
     }
   }
 
-  setFont() {
-    if (this.props.mapFontFamily) {
-      this.rootRef
-        .querySelectorAll('text')
-        .forEach(elem => {
-          elem.style.fontFamily = `${this.props.mapFontFamily}`
-        })
-    }
-  }
-
   fillSection(section: string, shouldHighlight = true) {
     const isAnAvailableSection = this.venueSections.includes(section)
     if (isAnAvailableSection) {
@@ -542,12 +531,23 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   render() {
+    const containerStyle: React.CSSProperties  = {
+      height: 'inherit',
+      minHeight: 'inherit',
+      minWidth: 'inherit'
+    }
+
+    if (this.props.mapFontFamily) {
+      containerStyle.fontFamily = this.props.mapFontFamily
+    }
+
     return (
       <div
         ref={element => { this.rootRef = element }}
         onMouseOver={this.onMouseOver}
         onMouseOut={this.onMouseOut}
         onClick={this.onClick}
+        style={containerStyle}
         onTouchMove={() => this.setState({ isDragging: true })}
         onTouchEnd={event => {
           if (!this.state.isDragging) {
@@ -555,11 +555,7 @@ export default class TicketMap extends Component<Props, State> {
           }
           this.setState({ isDragging: false })
         }}
-        style={{
-          height: 'inherit',
-          minHeight: 'inherit',
-          minWidth: 'inherit'
-        }}
+        
       >
         <Tooltip
           isActive={this.state.tooltipActive}
