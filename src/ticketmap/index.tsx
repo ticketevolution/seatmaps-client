@@ -490,10 +490,10 @@ export default class TicketMap extends Component<Props, State> {
     }
   }
 
-  onMouseMove = ({ clientX, clientY }: React.MouseEvent<HTMLElement>) => {
+  onMouseMove = ({ offsetX, offsetY }: React.MouseEvent<HTMLElement>) => {
     this.setState({
-      tooltipX: clientX,
-      tooltipY: clientY
+      tooltipX: offsetX,
+      tooltipY: offsetY
     })
   }
 
@@ -549,7 +549,8 @@ export default class TicketMap extends Component<Props, State> {
     const containerStyle: React.CSSProperties  = {
       height: 'inherit',
       minHeight: 'inherit',
-      minWidth: 'inherit'
+      minWidth: 'inherit',
+      position: 'relative'
     }
 
     if (this.props.mapFontFamily) {
