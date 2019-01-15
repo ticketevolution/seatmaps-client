@@ -470,6 +470,9 @@ export default class TicketMap extends Component<Props, State> {
 
   onMouseOut = (event: React.MouseEvent<HTMLElement>) => {
     const element = event.target as HTMLElement
+    if (event.relatedTarget && event.relatedTarget.nodeName === 'text') {
+      return
+    }
     if (element.hasAttribute('data-section-id')) {
       const section = element.getAttribute('data-section-id').toLowerCase()
       if (this.venueSections.includes(section)) {
@@ -483,18 +486,10 @@ export default class TicketMap extends Component<Props, State> {
     }
   }
 
-  onClick = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-    const element = event.target as HTMLElement
-    if (element.hasAttribute('data-section-id')) {
-      const section = element.getAttribute('data-section-id').toLowerCase()
-      if (this.venueSections.includes(section)) {
-        return this.selectSectionOrZone(section)
-      }
-    } else if (event.target !== this.rootRef) {
-      return this.onClick({
-        ...event,
-        target: element.parentNode
-      })
+  onClick = () => {
+    const section = this.state.currentHoveredSection
+    if (this.venueSections.includes(section)) {
+      return this.selectSectionOrZone(section)
     }
   }
 
@@ -523,8 +518,12 @@ export default class TicketMap extends Component<Props, State> {
     this.setState(newState)
   }
 
-  doHoverCleanup(section: string) {
-    this.setState({ activeTooltip: false })
+  doHoverCleanup(section: string): void {
+    this.setState({
+      activeTooltip: false,
+      currentHoveredZone: null,
+      currentHoveredSection: null
+    })
 
     if (this.state.isZoneToggled) {
       return this.unhighlightZone(this.state.sectionZoneMapping[section].zone)
