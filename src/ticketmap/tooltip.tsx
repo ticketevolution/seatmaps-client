@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { TicketGroup } from './index'
+import { FlexDirectionProperty, PositionProperty, PointerEventsProperty } from 'csstype'
 
 interface Props {
   isActive: boolean
@@ -7,7 +8,7 @@ interface Props {
   x: number
   y: number
   name: string,
-  color: string,
+  color: string
 }
 
 export default class Tooltip extends Component<Props> {
@@ -18,17 +19,17 @@ export default class Tooltip extends Component<Props> {
     const prices = ticketGroups.map(ticketGroup => ticketGroup.price).sort((a, b) => a - b)
 
     const containerStyle = {
-      position: 'fixed',
+      position: 'fixed' as PositionProperty,
       left: x,
       top: y,
       transition: 'opacity .3s',
       opacity: isActive ? 1 : 0,
       padding: '5px 20px',
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column' as FlexDirectionProperty,
       alignItems: 'center',
       filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
-      pointerEvents: 'none'
+      pointerEvents: 'none' as PointerEventsProperty
     }
 
     if (this.container && x !== undefined && x !== undefined) {
