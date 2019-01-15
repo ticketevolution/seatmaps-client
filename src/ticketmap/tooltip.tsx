@@ -1,4 +1,3 @@
-import CSSTransition from 'react-transition-group/CSSTransition'
 import { Component } from 'react'
 import { TicketGroup } from './index'
 import { mainContainerStyle } from './styles'
@@ -29,41 +28,41 @@ export default class Tooltip extends Component<Props> {
     const prices = ticketGroups.map(ticketGroup => ticketGroup.price).sort((a, b) => a - b)
 
     return (
-      <CSSTransition in={isActive} timeout={300} classNames='message' unmountOnExit>
+      <div
+        style={{
+          ...mainContainerStyle,
+          left: getTooltipX(clientX),
+          top: getTooltipY(clientY),
+          transition: 'opacity .3s',
+          opacity: isActive ? 1 : 0
+        }}
+      >
         <div
           style={{
-            ...mainContainerStyle,
-            left: getTooltipX(clientX),
-            top: getTooltipY(clientY)
+            backgroundColor: 'white',
+            borderRadius: '4px',
+            display: 'inlineBlock',
+            filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
+            fontFamily: 'Open Sans, sans-serif',
+            padding: '20px',
+            position: 'relative'
           }}
         >
-          <div
-            style={{
-              backgroundColor: 'white',
-              borderRadius: '4px',
-              display: 'inlineBlock',
-              filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
-              fontFamily: 'Open Sans, sans-serif',
-              padding: '20px',
-              position: 'relative'
-            }}
-          >
-            <div style={{ color: '#181514', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', flexDirection: 'row', fontSize: '0.75em', padding: '0px' }}>
-                <div>
-                  <div style={{ fontWeight: 400 }}>{name}</div>
-                  <div style={{ fontWeight: 400 }}>
-                    <span>
-                      {prices.length} listing{prices.length > 1 ? 's' : ''}
-                    </span>{' '}&#9679;{' '}
-                    <span>Starting at <span style={{ fontWeight: 700 }}>{prices[0]}</span></span>
-                  </div>
+          <div style={{ color: '#181514', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', fontSize: '0.75em', padding: '0px' }}>
+              <div>
+                <div style={{ fontWeight: 400 }}>{name}</div>
+                <div style={{ fontWeight: 400 }}>
+                  <span>
+                    {prices.length} listing{prices.length > 1 ? 's' : ''}
+                  </span>{' '}&#9679;{' '}
+                  <span>Starting at <span style={{ fontWeight: 700 }}>{prices[0]}</span></span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </CSSTransition>
+      </div>
     )
   }
 }
