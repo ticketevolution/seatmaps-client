@@ -55,7 +55,7 @@ export default class Tooltip extends Component<Props> {
                 <div style={{ fontWeight: 400 }}>
                   {prices.length} listing{prices.length !== 1 ? 's' : ''}
                   {' ● '}
-                  Starting at <span style={{ fontWeight: 700 }}>{prices[0]}</span>
+                  Starting at <span style={{ fontWeight: 700 }}>${prices[0]}</span>
                 </div>
               </div>
             </div>
