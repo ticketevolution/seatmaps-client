@@ -20,12 +20,12 @@ export default class Tooltip extends Component<Props> {
 
     const containerStyle: CSSProperties = {
       position: 'fixed',
-      transition: 'opacity .3s',
-      opacity: isActive ? 1 : 1,
+      transition: 'top .1s, left .1s',
+      opacity: isActive ? 1 : 0,
       padding: 5,
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
       pointerEvents: 'none'
     }
@@ -51,14 +51,25 @@ export default class Tooltip extends Component<Props> {
         containerStyle.left = x
       } else {
         containerStyle.left = x - this.container.clientWidth
+        containerStyle.alignItems = 'flex-end'
       }
+    }
+
+    const tipStyle = {
+      width: 0,
+      height: 0,
+      borderStyle: 'solid'
     }
 
     return (
       <div ref={element => {this.container = element}} style={containerStyle}>
+        {!renderAboveTarget && <div style={{
+          ...tipStyle,
+          borderWidth: renderRightOfTarget ? '10px 0 0 10px' : '0 0 10px 10px',
+          borderColor: renderRightOfTarget ? 'transparent transparent transparent white' : 'transparent transparent white transparent',
+        }} /> }
         <div style={{
           backgroundColor: 'white',
-          borderRadius: 4,
           padding: 20,
         }}>
           <div style={{
@@ -80,11 +91,11 @@ export default class Tooltip extends Component<Props> {
             Starting at <span style={{ fontWeight: 700 }}>${prices[0]}</span>
           </div>
         </div>
-        {/* <div style={{
-          border: '10px solid',
-          borderColor: 'white transparent transparent',
-          width: 0
-        }} /> */}
+        {renderAboveTarget && <div style={{
+          ...tipStyle,
+          borderWidth: renderRightOfTarget ? '10px 10px 0 0' : '0 10px 10px 0',
+          borderColor: renderRightOfTarget ? 'white transparent transparent transparent' : 'transparent white transparent transparent',
+        }} /> }
       </div>
     )
   }
