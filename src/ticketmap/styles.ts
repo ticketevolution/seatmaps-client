@@ -17,10 +17,3 @@ export const toggleTextStyle: React.CSSProperties = {
   fontFamily: 'sans-serif',
   fontSize: '14px'
 }
-
-export const mainContainerStyle: React.CSSProperties = {
-  padding: '0 5px 10px',
-  zIndex: 2,
-  maxWidth: '214px',
-  position: 'fixed'
-}

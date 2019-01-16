@@ -32,7 +32,7 @@ interface State {
   isDragging: boolean
   currentHoveredZone: string
   currentHoveredSection: string
-  activeTooltip: boolean
+  tooltipActive: boolean
   tooltipSectionName: string
   tooltipZoneId: string
   tooltipX: number
@@ -91,7 +91,7 @@ export default class TicketMap extends Component<Props, State> {
       isDragging: false,
       currentHoveredZone: null,
       currentHoveredSection: null,
-      activeTooltip: false,
+      tooltipActive: false,
       tooltipSectionName: '',
       tooltipZoneId: '',
       tooltipX: 0,
@@ -172,7 +172,6 @@ export default class TicketMap extends Component<Props, State> {
     mapSvg.style.minWidth = '100%'
     mapSvg.style.minHeight = 'inherit'
 
-    this.setFont()
     this.setUnavailableColors()
 
     for (const path of mapSvg.querySelectorAll('*[data-section-id]')) {
@@ -402,16 +401,6 @@ export default class TicketMap extends Component<Props, State> {
     }
   }
 
-  setFont() {
-    if (this.props.mapFontFamily) {
-      this.rootRef
-        .querySelectorAll('text')
-        .forEach(elem => {
-          elem.style.fontFamily = `${this.props.mapFontFamily}`
-        })
-    }
-  }
-
   fillSection(section: string, shouldHighlight = true) {
     const isAnAvailableSection = this.venueSections.includes(section)
     if (isAnAvailableSection) {
@@ -486,11 +475,26 @@ export default class TicketMap extends Component<Props, State> {
     }
   }
 
-  onClick = () => {
-    const section = this.state.currentHoveredSection
-    if (this.venueSections.includes(section)) {
-      return this.selectSectionOrZone(section)
+  onClick = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+    const element = event.target as HTMLElement
+    if (element.hasAttribute('data-section-id')) {
+      const section = element.getAttribute('data-section-id').toLowerCase()
+      if (this.venueSections.includes(section)) {
+        return this.selectSectionOrZone(section)
+      }
+    } else if (event.target !== this.rootRef) {
+      return this.onClick({
+        ...event,
+        target: element.parentNode
+      })
     }
+  }
+
+  onMouseMove = ({ offsetX, offsetY }: React.MouseEvent<HTMLElement>) => {
+    this.setState({
+      tooltipX: offsetX,
+      tooltipY: offsetY
+    })
   }
 
   /**
@@ -501,7 +505,7 @@ export default class TicketMap extends Component<Props, State> {
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
     const newState: any = {
-      activeTooltip: true,
+      tooltipActive: true,
       tooltipX,
       tooltipY,
       tooltipSectionName: sectionName
@@ -520,7 +524,7 @@ export default class TicketMap extends Component<Props, State> {
 
   doHoverCleanup(section: string): void {
     this.setState({
-      activeTooltip: false,
+      tooltipActive: false,
       currentHoveredZone: null,
       currentHoveredSection: null
     })
@@ -542,12 +546,25 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   render() {
+    const containerStyle: React.CSSProperties  = {
+      height: 'inherit',
+      minHeight: 'inherit',
+      minWidth: 'inherit',
+      position: 'relative'
+    }
+
+    if (this.props.mapFontFamily) {
+      containerStyle.fontFamily = this.props.mapFontFamily
+    }
+
     return (
       <div
         ref={element => { this.rootRef = element }}
         onMouseOver={this.onMouseOver}
         onMouseOut={this.onMouseOut}
+        onMouseMove={this.onMouseMove}
         onClick={this.onClick}
+        style={containerStyle}
         onTouchMove={() => this.setState({ isDragging: true })}
         onTouchEnd={event => {
           if (!this.state.isDragging) {
@@ -555,18 +572,14 @@ export default class TicketMap extends Component<Props, State> {
           }
           this.setState({ isDragging: false })
         }}
-        style={{
-          height: 'inherit',
-          minHeight: 'inherit',
-          minWidth: 'inherit'
-        }}
       >
         <Tooltip
-          isActive={this.state.activeTooltip}
-          clientX={this.state.tooltipX}
-          clientY={this.state.tooltipY}
+          isActive={this.state.tooltipActive}
+          x={this.state.tooltipX}
+          y={this.state.tooltipY}
           name={this.state.tooltipSectionName}
           ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
+          color={this.state.currentHoveredSection && this.getDefaultColor(this.ticketGroupsBySection[this.state.currentHoveredSection])}
         />
         <div style={{ display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}

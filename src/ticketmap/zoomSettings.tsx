@@ -25,7 +25,10 @@ export default class ZoomSettings extends Component<Props> {
 
   render() {
     return (
-      <div style={{ display: 'flex' }}>
+      <div style={{
+        display: 'flex',
+        position: 'absolute'
+      }}>
         <a
           data-rh='Default'
           data-custom-at='right'

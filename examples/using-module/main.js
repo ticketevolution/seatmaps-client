@@ -7,5 +7,6 @@ window.seatmap = new Tevomaps({
   ticketGroups: [
     ...ticketGroups,
     { tevo_section_name: 'foo' }
-  ]
+  ],
+  mapFontFamily: '"Open Sans", sans-sarif'
 }).build('map')

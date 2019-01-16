@@ -1,69 +1,102 @@
-import CSSTransition from 'react-transition-group/CSSTransition'
-import { Component } from 'react'
+import { Component, CSSProperties } from 'react'
 import { TicketGroup } from './index'
-import { mainContainerStyle } from './styles'
-
-const SCREEN_BUFFER = 100
-const TOOLTIP_BUFFER = 250
-
-export const getTooltipX = (clientX: number) =>
-  clientX - SCREEN_BUFFER < 0
-    ? clientX
-    : document.body.clientWidth - TOOLTIP_BUFFER < clientX
-      ? clientX - TOOLTIP_BUFFER
-      : clientX - 10
-
-export const getTooltipY = (clientY: number) => clientY - SCREEN_BUFFER < 0 ? clientY + 50 : clientY - SCREEN_BUFFER
+import { FlexDirectionProperty, PositionProperty, PointerEventsProperty } from 'csstype'
 
 interface Props {
   isActive: boolean
   ticketGroups: TicketGroup[],
-  clientX: number
-  clientY: number
-  name: string
+  x: number
+  y: number
+  name: string,
+  color: string
 }
 
 export default class Tooltip extends Component<Props> {
+  container: HTMLElement
+
   render() {
-    const { isActive, ticketGroups, clientX, clientY, name } = this.props
+    const { isActive, ticketGroups, x, y, name, color } = this.props
     const prices = ticketGroups.map(ticketGroup => ticketGroup.price).sort((a, b) => a - b)
 
+    const containerStyle: CSSProperties = {
+      position: 'fixed',
+      transition: 'top .1s, left .1s',
+      opacity: isActive ? 1 : 0,
+      padding: 5,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
+      pointerEvents: 'none'
+    }
+
+    let renderAboveTarget = true
+    let renderRightOfTarget = true
+    if (this.container && x !== undefined && x !== undefined) {
+      if (x + this.container.clientWidth > this.container.parentElement.clientWidth) {
+        renderRightOfTarget = false
+      }
+
+      if (y - this.container.clientHeight < 0) {
+        renderAboveTarget = false
+      }
+
+      if (renderAboveTarget) {
+        containerStyle.top = y - this.container.clientHeight
+      } else {
+        containerStyle.top = y
+      }
+
+      if (renderRightOfTarget) {
+        containerStyle.left = x
+      } else {
+        containerStyle.left = x - this.container.clientWidth
+        containerStyle.alignItems = 'flex-end'
+      }
+    }
+
+    const tipStyle = {
+      width: 0,
+      height: 0,
+      borderStyle: 'solid'
+    }
+
     return (
-      <CSSTransition in={isActive} timeout={300} classNames='message' unmountOnExit>
-        <div
-          style={{
-            ...mainContainerStyle,
-            left: getTooltipX(clientX),
-            top: getTooltipY(clientY)
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: 'white',
-              borderRadius: '4px',
-              display: 'inlineBlock',
-              filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
-              fontFamily: 'Open Sans, sans-serif',
-              padding: '20px',
-              position: 'relative'
-            }}
-          >
-            <div style={{ color: '#181514', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', flexDirection: 'row', fontSize: '0.75em', padding: '0px' }}>
-                <div>
-                  <div style={{ fontWeight: 400 }}>{name}</div>
-                  <div style={{ fontWeight: 400 }}>
-                    <span>
-                      {prices.length} listing{prices.length > 1 ? 's' : ''}
-                    </span>{' '}&#9679;{' '}
-                    <span>Starting at <span style={{ fontWeight: 700 }}>{prices[0]}</span></span>
-                  </div>
-                </div>
-              </div>
+      <div ref={element => {this.container = element}} style={containerStyle}>
+        {!renderAboveTarget && <div style={{
+          ...tipStyle,
+          borderWidth: renderRightOfTarget ? '10px 0 0 10px' : '0 0 10px 10px',
+          borderColor: renderRightOfTarget ? 'transparent transparent transparent white' : 'transparent transparent white transparent',
+        }} /> }
+        <div style={{
+          backgroundColor: 'white',
+          padding: 20,
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            <div style={{
+              width: 10,
+              height: 10,
+              backgroundColor: color,
+              display: 'inline-block',
+              marginRight: 5
+            }}/>
+              {name}
             </div>
+          <div>
+            {prices.length} listing{prices.length !== 1 ? 's' : ''}
+            {' ● '}
+            Starting at <span style={{ fontWeight: 700 }}>${prices[0]}</span>
           </div>
         </div>
-      </CSSTransition>
+        {renderAboveTarget && <div style={{
+          ...tipStyle,
+          borderWidth: renderRightOfTarget ? '10px 10px 0 0' : '0 10px 10px 0',
+          borderColor: renderRightOfTarget ? 'white transparent transparent transparent' : 'transparent white transparent transparent',
+        }} /> }
+      </div>
     )
   }
 }
