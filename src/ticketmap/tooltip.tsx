@@ -81,7 +81,7 @@ export default class Tooltip extends Component<Props> {
               height: 10,
               backgroundColor: color,
               display: 'inline-block',
-              marginrenderRightOfTarget: 5
+              marginRight: 5
             }}/>
               {name}
             </div>
