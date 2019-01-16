@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { Component, CSSProperties } from 'react'
 import { TicketGroup } from './index'
 import { FlexDirectionProperty, PositionProperty, PointerEventsProperty } from 'csstype'
 
@@ -18,18 +18,18 @@ export default class Tooltip extends Component<Props> {
     const { isActive, ticketGroups, x, y, name, color } = this.props
     const prices = ticketGroups.map(ticketGroup => ticketGroup.price).sort((a, b) => a - b)
 
-    const containerStyle = {
-      position: 'fixed' as PositionProperty,
+    const containerStyle: CSSProperties = {
+      position: 'fixed',
       left: x,
       top: y,
       transition: 'opacity .3s',
       opacity: isActive ? 1 : 0,
       padding: '5px 20px',
       display: 'flex',
-      flexDirection: 'column' as FlexDirectionProperty,
+      flexDirection: 'column',
       alignItems: 'center',
       filter: 'drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)',
-      pointerEvents: 'none' as PointerEventsProperty
+      pointerEvents: 'none'
     }
 
     if (this.container && x !== undefined && x !== undefined) {
