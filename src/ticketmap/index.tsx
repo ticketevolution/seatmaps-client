@@ -1,10 +1,12 @@
 import { Component } from 'react'
+import { defaultMemoize, createSelectorCreator } from 'reselect'
+import { isEqual } from 'lodash'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
 
 export interface TicketGroup {
-  price: number
-  section: string
+  tevo_section_name: string
+  retail_price: number
 }
 
 interface Percentiles {
@@ -26,7 +28,7 @@ export interface Props {
 interface State {
   mapSvg: SVGSVGElement
   sectionZoneMapping: any
-  availableTicketGroups: TicketGroup[]
+  ticketGroups: TicketGroup[]
   selectedSections: Set<string>
   isZoneToggled: boolean
   isDragging: boolean
@@ -61,6 +63,28 @@ interface TicketGroupsBySectionByZone {
   }
 }
 
+const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual)
+
+const $missingSectionIds = createDeepEqualSelector(
+  (state: State) => state.ticketGroups,
+  (state: State) => state.sectionZoneMapping,
+  (ticketGroups, sectionZoneMapping) => ticketGroups
+    .map(ticketGroup => ticketGroup.tevo_section_name.toLowerCase())
+    .filter(sectionId => sectionZoneMapping[sectionId] === undefined)
+)
+
+const $availableTicketGroups = createDeepEqualSelector(
+  (state: State) => state.ticketGroups,
+  (state: State) => state.sectionZoneMapping,
+  (ticketGroups, sectionZoneMapping) => ticketGroups
+    .map(ticketGroup => ({
+      section: ticketGroup.tevo_section_name,
+      zone: sectionZoneMapping[ticketGroup.tevo_section_name.toLowerCase()],
+      price: ticketGroup.retail_price
+    }))
+    .filter(ticketGroup => ticketGroup.zone !== undefined)
+)
+
 export default class TicketMap extends Component<Props, State> {
   publicApi: PublicApi
   mapRootRef: HTMLElement
@@ -85,7 +109,6 @@ export default class TicketMap extends Component<Props, State> {
     this.state = {
       mapSvg: undefined,
       sectionZoneMapping: {},
-      availableTicketGroups: [],
       selectedSections: new Set(this.props.selectedSections.filter(section => !!section)),
       isZoneToggled: this.props.isZoneDefault,
       isDragging: false,
@@ -95,7 +118,8 @@ export default class TicketMap extends Component<Props, State> {
       tooltipSectionName: '',
       tooltipZoneId: '',
       tooltipX: 0,
-      tooltipY: 0
+      tooltipY: 0,
+      ticketGroups: []
     }
 
     this.publicApi = {
@@ -123,11 +147,16 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   componentDidUpdate(_prevProps: Props, prevState: State) {
-    if (JSON.stringify(this.state.availableTicketGroups) !== JSON.stringify(prevState.availableTicketGroups)) {
+    if ($availableTicketGroups(prevState) != $availableTicketGroups(this.state)) {
       this.updateMap()
     }
+
     if (this.state.selectedSections !== prevState.selectedSections) {
       this.props.onSelection(Array.from(this.state.selectedSections))
+    }
+
+    if ($missingSectionIds(prevState) !== $missingSectionIds(this.state) && $missingSectionIds(this.state).length > 0) {
+      console.warn('Unknown section names found in ticket groups: %o', $missingSectionIds(this.state))
     }
   }
 
@@ -186,7 +215,7 @@ export default class TicketMap extends Component<Props, State> {
    */
 
   get sortedTicketGroupPrices() {
-    return this.state.availableTicketGroups
+    return $availableTicketGroups(this.state)
       .map(group => group.price)
       .sort((a, b) => a - b)
   }
@@ -206,7 +235,7 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   get ticketGroupsBySection() {
-    return this.state.availableTicketGroups.reduce((memo, ticketGroup) => {
+    return $availableTicketGroups(this.state).reduce((memo, ticketGroup) => {
       const { section } = ticketGroup
       return {
         ...memo,
@@ -324,8 +353,7 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   updateTicketGroups = (ticketGroups = this.props.ticketGroups) => {
-    const availableTicketGroups = this.getAvailableTicketGroups(ticketGroups)
-    this.setState({ availableTicketGroups })
+    this.setState({ ticketGroups })
   }
 
   /**
@@ -355,28 +383,6 @@ export default class TicketMap extends Component<Props, State> {
    * Helpers
    */
 
-  getAvailableTicketGroups = (availableTicketGroups = []) => {
-    const unknownSectionNames = []
-
-    // eslint-disable-next-line camelcase
-    const result = availableTicketGroups.reduce((memo, { tevo_section_name, retail_price: price }) => {
-      const section = tevo_section_name.toLowerCase()
-      const sectionZoneMeta = this.state.sectionZoneMapping[section]
-      if (sectionZoneMeta) {
-        memo.push({ section, price, zone: sectionZoneMeta.zone })
-      } else {
-        unknownSectionNames.push(section)
-      }
-      return memo
-    }, [])
-
-    if (unknownSectionNames.length > 0) {
-      console.warn('Unknown section names found in ticket groups: %o', unknownSectionNames)
-    }
-
-    return result
-  }
-
   getAllSectionsInZoneBySectionId(section: string) {
     const zoneMeta = this.state.sectionZoneMapping[section] || {}
     return this.venueSections.filter((venueSection) => this.state.sectionZoneMapping[venueSection].zone === zoneMeta.zone)
@@ -388,6 +394,7 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   updateMap() {
+    this.fillUnavailableColors()
     if (this.state.isZoneToggled) {
       Object.keys(this.ticketGroupsBySectionByZone).forEach(zone => {
         const shouldHighight = this.areAllSectionsInTheZoneSelected(zone)
@@ -578,8 +585,8 @@ export default class TicketMap extends Component<Props, State> {
           x={this.state.tooltipX}
           y={this.state.tooltipY}
           name={this.state.tooltipSectionName}
-          ticketGroups={this.state.availableTicketGroups.filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
           color={this.state.currentHoveredSection && this.getDefaultColor(this.ticketGroupsBySection[this.state.currentHoveredSection])}
+          ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
         <div style={{ display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
