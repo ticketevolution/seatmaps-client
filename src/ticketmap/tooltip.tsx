@@ -20,11 +20,9 @@ export default class Tooltip extends Component<Props> {
 
     const containerStyle: CSSProperties = {
       position: 'fixed',
-      left: x,
-      top: y,
       transition: 'opacity .3s',
-      opacity: isActive ? 1 : 0,
-      padding: '5px 20px',
+      opacity: isActive ? 1 : 1,
+      padding: 5,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -32,9 +30,28 @@ export default class Tooltip extends Component<Props> {
       pointerEvents: 'none'
     }
 
+    let renderAboveTarget = true
+    let renderRightOfTarget = true
     if (this.container && x !== undefined && x !== undefined) {
-      containerStyle.top = y - this.container.clientHeight
-      containerStyle.left = x - Math.floor(this.container.clientWidth / 2)
+      if (x + this.container.clientWidth > this.container.parentElement.clientWidth) {
+        renderRightOfTarget = false
+      }
+
+      if (y - this.container.clientHeight < 0) {
+        renderAboveTarget = false
+      }
+
+      if (renderAboveTarget) {
+        containerStyle.top = y - this.container.clientHeight
+      } else {
+        containerStyle.top = y
+      }
+
+      if (renderRightOfTarget) {
+        containerStyle.left = x
+      } else {
+        containerStyle.left = x - this.container.clientWidth
+      }
     }
 
     return (
@@ -53,7 +70,7 @@ export default class Tooltip extends Component<Props> {
               height: 10,
               backgroundColor: color,
               display: 'inline-block',
-              marginRight: 5
+              marginrenderRightOfTarget: 5
             }}/>
               {name}
             </div>
@@ -63,11 +80,11 @@ export default class Tooltip extends Component<Props> {
             Starting at <span style={{ fontWeight: 700 }}>${prices[0]}</span>
           </div>
         </div>
-        <div style={{
+        {/* <div style={{
           border: '10px solid',
           borderColor: 'white transparent transparent',
           width: 0
-        }} />
+        }} /> */}
       </div>
     )
   }
