@@ -9,6 +9,12 @@ export interface TicketGroup {
   retail_price: number
 }
 
+interface NormalizedTicketGroup {
+  section: string
+  zone: string
+  price: number
+}
+
 interface Percentiles {
   [key: string]: string
 }
@@ -81,7 +87,7 @@ const $availableTicketGroups = createDeepEqualSelector(
       section: ticketGroup.tevo_section_name,
       zone: sectionZoneMapping[ticketGroup.tevo_section_name.toLowerCase()],
       price: ticketGroup.retail_price
-    }))
+    } as NormalizedTicketGroup))
     .filter(ticketGroup => ticketGroup.zone !== undefined)
 )
 
