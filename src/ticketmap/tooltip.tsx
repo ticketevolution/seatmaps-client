@@ -18,7 +18,7 @@ export default class Tooltip extends Component<Props> {
     const prices = ticketGroups.map(ticketGroup => ticketGroup.price).sort((a, b) => a - b)
 
     const containerStyle: CSSProperties = {
-      position: 'fixed',
+      position: 'absolute',
       transition: 'top .1s, left .1s',
       opacity: isActive ? 1 : 0,
       padding: 5,
@@ -31,7 +31,7 @@ export default class Tooltip extends Component<Props> {
 
     let renderAboveTarget = true
     let renderRightOfTarget = true
-    if (this.container && x !== undefined && x !== undefined) {
+    if (this.container && x !== undefined && y !== undefined) {
       if (x + this.container.clientWidth > this.container.parentElement.clientWidth) {
         renderRightOfTarget = false
       }
