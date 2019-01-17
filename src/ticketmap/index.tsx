@@ -494,17 +494,9 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   onClick = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-    const element = event.target as HTMLElement
-    if (element.hasAttribute('data-section-id')) {
-      const section = element.getAttribute('data-section-id').toLowerCase()
-      if (this.venueSections.includes(section)) {
-        return this.selectSectionOrZone(section)
-      }
-    } else if (event.target !== this.rootRef) {
-      return this.onClick({
-        ...event,
-        target: element.parentNode
-      })
+    const section = this.state.currentHoveredSection
+    if (this.venueSections.includes(section)) {
+      return this.selectSectionOrZone(section)
     }
   }
 
