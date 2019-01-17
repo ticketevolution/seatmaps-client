@@ -83,12 +83,16 @@ const $availableTicketGroups = createDeepEqualSelector(
   (state: State) => state.ticketGroups,
   (state: State) => state.sectionZoneMapping,
   (ticketGroups, sectionZoneMapping) => ticketGroups
-    .map(ticketGroup => ({
-      section: ticketGroup.tevo_section_name,
-      zone: sectionZoneMapping[ticketGroup.tevo_section_name.toLowerCase()],
-      price: ticketGroup.retail_price
-    } as NormalizedTicketGroup))
-    .filter(ticketGroup => ticketGroup.zone !== undefined)
+    .map(ticketGroup => {
+      const section = ticketGroup.tevo_section_name.toLowerCase()
+      const zoneMapping = sectionZoneMapping[section]
+
+      return {
+        section,
+        zone: zoneMapping && zoneMapping.zone,
+        price: ticketGroup.retail_price
+      } as NormalizedTicketGroup
+    }).filter(ticketGroup => ticketGroup.zone)
 )
 
 export default class TicketMap extends Component<Props, State> {
