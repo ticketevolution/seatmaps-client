@@ -87,12 +87,12 @@ const $availableTicketGroups = createDeepEqualSelector(
       const section = ticketGroup.tevo_section_name.toLowerCase()
       const zoneMapping = sectionZoneMapping[section]
 
-      return {
+      return zoneMapping && {
         section,
-        zone: zoneMapping && zoneMapping.zone,
+        zone: zoneMapping.zone,
         price: ticketGroup.retail_price
       }
-    }).filter(ticketGroup => ticketGroup.zone)
+    }).filter(ticketGroup => ticketGroup)
 )
 
 export default class TicketMap extends Component<Props, State> {
