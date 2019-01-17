@@ -83,7 +83,7 @@ const $availableTicketGroups = createDeepEqualSelector(
   (state: State) => state.ticketGroups,
   (state: State) => state.sectionZoneMapping,
   (ticketGroups, sectionZoneMapping) => ticketGroups
-    .map(ticketGroup => {
+    .map((ticketGroup): NormalizedTicketGroup => {
       const section = ticketGroup.tevo_section_name.toLowerCase()
       const zoneMapping = sectionZoneMapping[section]
 
@@ -91,7 +91,7 @@ const $availableTicketGroups = createDeepEqualSelector(
         section,
         zone: zoneMapping && zoneMapping.zone,
         price: ticketGroup.retail_price
-      } as NormalizedTicketGroup
+      }
     }).filter(ticketGroup => ticketGroup.zone)
 )
 
