@@ -21,6 +21,7 @@
     "preact": "8.4.2",
     "preact-compat": "3.18.4",
     "react-toggled": "1.2.7",
+    "reselect": "^4.0.0",
     "svg-pan-zoom": "^3.6.0",
     "unfetch": "^4.0.1"
   },

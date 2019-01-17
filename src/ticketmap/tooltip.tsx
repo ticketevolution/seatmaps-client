@@ -1,10 +1,9 @@
 import { Component, CSSProperties } from 'react'
-import { TicketGroup } from './index'
-import { FlexDirectionProperty, PositionProperty, PointerEventsProperty } from 'csstype'
+import { NormalizedTicketGroup } from './index'
 
 interface Props {
   isActive: boolean
-  ticketGroups: TicketGroup[],
+  ticketGroups: NormalizedTicketGroup[],
   x: number
   y: number
   name: string,
