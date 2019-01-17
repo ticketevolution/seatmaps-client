@@ -9,7 +9,7 @@ export interface TicketGroup {
   retail_price: number
 }
 
-interface NormalizedTicketGroup {
+export interface NormalizedTicketGroup {
   section: string
   zone?: string
   price: number
