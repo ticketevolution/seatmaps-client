@@ -44,7 +44,9 @@ interface State {
   tooltipSectionName: string
   tooltipZoneId: string
   tooltipX: number
-  tooltipY: number
+  tooltipY: number,
+  isInitializing: boolean,
+  cachedTicketGroupsUpdate: TicketGroup[]
 }
 
 interface PublicApi {
@@ -148,9 +150,8 @@ export default class TicketMap extends Component<Props, State> {
   async componentDidMount() {
     try {
       await this.fetchMap()
-      await this.setupMap()
+      this.setupMap()
       await this.fetchManifest()
-      await this.updateTicketGroups()
     } catch (error) {
       console.error(error)
     }
@@ -193,6 +194,7 @@ export default class TicketMap extends Component<Props, State> {
     const manifest: Manifest = await manifestResponse.json()
 
     this.setState({
+      isInitializing: false,
       sectionZoneMapping: Object.entries(manifest.sections)
         .reduce((memo, [sectionName, section]) => ({
           ...memo,
@@ -269,15 +271,11 @@ export default class TicketMap extends Component<Props, State> {
    * Public Methods
    */
 
-  highlightSection(section: string) {
-    return this.toggleSectionHighlight(section, true)
-  }
+  highlightSection = (section: string) => this.toggleSectionHighlight(section, true)
 
-  unhighlightSection(section: string) {
-    return this.toggleSectionHighlight(section, false)
-  }
+  unhighlightSection = (section: string) => this.toggleSectionHighlight(section, false)
 
-  toggleSectionHighlight(section: string, shouldHighlight = true) {
+  toggleSectionHighlight = (section: string, shouldHighlight = true) => {
     if (!section) {
       return
     }
@@ -289,15 +287,15 @@ export default class TicketMap extends Component<Props, State> {
     return this.fillSection(sectionId, shouldHighlight)
   }
 
-  selectSection(section: string) {
+  selectSection = (section: string) => {
     return this.toggleSectionSelect(section, true)
   }
 
-  deselectSection(section: string) {
+  deselectSection = (section: string) => {
     return this.toggleSectionSelect(section, false)
   }
 
-  toggleSectionSelect(section: string, shouldHighlight = true) {
+  toggleSectionSelect = (section: string, shouldHighlight = true) => {
     if (!section) {
       return
     }
@@ -315,15 +313,15 @@ export default class TicketMap extends Component<Props, State> {
     this.setState({ selectedSections })
   }
 
-  highlightZone(zone: string) {
+  highlightZone = (zone: string) => {
     return this.toggleZoneHighlight(zone, true)
   }
 
-  unhighlightZone(zone: string) {
+  unhighlightZone = (zone: string) => {
     return this.toggleZoneHighlight(zone, false)
   }
 
-  toggleZoneHighlight(zone: string, shouldHighlight = true) {
+  toggleZoneHighlight = (zone: string, shouldHighlight = true) => {
     if (!zone) {
       return
     }
@@ -335,15 +333,15 @@ export default class TicketMap extends Component<Props, State> {
     return this.fillZone(zoneId, shouldHighlight)
   }
 
-  selectZone(zone: string) {
+  selectZone = (zone: string) => {
     return this.toggleZoneSelect(zone, true)
   }
 
-  deselectZone(zone: string) {
+  deselectZone = (zone: string) => {
     return this.toggleZoneSelect(zone, false)
   }
 
-  toggleZoneSelect(zone: string, shouldHighlight = true) {
+  toggleZoneSelect = (zone: string, shouldHighlight = true) => {
     if (!zone) {
       return
     }
@@ -382,7 +380,10 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   fillUnavailableColors = () => {
-    this.getAllPaths().forEach(element => element.setAttribute('fill', element.getAttribute('data-unavailable-color')))
+    this.getAllPaths().forEach(element => {
+      element.setAttribute('fill', element.getAttribute('data-unavailable-color'))
+      element.setAttribute('opacity', 1)
+    })
   }
 
   getAllPaths = (id) =>

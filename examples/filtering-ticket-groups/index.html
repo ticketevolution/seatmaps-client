@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:,">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="./main.css" />
+</head>
+
+<body>
+  <div id="container">
+    <ul id="filters">
+      <li>Quantity <input name="quantity" type="number" min="1" /></li>
+      <li>
+        <label>
+          Min Price: <span id="min-price"></span> <input name="min-price" type="range" min="1" max="1000" step="10" />
+        </label>
+        <label>
+          Max Price <span id="max-price"></span> <input name="max-price" type="range" min="1" max="1000" step="10" />
+        </label>
+      </li>
+      <li>
+        Type
+        <label>
+          <input name="type" type="checkbox" value="Physical" />
+          Physical
+        </label>
+        <label>
+          <input name="type" type="checkbox" value="TM_mobile" />
+          TM_Mobile
+        </label>
+        <label>
+          <input name="type" type="checkbox" value="Eticket" />
+          Eticket
+        </label>
+      </li>
+    </ul>
+    <div id="map"></div>
+    <div id="ticketGroups"></div>
+  </div>
+  <script src="../../build/tevomaps.js"></script>
+  <script src="./main.js"></script>
+</body>
+
+</html>
