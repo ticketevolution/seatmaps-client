@@ -131,7 +131,7 @@ export default class TicketMap extends Component<Props, State> {
       tooltipZoneId: '',
       tooltipX: 0,
       tooltipY: 0,
-      ticketGroups: []
+      ticketGroups: this.props.ticketGroups
     }
 
     this.publicApi = {
