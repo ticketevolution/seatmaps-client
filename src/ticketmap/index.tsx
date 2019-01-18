@@ -3,6 +3,7 @@ import { defaultMemoize, createSelectorCreator } from 'reselect'
 import { isEqual } from 'lodash'
 import ZoomSettings from './zoomSettings'
 import Tooltip from './tooltip'
+import Legend from './legend'
 
 export interface TicketGroup {
   tevo_section_name: string
@@ -71,12 +72,14 @@ interface TicketGroupsBySectionByZone {
   }
 }
 
+const $ticketGroups = (state: State) => state.ticketGroups
+
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual)
 
 const $missingSectionIds = createDeepEqualSelector(
-  (state: State) => state.ticketGroups,
   (state: State) => state.sectionZoneMapping,
-  (ticketGroups, sectionZoneMapping) => ticketGroups
+  $ticketGroups,
+  (sectionZoneMapping, ticketGroups) => ticketGroups
     .map(ticketGroup => ticketGroup.tevo_section_name.toLowerCase())
     .filter(sectionId => sectionZoneMapping[sectionId] === undefined)
 )
@@ -95,6 +98,48 @@ const $availableTicketGroups = createDeepEqualSelector(
         price: ticketGroup.retail_price
       }
     }).filter(ticketGroup => ticketGroup)
+)
+
+const $priceSortedTicketGroups = createDeepEqualSelector(
+  $ticketGroups,
+  ticketGroups => ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
+)
+
+const $sectionPercentiles = (state: State, props: Props) => props.sectionPercentiles
+
+const $costRanges = createDeepEqualSelector(
+  $sectionPercentiles,
+  $priceSortedTicketGroups,
+  (percentiles, ticketGroups) => {
+    const costRanges = Object.entries(percentiles)
+      .map(([percentile, color]) => ({
+        percentile: parseFloat(percentile),
+        color,
+        min: 0,
+        max: 0,
+        ticketGroups: []
+      }))
+      .sort((a, b) => a.percentile - b.percentile)
+
+    for (let i = 0; i < ticketGroups.length; i++) {
+      const percentile = i / ticketGroups.length
+      for (const costRange of costRanges) {
+        if (costRange.percentile > percentile) {
+          costRange.ticketGroups.push(ticketGroups[i])
+          break
+        }
+      }
+    }
+
+    costRanges.forEach(costRange => {
+      if (costRange.ticketGroups.length > 0) {
+        costRange.min = costRange.ticketGroups[0].retail_price
+        costRange.max = costRange.ticketGroups[costRange.ticketGroups.length - 1].retail_price
+      }
+    })
+
+    return costRanges
+  }
 )
 
 export default class TicketMap extends Component<Props, State> {
@@ -614,6 +659,7 @@ export default class TicketMap extends Component<Props, State> {
             opacity: this.state.mapSvg ? 1 : 0
           }}
         />
+        <Legend ranges={$costRanges(this.state, this.props)}/>
       </div>
     )
   }
