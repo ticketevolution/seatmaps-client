@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import ResetZoom from '../../assets/reset-zoom.svg'
 import { buttonStyle } from './styles'
