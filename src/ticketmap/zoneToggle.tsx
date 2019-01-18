@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import Toggle from 'react-toggled/preact'
 import { toggleTextStyle } from './styles'
 

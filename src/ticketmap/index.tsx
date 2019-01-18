@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import { defaultMemoize, createSelectorCreator } from 'reselect'
 import { isEqual } from 'lodash'
 import ZoomSettings from './zoomSettings'

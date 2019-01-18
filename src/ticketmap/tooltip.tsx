@@ -1,4 +1,4 @@
-import { Component, CSSProperties } from 'react'
+import React, { Component, CSSProperties } from 'react'
 import { NormalizedTicketGroup } from './index'
 
 interface Props {
