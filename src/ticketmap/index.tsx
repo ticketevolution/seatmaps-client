@@ -72,6 +72,14 @@ interface TicketGroupsBySectionByZone {
   }
 }
 
+interface CostRange {
+  color: string
+  min: number
+  max: number
+  percentile: number
+  ticketGroups: TicketGroup[]
+}
+
 const $ticketGroups = (state: State) => state.ticketGroups
 
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual)
@@ -118,7 +126,7 @@ const $costRanges = createDeepEqualSelector(
         min: 0,
         max: 0,
         ticketGroups: []
-      }))
+      } as CostRange))
       .sort((a, b) => a.percentile - b.percentile)
 
     for (let i = 0; i < ticketGroups.length; i++) {
@@ -493,13 +501,16 @@ export default class TicketMap extends Component<Props, State> {
   getDefaultColor(ticketGroups: TicketGroup[]) {
     const { sectionPercentiles } = this.props
     const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0]
-    const percentile = this.sortedTicketGroupPrices.indexOf(lowestTicketPriceInSection) / this.sortedTicketGroupPrices.length
-    const sectionPercentileKeys = Object.keys(sectionPercentiles).map(key => +key).sort()
-    for (const key of sectionPercentileKeys) {
-      if (percentile <= key) {
-        return sectionPercentiles[key]
+
+    const ranges = $costRanges(this.state, this.props)
+
+    for (const range of ranges) {
+      if (range.max > lowestTicketPriceInSection) {
+        return range.color
       }
     }
+
+    return ranges[ranges.length - 1]
   }
 
   /**
@@ -602,7 +613,7 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   render() {
-    const containerStyle: React.CSSProperties  = {
+    const containerStyle: React.CSSProperties = {
       height: 'inherit',
       minHeight: 'inherit',
       minWidth: 'inherit',
@@ -659,7 +670,7 @@ export default class TicketMap extends Component<Props, State> {
             opacity: this.state.mapSvg ? 1 : 0
           }}
         />
-        <Legend ranges={$costRanges(this.state, this.props)}/>
+        <Legend ranges={$costRanges(this.state, this.props)} />
       </div>
     )
   }
