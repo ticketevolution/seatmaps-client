@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface State {
-   open: boolean 
+  open: boolean
 }
 
 const styles = {
@@ -28,8 +28,7 @@ const styles = {
     opacity: .7
   } as CSSProperties,
   item: {
-    padding: 10,
-    cursor: 'pointer'
+    padding: 10
   } as CSSProperties,
   icon: {
     marginRight: 5
@@ -47,13 +46,13 @@ export default class Legend extends Component<Props, State> {
 
     return (
       <div style={styles.container}>
-        <div style={styles.item} onClick={() => this.setState({ open: !open })}>
-          <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} style={styles.icon}/>
+        <div style={{ ...styles.item, cursor: 'pointer' }} onClick={() => this.setState({ open: !open })}>
+          <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} style={styles.icon} />
           <span>{open ? 'Hide' : 'Show'} Map Legend</span>
         </div>
         {ranges && open && ranges.map(range => (
           <div style={styles.item}>
-            <Swatch color={range.color} style={styles.icon}/>
+            <Swatch color={range.color} style={styles.icon} />
             <span>${Math.floor(range.min)} - ${Math.ceil(range.max)}</span>
           </div>
         ))}
