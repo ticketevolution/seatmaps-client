@@ -113,7 +113,8 @@ export default class TicketMap extends Component<Props, State> {
       '0.6': '#D6226A',
       '0.8': '#a333c8',
       '1': '#2A6EBB'
-    }
+    },
+    ticketGroups: []
   }
 
   constructor(props: Props) {
