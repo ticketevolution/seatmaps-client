@@ -113,7 +113,7 @@ const $priceSortedTicketGroups = createDeepEqualSelector(
   ticketGroups => ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
 )
 
-const $sectionPercentiles = (state: State, props: Props) => props.sectionPercentiles
+const $sectionPercentiles = (_state: State, props: Props) => props.sectionPercentiles
 
 const $costRanges = createDeepEqualSelector(
   $sectionPercentiles,
