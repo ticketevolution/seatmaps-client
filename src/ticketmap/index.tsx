@@ -509,7 +509,7 @@ export default class TicketMap extends Component<Props, State> {
       }
     }
 
-    return ranges[ranges.length - 1]
+    return ranges[ranges.length - 1].color
   }
 
   /**
