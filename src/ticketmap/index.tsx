@@ -499,7 +499,6 @@ export default class TicketMap extends Component<Props, State> {
    */
 
   getDefaultColor(ticketGroups: TicketGroup[]) {
-    const { sectionPercentiles } = this.props
     const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0]
 
     const ranges = $costRanges(this.state, this.props)
