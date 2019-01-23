@@ -262,10 +262,10 @@ export default class TicketMap extends Component<Props, State> {
 
   setupMap() {
     const mapSvg = this.mapRootRef.querySelector('svg')
-    mapSvg.style.width = 'inherit'
-    mapSvg.style.height = 'inherit'
+    mapSvg.style.width = '100%'
+    mapSvg.style.height = '100%'
     mapSvg.style.minWidth = '100%'
-    mapSvg.style.minHeight = 'inherit'
+    mapSvg.style.minHeight = '100%'
 
     this.setUnavailableColors()
 
@@ -613,9 +613,9 @@ export default class TicketMap extends Component<Props, State> {
 
   render() {
     const containerStyle: React.CSSProperties = {
-      height: 'inherit',
-      minHeight: 'inherit',
-      minWidth: 'inherit',
+      height: '100%',
+      minHeight: '100%',
+      minWidth: '100%',
       position: 'relative'
     }
 
@@ -662,10 +662,10 @@ export default class TicketMap extends Component<Props, State> {
           ref={element => { this.mapRootRef = element }}
           style={{
             cursor: '-webkit-grab',
-            height: 'inherit',
-            width: 'inherit',
-            minHeight: 'inherit',
-            minWidth: 'inherit',
+            height: '100%',
+            width: '100%',
+            minHeight: '100%',
+            minWidth: '100%',
             opacity: this.state.mapSvg ? 1 : 0
           }}
         />
