@@ -9,7 +9,8 @@ export const buttonStyle: React.CSSProperties = {
   fontSize: '24px',
   textDecoration: 'none',
   fontWeight: 500,
-  cursor: 'pointer'
+  cursor: 'pointer',
+  lineHeight: 1.5,
 }
 
 export const toggleTextStyle: React.CSSProperties = {

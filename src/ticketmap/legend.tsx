@@ -25,7 +25,8 @@ const styles = {
     border: '1px solid rgb(224, 224, 224)',
     borderRadius: 4,
     backgroundColor: 'white',
-    opacity: .7
+    opacity: .7,
+    textAlign: 'left'
   } as CSSProperties,
   item: {
     padding: 10
