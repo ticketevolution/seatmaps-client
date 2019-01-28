@@ -24,6 +24,7 @@ export interface Props {
   venueId: string
   configurationId: string
   isZoneDefault?: boolean
+  showLegend?: boolean
   mapFontFamily?: string
   selectedSections?: string[]
   ticketGroups?: TicketGroup[]
@@ -167,7 +168,8 @@ export default class TicketMap extends Component<Props, State> {
       '0.8': '#a333c8',
       '1': '#2A6EBB'
     },
-    ticketGroups: []
+    ticketGroups: [],
+    showLegend: true
   }
 
   constructor(props: Props) {
@@ -671,7 +673,7 @@ export default class TicketMap extends Component<Props, State> {
             opacity: this.state.mapSvg ? 1 : 0
           }}
         />
-        <Legend ranges={$costRanges(this.state, this.props)} />
+        {this.props.showLegend && <Legend ranges={$costRanges(this.state, this.props)} />}
       </div>
     )
   }
