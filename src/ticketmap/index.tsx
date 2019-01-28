@@ -478,6 +478,8 @@ export default class TicketMap extends Component<Props, State> {
     if (isAnAvailableSection) {
       this.fillPath(section, this.getDefaultColor(this.ticketGroupsBySection[section]), 'fill')
       this.fillPath(section, shouldHighlight ? '1' : '0.6', 'opacity')
+      this.fillPath(section, '1' , 'stroke-width')
+      this.fillPath(section, shouldHighlight ? '#4a4a4a' : '#FFFFFF', 'stroke')
     }
   }
 
