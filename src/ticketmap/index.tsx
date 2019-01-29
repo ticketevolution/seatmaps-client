@@ -524,39 +524,38 @@ export default class TicketMap extends Component<Props, State> {
    */
 
   onMouseOver = (event: React.MouseEvent<HTMLElement>) => {
-    const element = event.target as HTMLElement
-    if (element.hasAttribute('data-section-id')) {
-      const section = element.getAttribute('data-section-id').toLowerCase()
-      if (this.venueSections.includes(section)) {
-        return this.doHover(event.clientX, event.clientY, section)
-      }
-    } else if (element !== this.rootRef) {
-      return this.onMouseOver({
-        ...event,
-        target: element.parentNode
-      })
+    const element = event.target.closest('[data-section-id]')
+    
+    const isEnteringASection = !!element
+    if (!isEnteringASection) {
+      return
+    }
+
+    const section = element.getAttribute('data-section-id').toLowerCase()
+    if (this.venueSections.includes(section)) {
+      return this.doHover(event.clientX, event.clientY, section)
     }
   }
 
   onMouseOut = (event: React.MouseEvent<HTMLElement>) => {
-    const element = event.target as HTMLElement
-    if (event.relatedTarget && event.relatedTarget.nodeName === 'text') {
+    const enteringElement = event.relatedTarget
+
+    const isEnteringText = !!enteringElement && enteringElement.nodeName === 'text'
+    if (isEnteringText) {
       return
     }
-    if (element.hasAttribute('data-section-id')) {
-      const section = element.getAttribute('data-section-id').toLowerCase()
-      if (this.venueSections.includes(section)) {
-        return this.doHoverCleanup(section)
-      }
-    } else if (element !== this.rootRef) {
-      return this.onMouseOut({
-        ...event,
-        target: element.parentNode
-      })
+
+    const enteringSection = !!enteringElement && enteringElement.closest('[data-section-id]')
+    const isEnteringTheSameSection = !!enteringSection &&
+      enteringSection.getAttribute('data-section-id').toLowerCase() === this.state.currentHoveredSection    
+    if (isEnteringTheSameSection) {
+      return
     }
+    
+    return this.doHoverCleanup()
   }
 
-  onClick = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+  onClick = () => {
     const section = this.state.currentHoveredSection
     if (this.venueSections.includes(section)) {
       return this.selectSectionOrZone(section)
@@ -595,7 +594,9 @@ export default class TicketMap extends Component<Props, State> {
     this.setState(newState)
   }
 
-  doHoverCleanup(section: string): void {
+  doHoverCleanup(): void {
+    const section = this.state.currentHoveredSection
+
     this.setState({
       tooltipActive: false,
       currentHoveredZone: null,
