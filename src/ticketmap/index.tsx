@@ -444,7 +444,10 @@ export default class TicketMap extends Component<Props, State> {
 
   getAllPaths = (id) =>
     Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
-      .reduce((memo, element) => [...memo, element, ...element.querySelectorAll('path')], [])
+      .reduce((memo, element) => {
+        const children = element.querySelectorAll('path');
+        return children.length ? [...memo, ...children] : [...memo, element]
+      }, [])
 
   /**
    * Helpers
