@@ -40,7 +40,7 @@ export default class ZoomSettings extends Component<Props> {
           style={buttonStyle}
         >‐</a>
         <a
-          style={{ ...buttonStyle, paddingTop: '5px' }}
+          style={{ ...buttonStyle, paddingTop: '8px' }}
           onClick={() => this.mapZoom.reset()}
         ><img src={ResetZoom} /></a>
       </div>
