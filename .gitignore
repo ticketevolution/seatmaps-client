@@ -12,6 +12,7 @@ coverage
 # local development
 .cache
 stats.json
+.vscode
 
 # misc
 .DS_Store
