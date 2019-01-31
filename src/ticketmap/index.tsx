@@ -52,11 +52,11 @@ interface State {
 }
 
 interface PublicApi {
-  updateTicketGroups: any
-  highlightSection: any
-  unhighlightSection: any
-  selectSection: any
-  deselectSection: any
+  updateTicketGroups(ticketGroups: TicketGroup[]): void
+  highlightSection(section: string): void
+  unhighlightSection(section?: string): void
+  selectSection(section: string): void
+  deselectSection(section?: string): void
 }
 
 interface Manifest {
@@ -151,7 +151,7 @@ const $costRanges = createDeepEqualSelector(
   }
 )
 
-const areSetsEqual = (setA, setB) => {
+const areSetsEqual = (setA: Set, setB: Set): boolean => {
   if (setA.size !== setB.size) {
     return false
   }
@@ -339,9 +339,9 @@ export default class TicketMap extends Component<Props, State> {
    * Public Methods
    */
 
-  highlightSection = (section: string) => this.toggleSectionHighlight(section, true)
+  highlightSection = (section: string): void => this.toggleSectionHighlight(section, true)
 
-  unhighlightSection = (section?: string) => {
+  unhighlightSection = (section?: string): void => {
     if (!section) {
       this.setState({ currentHoveredSection: null })
       return this.updateMap()
@@ -349,23 +349,23 @@ export default class TicketMap extends Component<Props, State> {
     return this.toggleSectionHighlight(section, false)
   }
 
-  toggleSectionHighlight = (section: string, shouldHighlight = true) => {
+  toggleSectionHighlight = (section?: string, shouldHighlight: boolean = true): void => {
     if (!section) {
       return
     }
-    const sectionId = section.toLowerCase()
-    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.has(sectionId)
+
+    const sectionId: string = section.toLowerCase()
+    const isUnhighlightingSelectedSection: boolean = !shouldHighlight && this.state.selectedSections.has(sectionId)
     if (isUnhighlightingSelectedSection) {
       return
     }
+
     return this.fillSection(sectionId, shouldHighlight)
   }
 
-  selectSection = (section: string) => {
-    return this.toggleSectionSelect(section, true)
-  }
+  selectSection = (section: string): void => this.toggleSectionSelect(section, true)
 
-  deselectSection = (section?: string) => {
+  deselectSection = (section?: string): void => {
     if (!section) {
       this.state.selectedSections.clear()
       return this.updateMap()
@@ -373,15 +373,15 @@ export default class TicketMap extends Component<Props, State> {
     return this.toggleSectionSelect(section, false)
   }
 
-  toggleSectionSelect = (section: string, shouldHighlight = true) => {
+  toggleSectionSelect = (section: string, shouldHighlight: boolean = true): void => {
     if (!section) {
       return
     }
 
-    const sectionId = section.toLowerCase()
+    const sectionId: string = section.toLowerCase()
     this.fillSection(sectionId, shouldHighlight)
 
-    const selectedSections = new Set(this.state.selectedSections)
+    const selectedSections: Set<string> = new Set(this.state.selectedSections)
     if (shouldHighlight) {
       selectedSections.add(sectionId)
     } else {
@@ -391,54 +391,48 @@ export default class TicketMap extends Component<Props, State> {
     this.setState({ selectedSections })
   }
 
-  highlightZone = (zone: string) => {
-    return this.toggleZoneHighlight(zone, true)
-  }
+  highlightZone = (zone: string): void => this.toggleZoneHighlight(zone, true)
 
-  unhighlightZone = (zone: string) => {
-    return this.toggleZoneHighlight(zone, false)
-  }
+  unhighlightZone = (zone: string): void => this.toggleZoneHighlight(zone, false)
 
-  toggleZoneHighlight = (zone: string, shouldHighlight = true) => {
+  toggleZoneHighlight = (zone: string, shouldHighlight: boolean = true): void => {
     if (!zone) {
       return
     }
-    const zoneId = zone.toLowerCase()
-    const isUnhighlightingSelectedZone = !shouldHighlight && this.areAllSectionsInTheZoneSelected(zoneId)
+
+    const zoneId: string = zone.toLowerCase()
+    const isUnhighlightingSelectedZone: boolean = !shouldHighlight && this.areAllSectionsInTheZoneSelected(zoneId)
     if (isUnhighlightingSelectedZone) {
       return
     }
+
     return this.fillZone(zoneId, shouldHighlight)
   }
 
-  selectZone = (zone: string) => {
-    return this.toggleZoneSelect(zone, true)
-  }
+  selectZone = (zone: string): void => this.toggleZoneSelect(zone, true)
 
-  deselectZone = (zone: string) => {
-    return this.toggleZoneSelect(zone, false)
-  }
+  deselectZone = (zone: string): void => this.toggleZoneSelect(zone, false)
 
-  toggleZoneSelect = (zone: string, shouldHighlight = true) => {
+  toggleZoneSelect = (zone: string, shouldHighlight = true): void => {
     if (!zone) {
       return
     }
 
-    const zoneId = zone.toLowerCase()
+    const zoneId: string = zone.toLowerCase()
     this.fillZone(zoneId, shouldHighlight)
 
-    const sections = Object.keys(this.ticketGroupsBySectionByZone[zoneId])
-    const selectedSections = new Set(this.state.selectedSections)
+    const sections: string[] = Object.keys(this.ticketGroupsBySectionByZone[zoneId])
+    const selectedSections: Set<string> = new Set(this.state.selectedSections)
     if (shouldHighlight) {
-      sections.forEach(section => selectedSections.add(section))
+      sections.forEach((section: string): void => selectedSections.add(section))
     } else {
-      sections.forEach(section => selectedSections.delete(section))
+      sections.forEach((section: string): void => selectedSections.delete(section))
     }
 
     this.setState({ selectedSections })
   }
 
-  updateTicketGroups = (ticketGroups = this.props.ticketGroups) => {
+  updateTicketGroups = (ticketGroups: TicketGroup[] = this.props.ticketGroups): void => {
     this.setState({ ticketGroups })
   }
 
@@ -500,7 +494,7 @@ export default class TicketMap extends Component<Props, State> {
     }
   }
 
-  fillSection(section: string, shouldHighlight = true) {
+  fillSection(section: string, shouldHighlight = true): void {
     const isAnAvailableSection = this.venueSections.includes(section)
     if (isAnAvailableSection) {
       this.fillPath(section, this.getDefaultColor(this.ticketGroupsBySection[section]), 'fill')
