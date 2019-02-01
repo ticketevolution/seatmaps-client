@@ -151,6 +151,18 @@ const $costRanges = createDeepEqualSelector(
   }
 )
 
+const areSetsEqual = (setA, setB) => {
+  if (setA.size !== setB.size) {
+    return false
+  }
+  for (const element of setA) {
+    if (!setB.has(element)) {
+      return false
+    }
+  }
+  return true
+}
+
 export default class TicketMap extends Component<Props, State> {
   publicApi: PublicApi
   mapRootRef: HTMLElement
@@ -218,7 +230,7 @@ export default class TicketMap extends Component<Props, State> {
       this.updateMap()
     }
 
-    if (this.state.selectedSections !== prevState.selectedSections) {
+    if (!areSetsEqual(this.state.selectedSections, prevState.selectedSections)) {
       this.props.onSelection(Array.from(this.state.selectedSections))
     }
 
@@ -329,7 +341,13 @@ export default class TicketMap extends Component<Props, State> {
 
   highlightSection = (section: string) => this.toggleSectionHighlight(section, true)
 
-  unhighlightSection = (section: string) => this.toggleSectionHighlight(section, false)
+  unhighlightSection = (section?: string) => {
+    if (!section) {
+      this.setState({ currentHoveredSection: null })
+      return this.updateMap()
+    }
+    return this.toggleSectionHighlight(section, false)
+  }
 
   toggleSectionHighlight = (section: string, shouldHighlight = true) => {
     if (!section) {
@@ -347,7 +365,11 @@ export default class TicketMap extends Component<Props, State> {
     return this.toggleSectionSelect(section, true)
   }
 
-  deselectSection = (section: string) => {
+  deselectSection = (section?: string) => {
+    if (!section) {
+      this.state.selectedSections.clear()
+      return this.updateMap()
+    }
     return this.toggleSectionSelect(section, false)
   }
 
