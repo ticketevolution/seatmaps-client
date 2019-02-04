@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default class Tooltip extends Component<Props> {
-  container: HTMLElement
+  container!: HTMLElement
 
   render() {
     const { isActive, ticketGroups, x, y, name, color } = this.props
@@ -32,7 +32,7 @@ export default class Tooltip extends Component<Props> {
     let renderAboveTarget = true
     let renderRightOfTarget = true
     if (this.container && x !== undefined && y !== undefined) {
-      if (x + this.container.clientWidth > this.container.parentElement.clientWidth) {
+      if (this.container.parentElement && x + this.container.clientWidth > this.container.parentElement.clientWidth) {
         renderRightOfTarget = false
       }
 
@@ -61,7 +61,7 @@ export default class Tooltip extends Component<Props> {
     }
 
     return (
-      <div ref={element => {this.container = element}} style={containerStyle}>
+      <div ref={element => {this.container = element as HTMLElement}} style={containerStyle}>
         {!renderAboveTarget && <div style={{
           ...tipStyle,
           borderWidth: renderRightOfTarget ? '10px 0 0 10px' : '0 0 10px 10px',

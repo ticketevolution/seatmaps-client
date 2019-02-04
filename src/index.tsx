@@ -18,7 +18,7 @@ export default class SeatmapFactory {
       throw new Error('Seatmaps must be initialized with a DOM element.')
     }
 
-    let map: TicketMap
+    let map!: TicketMap
 
     render((
       <TicketMap
