@@ -81,6 +81,12 @@ interface CostRange {
   ticketGroups: TicketGroup[]
 }
 
+interface ElementProperties {
+  [key: string]: string
+}
+
+type PropertiesForElement = (element: HTMLElement) => ElementProperties
+
 const $ticketGroups = (state: State) => state.ticketGroups
 
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual)
@@ -226,7 +232,7 @@ export default class TicketMap extends Component<Props, State> {
   }
 
   componentDidUpdate(_prevProps: Props, prevState: State) {
-    if ($availableTicketGroups(prevState) != $availableTicketGroups(this.state)) {
+    if ($availableTicketGroups(prevState) !== $availableTicketGroups(this.state)) {
       this.updateMap()
     }
 
@@ -446,23 +452,23 @@ export default class TicketMap extends Component<Props, State> {
    * Colors
    */
 
-  fillPath = (id, color, type = 'fill') => {
-    if (!color) {
-      throw Error('Color is undefined for this section.')
-    }
-    this.getAllPaths(id).forEach(element => element.setAttribute(type, color))
-  }
-
   setUnavailableColors = () => {
-    this.getAllPaths().forEach(element => element.setAttribute('data-unavailable-color', element.getAttribute('fill')))
+    this.fillPathsForSection(element => ({ 'data-unavailable-color': element.getAttribute('fill') }))
   }
 
   fillUnavailableColors = () => {
-    this.getAllPaths().forEach(element => {
-      element.setAttribute('fill', element.getAttribute('data-unavailable-color'))
-      element.setAttribute('opacity', 1)
-    })
+    this.fillPathsForSection(element => ({
+      'fill': element.getAttribute('data-unavailable-color'),
+      'opacity': '1',
+      'stroke-width': '1',
+      'stroke': '#FFFFFF'
+    }))
   }
+
+  fillPathsForSection = (propertiesForElement: PropertiesForElement, section?: string): void =>
+    this.getAllPaths(section).forEach(element => 
+      Object.entries(propertiesForElement(element)).forEach(([property, value]) =>
+        element.setAttribute(property, value)))
 
   getAllPaths = (id) =>
     Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
@@ -503,10 +509,12 @@ export default class TicketMap extends Component<Props, State> {
   fillSection(section: string, shouldHighlight = true) {
     const isAnAvailableSection = this.venueSections.includes(section)
     if (isAnAvailableSection) {
-      this.fillPath(section, this.getDefaultColor(this.ticketGroupsBySection[section]), 'fill')
-      this.fillPath(section, shouldHighlight ? '1' : '0.6', 'opacity')
-      this.fillPath(section, '1' , 'stroke-width')
-      this.fillPath(section, shouldHighlight ? '#4a4a4a' : '#FFFFFF', 'stroke')
+      this.fillPathsForSection(element => ({
+        'fill': this.getDefaultColor(this.ticketGroupsBySection[section]),
+        'opacity': shouldHighlight ? '1' : '0.6',
+        'stroke-width': '1',
+        'stroke': shouldHighlight ? '#4a4a4a' : '#FFFFFF'
+      }), section)
     }
   }
 
@@ -517,8 +525,10 @@ export default class TicketMap extends Component<Props, State> {
     Object.keys(ticketGroupsBySection).forEach(section => {
       const isAnAvailableSection = this.venueSections.includes(section)
       if (isAnAvailableSection) {
-        this.fillPath(section, this.getDefaultColor(allTicketGroupsInZone), 'fill')
-        this.fillPath(section, shouldHighlight ? '1' : '0.6', 'opacity')
+        this.fillPathsForSection(element => ({
+          'fill': this.getDefaultColor(allTicketGroupsInZone),
+          'opacity': shouldHighlight ? '1' : '0.6'
+        }), section)
       }
     })
   }
