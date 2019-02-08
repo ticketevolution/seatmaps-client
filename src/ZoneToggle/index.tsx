@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
 import Toggle from 'react-toggled/preact'
-import { toggleTextStyle } from './styles'
 
 interface Props {
   isZoneToggled: boolean
   onToggle(): void
+}
+
+const toggleTextStyle: React.CSSProperties = {
+  padding: '0 5px',
+  fontFamily: 'sans-serif',
+  fontSize: '14px'
 }
 
 export default class ZoneToggle extends Component<Props> {
