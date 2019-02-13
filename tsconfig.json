@@ -2,11 +2,15 @@
     "compilerOptions": {
         "outDir": "build",
         "module": "esNext",
-        "target": "es6",
+        "target": "esnext",
+        "noEmit": false,
+        "strict": true,
         "allowJs": true,
-        "noImplicitAny": false,
-        "jsx": "preserve",
+        "noImplicitReturns": true,
+        "jsx": "react",
         "moduleResolution": "node",
+        "isolatedModules": true,
+        "esModuleInterop": true,
         "lib": [
             "esnext",
             "dom",
@@ -17,6 +21,7 @@
             "react-dom": [
                 "node_modules/preact-compat"
             ]
-        }
+        },
     },
+    "include": ["src"]
 }
