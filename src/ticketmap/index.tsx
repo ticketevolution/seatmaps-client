@@ -60,7 +60,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       '1': '#2A6EBB'
     },
     ticketGroups: [],
-    showLegend: true
+    showLegend: true,
+    mapFontFamily: 'inherit'
   }
 
   constructor(props: Props & DefaultProps) {
@@ -487,14 +488,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   render() {
-    const containerStyle: React.CSSProperties = {
-      position: 'relative'
-    }
-
-    if (this.props.mapFontFamily) {
-      containerStyle.fontFamily = this.props.mapFontFamily
-    }
-
     return (
       <div
         ref={element => { this.rootRef = element as HTMLElement }}
@@ -502,7 +495,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
         onClick={this.onClick}
-        style={containerStyle}
+        style={{
+          position: 'relative',
+          fontFamily: this.props.mapFontFamily
+        }}
         onTouchMove={() => this.setState({ isDragging: true })}
         onTouchEnd={event => {
           if (!this.state.isDragging) {
