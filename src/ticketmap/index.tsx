@@ -151,8 +151,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   setupMap() {
     const mapSvg = this.mapRootRef.querySelector('svg') as SVGSVGElement
-    mapSvg.style.width = '100%'
-    mapSvg.style.height = '100%'
+    const [x, y, width, height] = (mapSvg.getAttribute('viewBox') || '0 0 100% 100%').split(' ')
+    mapSvg.setAttribute('width', width)
+    mapSvg.setAttribute('height', height)
     mapSvg.style.minWidth = '100%'
     mapSvg.style.minHeight = '100%'
 
@@ -487,9 +488,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   render() {
     const containerStyle: React.CSSProperties = {
-      height: '100%',
-      minHeight: '100%',
-      minWidth: '100%',
       position: 'relative'
     }
 
@@ -536,10 +534,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           ref={element => { this.mapRootRef = element as HTMLElement }}
           style={{
             cursor: '-webkit-grab',
-            height: '100%',
-            width: '100%',
-            minHeight: '100%',
-            minWidth: '100%',
             opacity: this.state.mapSvg ? 1 : 0
           }}
         />

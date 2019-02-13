@@ -31,10 +31,6 @@ export default class ZoomSettings extends Component<Props> {
     this.mapZoom = svgPanZoom(this.props.mapSvg, {
       zoomScaleSensitivity: 0.8,
       minZoom: 0.8,
-      maxZoom: 10,
-      center: true,
-      fit: true,
-      contain: false
     })
   }
 
