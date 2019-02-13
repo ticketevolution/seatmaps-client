@@ -1,5 +1,5 @@
 import React, { render } from 'react-dom'
-import TicketMap, { Props } from './ticketmap/index'
+import TicketMap, { Props } from './TicketMap'
 
 export default class SeatmapFactory {
   options: Props

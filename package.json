@@ -1,6 +1,6 @@
 {
   "name": "ticket-evolution-seatmaps",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "interactive seatmaps",
   "repository": {
     "url": "git@github.com:ticketevolution/seatmaps-client.git",

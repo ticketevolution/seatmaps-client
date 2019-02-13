@@ -5,7 +5,7 @@ interface Props {
     color: string
 }
 
-const Swatch = (props: Props) => <div style={{
+export default (props: Props) => <div style={{
     ...props.style,
     height: 14,
     width: 14,
@@ -13,5 +13,3 @@ const Swatch = (props: Props) => <div style={{
     backgroundColor: props.color,
     display: 'inline-block'
 }}/>
-
-export default Swatch

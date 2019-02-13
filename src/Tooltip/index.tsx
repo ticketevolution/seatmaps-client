@@ -1,5 +1,5 @@
 import React, { Component, CSSProperties } from 'react'
-import { NormalizedTicketGroup } from './index'
+import { NormalizedTicketGroup } from '../types'
 
 interface Props {
   isActive: boolean

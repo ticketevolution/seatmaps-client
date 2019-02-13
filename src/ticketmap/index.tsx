@@ -1,63 +1,24 @@
 import React, { Component } from 'react'
-import { defaultMemoize, createSelectorCreator } from 'reselect'
 import { isEqual } from 'lodash-es'
-import ZoomSettings from './zoomSettings'
-import Tooltip from './tooltip'
-import Legend from './legend'
 
-export interface TicketGroup {
-  tevo_section_name: string
-  retail_price: number
-}
+import ZoomSettings from '../ZoomSettings'
+import Tooltip from '../Tooltip'
+import Legend from '../Legend'
 
-export interface NormalizedTicketGroup {
-  section: string
-  zone?: string
-  price: number
-}
+import { TicketGroup, NormalizedTicketGroup } from '../types'
 
-interface Percentiles {
-  [key: string]: string
-}
+export * from './types'
+import { State, Props, DefaultProps, SectionZoneMapping } from './types'
 
-interface SectionZoneMapping {
-  [section: string]: {
-    sectionName: string
-    zone?: string
-  }
-}
-
-interface DefaultProps {
-  isZoneDefault: boolean
-  showLegend: boolean
-  mapFontFamily?: string
-  selectedSections: string[]
-  ticketGroups: TicketGroup[]
-  sectionPercentiles: Percentiles
-  mapsDomain: string
-  onSelection(sections: string[]): void
-}
-
-export interface Props extends Partial<DefaultProps> {
-  venueId: string
-  configurationId: string
-}
-
-interface State {
-  mapSvg?: SVGSVGElement
-  sectionZoneMapping: SectionZoneMapping
-  ticketGroups: TicketGroup[]
-  selectedSections: Set<string>
-  isZoneToggled: boolean
-  isDragging: boolean
-  currentHoveredZone?: string
-  currentHoveredSection?: string
-  tooltipActive: boolean
-  tooltipSectionName: string
-  tooltipZoneId: string
-  tooltipX: number
-  tooltipY: number
-}
+import {
+  $availableTicketGroups,
+  $missingSectionIds,
+  $areAllSectionsInTheZoneSelected,
+  $ticketGroupsBySectionByZone,
+  $ticketGroupsBySection,
+  $venueSections,
+  $costRanges
+} from './selectors'
 
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
@@ -69,26 +30,10 @@ interface PublicApi {
 
 interface Manifest {
   sections: {
-    [key: string]: {
-      zone_name: string
-    }
+      [key: string]: {
+          zone_name: string
+      }
   }
-}
-
-interface NormalizedTicketGroupsBySection {
-  [section: string]: NormalizedTicketGroup[]
-}
-
-interface NormalizedTicketGroupsBySectionByZone {
-  [zone: string]: NormalizedTicketGroupsBySection
-}
-
-interface CostRange {
-  color: string
-  min: number
-  max: number
-  percentile: number
-  ticketGroups: TicketGroup[]
 }
 
 interface ElementProperties {
@@ -96,76 +41,6 @@ interface ElementProperties {
 }
 
 type PropertiesForElement = (element: Element) => ElementProperties
-
-const $ticketGroups = (state: State) => state.ticketGroups
-
-const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual)
-
-const $missingSectionIds = createDeepEqualSelector(
-  (state: State) => state.sectionZoneMapping,
-  $ticketGroups,
-  (sectionZoneMapping, ticketGroups) => ticketGroups
-    .map(ticketGroup => ticketGroup.tevo_section_name.toLowerCase())
-    .filter(sectionId => sectionZoneMapping[sectionId] === undefined)
-)
-
-const $availableTicketGroups = createDeepEqualSelector(
-  (state: State) => state.ticketGroups,
-  (state: State) => state.sectionZoneMapping,
-  (ticketGroups, sectionZoneMapping) => ticketGroups
-    .map((ticketGroup): NormalizedTicketGroup => {
-      const section = ticketGroup.tevo_section_name.toLowerCase()
-      const zoneMapping = sectionZoneMapping[section]
-
-      return zoneMapping && {
-        section,
-        zone: zoneMapping.zone,
-        price: ticketGroup.retail_price
-      }
-    }).filter(ticketGroup => ticketGroup)
-)
-
-const $priceSortedTicketGroups = createDeepEqualSelector(
-  $ticketGroups,
-  ticketGroups => ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
-)
-
-const $sectionPercentiles = (_state: State, props: Props) => props.sectionPercentiles
-
-const $costRanges = createDeepEqualSelector(
-  $sectionPercentiles,
-  $priceSortedTicketGroups,
-  (percentiles = {}, ticketGroups) => {
-    const costRanges = Object.entries(percentiles)
-      .map(([percentile, color]) => ({
-        percentile: parseFloat(percentile),
-        color,
-        min: 0,
-        max: 0,
-        ticketGroups: []
-      } as CostRange))
-      .sort((a, b) => a.percentile - b.percentile)
-
-    for (let i = 0; i < ticketGroups.length; i++) {
-      const percentile = i / ticketGroups.length
-      for (const costRange of costRanges) {
-        if (costRange.percentile > percentile) {
-          costRange.ticketGroups.push(ticketGroups[i])
-          break
-        }
-      }
-    }
-
-    costRanges.forEach(costRange => {
-      if (costRange.ticketGroups.length > 0) {
-        costRange.min = costRange.ticketGroups[0].retail_price
-        costRange.max = costRange.ticketGroups[costRange.ticketGroups.length - 1].retail_price
-      }
-    })
-
-    return costRanges
-  }
-)
 
 export default class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi
@@ -294,46 +169,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Properties
    */
 
-  get sortedTicketGroupPrices() {
-    return $availableTicketGroups(this.state)
-      .map(group => group.price)
-      .sort((a, b) => a - b)
-  }
-
-  get ticketGroupsBySectionByZone(): NormalizedTicketGroupsBySectionByZone {
-    const ticketGroupsBySection = this.ticketGroupsBySection
-    return Object.keys(ticketGroupsBySection).reduce((memo, section) => {
-      const { zone } = this.state.sectionZoneMapping[section]
-      if (!zone) {
-        return memo
-      }
-      return {
-        ...memo,
-        [zone]: {
-          ...(memo[zone] || {}),
-          [section]: ticketGroupsBySection[section]
-        }
-      }
-    }, {} as NormalizedTicketGroupsBySectionByZone)
-  }
-
-  get ticketGroupsBySection(): NormalizedTicketGroupsBySection {
-    return $availableTicketGroups(this.state).reduce((memo, ticketGroup) => {
-      const { section } = ticketGroup
-      return {
-        ...memo,
-        [section]: [
-          ...(memo[section] || []),
-          ticketGroup
-        ]
-      }
-    }, {} as NormalizedTicketGroupsBySection)
-  }
-
-  get venueSections() {
-    return Object.keys(this.ticketGroupsBySection)
-  }
-
   get configFilePath() {
     return `${this.props.mapsDomain}/${this.props.venueId}/${this.props.configurationId}`
   }
@@ -356,17 +191,17 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     if (!section) {
       return
     }
+
     const sectionId = section.toLowerCase()
     const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.has(sectionId)
     if (isUnhighlightingSelectedSection) {
       return
     }
+
     return this.fillSection(sectionId, shouldHighlight)
   }
 
-  selectSection = (section: string) => {
-    return this.toggleSectionSelect(section, true)
-  }
+  selectSection = (section: string) => this.toggleSectionSelect(section, true)
 
   deselectSection = (section?: string) => {
     if (!section) {
@@ -394,9 +229,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.setState({ selectedSections })
   }
 
-  highlightZone = (zone: string) => {
-    return this.toggleZoneHighlight(zone, true)
-  }
+  highlightZone = (zone: string) => this.toggleZoneHighlight(zone, true)
 
   unhighlightZone = (zone?: string) => {
     if (!zone) {
@@ -410,24 +243,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     if (!zone) {
       return
     }
+
     const zoneId = zone.toLowerCase()
-    const isUnhighlightingSelectedZone = !shouldHighlight && this.areAllSectionsInTheZoneSelected(zoneId)
+    const isUnhighlightingSelectedZone = !shouldHighlight && $areAllSectionsInTheZoneSelected(this.state)(zoneId)
     if (isUnhighlightingSelectedZone) {
       return
     }
+
     return this.fillZone(zoneId, shouldHighlight)
-  }
-
-  selectZone = (zone: string) => {
-    return this.toggleZoneSelect(zone, true)
-  }
-
-  deselectZone = (zone?: string) => {
-    if (!zone) {
-      this.state.selectedSections.clear()
-      return this.updateMap()
-    }
-    return this.toggleZoneSelect(zone, false)
   }
 
   toggleZoneSelect = (zone: string, shouldHighlight = true) => {
@@ -438,7 +261,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     const zoneId = zone.toLowerCase()
     this.fillZone(zoneId, shouldHighlight)
 
-    const sections = Object.keys(this.ticketGroupsBySectionByZone[zoneId])
+    const sections = Object.keys($ticketGroupsBySectionByZone(this.state)[zoneId])
     const selectedSections = new Set(this.state.selectedSections)
     if (shouldHighlight) {
       sections.forEach(section => selectedSections.add(section))
@@ -449,26 +272,24 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.setState({ selectedSections })
   }
 
-  updateTicketGroups = (ticketGroups = this.props.ticketGroups) => {
+  updateTicketGroups = (ticketGroups = this.props.ticketGroups) =>
     this.setState({ ticketGroups })
-  }
 
   /**
    * Colors
    */
 
-  setUnavailableColors = () => {
-    this.fillPathsForSection(element => ({ 'data-unavailable-color': element.getAttribute('fill') as string }))
-  }
+  setUnavailableColors = () =>
+    this.fillPathsForSection(element =>
+      ({ 'data-unavailable-color': element.getAttribute('fill') as string }))
 
-  fillUnavailableColors = () => {
+  fillUnavailableColors = () =>
     this.fillPathsForSection(element => ({
       'fill': element.getAttribute('data-unavailable-color') as string,
       'opacity': '1',
       'stroke-width': '1',
       'stroke': '#FFFFFF'
     }))
-  }
 
   fillPathsForSection = (propertiesForElement: PropertiesForElement, section?: string): void =>
     this.getAllPaths(section).forEach(element => 
@@ -487,25 +308,15 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Helpers
    */
 
-  getAllSectionsInZoneBySectionId(section: string) {
-    const zoneMeta = this.state.sectionZoneMapping[section] || {}
-    return this.venueSections.filter((venueSection) => this.state.sectionZoneMapping[venueSection].zone === zoneMeta.zone)
-  }
-
-  areAllSectionsInTheZoneSelected(zone: string) {
-    return Object.keys(this.ticketGroupsBySectionByZone[zone])
-      .every(section => this.state.selectedSections.has(section))
-  }
-
   updateMap() {
     this.fillUnavailableColors()
     if (this.state.isZoneToggled) {
-      Object.keys(this.ticketGroupsBySectionByZone).forEach(zone => {
-        const shouldHighight = this.areAllSectionsInTheZoneSelected(zone)
+      Object.keys($ticketGroupsBySectionByZone(this.state)).forEach(zone => {
+        const shouldHighight = $areAllSectionsInTheZoneSelected(this.state)(zone)
         this.toggleZoneSelect(zone, shouldHighight)
       })
     } else {
-      Object.keys(this.ticketGroupsBySection).forEach(section => {
+      Object.keys($ticketGroupsBySection(this.state)).forEach(section => {
         const shouldHighight = this.state.selectedSections.has(section)
         this.toggleSectionSelect(section, shouldHighight)
       })
@@ -513,10 +324,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   fillSection(section: string, shouldHighlight = true) {
-    const isAnAvailableSection = this.venueSections.includes(section)
+    const isAnAvailableSection = $venueSections(this.state).includes(section)
     if (isAnAvailableSection) {
       this.fillPathsForSection(element => ({
-        'fill': this.getDefaultColor(this.ticketGroupsBySection[section]),
+        'fill': this.getDefaultColor($ticketGroupsBySection(this.state)[section]),
         'opacity': shouldHighlight ? '1' : '0.6',
         'stroke-width': '1',
         'stroke': shouldHighlight ? '#4a4a4a' : '#FFFFFF'
@@ -525,11 +336,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   fillZone(zone: string, shouldHighlight = true) {
-    const ticketGroupsBySection = this.ticketGroupsBySectionByZone[zone]
+    const ticketGroupsBySection = $ticketGroupsBySectionByZone(this.state)[zone]
     const allTicketGroupsInZone = Object.values(ticketGroupsBySection)
       .reduce((memo, ticketGroupsInSection) => [...memo, ...ticketGroupsInSection], [])
     Object.keys(ticketGroupsBySection).forEach(section => {
-      const isAnAvailableSection = this.venueSections.includes(section)
+      const isAnAvailableSection = $venueSections(this.state).includes(section)
       if (isAnAvailableSection) {
         this.fillPathsForSection(element => ({
           'fill': this.getDefaultColor(allTicketGroupsInZone),
@@ -573,7 +384,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
 
     const section = sectionId.toLowerCase()
-    if (this.venueSections.includes(section)) {
+    if ($venueSections(this.state).includes(section)) {
       return this.doHover(event.clientX, event.clientY, section)
     }
   }
@@ -601,7 +412,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     if (!section) {
       return
     }
-    if (this.venueSections.includes(section)) {
+    if ($venueSections(this.state).includes(section)) {
       return this.selectSectionOrZone(section)
     }
   }
@@ -667,7 +478,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     if (this.state.isZoneToggled) {
       const { zone } = this.state.sectionZoneMapping[section]
       if (zone) {
-        this.toggleZoneSelect(zone, !this.areAllSectionsInTheZoneSelected(zone))
+        this.toggleZoneSelect(zone, !$areAllSectionsInTheZoneSelected(this.state)(zone))
       }
     } else {
       this.toggleSectionSelect(section, !this.state.selectedSections.has(section))
@@ -707,7 +518,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           x={this.state.tooltipX}
           y={this.state.tooltipY}
           name={this.state.tooltipSectionName}
-          color={this.state.currentHoveredSection ? this.getDefaultColor(this.ticketGroupsBySection[this.state.currentHoveredSection]) : ''}
+          color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
         <div style={{ display: 'flex' }}>

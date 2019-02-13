@@ -1,11 +1,26 @@
 import React, { Component } from 'react'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import ResetZoom from '../../assets/reset-zoom.svg'
-import { buttonStyle } from './styles'
 
 interface Props {
   mapSvg: SVGSVGElement
 }
+
+const buttonStyle: React.CSSProperties = {
+  width: '40px',
+  background: 'white',
+  color: '#4A4A4A',
+  border: '1px solid #E0E0E0',
+  borderRadius: '8px',
+  display: 'block',
+  textAlign: 'center',
+  fontSize: '24px',
+  textDecoration: 'none',
+  fontWeight: 500,
+  cursor: 'pointer',
+  lineHeight: 1.5,
+}
+
 
 export default class ZoomSettings extends Component<Props> {
   mapZoom: any
