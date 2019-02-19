@@ -30,7 +30,7 @@ export interface SectionZoneMapping {
 export interface DefaultProps {
     isZoneDefault: boolean
     showLegend: boolean
-    mapFontFamily?: string
+    mapFontFamily: string
     selectedSections: string[]
     ticketGroups: TicketGroup[]
     sectionPercentiles: Percentiles
