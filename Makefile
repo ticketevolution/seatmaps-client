@@ -44,3 +44,9 @@ analyze: ## Run the webpack analyzer
 	yarn analyze
 	@echo "\nOpen $(MAGENTA_COLOR)http://webpack.github.io/analyse/$(RESET_COLOR) in your browser and upload the stats.json file!"
 	@echo "$(BLUE_COLOR)(Tip: CMD + double-click the link!)$(RESET_COLOR)\n"
+
+copy-to-shell: build ## Build seatmaps and drop it into your local Shell instance
+	cp -r build /Users/Shared/workspace/shell/node_modules/ticket-evolution-seatmaps
+
+copy-to-core: build ## Build seatmaps and drop it into your local Core instance
+	cp -r build /Users/Shared/workspace/pos/node_modules/ticket-evolution-seatmaps

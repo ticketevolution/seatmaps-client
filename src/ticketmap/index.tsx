@@ -42,6 +42,13 @@ interface ElementProperties {
 
 type PropertiesForElement = (element: Element) => ElementProperties
 
+class MapNotFoundError extends Error {
+  name = 'MapNotFoundError'
+  constructor(message = 'This map is not currently available.') {
+    super(message)
+  }
+}
+
 export default class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi
   mapRootRef!: HTMLElement
@@ -76,7 +83,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       tooltipZoneId: '',
       tooltipX: 0,
       tooltipY: 0,
-      ticketGroups: this.props.ticketGroups
+      ticketGroups: this.props.ticketGroups,
+      mapNotFound: false
     }
 
     this.publicApi = {
@@ -99,6 +107,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       await this.fetchManifest()
     } catch (error) {
       console.error(error)
+      if (error.name === 'MapNotFoundError') {
+        this.setState({ mapNotFound: true })
+      }
     }
   }
 
@@ -117,11 +128,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   async fetchMap() {
-    const mapSvgUrl = `${this.configFilePath}/map.svg`
-    const mapNotAvailableUrl = 'https://maps.ticketevolution.com/maps/not_available.jpg' // Only exists on prod
-    let mapResponse = await fetch(mapSvgUrl)
+    const mapResponse = await fetch(`${this.configFilePath}/map.svg`)
     if (!mapResponse.ok) {
-      mapResponse = await fetch(mapNotAvailableUrl)
+      throw new MapNotFoundError();
     }
     const mapHtml = await mapResponse.text()
     // Can't use dangerouslySetInnerHTML={{ __html: this.state.mapHtml }} in this case because
@@ -488,6 +497,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   render() {
+    if (this.state.mapNotFound) {
+      return <img src="https://maps.ticketevolution.com/maps/not_available.jpg" style={{ width: '100%' }} />
+    }
+
     return (
       <div
         ref={element => { this.rootRef = element as HTMLElement }}
