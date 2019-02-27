@@ -57,4 +57,5 @@ export interface State {
     tooltipZoneId: string
     tooltipX: number
     tooltipY: number
+    mapNotFound: boolean
 }
