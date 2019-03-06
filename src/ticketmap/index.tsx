@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { isEqual } from 'lodash-es'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 import ZoomSettings from '../ZoomSettings'
 import Tooltip from '../Tooltip'
@@ -19,6 +21,7 @@ import {
   $venueSections,
   $costRanges
 } from './selectors'
+import Button from '../Button';
 
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
@@ -120,6 +123,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
     if (!isEqual(this.state.selectedSections, prevState.selectedSections)) {
       this.props.onSelection(Array.from(this.state.selectedSections))
+      this.updateMap()
     }
 
     if ($missingSectionIds(prevState) !== $missingSectionIds(this.state) && $missingSectionIds(this.state).length > 0) {
@@ -216,10 +220,16 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   deselectSection = (section?: string) => {
     if (!section) {
-      this.state.selectedSections.clear()
-      return this.updateMap()
+      this.clearSelection()
+    } else {
+      return this.toggleSectionSelect(section, false)
     }
-    return this.toggleSectionSelect(section, false)
+  }
+
+  clearSelection = () => {
+    this.setState({
+      selectedSections: new Set()
+    })
   }
 
   toggleSectionSelect = (section: string, shouldHighlight = true) => {
@@ -496,12 +506,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
   }
 
-  clearSelection = () => {
-    this.setState({
-      selectedSections: new Set()
-    })
-  }
-
   render() {
     if (this.state.mapNotFound) {
       return <img src="https://maps.ticketevolution.com/maps/not_available.jpg" style={{ width: '100%' }} />
@@ -536,7 +540,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         />
         <div style={{ position: 'absolute', display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
-          <button onClick={this.clearSelection}>Unselect</button>
+          <Button onClick={this.clearSelection}>
+            <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 5 }} />
+            <span>Clear All</span>
+          </Button>
           {/* <ZoneToggle
             isZoneToggled={this.state.isZoneToggled}
             onToggle={isZoneToggled => {
