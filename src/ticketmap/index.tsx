@@ -496,6 +496,12 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
   }
 
+  clearSelection = () => {
+    this.setState({
+      selectedSections: new Set()
+    })
+  }
+
   render() {
     if (this.state.mapNotFound) {
       return <img src="https://maps.ticketevolution.com/maps/not_available.jpg" style={{ width: '100%' }} />
@@ -528,8 +534,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
-        <div style={{ display: 'flex' }}>
+        <div style={{ position: 'absolute', display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
+          <button onClick={this.clearSelection}>Unselect</button>
           {/* <ZoneToggle
             isZoneToggled={this.state.isZoneToggled}
             onToggle={isZoneToggled => {
