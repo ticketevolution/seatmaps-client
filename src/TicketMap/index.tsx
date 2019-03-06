@@ -115,11 +115,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   componentDidUpdate(_prevProps: Props, prevState: State) {
     const availableTicketGroupsDidChange = $availableTicketGroups(prevState) !== $availableTicketGroups(this.state)
-    const isNoLongerHovering = (prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined) ||
-      (prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined)
+    const isNoLongerHoveringOnSection = prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined
+    const isNoLongerHoveringOnZone = prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined
     const selectedSectionsDidChange = !isEqual(this.state.selectedSections, prevState.selectedSections)
 
-    if (isNoLongerHovering || availableTicketGroupsDidChange || selectedSectionsDidChange) {
+    if (this.mapRootRef !== null && (isNoLongerHoveringOnSection || isNoLongerHoveringOnZone || availableTicketGroupsDidChange || selectedSectionsDidChange)) {
       this.updateMap()
     }
 
@@ -305,12 +305,16 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         .forEach(([property, value]) =>
           element.setAttribute(property, value)))
 
-  getAllPaths = (id?: string) =>
-    Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
+  getAllPaths = (id?: string) => {
+    if (!this.mapRootRef) {
+      return []
+    }
+    return Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
       .reduce((memo, element) => {
         const children = element.querySelectorAll('path');
         return memo.concat(children.length ? Array.from(children) : [element])
       }, [] as Element[])
+  }
 
   /**
    * Helpers
