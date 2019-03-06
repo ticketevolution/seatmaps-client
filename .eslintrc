@@ -33,6 +33,9 @@
       "error",
       2
     ],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/member-delimiter-style": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "camelcase": "off"
