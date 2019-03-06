@@ -117,14 +117,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     const availableTicketGroupsDidChange = $availableTicketGroups(prevState) !== $availableTicketGroups(this.state)
     const isNoLongerHovering = (prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined) ||
       (prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined)
-    if (isNoLongerHovering || availableTicketGroupsDidChange) {
+    const selectedSectionsDidChange = !isEqual(this.state.selectedSections, prevState.selectedSections)
+
+    if (isNoLongerHovering || availableTicketGroupsDidChange || selectedSectionsDidChange) {
       this.updateMap()
     }
 
-    const selectedSectionsDidChange = !isEqual(this.state.selectedSections, prevState.selectedSections)
     if (selectedSectionsDidChange) {
       this.props.onSelection(Array.from(this.state.selectedSections))
-      this.updateMap()
     }
 
     if ($missingSectionIds(prevState) !== $missingSectionIds(this.state) && $missingSectionIds(this.state).length > 0) {
