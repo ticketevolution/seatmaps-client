@@ -15,7 +15,7 @@
     "start": "webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module --open",
     "analyze": "webpack --profile --json --progress > stats.json",
     "check-types": "tsc",
-    "lint": "eslint . --cache",
+    "lint": "eslint . --ext js --ext jsx --ext ts --ext tsx --cache",
     "fix": "yarn lint --fix"
   },
   "devDependencies": {
@@ -32,6 +32,7 @@
     "@types/lodash-es": "^4.17.1",
     "@types/react": "^16.8.1",
     "@types/react-dom": "^16.0.11",
+    "@typescript-eslint/eslint-plugin": "^1.4.2",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
     "compression-webpack-plugin": "^2.0.0",
