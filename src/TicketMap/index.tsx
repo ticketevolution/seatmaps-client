@@ -522,14 +522,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         />
         <div style={{ display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
-          {/* <ZoneToggle
-            isZoneToggled={this.state.isZoneToggled}
-            onToggle={isZoneToggled => {
-              this.setState({ isZoneToggled });
-              fillUnavailableColors();
-              this.updateMap();
-            }}
-          /> */}
         </div>
         <div
           ref={element => { this.mapRootRef = element as HTMLElement }}
