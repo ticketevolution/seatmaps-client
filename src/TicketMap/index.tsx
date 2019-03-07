@@ -336,8 +336,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       return Object.keys($ticketGroupsBySectionByZone(this.state)).forEach(zone =>
         this.fillZone(zone.toLowerCase(), $areAllSectionsInTheZoneSelected(this.state)(zone.toLowerCase())))
     }
-    Object.keys($ticketGroupsBySection(this.state)).forEach(section =>
-      this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section)))
+    Object.keys($ticketGroupsBySection(this.state)).forEach(section => {
+      this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section))
+
+      for (const path of this.getAllPaths(section)) {
+        (path as HTMLElement).style.cursor = 'pointer'
+      }
+    })
   }
 
   fillSection(section: string, shouldHighlight = true) {
