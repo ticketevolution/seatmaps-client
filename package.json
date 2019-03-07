@@ -11,7 +11,7 @@
     "npm": "^6.4.1"
   },
   "main": "build/tevomaps.js",
-  "author": "BRAD LARSON",
+  "author": "Ticket Evolution, Inc.",
   "license": "UNLICENSED",
   "scripts": {
     "build": "webpack --progress",
