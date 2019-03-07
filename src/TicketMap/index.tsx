@@ -117,13 +117,17 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   componentDidUpdate(_prevProps: Props, prevState: State) {
-    if ($availableTicketGroups(prevState) !== $availableTicketGroups(this.state)) {
+    const availableTicketGroupsDidChange = $availableTicketGroups(prevState) !== $availableTicketGroups(this.state)
+    const isNoLongerHoveringOnSection = prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined
+    const isNoLongerHoveringOnZone = prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined
+    const selectedSectionsDidChange = !isEqual(this.state.selectedSections, prevState.selectedSections)
+
+    if (this.mapRootRef !== null && (isNoLongerHoveringOnSection || isNoLongerHoveringOnZone || availableTicketGroupsDidChange || selectedSectionsDidChange)) {
       this.updateMap()
     }
 
-    if (!isEqual(this.state.selectedSections, prevState.selectedSections)) {
+    if (selectedSectionsDidChange) {
       this.props.onSelection(Array.from(this.state.selectedSections))
-      this.updateMap()
     }
 
     if ($missingSectionIds(prevState) !== $missingSectionIds(this.state) && $missingSectionIds(this.state).length > 0) {
@@ -196,8 +200,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   unhighlightSection = (section?: string) => {
     if (!section) {
-      this.setState({ currentHoveredSection: undefined })
-      return this.updateMap()
+      return this.setState({ currentHoveredSection: undefined })
     }
     return this.toggleSectionHighlight(section, false)
   }
@@ -238,8 +241,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
 
     const sectionId = section.toLowerCase()
-    this.fillSection(sectionId, shouldHighlight)
-
     const selectedSections = new Set(this.state.selectedSections)
     if (shouldHighlight) {
       selectedSections.add(sectionId)
@@ -254,8 +255,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   unhighlightZone = (zone?: string) => {
     if (!zone) {
-      this.setState({ currentHoveredZone: undefined })
-      return this.updateMap()
+      return this.setState({ currentHoveredZone: undefined })
     }
     return this.toggleZoneHighlight(zone, false)
   }
@@ -279,10 +279,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       return
     }
 
-    const zoneId = zone.toLowerCase()
-    this.fillZone(zoneId, shouldHighlight)
-
-    const sections = Object.keys($ticketGroupsBySectionByZone(this.state)[zoneId])
+    const sections = Object.keys($ticketGroupsBySectionByZone(this.state)[zone.toLowerCase()])
     const selectedSections = new Set(this.state.selectedSections)
     if (shouldHighlight) {
       sections.forEach(section => selectedSections.add(section))
@@ -313,17 +310,21 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }))
 
   fillPathsForSection = (propertiesForElement: PropertiesForElement, section?: string): void =>
-    this.getAllPaths(section).forEach(element => 
+    this.getAllPaths(section).forEach(element =>
       Object.entries(propertiesForElement(element))
         .forEach(([property, value]) =>
           element.setAttribute(property, value)))
 
-  getAllPaths = (id?: string) =>
-    Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
+  getAllPaths = (id?: string) => {
+    if (!this.mapRootRef) {
+      return []
+    }
+    return Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
       .reduce((memo, element) => {
         const children = element.querySelectorAll('path');
         return memo.concat(children.length ? Array.from(children) : [element])
       }, [] as Element[])
+  }
 
   /**
    * Helpers
@@ -332,16 +333,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   updateMap() {
     this.fillUnavailableColors()
     if (this.state.isZoneToggled) {
-      Object.keys($ticketGroupsBySectionByZone(this.state)).forEach(zone => {
-        const shouldHighight = $areAllSectionsInTheZoneSelected(this.state)(zone)
-        this.toggleZoneSelect(zone, shouldHighight)
-      })
-    } else {
-      Object.keys($ticketGroupsBySection(this.state)).forEach(section => {
-        const shouldHighight = this.state.selectedSections.has(section)
-        this.toggleSectionSelect(section, shouldHighight)
-      })
+      return Object.keys($ticketGroupsBySectionByZone(this.state)).forEach(zone =>
+        this.fillZone(zone.toLowerCase(), $areAllSectionsInTheZoneSelected(this.state)(zone.toLowerCase())))
     }
+    Object.keys($ticketGroupsBySection(this.state)).forEach(section =>
+      this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section)))
   }
 
   fillSection(section: string, shouldHighlight = true) {
@@ -420,11 +416,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
     const enteringSection = !!enteringElement && enteringElement.closest('[data-section-id]')
     const isEnteringTheSameSection = !!enteringSection &&
-      (enteringSection.getAttribute('data-section-id') as string).toLowerCase() === this.state.currentHoveredSection    
+      (enteringSection.getAttribute('data-section-id') as string).toLowerCase() === this.state.currentHoveredSection
     if (isEnteringTheSameSection) {
       return
     }
-    
+
     return this.doHoverCleanup()
   }
 
@@ -544,14 +540,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
             <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 5 }} />
             <span>Clear All</span>
           </Button>
-          {/* <ZoneToggle
-            isZoneToggled={this.state.isZoneToggled}
-            onToggle={isZoneToggled => {
-              this.setState({ isZoneToggled });
-              fillUnavailableColors();
-              this.updateMap();
-            }}
-          /> */}
         </div>
         <div
           ref={element => { this.mapRootRef = element as HTMLElement }}

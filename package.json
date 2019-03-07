@@ -1,6 +1,6 @@
 {
   "name": "ticket-evolution-seatmaps",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "interactive seatmaps",
   "repository": {
     "url": "git@github.com:ticketevolution/seatmaps-client.git",
@@ -13,6 +13,7 @@
     "build": "webpack --progress",
     "watch": "npm run build -- --watch",
     "start": "webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module --open",
+    "start-missing": "webpack-dev-server --config examples/missing-map/webpack.config.babel.js --context examples/missing-map --open",
     "analyze": "webpack --profile --json --progress > stats.json",
     "check-types": "tsc",
     "lint": "eslint . --cache",
