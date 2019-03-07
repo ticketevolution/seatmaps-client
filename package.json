@@ -7,7 +7,7 @@
     "type": "git"
   },
   "main": "build/tevomaps.js",
-  "author": "BRAD LARSON",
+  "author": "Ticket Evolution, Inc.",
   "license": "UNLICENSED",
   "scripts": {
     "build": "webpack --progress",
