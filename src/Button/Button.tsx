@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+export default function Button (props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       {...props}
@@ -15,6 +15,6 @@ export default function Button(props: React.ButtonHTMLAttributes<HTMLButtonEleme
         fontSize: 16,
         ...props.style
       }}
-   />
+    />
   )
 }

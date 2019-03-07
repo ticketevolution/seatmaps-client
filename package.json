@@ -21,7 +21,7 @@
     "analyze": "webpack --profile --json --progress > stats.json",
     "check-types": "tsc",
     "lint": "eslint . --ext js --ext jsx --ext ts --ext tsx --cache",
-    "fix": "npm run lint --fix"
+    "fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",

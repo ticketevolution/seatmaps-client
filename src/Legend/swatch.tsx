@@ -1,15 +1,15 @@
-import React, { Component, CSSProperties} from 'react'
+import React, { CSSProperties } from 'react'
 
 interface Props {
-    style: CSSProperties
-    color: string
+  style: CSSProperties
+  color: string
 }
 
 export default (props: Props) => <div style={{
-    ...props.style,
-    height: 14,
-    width: 14,
-    borderRadius: 4,
-    backgroundColor: props.color,
-    display: 'inline-block'
-}}/>
+  ...props.style,
+  height: 14,
+  width: 14,
+  borderRadius: 4,
+  backgroundColor: props.color,
+  display: 'inline-block'
+}} />

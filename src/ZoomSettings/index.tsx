@@ -14,17 +14,17 @@ const buttonStyle: CSSProperties = {
 }
 
 export default class ZoomSettings extends Component<Props> {
-  mapZoom: any
+  mapZoom: any // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  constructor(props: Props) {
+  constructor (props: Props) {
     super(props)
 
     this.mapZoom = svgPanZoom(this.props.mapSvg, {
-      minZoom: 0.8,
+      minZoom: 0.8
     })
   }
 
-  render() {
+  render () {
     return (
       <div style={{ display: 'flex' }}>
         <Button

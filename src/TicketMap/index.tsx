@@ -8,9 +8,7 @@ import Tooltip from '../Tooltip'
 import Legend from '../Legend'
 
 import { TicketGroup, NormalizedTicketGroup } from '../types'
-
-export * from './types'
-import { State, Props, DefaultProps, SectionZoneMapping } from './types'
+import { State, Props, DefaultProps } from './types'
 
 import {
   $availableTicketGroups,
@@ -21,7 +19,9 @@ import {
   $venueSections,
   $costRanges
 } from './selectors'
-import Button from '../Button';
+import Button from '../Button'
+
+export * from './types'
 
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
@@ -47,7 +47,7 @@ type PropertiesForElement = (element: Element) => ElementProperties
 
 class MapNotFoundError extends Error {
   name = 'MapNotFoundError'
-  constructor(message = 'This map is not currently available.') {
+  constructor (message = 'This map is not currently available.') {
     super(message)
   }
 }
@@ -74,10 +74,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     mapFontFamily: 'inherit'
   }
 
-  constructor(props: Props & DefaultProps) {
+  constructor (props: Props & DefaultProps) {
     super(props)
     this.state = {
-      sectionZoneMapping: {} as SectionZoneMapping,
+      sectionZoneMapping: {},
       selectedSections: new Set(this.props.selectedSections.filter(section => !!section)),
       isZoneToggled: this.props.isZoneDefault,
       isDragging: false,
@@ -103,7 +103,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Lifecycle
    */
 
-  async componentDidMount() {
+  async componentDidMount () {
     try {
       await this.fetchMap()
       this.setupMap()
@@ -116,7 +116,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
   }
 
-  componentDidUpdate(_prevProps: Props, prevState: State) {
+  componentDidUpdate (_prevProps: Props, prevState: State) {
     const availableTicketGroupsDidChange = $availableTicketGroups(prevState) !== $availableTicketGroups(this.state)
     const isNoLongerHoveringOnSection = prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined
     const isNoLongerHoveringOnZone = prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined
@@ -135,10 +135,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
   }
 
-  async fetchMap() {
+  async fetchMap () {
     const mapResponse = await fetch(`${this.configFilePath}/map.svg`)
     if (!mapResponse.ok) {
-      throw new MapNotFoundError();
+      throw new MapNotFoundError()
     }
     const mapHtml = await mapResponse.text()
     // Can't use dangerouslySetInnerHTML={{ __html: this.state.mapHtml }} in this case because
@@ -147,7 +147,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.mapRootRef.innerHTML = mapHtml
   }
 
-  async fetchManifest() {
+  async fetchManifest () {
     const manifestResponse = await fetch(`${this.configFilePath}/manifest.json`)
     if (!manifestResponse.ok) {
       throw Error('There was an error fetching the venue map data, please try again')
@@ -167,9 +167,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     })
   }
 
-  setupMap() {
+  setupMap () {
     const mapSvg = this.mapRootRef.querySelector('svg') as SVGSVGElement
-    const [x, y, width, height] = (mapSvg.getAttribute('viewBox') || '0 0 100% 100%').split(' ')
+    const [, , width, height] = (mapSvg.getAttribute('viewBox') || '0 0 100% 100%').split(' ')
     mapSvg.setAttribute('width', width)
     mapSvg.setAttribute('height', height)
     mapSvg.style.minWidth = '100%'
@@ -188,7 +188,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Properties
    */
 
-  get configFilePath() {
+  get configFilePath () {
     return `${this.props.mapsDomain}/${this.props.venueId}/${this.props.configurationId}`
   }
 
@@ -321,7 +321,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
     return Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
       .reduce((memo, element) => {
-        const children = element.querySelectorAll('path');
+        const children = element.querySelectorAll('path')
         return memo.concat(children.length ? Array.from(children) : [element])
       }, [] as Element[])
   }
@@ -330,7 +330,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Helpers
    */
 
-  updateMap() {
+  updateMap () {
     this.fillUnavailableColors()
     if (this.state.isZoneToggled) {
       return Object.keys($ticketGroupsBySectionByZone(this.state)).forEach(zone =>
@@ -340,10 +340,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section)))
   }
 
-  fillSection(section: string, shouldHighlight = true) {
+  fillSection (section: string, shouldHighlight = true) {
     const isAnAvailableSection = $venueSections(this.state).includes(section)
     if (isAnAvailableSection) {
-      this.fillPathsForSection(element => ({
+      this.fillPathsForSection(() => ({
         'fill': this.getDefaultColor($ticketGroupsBySection(this.state)[section]),
         'opacity': shouldHighlight ? '1' : '0.6',
         'stroke-width': '1',
@@ -352,14 +352,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
   }
 
-  fillZone(zone: string, shouldHighlight = true) {
+  fillZone (zone: string, shouldHighlight = true) {
     const ticketGroupsBySection = $ticketGroupsBySectionByZone(this.state)[zone]
     const allTicketGroupsInZone = Object.values(ticketGroupsBySection)
       .reduce((memo, ticketGroupsInSection) => [...memo, ...ticketGroupsInSection], [])
     Object.keys(ticketGroupsBySection).forEach(section => {
       const isAnAvailableSection = $venueSections(this.state).includes(section)
       if (isAnAvailableSection) {
-        this.fillPathsForSection(element => ({
+        this.fillPathsForSection(() => ({
           'fill': this.getDefaultColor(allTicketGroupsInZone),
           'opacity': shouldHighlight ? '1' : '0.6'
         }), section)
@@ -371,7 +371,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Coloring
    */
 
-  getDefaultColor(ticketGroups: NormalizedTicketGroup[]): string {
+  getDefaultColor (ticketGroups: NormalizedTicketGroup[]): string {
     const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0]
 
     const ranges = $costRanges(this.state, this.props)
@@ -445,7 +445,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Interactions
    */
 
-  doHover(tooltipX: number, tooltipY: number, section: string) {
+  doHover (tooltipX: number, tooltipY: number, section: string) {
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
     type NewState =
@@ -460,7 +460,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
 
     if (this.state.isZoneToggled) {
-      if (!!zone) {
+      if (zone) {
         newState.currentHoveredZone = zone
         this.highlightZone(zone)
       }
@@ -472,7 +472,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.setState(newState)
   }
 
-  doHoverCleanup(): void {
+  doHoverCleanup (): void {
     const section = this.state.currentHoveredSection
     if (!section) {
       return
@@ -491,7 +491,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.unhighlightSection(section)
   }
 
-  selectSectionOrZone(section: string) {
+  selectSectionOrZone (section: string) {
     if (this.state.isZoneToggled) {
       const { zone } = this.state.sectionZoneMapping[section]
       if (zone) {
@@ -502,15 +502,15 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
   }
 
-  render() {
+  render () {
     if (this.state.mapNotFound) {
-      return <div style="left: 0px; position: relative; text-align: left;">
-          <div style="color: white; font-family: 'Nunito Sans'; padding: 50px 30px; position: absolute; text-align: left;">
-            <div style="font-weight: 600; font-size: 1.375em;">Seating chart not available.</div>
-            <div style="font-weight: 300">(It was abducted by aliens)</div>
-          </div>
-          <img src="https://maps.ticketevolution.com/maps/not_available.jpg" style={{ width: '100%', textAlign: 'left', maxWidth: '800px' }} />
+      return <div style='left: 0px; position: relative; text-align: left;'>
+        <div style="color: white; font-family: 'Nunito Sans'; padding: 50px 30px; position: absolute; text-align: left;">
+          <div style='font-weight: 600; font-size: 1.375em;'>Seating chart not available.</div>
+          <div style='font-weight: 300'>(It was abducted by aliens)</div>
         </div>
+        <img src='https://maps.ticketevolution.com/maps/not_available.jpg' style={{ width: '100%', textAlign: 'left' }} />
+      </div>
     }
 
     return (
@@ -525,7 +525,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           fontFamily: this.props.mapFontFamily
         }}
         onTouchMove={() => this.setState({ isDragging: true })}
-        onTouchEnd={event => {
+        onTouchEnd={() => {
           if (!this.state.isDragging) {
             this.onClick()
           }

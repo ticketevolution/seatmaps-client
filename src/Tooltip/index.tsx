@@ -13,7 +13,7 @@ interface Props {
 export default class Tooltip extends Component<Props> {
   container!: HTMLElement
 
-  render() {
+  render () {
     const { isActive, ticketGroups, x, y, name, color } = this.props
     const prices = ticketGroups.map(ticketGroup => ticketGroup.price).sort((a, b) => a - b)
 
@@ -61,15 +61,15 @@ export default class Tooltip extends Component<Props> {
     }
 
     return (
-      <div ref={element => {this.container = element as HTMLElement}} style={containerStyle}>
+      <div ref={element => { this.container = element as HTMLElement }} style={containerStyle}>
         {!renderAboveTarget && <div style={{
           ...tipStyle,
           borderWidth: renderRightOfTarget ? '10px 0 0 10px' : '0 0 10px 10px',
-          borderColor: renderRightOfTarget ? 'transparent transparent transparent white' : 'transparent transparent white transparent',
+          borderColor: renderRightOfTarget ? 'transparent transparent transparent white' : 'transparent transparent white transparent'
         }} /> }
         <div style={{
           backgroundColor: 'white',
-          padding: 20,
+          padding: 20
         }}>
           <div style={{
             display: 'flex',
@@ -81,9 +81,9 @@ export default class Tooltip extends Component<Props> {
               backgroundColor: color,
               display: 'inline-block',
               marginRight: 5
-            }}/>
-              {name}
-            </div>
+            }} />
+            {name}
+          </div>
           <div>
             {prices.length} listing{prices.length !== 1 ? 's' : ''}
             {' ● '}
@@ -93,7 +93,7 @@ export default class Tooltip extends Component<Props> {
         {renderAboveTarget && <div style={{
           ...tipStyle,
           borderWidth: renderRightOfTarget ? '10px 10px 0 0' : '0 10px 10px 0',
-          borderColor: renderRightOfTarget ? 'white transparent transparent transparent' : 'transparent white transparent transparent',
+          borderColor: renderRightOfTarget ? 'white transparent transparent transparent' : 'transparent white transparent transparent'
         }} /> }
       </div>
     )

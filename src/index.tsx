@@ -4,11 +4,11 @@ import TicketMap, { Props } from './TicketMap'
 export default class SeatmapFactory {
   options: Props
 
-  constructor(options: Props) {
+  constructor (options: Props) {
     this.options = options
   }
 
-  build(rootElementId: string) {
+  build (rootElementId: string) {
     if (!rootElementId) {
       throw new Error('Seatmaps must be initialized with a DOM element.')
     }

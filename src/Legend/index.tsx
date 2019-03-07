@@ -17,7 +17,7 @@ interface State {
   open: boolean
 }
 
-const styles = {
+const styles: { [key: string]: CSSProperties } = {
   container: {
     position: 'absolute',
     top: 10,
@@ -25,15 +25,15 @@ const styles = {
     border: '1px solid rgb(224, 224, 224)',
     borderRadius: 4,
     backgroundColor: 'white',
-    opacity: .7,
+    opacity: 0.7,
     textAlign: 'left'
-  } as CSSProperties,
+  },
   item: {
     padding: 10
-  } as CSSProperties,
+  },
   icon: {
     marginRight: 5
-  } as CSSProperties
+  }
 }
 
 export default class Legend extends Component<Props, State> {
@@ -41,7 +41,7 @@ export default class Legend extends Component<Props, State> {
     open: false
   }
 
-  render() {
+  render () {
     const { open } = this.state
     const { ranges } = this.props
 
