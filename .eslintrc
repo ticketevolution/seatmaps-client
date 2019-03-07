@@ -1,18 +1,43 @@
 {
-  "parser": "babel-eslint",
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "node": true,
+    "browser": true
+  },
   "extends": [
+    "plugin:@typescript-eslint/recommended",
     "standard",
     "standard-react"
   ],
   "plugins": [
-    "typescript"
+    "@typescript-eslint",
+    "react"
   ],
+  "settings": {
+    "react": {
+      "version": "16.8"
+    }
+  },
   "rules": {
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true
+      }
+    ],
+    "no-plusplus": "off",
+    "indent": "off",
+    "@typescript-eslint/indent": [
+      "error",
+      2
+    ],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/member-delimiter-style": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "camelcase": "off"
-  },
-  "env": {
-    "browser": true
   }
 }
