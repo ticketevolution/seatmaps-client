@@ -19,7 +19,7 @@
     "start": "webpack-dev-server --config examples/using-module/webpack.config.babel.js --context examples/using-module --open",
     "start-missing": "webpack-dev-server --config examples/missing-map/webpack.config.babel.js --context examples/missing-map --open",
     "analyze": "webpack --profile --json --progress > stats.json",
-    "check-types": "tsc",
+    "check-types": "tsc --noEmit",
     "lint": "eslint . --ext js --ext jsx --ext ts --ext tsx --cache",
     "fix": "npm run lint -- --fix"
   },
