@@ -13,8 +13,7 @@ const toggleTextStyle: React.CSSProperties = {
 }
 
 export default class ZoneToggle extends Component<Props> {
-
-  render() {
+  render () {
     const { isZoneToggled, onToggle } = this.props
 
     return (

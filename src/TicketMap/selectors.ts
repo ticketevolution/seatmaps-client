@@ -1,13 +1,13 @@
 import { defaultMemoize, createSelectorCreator } from 'reselect'
 import { isEqual } from 'lodash-es'
 
-import { TicketGroup, NormalizedTicketGroup } from '../types'
+import { NormalizedTicketGroup } from '../types'
 import {
   State,
   Props,
   NormalizedTicketGroupsBySection,
   NormalizedTicketGroupsBySectionByZone,
-  CostRange,
+  CostRange
 } from './types'
 
 const $ticketGroups = (state: State) => state.ticketGroups
@@ -30,16 +30,16 @@ export const $availableTicketGroups = createDeepEqualSelector(
   $sectionZoneMapping,
   (ticketGroups, sectionZoneMapping) =>
     ticketGroups
-        .map((ticketGroup): NormalizedTicketGroup => {
+      .map((ticketGroup): NormalizedTicketGroup => {
         const section = ticketGroup.tevo_section_name.toLowerCase()
         const zoneMapping = sectionZoneMapping[section]
 
         return zoneMapping && {
-            section,
-            zone: zoneMapping.zone,
-            price: ticketGroup.retail_price
+          section,
+          zone: zoneMapping.zone,
+          price: ticketGroup.retail_price
         }
-        }).filter(ticketGroup => ticketGroup)
+      }).filter(ticketGroup => ticketGroup)
 )
 
 const $priceSortedTicketGroups = createDeepEqualSelector(
@@ -52,13 +52,13 @@ export const $costRanges = createDeepEqualSelector(
   $priceSortedTicketGroups,
   (percentiles = {}, ticketGroups) => {
     const costRanges = Object.entries(percentiles)
-      .map(([percentile, color]) => ({
+      .map(([percentile, color]): CostRange => ({
         percentile: parseFloat(percentile),
         color,
         min: 0,
         max: 0,
         ticketGroups: []
-      } as CostRange))
+      }))
       .sort((a, b) => a.percentile - b.percentile)
 
     for (let i = 0; i < ticketGroups.length; i++) {
@@ -84,21 +84,21 @@ export const $costRanges = createDeepEqualSelector(
 
 export const $ticketGroupsBySection = createDeepEqualSelector(
   $availableTicketGroups,
-  (ticketGroups) =>
-    ticketGroups.reduce((memo, ticketGroup) => ({
+  (ticketGroups): NormalizedTicketGroupsBySection =>
+    ticketGroups.reduce((memo: NormalizedTicketGroupsBySection, ticketGroup) => ({
       ...memo,
       [ticketGroup.section]: [
         ...(memo[ticketGroup.section] || []),
         ticketGroup
       ]
-    }), {} as NormalizedTicketGroupsBySection)
+    }), {})
 )
 
 export const $ticketGroupsBySectionByZone = createDeepEqualSelector(
   $ticketGroupsBySection,
   $sectionZoneMapping,
-  (ticketGroupsBySection, sectionZoneMapping) =>
-    Object.keys(ticketGroupsBySection).reduce((memo, section) => {
+  (ticketGroupsBySection, sectionZoneMapping): NormalizedTicketGroupsBySectionByZone =>
+    Object.keys(ticketGroupsBySection).reduce((memo: NormalizedTicketGroupsBySectionByZone, section) => {
       const { zone } = sectionZoneMapping[section]
       return !zone ? memo : {
         ...memo,
@@ -107,7 +107,7 @@ export const $ticketGroupsBySectionByZone = createDeepEqualSelector(
           [section]: ticketGroupsBySection[section]
         }
       }
-    }, {} as NormalizedTicketGroupsBySectionByZone)
+    }, {})
 )
 
 export const $venueSections = createDeepEqualSelector(
