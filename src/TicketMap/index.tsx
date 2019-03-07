@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { isEqual } from 'lodash-es'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 import ZoomSettings from '../ZoomSettings'
 import Tooltip from '../Tooltip'
@@ -19,6 +21,7 @@ import {
   $venueSections,
   $costRanges
 } from './selectors'
+import Button from '../Button';
 
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
@@ -220,9 +223,16 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   deselectSection = (section?: string) => {
     if (!section) {
-      return this.setState({ selectedSections: new Set() })
+      this.clearSelection()
+    } else {
+      return this.toggleSectionSelect(section, false)
     }
-    return this.toggleSectionSelect(section, false)
+  }
+
+  clearSelection = () => {
+    this.setState({
+      selectedSections: new Set()
+    })
   }
 
   toggleSectionSelect = (section: string, shouldHighlight = true) => {
@@ -524,8 +534,12 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
-        <div style={{ display: 'flex' }}>
+        <div style={{ position: 'absolute', display: 'flex' }}>
           {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
+          <Button onClick={this.clearSelection}>
+            <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 5 }} />
+            <span>Clear All</span>
+          </Button>
         </div>
         <div
           ref={element => { this.mapRootRef = element as HTMLElement }}
