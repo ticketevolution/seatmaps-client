@@ -6,6 +6,10 @@
     "url": "git@github.com:ticketevolution/seatmaps-client.git",
     "type": "git"
   },
+  "engines": {
+    "node": "^10.15.3",
+    "npm": "^6.4.1"
+  },
   "main": "build/tevomaps.js",
   "author": "BRAD LARSON",
   "license": "UNLICENSED",
