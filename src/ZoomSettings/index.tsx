@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, CSSProperties } from 'react'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import Button from '../Button'
 import ResetZoom from '../../assets/reset-zoom.svg'
@@ -7,7 +7,7 @@ interface Props {
   mapSvg: SVGSVGElement
 }
 
-const buttonStyle = {
+const buttonStyle: CSSProperties = {
   textAlign: 'center',
   fontSize: 24,
   fontWeight: 500
