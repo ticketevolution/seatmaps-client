@@ -30,15 +30,14 @@ clean-all: clean ## Remove all temporary files plus installed dependencies
 	rm -rf ./node_modules
 
 start: build ## Start the development server
-	# npm run test
 	@echo "\n\n\nStarting development server...\n\n\n"
 	npm start
 
 build: install clean ## Build the project
+	npm run lint
+	npm run check-types
+	# npm run test
 	npm run build
-
-watch: ## Build, then rebuild on changes indefinitely
-	npm run watch
 
 analyze: ## Run the webpack analyzer
 	npm analyze
