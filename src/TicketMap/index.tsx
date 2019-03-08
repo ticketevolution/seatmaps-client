@@ -336,8 +336,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       return Object.keys($ticketGroupsBySectionByZone(this.state)).forEach(zone =>
         this.fillZone(zone.toLowerCase(), $areAllSectionsInTheZoneSelected(this.state)(zone.toLowerCase())))
     }
-    Object.keys($ticketGroupsBySection(this.state)).forEach(section =>
-      this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section)))
+    Object.keys($ticketGroupsBySection(this.state)).forEach(section => {
+      this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section))
+    })
   }
 
   fillSection (section: string, shouldHighlight = true) {
@@ -347,7 +348,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         'fill': this.getDefaultColor($ticketGroupsBySection(this.state)[section]),
         'opacity': shouldHighlight ? '1' : '0.6',
         'stroke-width': '1',
-        'stroke': shouldHighlight ? '#4a4a4a' : '#FFFFFF'
+        'stroke': shouldHighlight ? '#4a4a4a' : '#FFFFFF',
+        'cursor': 'pointer'
       }), section)
     }
   }
