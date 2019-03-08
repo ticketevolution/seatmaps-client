@@ -3,7 +3,6 @@ import { isEqual } from 'lodash-es'
 
 import Actions from '../Actions'
 import Tooltip from '../Tooltip'
-import Legend from '../Legend'
 
 import { TicketGroup, NormalizedTicketGroup } from '../types'
 import { State, Props, DefaultProps } from './types'
@@ -554,14 +553,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
-        <div style={{ position: 'absolute', display: 'flex' }}>
-          {this.state.mapSvg && (
-            <Actions
-              mapSvg={this.state.mapSvg}
-              onClearSelection={this.clearSelection}
-            />
-          )}
-        </div>
+        {this.state.mapSvg && (
+          <Actions
+            mapSvg={this.state.mapSvg}
+            onClearSelection={this.clearSelection}
+            ranges={$costRanges(this.state, this.props)}
+            showLegend={this.props.showLegend}
+          />
+        )}
         <div
           ref={element => { this.mapRootRef = element as HTMLElement }}
           style={{
@@ -569,7 +568,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
             opacity: this.state.mapSvg ? 1 : 0
           }}
         />
-        {this.props.showLegend && <Legend ranges={$costRanges(this.state, this.props)} />}
       </div>
     )
   }

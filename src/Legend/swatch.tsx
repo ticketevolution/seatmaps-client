@@ -1,12 +1,12 @@
 import React, { CSSProperties } from 'react'
 
 interface Props {
-  style: CSSProperties
+  style?: CSSProperties
   color: string
 }
 
 export default (props: Props) => <div style={{
-  ...props.style,
+  ...(props.style || {}),
   height: 14,
   width: 14,
   borderRadius: 4,

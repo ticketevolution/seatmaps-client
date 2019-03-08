@@ -1,23 +1,49 @@
-import React, { Component, CSSProperties } from 'react'
+import React from 'react'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle, faPlus, faMinus, faUndoAlt } from '@fortawesome/free-solid-svg-icons'
+import Legend from '../Legend'
 import Button from '../Button'
-import ResetZoom from '../../assets/reset-zoom.svg'
+import ActionGroup from './ActionGroup'
 
 interface Props {
   mapSvg: SVGSVGElement
   onClearSelection(): void
+  showLegend: boolean
+  ranges: any // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-const buttonStyle: CSSProperties = {
-  textAlign: 'center',
-  fontSize: 24,
-  fontWeight: 500
+interface State {
+  isMobile: boolean
 }
 
-export default class Actions extends Component<Props> {
+const styles = {
+  container: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    right: 10,
+    bottom: 10,
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    opacity: 0.9,
+    pointerEvents: 'none',
+    whiteSpace: 'nowrap'
+  },
+  icon: {
+    display: 'inline-block',
+    fontSize: 'inherit',
+    height: '1.333333333em',
+    overflow: 'visible',
+    verticalAlign: '-0.125em'
+  }
+}
+
+export default class Actions extends React.Component<Props, State> {
+  container?: HTMLDivElement | null
   mapZoom: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  timer?: number
 
   constructor (props: Props) {
     super(props)
@@ -27,27 +53,63 @@ export default class Actions extends Component<Props> {
     })
   }
 
+  componentDidMount () {
+    this.timer = window.setInterval(this.updateIsMobile, 200)
+  }
+
+  componentWillUnmount () {
+    window.clearInterval(this.timer)
+  }
+
+  updateIsMobile = () => {
+    this.setState({
+      isMobile: this.container && this.container.clientWidth < 560
+    })
+  }
+
   render () {
+    const { isMobile } = this.state
+
     return (
-      <div style={{ display: 'flex' }}>
-        <Button
-          style={buttonStyle}
-          data-rh='Default'
-          data-custom-at='right'
-          onClick={() => this.mapZoom.zoomIn()}
-        >+</Button>
-        <Button
-          style={buttonStyle}
-          onClick={() => this.mapZoom.zoomOut()}
-        >‐</Button>
-        <Button
-          style={{ ...buttonStyle, paddingTop: '8px' }}
-          onClick={() => this.mapZoom.reset()}
-        ><img src={ResetZoom} /></Button>
-        <Button onClick={() => this.props.onClearSelection()}>
-          <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 5 }} />
-          <span>Clear All</span>
-        </Button>
+      <div style={styles.container} ref={ref => { this.container = ref }}>
+        <ActionGroup>
+          <Button
+            data-rh='Default'
+            data-custom-at='right'
+            onClick={() => this.mapZoom.zoomIn()}
+            style={{ borderRight: '2px solid lightgray' }}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </Button>
+
+          <Button
+            onClick={() => this.mapZoom.zoomOut()}
+            style={{ borderRight: '2px solid lightgray' }}
+          >
+            <FontAwesomeIcon icon={faMinus} />
+          </Button>
+
+          <Button
+            onClick={() => this.mapZoom.reset()}
+            style={{ borderRight: '2px solid lightgray' }}
+          >
+            <FontAwesomeIcon icon={faUndoAlt} style={{ marginRight: 8 }} />
+            Reset Zoom
+          </Button>
+
+          <Button
+            onClick={() => this.props.onClearSelection()}
+            style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
+          >
+            <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 8 }} />
+            <span>Clear All</span>
+          </Button>
+
+          {isMobile && this.props.showLegend && <Legend ranges={this.props.ranges} />}
+        </ActionGroup>
+        {!isMobile && <ActionGroup>
+          {this.props.showLegend && <Legend ranges={this.props.ranges} />}
+        </ActionGroup>}
       </div>
     )
   }

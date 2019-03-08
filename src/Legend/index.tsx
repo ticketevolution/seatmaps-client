@@ -1,6 +1,7 @@
 import React, { Component, CSSProperties } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import Button from '../Button'
 import Swatch from './swatch'
 
 interface Range {
@@ -11,32 +12,18 @@ interface Range {
 
 interface Props {
   ranges: Range[]
+  style?: CSSProperties
 }
 
 interface State {
   open: boolean
 }
 
-const styles: { [key: string]: CSSProperties } = {
-  container: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    border: '1px solid rgb(224, 224, 224)',
-    borderRadius: 4,
-    backgroundColor: 'white',
-    opacity: 0.7,
-    textAlign: 'left'
-  },
-  item: {
-    padding: 10
-  },
-  icon: {
-    marginRight: 5
-  }
-}
-
 export default class Legend extends Component<Props, State> {
+  static defaultProps = {
+    style: {}
+  }
+
   state = {
     open: false
   }
@@ -46,17 +33,19 @@ export default class Legend extends Component<Props, State> {
     const { ranges } = this.props
 
     return (
-      <div style={styles.container}>
-        <div style={{ ...styles.item, cursor: 'pointer' }} onClick={() => this.setState({ open: !open })}>
-          <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} style={styles.icon} />
+      <div style={{ position: 'relative ' }}>
+        <Button onClick={() => this.setState({ open: !open })}>
+          <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} style={{ marginRight: 8 }} />
           <span>{open ? 'Hide' : 'Show'} Map Legend</span>
-        </div>
-        {ranges && open && ranges.map(range => (
-          <div style={styles.item}>
-            <Swatch color={range.color} style={styles.icon} />
-            <span>${Math.floor(range.min)} - ${Math.ceil(range.max)}</span>
-          </div>
-        ))}
+        </Button>
+        {ranges && ranges.length > 0 && open && <div style={{ position: 'absolute', backgroundColor: 'white', left: -2, right: -2, border: '2px solid lightgray', borderRadius: '0 0 5px 5px' }}>
+          {ranges.map(range => (
+            <div style={{ padding: 13 }}>
+              <Swatch color={range.color} style={{ marginRight: 8 }} />
+              <span>${Math.floor(range.min)} - ${Math.ceil(range.max)}</span>
+            </div>
+          ))}
+        </div>}
       </div>
     )
   }
