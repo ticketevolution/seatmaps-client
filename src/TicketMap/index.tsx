@@ -504,13 +504,28 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   render () {
     if (this.state.mapNotFound) {
-      return <div style='left: 0px; position: relative; text-align: left;'>
-        <div style="color: white; font-family: 'Nunito Sans'; padding: 50px 30px; position: absolute; text-align: left;">
-          <div style='font-weight: 600; font-size: 1.375em;'>Seating chart not available.</div>
-          <div style='font-weight: 300'>(It was abducted by aliens)</div>
+      return (
+        <div style={{
+          left: 0,
+          position: 'relative',
+          textAlign: 'left'
+        }}>
+          <div style={{
+            color: 'white',
+            fontFamily: 'Nunito Sans',
+            padding: '50px 30px',
+            position: 'absolute',
+            textAlign: 'left'
+          }}>
+            <div style={{
+              fontWeight: 600,
+              fontSize: '1.375em'
+            }}>Seating chart not available.</div>
+            <div style={{ fontWeight: 300 }}>(It was abducted by aliens)</div>
+          </div>
+          <img src='https://maps.ticketevolution.com/maps/not_available.jpg' style={{ width: '100%', textAlign: 'left' }} />
         </div>
-        <img src='https://maps.ticketevolution.com/maps/not_available.jpg' style={{ width: '100%', textAlign: 'left' }} />
-      </div>
+      )
     }
 
     return (
