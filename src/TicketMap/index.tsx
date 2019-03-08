@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { isEqual } from 'lodash-es'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
-import ZoomSettings from '../ZoomSettings'
+import Actions from '../Actions'
 import Tooltip from '../Tooltip'
 import Legend from '../Legend'
 
@@ -19,7 +17,6 @@ import {
   $venueSections,
   $costRanges
 } from './selectors'
-import Button from '../Button'
 
 export * from './types'
 
@@ -558,11 +555,12 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
         <div style={{ position: 'absolute', display: 'flex' }}>
-          {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
-          <Button onClick={this.clearSelection}>
-            <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 5 }} />
-            <span>Clear All</span>
-          </Button>
+          {this.state.mapSvg && (
+            <Actions
+              mapSvg={this.state.mapSvg}
+              onClearSelection={this.clearSelection}
+            />
+          )}
         </div>
         <div
           ref={element => { this.mapRootRef = element as HTMLElement }}
