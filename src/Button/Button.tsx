@@ -13,6 +13,7 @@ export default function Button (props: React.ButtonHTMLAttributes<HTMLButtonElem
         cursor: 'pointer',
         lineHeight: 1.5,
         fontSize: 16,
+        outline: 'none',
         ...props.style
       }}
     />
