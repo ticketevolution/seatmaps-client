@@ -387,11 +387,42 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   /**
-   * Interation Callbacks
+   * Interaction Callbacks
    */
 
-  onMouseOver = (event: React.MouseEvent<HTMLElement>) => {
-    const element = (event.target as HTMLElement).closest('[data-section-id]')
+  onMouseOver = ({ clientX, clientY, target }: React.MouseEvent<HTMLElement>) =>
+    this.doHover(clientX, clientY, target as HTMLElement)
+
+  onTouchStart = ({ touches, target }: React.TouchEvent<HTMLElement>) =>
+    this.doHover(touches[0].clientX, touches[0].clientY, target as HTMLElement)
+
+  onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) =>
+    this.doHoverCleanup(relatedTarget as HTMLElement)
+
+  onMouseMove = ({ nativeEvent }: React.MouseEvent<HTMLElement>) =>
+    this.setState({
+      tooltipX: nativeEvent.offsetX,
+      tooltipY: nativeEvent.offsetY
+    })
+
+  onTouchMove = ({ target }: React.TouchEvent<HTMLElement>) => {
+    this.doHoverCleanup(target as HTMLElement)
+    this.setState({ isDragging: true })
+  }
+
+  onTouchEnd = () => {
+    if (!this.state.isDragging) {
+      this.selectSectionOrZone()
+    }
+    this.setState({ isDragging: false })
+  }
+
+  /**
+   * Interactions
+   */
+
+  doHover (tooltipX: number, tooltipY: number, target: HTMLElement) {
+    const element = target.closest('[data-section-id]')
     if (!element) {
       return
     }
@@ -402,51 +433,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
 
     const section = sectionId.toLowerCase()
-    if ($venueSections(this.state).includes(section)) {
-      return this.doHover(event.clientX, event.clientY, section)
-    }
-  }
-
-  onMouseOut = (event: React.MouseEvent<HTMLElement>) => {
-    const enteringElement = event.relatedTarget as HTMLElement
-
-    const isEnteringText = !!enteringElement && enteringElement.nodeName === 'text'
-    if (isEnteringText) {
+    if (!$venueSections(this.state).includes(section)) {
       return
     }
 
-    const enteringSection = !!enteringElement && enteringElement.closest('[data-section-id]')
-    const isEnteringTheSameSection = !!enteringSection &&
-      (enteringSection.getAttribute('data-section-id') as string).toLowerCase() === this.state.currentHoveredSection
-    if (isEnteringTheSameSection) {
-      return
-    }
-
-    return this.doHoverCleanup()
-  }
-
-  onClick = () => {
-    const section = this.state.currentHoveredSection
-    if (!section) {
-      return
-    }
-    if ($venueSections(this.state).includes(section)) {
-      return this.selectSectionOrZone(section)
-    }
-  }
-
-  onMouseMove = ({ nativeEvent: { offsetX, offsetY } }: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    this.setState({
-      tooltipX: offsetX,
-      tooltipY: offsetY
-    })
-  }
-
-  /**
-   * Interactions
-   */
-
-  doHover (tooltipX: number, tooltipY: number, section: string) {
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
     type NewState =
@@ -473,9 +463,21 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.setState(newState)
   }
 
-  doHoverCleanup (): void {
+  doHoverCleanup (enteringElement: HTMLElement): void {
+    const isEnteringText = !!enteringElement && enteringElement.nodeName === 'text'
+    if (isEnteringText) {
+      return
+    }
+
     const section = this.state.currentHoveredSection
     if (!section) {
+      return
+    }
+
+    const enteringSection = !!enteringElement && enteringElement.closest('[data-section-id]')
+    const isEnteringTheSameSection = !!enteringSection &&
+      (enteringSection.getAttribute('data-section-id') as string).toLowerCase() === section
+    if (isEnteringTheSameSection) {
       return
     }
 
@@ -492,7 +494,16 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.unhighlightSection(section)
   }
 
-  selectSectionOrZone (section: string) {
+  selectSectionOrZone () {
+    const section = this.state.currentHoveredSection
+    if (!section) {
+      return
+    }
+
+    if (!$venueSections(this.state).includes(section)) {
+      return
+    }
+
     if (this.state.isZoneToggled) {
       const { zone } = this.state.sectionZoneMapping[section]
       if (zone) {
@@ -533,21 +544,17 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       <div
         ref={element => { this.rootRef = element as HTMLElement }}
         onMouseOver={this.onMouseOver}
+        onTouchStart={this.onTouchStart}
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
-        onClick={this.onClick}
+        onClick={this.selectSectionOrZone}
+        onTouchMove={this.onTouchMove}
+        onTouchEnd={this.onTouchEnd}
         style={{
           position: 'relative',
           fontFamily: this.props.mapFontFamily,
           height: '100%',
           width: '100%'
-        }}
-        onTouchMove={() => this.setState({ isDragging: true })}
-        onTouchEnd={() => {
-          if (!this.state.isDragging) {
-            this.onClick()
-          }
-          this.setState({ isDragging: false })
         }}
       >
         <Tooltip
