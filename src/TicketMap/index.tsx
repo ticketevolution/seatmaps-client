@@ -558,6 +558,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
+        <div
+          ref={element => { this.mapRootRef = element as HTMLElement }}
+          style={{
+            cursor: '-webkit-grab',
+            opacity: this.state.mapSvg ? 1 : 0
+          }}
+        />
         {this.state.mapSvg && (
           <Actions
             mapSvg={this.state.mapSvg}
@@ -566,13 +573,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
             showLegend={this.props.showLegend}
           />
         )}
-        <div
-          ref={element => { this.mapRootRef = element as HTMLElement }}
-          style={{
-            cursor: '-webkit-grab',
-            opacity: this.state.mapSvg ? 1 : 0
-          }}
-        />
       </div>
     )
   }

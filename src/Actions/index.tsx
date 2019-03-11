@@ -5,7 +5,7 @@ import { faTimesCircle, faPlus, faMinus, faUndoAlt } from '@fortawesome/free-sol
 import Legend from '../Legend'
 import Button from '../Button'
 import ActionGroup from './ActionGroup'
-import { CostRange } from 'src/TicketMap';
+import { CostRange } from 'src/TicketMap'
 
 interface Props {
   mapSvg: SVGSVGElement
