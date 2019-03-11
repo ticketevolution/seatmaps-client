@@ -5,12 +5,13 @@ import { faTimesCircle, faPlus, faMinus, faUndoAlt } from '@fortawesome/free-sol
 import Legend from '../Legend'
 import Button from '../Button'
 import ActionGroup from './ActionGroup'
+import { CostRange } from 'src/TicketMap';
 
 interface Props {
   mapSvg: SVGSVGElement
   onClearSelection(): void
   showLegend: boolean
-  ranges: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ranges: CostRange[] // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 interface State {
