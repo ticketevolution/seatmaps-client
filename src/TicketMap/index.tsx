@@ -165,11 +165,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   setupMap () {
     const mapSvg = this.mapRootRef.querySelector('svg') as SVGSVGElement
-    const [, , width, height] = (mapSvg.getAttribute('viewBox') || '0 0 100% 100%').split(' ')
-    mapSvg.setAttribute('width', width)
-    mapSvg.setAttribute('height', height)
-    mapSvg.style.minWidth = '100%'
-    mapSvg.style.minHeight = '100%'
+    Object.assign(mapSvg.style, {
+      position: 'absolute',
+      zIndex: 0,
+      top: 0,
+      left: 0,
+      height: '100%',
+      width: '100%'
+    })
 
     this.setUnavailableColors()
 
@@ -535,7 +538,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         onClick={this.onClick}
         style={{
           position: 'relative',
-          fontFamily: this.props.mapFontFamily
+          fontFamily: this.props.mapFontFamily,
+          height: '100%',
+          width: '100%'
         }}
         onTouchMove={() => this.setState({ isDragging: true })}
         onTouchEnd={() => {

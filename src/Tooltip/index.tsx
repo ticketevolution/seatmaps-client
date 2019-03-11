@@ -19,6 +19,7 @@ export default class Tooltip extends Component<Props> {
 
     const containerStyle: CSSProperties = {
       position: 'absolute',
+      zIndex: 1,
       transition: 'top .1s, left .1s',
       opacity: isActive ? 1 : 0,
       padding: 5,
