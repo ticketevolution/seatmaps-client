@@ -11,7 +11,7 @@ interface Props {
   mapSvg: SVGSVGElement
   onClearSelection(): void
   showLegend: boolean
-  ranges: CostRange[] // eslint-disable-line @typescript-eslint/no-explicit-any
+  ranges: CostRange[]
 }
 
 interface State {
