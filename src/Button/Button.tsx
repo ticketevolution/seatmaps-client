@@ -1,20 +1,16 @@
 import React from 'react'
 
-export default function Button (props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      {...props}
-      style={{
-        background: 'white',
-        color: '#4A4A4A',
-        border: '1px solid #E0E0E0',
-        borderRadius: 8,
-        textDecoration: 'none',
-        cursor: 'pointer',
-        lineHeight: 1.5,
-        fontSize: 16,
-        ...props.style
-      }}
-    />
-  )
+export default function Button (props: React.HTMLProps<HTMLDivElement>) {
+  return <div {...props} style={{
+    backgroundColor: 'transparent',
+    borderRadius: 0,
+    padding: '13px',
+    outline: 'none',
+    cursor: 'pointer',
+    border: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...(props.style || {})
+  }} />
 }

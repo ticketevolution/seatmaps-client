@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import { isEqual } from 'lodash-es'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
-import ZoomSettings from '../ZoomSettings'
+import Actions from '../Actions'
 import Tooltip from '../Tooltip'
-import Legend from '../Legend'
 
 import { TicketGroup, NormalizedTicketGroup } from '../types'
 import { State, Props, DefaultProps } from './types'
@@ -19,7 +16,6 @@ import {
   $venueSections,
   $costRanges
 } from './selectors'
-import Button from '../Button'
 
 export * from './types'
 
@@ -562,17 +558,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
-        <div style={{
-          position: 'absolute',
-          display: 'flex',
-          zIndex: 1
-        }}>
-          {this.state.mapSvg && <ZoomSettings mapSvg={this.state.mapSvg} />}
-          <Button onClick={this.clearSelection}>
-            <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 5 }} />
-            <span>Clear All</span>
-          </Button>
-        </div>
         <div
           ref={element => { this.mapRootRef = element as HTMLElement }}
           style={{
@@ -580,7 +565,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
             opacity: this.state.mapSvg ? 1 : 0
           }}
         />
-        {this.props.showLegend && <Legend ranges={$costRanges(this.state, this.props)} />}
+        {this.state.mapSvg && (
+          <Actions
+            mapSvg={this.state.mapSvg}
+            onClearSelection={this.clearSelection}
+            ranges={$costRanges(this.state, this.props)}
+            showLegend={this.props.showLegend}
+          />
+        )}
       </div>
     )
   }
