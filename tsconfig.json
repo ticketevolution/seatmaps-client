@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "build",
+        "esModuleInterop": true,
         "module": "esNext",
         "target": "esnext",
         "noEmit": false,
@@ -9,8 +10,6 @@
         "noImplicitReturns": true,
         "jsx": "react",
         "moduleResolution": "node",
-        "isolatedModules": true,
-        "esModuleInterop": true,
         "lib": [
             "esnext",
             "dom",
@@ -23,5 +22,7 @@
             ]
         },
     },
-    "include": ["src"]
+    "include": [
+        "src"
+    ]
 }
