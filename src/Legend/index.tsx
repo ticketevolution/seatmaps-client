@@ -33,7 +33,7 @@ export default class Legend extends Component<Props, State> {
     const { ranges } = this.props
 
     return (
-      <div style={{ position: 'relative ' }}>
+      <div style={{ position: 'relative' }}>
         <Button onClick={() => this.setState({ open: !open })}>
           <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} style={{ marginRight: 8 }} />
           <span>{open ? 'Hide' : 'Show'} Map Legend</span>

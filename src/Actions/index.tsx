@@ -18,7 +18,7 @@ interface State {
   isMobile: boolean
 }
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   container: {
     position: 'absolute',
     top: 10,
@@ -63,9 +63,15 @@ export default class Actions extends React.Component<Props, State> {
   }
 
   updateIsMobile = () => {
-    this.setState({
-      isMobile: this.container && this.container.clientWidth < 560
-    })
+    if (!this.container) {
+      return
+    }
+
+    const isMobile = this.container.clientWidth < 560
+
+    if (this.state.isMobile !== isMobile) {
+      this.setState({ isMobile })
+    }
   }
 
   render () {
