@@ -1,0 +1,7 @@
+{
+  "write": true,
+  "singleQuote": true,
+  "jsxBracketSameLine": true,
+  "listDifferent": true,
+  "printWidth": 120
+}

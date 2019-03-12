@@ -8,11 +8,15 @@
   "extends": [
     "plugin:@typescript-eslint/recommended",
     "plugin:jest/recommended",
+    "plugin:prettier/recommended",
+    "prettier/react",
+    "prettier/standard",
     "standard",
     "standard-react"
   ],
   "plugins": [
     "@typescript-eslint",
+    "prettier",
     "react"
   ],
   "settings": {
