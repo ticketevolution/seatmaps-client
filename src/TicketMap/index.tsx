@@ -494,7 +494,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.unhighlightSection(section)
   }
 
-  selectSectionOrZone () {
+  selectSectionOrZone = () => {
     const section = this.state.currentHoveredSection
     if (!section) {
       return
