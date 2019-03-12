@@ -3,10 +3,10 @@ import { NormalizedTicketGroup } from '../types'
 
 interface Props {
   isActive: boolean
-  ticketGroups: NormalizedTicketGroup[],
+  ticketGroups: NormalizedTicketGroup[]
   x: number
   y: number
-  name: string,
+  name: string
   color: string
 }
 
@@ -62,27 +62,41 @@ export default class Tooltip extends Component<Props> {
     }
 
     return (
-      <div ref={element => { this.container = element as HTMLElement }} style={containerStyle}>
-        {!renderAboveTarget && <div style={{
-          ...tipStyle,
-          borderWidth: renderRightOfTarget ? '10px 0 0 10px' : '0 0 10px 10px',
-          borderColor: renderRightOfTarget ? 'transparent transparent transparent white' : 'transparent transparent white transparent'
-        }} /> }
-        <div style={{
-          backgroundColor: 'white',
-          padding: 20
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center'
+      <div
+        ref={element => {
+          this.container = element as HTMLElement
+        }}
+        style={containerStyle}>
+        {!renderAboveTarget && (
+          <div
+            style={{
+              ...tipStyle,
+              borderWidth: renderRightOfTarget ? '10px 0 0 10px' : '0 0 10px 10px',
+              borderColor: renderRightOfTarget
+                ? 'transparent transparent transparent white'
+                : 'transparent transparent white transparent'
+            }}
+          />
+        )}
+        <div
+          style={{
+            backgroundColor: 'white',
+            padding: 20
           }}>
-            <div style={{
-              width: 10,
-              height: 10,
-              backgroundColor: color,
-              display: 'inline-block',
-              marginRight: 5
-            }} />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+            <div
+              style={{
+                width: 10,
+                height: 10,
+                backgroundColor: color,
+                display: 'inline-block',
+                marginRight: 5
+              }}
+            />
             {name}
           </div>
           <div>
@@ -91,11 +105,17 @@ export default class Tooltip extends Component<Props> {
             Starting at <span style={{ fontWeight: 700 }}>${prices[0]}</span>
           </div>
         </div>
-        {renderAboveTarget && <div style={{
-          ...tipStyle,
-          borderWidth: renderRightOfTarget ? '10px 10px 0 0' : '0 10px 10px 0',
-          borderColor: renderRightOfTarget ? 'white transparent transparent transparent' : 'transparent white transparent transparent'
-        }} /> }
+        {renderAboveTarget && (
+          <div
+            style={{
+              ...tipStyle,
+              borderWidth: renderRightOfTarget ? '10px 10px 0 0' : '0 10px 10px 0',
+              borderColor: renderRightOfTarget
+                ? 'white transparent transparent transparent'
+                : 'transparent white transparent transparent'
+            }}
+          />
+        )}
       </div>
     )
   }

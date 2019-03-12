@@ -6,11 +6,7 @@ import base from '../../webpack.config.base.babel'
 export default merge(base, {
   mode: 'development',
   devtool: 'source-map',
-  entry: [
-    'unfetch/polyfill',
-    path.join(__dirname, 'main.js'),
-    path.join(__dirname, 'main.css')
-  ],
+  entry: ['unfetch/polyfill', path.join(__dirname, 'main.js'), path.join(__dirname, 'main.css')],
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Ticket Evolution Map',

@@ -20,12 +20,15 @@ export default class SeatmapFactory {
 
     let map!: TicketMap
 
-    render((
+    render(
       <TicketMap
         {...this.options}
-        ref={(ref: TicketMap) => { map = ref }}
-      />
-    ), rootElement)
+        ref={(ref: TicketMap) => {
+          map = ref
+        }}
+      />,
+      rootElement
+    )
 
     return map.publicApi
   }

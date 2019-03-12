@@ -38,14 +38,26 @@ export default class Legend extends Component<Props, State> {
           <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} style={{ marginRight: 8 }} />
           <span>{open ? 'Hide' : 'Show'} Map Legend</span>
         </Button>
-        {ranges && ranges.length > 0 && open && <div style={{ position: 'absolute', backgroundColor: 'white', left: -2, right: -2, border: '2px solid lightgray', borderRadius: '0 0 5px 5px' }}>
-          {ranges.map(range => (
-            <div style={{ padding: 13 }}>
-              <Swatch color={range.color} style={{ marginRight: 8 }} />
-              <span>${Math.floor(range.min)} - ${Math.ceil(range.max)}</span>
-            </div>
-          ))}
-        </div>}
+        {ranges && ranges.length > 0 && open && (
+          <div
+            style={{
+              position: 'absolute',
+              backgroundColor: 'white',
+              left: -2,
+              right: -2,
+              border: '2px solid lightgray',
+              borderRadius: '0 0 5px 5px'
+            }}>
+            {ranges.map(range => (
+              <div style={{ padding: 13 }}>
+                <Swatch color={range.color} style={{ marginRight: 8 }} />
+                <span>
+                  ${Math.floor(range.min)} - ${Math.ceil(range.max)}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     )
   }

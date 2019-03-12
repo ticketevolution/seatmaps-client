@@ -6,11 +6,9 @@ module.exports = {
   coverageDirectory: 'coverage',
   moduleNameMapper: {
     '.+\\.(svg|png|jpg)$': 'identity-obj-proxy',
-    'react': '<rootDir>/node_modules/preact-compat',
+    react: '<rootDir>/node_modules/preact-compat',
     'react-dom': '<rootDir>/node_modules/preact-compat'
   },
   preset: 'ts-jest/presets/js-with-ts',
-  transformIgnorePatterns: [
-    '/node_modules/?!(lodash-es)'
-  ]
+  transformIgnorePatterns: ['/node_modules/?!(lodash-es)']
 }

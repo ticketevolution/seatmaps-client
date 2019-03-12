@@ -78,45 +78,41 @@ export default class Actions extends React.Component<Props, State> {
     const { isMobile } = this.state
 
     return (
-      <div style={styles.container} ref={ref => { this.container = ref }}>
+      <div
+        style={styles.container}
+        ref={ref => {
+          this.container = ref
+        }}>
         <ActionGroup>
           <Button
             data-rh='Default'
             data-custom-at='right'
             onClick={() => this.mapZoom.zoomIn()}
-            style={{ borderRight: '2px solid lightgray' }}
-          >
+            style={{ borderRight: '2px solid lightgray' }}>
             <FontAwesomeIcon icon={faPlus} />
           </Button>
 
-          <Button
-            onClick={() => this.mapZoom.zoomOut()}
-            style={{ borderRight: '2px solid lightgray' }}
-          >
+          <Button onClick={() => this.mapZoom.zoomOut()} style={{ borderRight: '2px solid lightgray' }}>
             <FontAwesomeIcon icon={faMinus} />
           </Button>
 
-          <Button
-            onClick={() => this.mapZoom.reset()}
-            style={{ borderRight: '2px solid lightgray' }}
-          >
+          <Button onClick={() => this.mapZoom.reset()} style={{ borderRight: '2px solid lightgray' }}>
             <FontAwesomeIcon icon={faUndoAlt} style={{ marginRight: 8 }} />
             Reset Zoom
           </Button>
 
           <Button
             onClick={() => this.props.onClearSelection()}
-            style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
-          >
+            style={{
+              borderRight: isMobile ? '2px solid lightgray' : undefined
+            }}>
             <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 8 }} />
             <span>Clear All</span>
           </Button>
 
           {isMobile && this.props.showLegend && <Legend ranges={this.props.ranges} />}
         </ActionGroup>
-        {!isMobile && <ActionGroup>
-          {this.props.showLegend && <Legend ranges={this.props.ranges} />}
-        </ActionGroup>}
+        {!isMobile && <ActionGroup>{this.props.showLegend && <Legend ranges={this.props.ranges} />}</ActionGroup>}
       </div>
     )
   }

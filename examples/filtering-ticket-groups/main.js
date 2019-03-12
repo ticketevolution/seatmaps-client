@@ -22,19 +22,19 @@ const createHeading = (section, row) => {
   return element
 }
 
-const createType = (format) => {
+const createType = format => {
   const element = document.createElement('h2')
   element.appendChild(document.createTextNode(format))
   return element
 }
 
-const createQuantity = (quantity) => {
+const createQuantity = quantity => {
   const element = document.createElement('h3')
   element.append(document.createTextNode(`${quantity} ticket${quantity > 1 ? 's' : ''}`))
   return element
 }
 
-const createTicketGroupListItem = (ticketGroup) => {
+const createTicketGroupListItem = ticketGroup => {
   const ticketGroupListItem = document.createElement('div')
   ticketGroupListItem.classList.add('ticket-groups-list-item')
   ticketGroupListItem.dataset.section = ticketGroup.tevo_section_name
@@ -83,9 +83,10 @@ const updatePriceDisplays = () => {
  * Filtering
  */
 
-const filterBySection = (selectedSections) =>
-  availableTicketGroups.filter(ticketGroup =>
-    selectedSections.length === 0 || selectedSections.includes(ticketGroup.tevo_section_name))
+const filterBySection = selectedSections =>
+  availableTicketGroups.filter(
+    ticketGroup => selectedSections.length === 0 || selectedSections.includes(ticketGroup.tevo_section_name)
+  )
 
 const filter = () =>
   allTicketGroups
@@ -127,21 +128,20 @@ const updateFilters = (name, value) => {
   }
 }
 
-document.getElementById('filters')
-  .addEventListener('change', ({ target: { name, value } }) => {
-    updateFilters(name, value)
-    update()
-  })
+document.getElementById('filters').addEventListener('change', ({ target: { name, value } }) => {
+  updateFilters(name, value)
+  update()
+})
 
 const ticketGroupsElement = document.getElementById('ticketGroups')
-ticketGroupsElement.addEventListener('mouseover', (event) => {
-  const element = event.path.find((path) => path.classList && path.classList.contains('ticket-groups-list-item'))
+ticketGroupsElement.addEventListener('mouseover', event => {
+  const element = event.path.find(path => path.classList && path.classList.contains('ticket-groups-list-item'))
   if (element) {
     map.highlightSection(element.dataset.section)
   }
 })
-ticketGroupsElement.addEventListener('mouseout', (event) => {
-  const element = event.path.find((path) => path.classList && path.classList.contains('ticket-groups-list-item'))
+ticketGroupsElement.addEventListener('mouseout', event => {
+  const element = event.path.find(path => path.classList && path.classList.contains('ticket-groups-list-item'))
   if (element) {
     map.unhighlightSection(element.dataset.section)
   }
@@ -151,25 +151,21 @@ ticketGroupsElement.addEventListener('mouseout', (event) => {
  * Initializing
  */
 
-const fetchTicketGroups = () =>
-  fetch('/examples/data/ticket-groups-1591449.json')
-    .then(response => response.json())
+const fetchTicketGroups = () => fetch('/examples/data/ticket-groups-1591449.json').then(response => response.json())
 
 const buildMap = () => {
   map = new Tevomaps({
     venueId: VENUE_ID,
     configurationId: CONFIGURATION_ID,
-    onSelection: (selectedSections) =>
-      renderTicketGroupList(filterBySection(selectedSections))
+    onSelection: selectedSections => renderTicketGroupList(filterBySection(selectedSections))
   }).build('map')
 }
 
 window.onload = () => {
   buildMap()
-  fetchTicketGroups()
-    .then((ticketGroups) => {
-      allTicketGroups = ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
-      setPriceRange()
-      update()
-    })
+  fetchTicketGroups().then(ticketGroups => {
+    allTicketGroups = ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
+    setPriceRange()
+    update()
+  })
 }

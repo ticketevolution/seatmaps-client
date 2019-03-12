@@ -55,7 +55,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   static defaultProps: DefaultProps = {
     mapsDomain: 'https://maps.ticketevolution.com',
-    onSelection: () => { },
+    onSelection: () => {},
     isZoneDefault: false,
     selectedSections: [],
     sectionPercentiles: {
@@ -114,11 +114,19 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   componentDidUpdate (_prevProps: Props, prevState: State) {
     const availableTicketGroupsDidChange = $availableTicketGroups(prevState) !== $availableTicketGroups(this.state)
-    const isNoLongerHoveringOnSection = prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined
-    const isNoLongerHoveringOnZone = prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined
+    const isNoLongerHoveringOnSection =
+      prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined
+    const isNoLongerHoveringOnZone =
+      prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined
     const selectedSectionsDidChange = !isEqual(this.state.selectedSections, prevState.selectedSections)
 
-    if (this.mapRootRef !== null && (isNoLongerHoveringOnSection || isNoLongerHoveringOnZone || availableTicketGroupsDidChange || selectedSectionsDidChange)) {
+    if (
+      this.mapRootRef !== null &&
+      (isNoLongerHoveringOnSection ||
+        isNoLongerHoveringOnZone ||
+        availableTicketGroupsDidChange ||
+        selectedSectionsDidChange)
+    ) {
       this.updateMap()
     }
 
@@ -152,14 +160,16 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     const manifest: Manifest = await manifestResponse.json()
 
     this.setState({
-      sectionZoneMapping: Object.entries(manifest.sections)
-        .reduce((memo, [sectionName, section]) => ({
+      sectionZoneMapping: Object.entries(manifest.sections).reduce(
+        (memo, [sectionName, section]) => ({
           ...memo,
           [sectionName.toLowerCase()]: {
             sectionName,
             zone: section.zone_name ? section.zone_name.toLowerCase() : undefined
           }
-        }), {})
+        }),
+        {}
+      )
     })
   }
 
@@ -289,40 +299,43 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.setState({ selectedSections })
   }
 
-  updateTicketGroups = (ticketGroups = this.props.ticketGroups) =>
-    this.setState({ ticketGroups })
+  updateTicketGroups = (ticketGroups = this.props.ticketGroups) => this.setState({ ticketGroups })
 
   /**
    * Colors
    */
 
   setUnavailableColors = () =>
-    this.fillPathsForSection(element =>
-      ({ 'data-unavailable-color': element.getAttribute('fill') as string }))
+    this.fillPathsForSection(element => ({
+      'data-unavailable-color': element.getAttribute('fill') as string
+    }))
 
   fillUnavailableColors = () =>
     this.fillPathsForSection(element => ({
-      'fill': element.getAttribute('data-unavailable-color') as string,
-      'opacity': '1',
+      fill: element.getAttribute('data-unavailable-color') as string,
+      opacity: '1',
       'stroke-width': '1',
-      'stroke': '#FFFFFF'
+      stroke: '#FFFFFF'
     }))
 
   fillPathsForSection = (propertiesForElement: PropertiesForElement, section?: string): void =>
     this.getAllPaths(section).forEach(element =>
-      Object.entries(propertiesForElement(element))
-        .forEach(([property, value]) =>
-          element.setAttribute(property, value)))
+      Object.entries(propertiesForElement(element)).forEach(([property, value]) =>
+        element.setAttribute(property, value)
+      )
+    )
 
   getAllPaths = (id?: string) => {
     if (!this.mapRootRef) {
       return []
     }
-    return Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
-      .reduce((memo, element) => {
+    return Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`)).reduce(
+      (memo, element) => {
         const children = element.querySelectorAll('path')
         return memo.concat(children.length ? Array.from(children) : [element])
-      }, [] as Element[])
+      },
+      [] as Element[]
+    )
   }
 
   /**
@@ -333,7 +346,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.fillUnavailableColors()
     if (this.state.isZoneToggled) {
       return Object.keys($ticketGroupsBySectionByZone(this.state)).forEach(zone =>
-        this.fillZone(zone.toLowerCase(), $areAllSectionsInTheZoneSelected(this.state)(zone.toLowerCase())))
+        this.fillZone(zone.toLowerCase(), $areAllSectionsInTheZoneSelected(this.state)(zone.toLowerCase()))
+      )
     }
     Object.keys($ticketGroupsBySection(this.state)).forEach(section => {
       this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section))
@@ -343,27 +357,35 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   fillSection (section: string, shouldHighlight = true) {
     const isAnAvailableSection = $venueSections(this.state).includes(section)
     if (isAnAvailableSection) {
-      this.fillPathsForSection(() => ({
-        'fill': this.getDefaultColor($ticketGroupsBySection(this.state)[section]),
-        'opacity': shouldHighlight ? '1' : '0.6',
-        'stroke-width': '1',
-        'stroke': shouldHighlight ? '#4a4a4a' : '#FFFFFF',
-        'cursor': 'pointer'
-      }), section)
+      this.fillPathsForSection(
+        () => ({
+          fill: this.getDefaultColor($ticketGroupsBySection(this.state)[section]),
+          opacity: shouldHighlight ? '1' : '0.6',
+          'stroke-width': '1',
+          stroke: shouldHighlight ? '#4a4a4a' : '#FFFFFF',
+          cursor: 'pointer'
+        }),
+        section
+      )
     }
   }
 
   fillZone (zone: string, shouldHighlight = true) {
     const ticketGroupsBySection = $ticketGroupsBySectionByZone(this.state)[zone]
-    const allTicketGroupsInZone = Object.values(ticketGroupsBySection)
-      .reduce((memo, ticketGroupsInSection) => [...memo, ...ticketGroupsInSection], [])
+    const allTicketGroupsInZone = Object.values(ticketGroupsBySection).reduce(
+      (memo, ticketGroupsInSection) => [...memo, ...ticketGroupsInSection],
+      []
+    )
     Object.keys(ticketGroupsBySection).forEach(section => {
       const isAnAvailableSection = $venueSections(this.state).includes(section)
       if (isAnAvailableSection) {
-        this.fillPathsForSection(() => ({
-          'fill': this.getDefaultColor(allTicketGroupsInZone),
-          'opacity': shouldHighlight ? '1' : '0.6'
-        }), section)
+        this.fillPathsForSection(
+          () => ({
+            fill: this.getDefaultColor(allTicketGroupsInZone),
+            opacity: shouldHighlight ? '1' : '0.6'
+          }),
+          section
+        )
       }
     })
   }
@@ -396,8 +418,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   onTouchStart = ({ touches, target }: React.TouchEvent<HTMLElement>) =>
     this.doHover(touches[0].clientX, touches[0].clientY, target as HTMLElement)
 
-  onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) =>
-    this.doHoverCleanup(relatedTarget as HTMLElement)
+  onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) => this.doHoverCleanup(relatedTarget as HTMLElement)
 
   onMouseMove = ({ nativeEvent }: React.MouseEvent<HTMLElement>) =>
     this.setState({
@@ -439,9 +460,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
     const { zone, sectionName } = this.state.sectionZoneMapping[section]
 
-    type NewState =
-      Pick<State, 'tooltipActive' | 'tooltipX' | 'tooltipY' | 'tooltipSectionName'> &
-      Partial<Pick<State, 'currentHoveredSection' | 'currentHoveredZone'>>
+    type NewState = Pick<State, 'tooltipActive' | 'tooltipX' | 'tooltipY' | 'tooltipSectionName'> &
+    Partial<Pick<State, 'currentHoveredSection' | 'currentHoveredZone'>>
 
     const newState: NewState = {
       tooltipActive: true,
@@ -475,8 +495,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
 
     const enteringSection = !!enteringElement && enteringElement.closest('[data-section-id]')
-    const isEnteringTheSameSection = !!enteringSection &&
-      (enteringSection.getAttribute('data-section-id') as string).toLowerCase() === section
+    const isEnteringTheSameSection =
+      !!enteringSection && (enteringSection.getAttribute('data-section-id') as string).toLowerCase() === section
     if (isEnteringTheSameSection) {
       return
     }
@@ -517,32 +537,42 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   render () {
     if (this.state.mapNotFound) {
       return (
-        <div style={{
-          left: 0,
-          position: 'relative',
-          textAlign: 'left'
-        }}>
-          <div style={{
-            color: 'white',
-            fontFamily: 'Nunito Sans',
-            padding: '50px 30px',
-            position: 'absolute',
+        <div
+          style={{
+            left: 0,
+            position: 'relative',
             textAlign: 'left'
           }}>
-            <div style={{
-              fontWeight: 600,
-              fontSize: '1.375em'
-            }}>Seating chart not available.</div>
+          <div
+            style={{
+              color: 'white',
+              fontFamily: 'Nunito Sans',
+              padding: '50px 30px',
+              position: 'absolute',
+              textAlign: 'left'
+            }}>
+            <div
+              style={{
+                fontWeight: 600,
+                fontSize: '1.375em'
+              }}>
+              Seating chart not available.
+            </div>
             <div style={{ fontWeight: 300 }}>(It was abducted by aliens)</div>
           </div>
-          <img src='https://maps.ticketevolution.com/maps/not_available.jpg' style={{ width: '100%', textAlign: 'left' }} />
+          <img
+            src='https://maps.ticketevolution.com/maps/not_available.jpg'
+            style={{ width: '100%', textAlign: 'left' }}
+          />
         </div>
       )
     }
 
     return (
       <div
-        ref={element => { this.rootRef = element as HTMLElement }}
+        ref={element => {
+          this.rootRef = element as HTMLElement
+        }}
         onMouseOver={this.onMouseOver}
         onTouchStart={this.onTouchStart}
         onMouseOut={this.onMouseOut}
@@ -555,18 +585,25 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           fontFamily: this.props.mapFontFamily,
           height: '100%',
           width: '100%'
-        }}
-      >
+        }}>
         <Tooltip
           isActive={this.state.tooltipActive}
           x={this.state.tooltipX}
           y={this.state.tooltipY}
           name={this.state.tooltipSectionName}
-          color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
-          ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
+          color={
+            this.state.currentHoveredSection
+              ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection])
+              : ''
+          }
+          ticketGroups={$availableTicketGroups(this.state).filter(
+            ticketGroup => ticketGroup.section === this.state.currentHoveredSection
+          )}
         />
         <div
-          ref={element => { this.mapRootRef = element as HTMLElement }}
+          ref={element => {
+            this.mapRootRef = element as HTMLElement
+          }}
           style={{
             cursor: '-webkit-grab',
             opacity: this.state.mapSvg ? 1 : 0

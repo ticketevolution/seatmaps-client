@@ -22,14 +22,12 @@ export default class ZoneToggle extends Component<Props> {
           marginLeft: 'auto',
           display: 'flex',
           alignItems: 'center'
-        }}
-      >
+        }}>
         <div
           style={{
             ...toggleTextStyle,
             color: isZoneToggled ? '#181514' : '#3D5A80'
-          }}
-        >
+          }}>
           Section
         </div>
 
@@ -41,8 +39,7 @@ export default class ZoneToggle extends Component<Props> {
                 display: 'inline-block',
                 width: '60px',
                 height: '36px'
-              }}
-            >
+              }}>
               <input
                 type='checkbox'
                 style={{
@@ -64,8 +61,7 @@ export default class ZoneToggle extends Component<Props> {
                   height: '100%',
                   pointerEvents: 'none',
                   cursor: 'pointer'
-                }}
-              >
+                }}>
                 <span
                   style={{
                     flex: 1,
@@ -94,8 +90,7 @@ export default class ZoneToggle extends Component<Props> {
           style={{
             ...toggleTextStyle,
             color: isZoneToggled ? '#3D5A80' : '#181514'
-          }}
-        >
+          }}>
           Zone
         </div>
       </div>

@@ -5,10 +5,7 @@ import base from './webpack.config.base.babel'
 
 export default merge(base, {
   mode: 'production',
-  entry: [
-    'unfetch/polyfill',
-    path.join(__dirname, 'src', 'index.tsx')
-  ],
+  entry: ['unfetch/polyfill', path.join(__dirname, 'src', 'index.tsx')],
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
