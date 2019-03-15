@@ -1,5 +1,4 @@
 import React, { Component, CSSProperties } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
 import Swatch from './swatch'
@@ -19,7 +18,8 @@ interface Range {
 
 interface Props {
   ranges: Range[]
-  style?: CSSProperties
+  style?: CSSProperties,
+  isMobile?: boolean
 }
 
 interface State {
@@ -28,7 +28,8 @@ interface State {
 
 export default class Legend extends Component<Props, State> {
   static defaultProps = {
-    style: {}
+    style: {},
+    isMobile: false
   }
 
   state = {
@@ -37,14 +38,16 @@ export default class Legend extends Component<Props, State> {
 
   render () {
     const { open } = this.state
-    const { ranges } = this.props
+    const { ranges, isMobile } = this.props
 
     return (
       <div style={{ position: 'relative' }}>
-        <Button onClick={() => this.setState({ open: !open })}>
-          <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} style={{ marginRight: 8 }} />
-          <span>{open ? 'Hide' : 'Show'} Map Legend</span>
-        </Button>
+        <Button
+          onClick={() => this.setState({ open: !open })}
+          icon={open ? faChevronUp : faChevronDown}
+          text={`${open ? 'Hide ' : 'Show '}Map Legend`}
+          isMobile={isMobile}
+        />
         {ranges && ranges.length > 0 && open && <div style={{ position: 'absolute', backgroundColor: 'white', left: -2, right: -2, border: '2px solid lightgray', borderRadius: '0 0 5px 5px' }}>
           {ranges.map(range => (
             <div style={{ padding: 13 }}>

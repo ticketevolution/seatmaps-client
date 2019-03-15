@@ -1,6 +1,5 @@
 import React from 'react'
 import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle, faPlus, faMinus, faUndoAlt } from '@fortawesome/free-solid-svg-icons'
 import Legend from '../Legend'
 import Button from '../Button'
@@ -18,29 +17,6 @@ interface State {
   isMobile: boolean
 }
 
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    right: 10,
-    bottom: 10,
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    opacity: 0.9,
-    pointerEvents: 'none',
-    whiteSpace: 'nowrap'
-  },
-  icon: {
-    display: 'inline-block',
-    fontSize: 'inherit',
-    height: '1.333333333em',
-    overflow: 'visible',
-    verticalAlign: '-0.125em'
-  }
-}
-
 export default class Actions extends React.Component<Props, State> {
   container?: HTMLDivElement | null
   mapZoom: any // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -52,6 +28,33 @@ export default class Actions extends React.Component<Props, State> {
     this.mapZoom = svgPanZoom(this.props.mapSvg, {
       minZoom: 0.8
     })
+  }
+
+  get styles (): { [key: string]: React.CSSProperties } {
+    return {
+      container: {
+        position: 'absolute',
+        top: this.state.isMobile ? 0 : 10,
+        left: this.state.isMobile ? 0 : 10,
+        right: this.state.isMobile ? 0 : 10,
+        bottom: this.state.isMobile ? 0 : 10,
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        opacity: 0.9,
+        pointerEvents: 'none',
+        whiteSpace: 'nowrap',
+        maxWidth: '100%',
+        fontSize: '0.75em'
+      },
+      icon: {
+        display: 'inline-block',
+        fontSize: 'inherit',
+        height: '1.333333333em',
+        overflow: 'visible',
+        verticalAlign: '-0.125em'
+      }
+    }
   }
 
   componentDidMount () {
@@ -67,7 +70,7 @@ export default class Actions extends React.Component<Props, State> {
       return
     }
 
-    const isMobile = this.container.clientWidth < 560
+    const isMobile = this.container.clientWidth < 700
 
     if (this.state.isMobile !== isMobile) {
       this.setState({ isMobile })
@@ -78,41 +81,41 @@ export default class Actions extends React.Component<Props, State> {
     const { isMobile } = this.state
 
     return (
-      <div style={styles.container} ref={ref => { this.container = ref }}>
+      <div style={this.styles.container} ref={ref => { this.container = ref }}>
         <ActionGroup>
           <Button
             data-rh='Default'
             data-custom-at='right'
             onClick={() => this.mapZoom.zoomIn()}
+            icon={faPlus}
+            isMobile={isMobile}
             style={{ borderRight: '2px solid lightgray' }}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </Button>
+          />
 
           <Button
             onClick={() => this.mapZoom.zoomOut()}
+            icon={faMinus}
+            isMobile={isMobile}
             style={{ borderRight: '2px solid lightgray' }}
-          >
-            <FontAwesomeIcon icon={faMinus} />
-          </Button>
+          />
 
           <Button
             onClick={() => this.mapZoom.reset()}
+            icon={faUndoAlt}
+            text='Reset Zoom'
+            isMobile={isMobile}
             style={{ borderRight: '2px solid lightgray' }}
-          >
-            <FontAwesomeIcon icon={faUndoAlt} style={{ marginRight: 8 }} />
-            Reset Zoom
-          </Button>
+          />
 
           <Button
             onClick={() => this.props.onClearSelection()}
+            icon={faTimesCircle}
+            text={`Clear${isMobile ? '' : ' All'}`}
+            isMobile={isMobile}
             style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
-          >
-            <FontAwesomeIcon icon={faTimesCircle} style={{ marginRight: 8 }} />
-            <span>Clear All</span>
-          </Button>
+          />
 
-          {isMobile && this.props.showLegend && <Legend ranges={this.props.ranges} />}
+          {isMobile && this.props.showLegend && <Legend isMobile ranges={this.props.ranges} />}
         </ActionGroup>
         {!isMobile && <ActionGroup>
           {this.props.showLegend && <Legend ranges={this.props.ranges} />}
