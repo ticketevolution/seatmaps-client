@@ -27,6 +27,7 @@ body {
 
 #map {
     width: 70%;
+    height: 600px;
 }
 
 #ticketGroups {

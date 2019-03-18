@@ -45,7 +45,7 @@ analyze: ## Run the webpack analyzer
 	@echo "$(BLUE_COLOR)(Tip: CMD + double-click the link!)$(RESET_COLOR)\n"
 
 copy-to-shell: build ## Build seatmaps and drop it into your local Shell instance
-	cp -r build /Users/Shared/workspace/shell/node_modules/ticket-evolution-seatmaps
+	docker cp build/. shell_app_1:/usr/src/shell/node_modules/ticket-evolution-seatmaps/build
 
 copy-to-core: build ## Build seatmaps and drop it into your local Core instance
 	cp -r build /Users/Shared/workspace/pos/node_modules/ticket-evolution-seatmaps

@@ -368,6 +368,20 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     })
   }
 
+  getSectionFromTarget (target: HTMLElement) {
+    const element = target.closest('[data-section-id]')
+    if (!element) {
+      return
+    }
+
+    const sectionId = element.getAttribute('data-section-id')
+    if (!sectionId) {
+      return
+    }
+
+    return sectionId.toLowerCase()
+  }
+
   /**
    * Coloring
    */
@@ -391,10 +405,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    */
 
   onMouseOver = ({ clientX, clientY, target }: React.MouseEvent<HTMLElement>) =>
-    this.doHover(clientX, clientY, target as HTMLElement)
+    this.doHover(target as HTMLElement, clientX, clientY)
 
-  onTouchStart = ({ touches, target }: React.TouchEvent<HTMLElement>) =>
-    this.doHover(touches[0].clientX, touches[0].clientY, target as HTMLElement)
+  onTouchStart = ({ target }: React.TouchEvent<HTMLElement>) =>
+    this.selectSectionOrZone(
+      this.getSectionFromTarget(target as HTMLElement))
 
   onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) =>
     this.doHoverCleanup(relatedTarget as HTMLElement)
@@ -405,10 +420,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       tooltipY: nativeEvent.offsetY
     })
 
-  onTouchMove = ({ target }: React.TouchEvent<HTMLElement>) => {
-    this.doHoverCleanup(target as HTMLElement)
-    this.setState({ isDragging: true })
-  }
+  onClick = () => this.selectSectionOrZone()
+
+  onTouchMove = () => this.setState({ isDragging: true })
 
   onTouchEnd = () => {
     if (!this.state.isDragging) {
@@ -421,18 +435,12 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Interactions
    */
 
-  doHover (tooltipX: number, tooltipY: number, target: HTMLElement) {
-    const element = target.closest('[data-section-id]')
-    if (!element) {
+  doHover (target: HTMLElement, tooltipX?: number, tooltipY?: number) {
+    const section = this.getSectionFromTarget(target)
+    if (!section) {
       return
     }
 
-    const sectionId = element.getAttribute('data-section-id')
-    if (!sectionId) {
-      return
-    }
-
-    const section = sectionId.toLowerCase()
     if (!$venueSections(this.state).includes(section)) {
       return
     }
@@ -444,9 +452,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       Partial<Pick<State, 'currentHoveredSection' | 'currentHoveredZone'>>
 
     const newState: NewState = {
-      tooltipActive: true,
-      tooltipX,
-      tooltipY,
+      tooltipActive: tooltipX !== undefined && tooltipY !== undefined,
+      tooltipX: tooltipX !== undefined ? tooltipX : 0,
+      tooltipY: tooltipY !== undefined ? tooltipY : 0,
       tooltipSectionName: sectionName
     }
 
@@ -494,8 +502,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.unhighlightSection(section)
   }
 
-  selectSectionOrZone = () => {
-    const section = this.state.currentHoveredSection
+  selectSectionOrZone (section = this.state.currentHoveredSection) {
     if (!section) {
       return
     }
@@ -547,7 +554,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         onTouchStart={this.onTouchStart}
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
-        onClick={this.selectSectionOrZone}
+        onClick={this.onClick}
         onTouchMove={this.onTouchMove}
         onTouchEnd={this.onTouchEnd}
         style={{

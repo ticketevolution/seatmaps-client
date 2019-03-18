@@ -6,7 +6,6 @@ export default function (props: React.HTMLProps<HTMLDivElement>) {
     border: '2px solid lightgray',
     borderRadius: 5,
     display: 'flex',
-    minHeight: 32,
     backgroundColor: 'white',
     ...(props.style || {})
   }} />
