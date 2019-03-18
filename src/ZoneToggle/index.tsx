@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Toggle from 'react-toggled/preact'
+import Toggle from 'react-toggled'
 
 interface Props {
   isZoneToggled: boolean

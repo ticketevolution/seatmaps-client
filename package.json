@@ -22,7 +22,7 @@
     "check-types": "tsc --noEmit",
     "lint": "eslint . --ext js --ext jsx --ext ts --ext tsx --cache",
     "fix": "npm run lint -- --fix",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },
   "devDependencies": {
@@ -62,8 +62,8 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.3.0",
     "lodash-es": "^4.17.11",
-    "preact": "^8.4.2",
-    "preact-compat": "3.18.4",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
     "react-toggled": "1.2.7",
     "reselect": "^4.0.0",
     "style-loader": "^0.23.1",
