@@ -4,12 +4,12 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import Button from '../Button'
 import Swatch from './swatch'
 
-const currencyFormatter = new Intl.NumberFormat(undefined, {
+const formatCurrency = new Intl.NumberFormat(undefined, {
   style: 'currency',
   currency: 'USD',
   maximumFractionDigits: 0,
   minimumFractionDigits: 0
-})
+}).format
 
 interface Range {
   color: string
@@ -50,9 +50,9 @@ export default class Legend extends Component<Props, State> {
             <div style={{ padding: 13 }}>
               <Swatch color={range.color} style={{ marginRight: 8 }} />
               <span>
-                {currencyFormatter.format(Math.floor(range.min))}
+                {formatCurrency(Math.floor(range.min))}
                 {' - '}
-                {currencyFormatter.format(Math.ceil(range.max))}
+                {formatCurrency(Math.ceil(range.max))}
               </span>
             </div>
           ))}
