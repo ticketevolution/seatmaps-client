@@ -22,6 +22,10 @@ export default class Actions extends React.Component<Props, State> {
   mapZoom: any // eslint-disable-line @typescript-eslint/no-explicit-any
   timer?: number
 
+  state: State = {
+    isMobile: true
+  }
+
   constructor (props: Props) {
     super(props)
 
