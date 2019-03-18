@@ -5,11 +5,10 @@ module.exports = {
   clearMocks: true,
   coverageDirectory: 'coverage',
   moduleNameMapper: {
-    '.+\\.(svg|png|jpg)$': 'identity-obj-proxy',
-    'react': '<rootDir>/node_modules/preact-compat',
-    'react-dom': '<rootDir>/node_modules/preact-compat'
+    '.+\\.(svg|png|jpg)$': 'identity-obj-proxy'
   },
-  preset: 'ts-jest/presets/js-with-ts',
+  preset: 'ts-jest',
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   transformIgnorePatterns: [
     '/node_modules/?!(lodash-es)'
   ]

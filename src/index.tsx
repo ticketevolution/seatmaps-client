@@ -1,4 +1,5 @@
-import React, { render } from 'react-dom'
+import React from 'react'
+import { render } from 'react-dom'
 import TicketMap, { Props } from './TicketMap'
 
 export default class SeatmapFactory {
