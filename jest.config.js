@@ -7,7 +7,8 @@ module.exports = {
   moduleNameMapper: {
     '.+\\.(svg|png|jpg)$': 'identity-obj-proxy'
   },
-  preset: 'ts-jest/presets/js-with-ts',
+  preset: 'ts-jest',
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   transformIgnorePatterns: [
     '/node_modules/?!(lodash-es)'
   ]
