@@ -3,7 +3,19 @@
 
 module.exports = {
   clearMocks: true,
+  collectCoverageFrom: [
+    '!src/declarations',
+    '**/*.{ts,tsx}'
+  ],
   coverageDirectory: 'coverage',
+  coverageThreshold: {
+    global: {
+      branches: 90,
+      functions: 90,
+      lines: 90,
+      statements: 90
+    }
+  },
   moduleNameMapper: {
     '.+\\.(svg|png|jpg)$': 'identity-obj-proxy',
     '^lodash-es$': '<rootDir>/node_modules/lodash/index.js'
