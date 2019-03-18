@@ -1,6 +1,10 @@
 import React, { Component, CSSProperties } from 'react'
 import { NormalizedTicketGroup } from '../types'
 
+const currencyFormatter = new Intl.NumberFormat(undefined, {
+  style: 'currency', currency: 'USD'
+})
+
 interface Props {
   isActive: boolean
   ticketGroups: NormalizedTicketGroup[],
@@ -88,7 +92,7 @@ export default class Tooltip extends Component<Props> {
           <div>
             {prices.length} listing{prices.length !== 1 ? 's' : ''}
             {' ● '}
-            Starting at <span style={{ fontWeight: 700 }}>${prices[0]}</span>
+            Starting at <span style={{ fontWeight: 700 }}>{currencyFormatter.format(prices[0])}</span>
           </div>
         </div>
         {renderAboveTarget && <div style={{
