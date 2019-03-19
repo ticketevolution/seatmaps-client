@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react'
 
-interface Props {
+export interface Props {
   style?: CSSProperties
   color: string
 }
