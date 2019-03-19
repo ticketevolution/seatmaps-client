@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default class Tooltip extends Component<Props> {
-  container!: HTMLElement
+  container = React.createRef<HTMLDivElement>()
 
   render () {
     const { isActive, ticketGroups, x, y, name, color } = this.props
@@ -35,19 +35,23 @@ export default class Tooltip extends Component<Props> {
       pointerEvents: 'none'
     }
 
+
     let renderAboveTarget = true
     let renderRightOfTarget = true
-    if (this.container && x !== undefined && y !== undefined) {
-      if (this.container.parentElement && x + this.container.clientWidth > this.container.parentElement.clientWidth) {
+
+    const container = this.container.current
+
+    if (container && x !== undefined && y !== undefined) {
+      if (container.parentElement && x + container.clientWidth > container.parentElement.clientWidth) {
         renderRightOfTarget = false
       }
 
-      if (y - this.container.clientHeight < 0) {
+      if (y - container.clientHeight < 0) {
         renderAboveTarget = false
       }
 
       if (renderAboveTarget) {
-        containerStyle.top = y - this.container.clientHeight
+        containerStyle.top = y - container.clientHeight
       } else {
         containerStyle.top = y
       }
@@ -55,7 +59,7 @@ export default class Tooltip extends Component<Props> {
       if (renderRightOfTarget) {
         containerStyle.left = x
       } else {
-        containerStyle.left = x - this.container.clientWidth
+        containerStyle.left = x - container.clientWidth
         containerStyle.alignItems = 'flex-end'
       }
     }
@@ -67,7 +71,7 @@ export default class Tooltip extends Component<Props> {
     }
 
     return (
-      <div ref={element => { this.container = element as HTMLElement }} style={containerStyle}>
+      <div ref={this.container} style={containerStyle}>
         {!renderAboveTarget && <div style={{
           ...tipStyle,
           borderWidth: renderRightOfTarget ? '10px 0 0 10px' : '0 0 10px 10px',
