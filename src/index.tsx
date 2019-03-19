@@ -49,15 +49,12 @@ export default class SeatmapFactory {
       throw new Error('Seatmaps must be initialized with a DOM element.')
     }
 
-    let map!: TicketMap
+    let map = React.createRef<TicketMap>()
 
     render((
-      <TicketMap
-        {...this.configuration}
-        ref={(ref: TicketMap) => { map = ref }}
-      />
+      <TicketMap {...this.configuration} ref={map} />
     ), rootElement)
 
-    return map.publicApi
+    return map.current!.publicApi
   }
 }
