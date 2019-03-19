@@ -50,7 +50,6 @@ class MapNotFoundError extends Error {
 
 export default class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi
-  root = React.createRef<HTMLDivElement>()
   mapRoot = React.createRef<HTMLDivElement>()
 
   static defaultProps: DefaultProps = {
@@ -556,7 +555,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
     return (
       <div
-        ref={this.root}
         onMouseOver={this.onMouseOver}
         onTouchStart={this.onTouchStart}
         onMouseOut={this.onMouseOut}
