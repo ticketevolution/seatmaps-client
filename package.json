@@ -22,7 +22,7 @@
     "check-types": "tsc --noEmit",
     "lint": "eslint . --ext js --ext jsx --ext ts --ext tsx --cache",
     "fix": "npm run lint -- --fix",
-    "test": "jest --passWithNoTests",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "devDependencies": {

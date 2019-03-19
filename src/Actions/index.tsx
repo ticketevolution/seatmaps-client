@@ -6,18 +6,23 @@ import Button from '../Button'
 import ActionGroup from './ActionGroup'
 import { CostRange } from 'src/TicketMap'
 
-interface Props {
+export interface Props {
   mapSvg: SVGSVGElement
-  onClearSelection(): void
-  showLegend: boolean
+  onClearSelection?: () => void
+  showLegend?: boolean
   ranges: CostRange[]
+}
+
+interface DefaultProps {
+  showLegend: boolean,
+  onClearSelection(): void
 }
 
 interface State {
   isMobile: boolean
 }
 
-export default class Actions extends React.Component<Props, State> {
+export default class Actions extends React.Component<Props & DefaultProps, State> {
   container?: HTMLDivElement | null
   mapZoom: any // eslint-disable-line @typescript-eslint/no-explicit-any
   timer?: number
@@ -26,7 +31,12 @@ export default class Actions extends React.Component<Props, State> {
     isMobile: true
   }
 
-  constructor (props: Props) {
+  static defaultProps: DefaultProps = {
+    showLegend: true,
+    onClearSelection: () => {}
+  }
+
+  constructor (props: Props & DefaultProps) {
     super(props)
 
     this.mapZoom = svgPanZoom(this.props.mapSvg, {
@@ -121,9 +131,11 @@ export default class Actions extends React.Component<Props, State> {
 
           {isMobile && this.props.showLegend && <Legend isMobile ranges={this.props.ranges} />}
         </ActionGroup>
-        {!isMobile && <ActionGroup>
-          {this.props.showLegend && <Legend ranges={this.props.ranges} />}
-        </ActionGroup>}
+        {!isMobile && (
+          <ActionGroup>
+            {this.props.showLegend && <Legend ranges={this.props.ranges} />}
+          </ActionGroup>
+        )}
       </div>
     )
   }
