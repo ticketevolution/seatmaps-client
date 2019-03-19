@@ -50,8 +50,8 @@ class MapNotFoundError extends Error {
 
 export default class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi
-  mapRootRef!: HTMLElement
-  rootRef!: HTMLElement
+  root = React.createRef<HTMLDivElement>()
+  mapRoot = React.createRef<HTMLDivElement>()
 
   static defaultProps: DefaultProps = {
     mapsDomain: 'https://maps.ticketevolution.com',
@@ -118,7 +118,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     const isNoLongerHoveringOnZone = prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined
     const selectedSectionsDidChange = !isEqual(this.state.selectedSections, prevState.selectedSections)
 
-    if (this.mapRootRef !== null && (isNoLongerHoveringOnSection || isNoLongerHoveringOnZone || availableTicketGroupsDidChange || selectedSectionsDidChange)) {
+    if (this.mapRoot.current && (isNoLongerHoveringOnSection || isNoLongerHoveringOnZone || availableTicketGroupsDidChange || selectedSectionsDidChange)) {
       this.updateMap()
     }
 
@@ -140,7 +140,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     // Can't use dangerouslySetInnerHTML={{ __html: this.state.mapHtml }} in this case because
     // re-rendering would inject all this HTML again, which would break all the event bindings
     // we set in future methods.
-    this.mapRootRef.innerHTML = mapHtml
+    if (this.mapRoot.current) {
+      this.mapRoot.current.innerHTML = mapHtml
+    }
   }
 
   async fetchManifest () {
@@ -164,7 +166,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   setupMap () {
-    const mapSvg = this.mapRootRef.querySelector('svg') as SVGSVGElement
+    if (!this.mapRoot.current) {
+      return
+    }
+
+    const mapSvg = this.mapRoot.current.querySelector('svg') as SVGSVGElement
     Object.assign(mapSvg.style, {
       position: 'absolute',
       zIndex: 0,
@@ -315,10 +321,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           element.setAttribute(property, value)))
 
   getAllPaths = (id?: string) => {
-    if (!this.mapRootRef) {
+    if (!this.mapRoot.current) {
       return []
     }
-    return Array.from(this.mapRootRef.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
+
+    return Array.from(this.mapRoot.current.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
       .reduce((memo, element) => {
         const children = element.querySelectorAll('path')
         return memo.concat(children.length ? Array.from(children) : [element])
@@ -549,7 +556,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
     return (
       <div
-        ref={element => { this.rootRef = element as HTMLElement }}
+        ref={this.root}
         onMouseOver={this.onMouseOver}
         onTouchStart={this.onTouchStart}
         onMouseOut={this.onMouseOut}
@@ -573,7 +580,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
         />
         <div
-          ref={element => { this.mapRootRef = element as HTMLElement }}
+          ref={this.mapRoot}
           style={{
             cursor: '-webkit-grab',
             opacity: this.state.mapSvg ? 1 : 0
