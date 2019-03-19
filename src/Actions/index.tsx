@@ -23,7 +23,7 @@ interface State {
 }
 
 export default class Actions extends React.Component<Props & DefaultProps, State> {
-  container?: HTMLDivElement | null
+  container = React.createRef<HTMLDivElement>()
   mapZoom: any // eslint-disable-line @typescript-eslint/no-explicit-any
   timer?: number
 
@@ -80,11 +80,11 @@ export default class Actions extends React.Component<Props & DefaultProps, State
   }
 
   updateIsMobile = () => {
-    if (!this.container) {
+    if (!this.container.current) {
       return
     }
 
-    const isMobile = this.container.clientWidth < 700
+    const isMobile = this.container.current.clientWidth < 700
 
     if (this.state.isMobile !== isMobile) {
       this.setState({ isMobile })
@@ -95,7 +95,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     const { isMobile } = this.state
 
     return (
-      <div style={this.styles.container} ref={ref => { this.container = ref }}>
+      <div style={this.styles.container} ref={this.container}>
         <ActionGroup>
           <Button
             data-rh='Default'
