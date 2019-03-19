@@ -5,7 +5,8 @@ module.exports = {
   clearMocks: true,
   coverageDirectory: 'coverage',
   moduleNameMapper: {
-    '.+\\.(svg|png|jpg)$': 'identity-obj-proxy'
+    '.+\\.(svg|png|jpg)$': 'identity-obj-proxy',
+    '^lodash-es$': '<rootDir>/node_modules/lodash/index.js'
   },
   preset: 'ts-jest',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
