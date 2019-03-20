@@ -6,7 +6,7 @@ const formatCurrency = new Intl.NumberFormat(undefined, {
   currency: 'USD'
 }).format
 
-interface Props {
+export interface Props {
   isActive: boolean
   ticketGroups: NormalizedTicketGroup[],
   x: number
