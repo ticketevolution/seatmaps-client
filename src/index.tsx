@@ -1,12 +1,42 @@
 import React from 'react'
 import { render } from 'react-dom'
-import TicketMap, { Props } from './TicketMap'
+import { union, pick } from 'lodash-es'
+import TicketMap, { Props, RequiredProps, DefaultProps } from './TicketMap'
+
+const requiredConfigKeys: (keyof RequiredProps)[] = [
+  'venueId',
+  'configurationId'
+]
+
+const optionalConfigKeys: (keyof DefaultProps)[] = [
+  'isZoneDefault',
+  'mapFontFamily',
+  'selectedSections',
+  'onSelection',
+  'ticketGroups',
+  'sectionPercentiles',
+  'mapsDomain'
+]
+
+export function extractConfigurationFromOptions (options: Props): Props {
+  const keys = union(requiredConfigKeys, optionalConfigKeys)
+  return pick(options, keys)
+}
+
+export function validateOptions (options: Props) {
+  for (let key of requiredConfigKeys) {
+    if (!options.hasOwnProperty(key)) {
+      throw new Error(`Seatmap configuration requires a '${key}' value.`)
+    }
+  }
+}
 
 export default class SeatmapFactory {
-  options: Props
+  configuration: Props
 
   constructor (options: Props) {
-    this.options = options
+    validateOptions(options)
+    this.configuration = extractConfigurationFromOptions(options)
   }
 
   build (rootElementId: string) {
@@ -23,7 +53,7 @@ export default class SeatmapFactory {
 
     render((
       <TicketMap
-        {...this.options}
+        {...this.configuration}
         ref={(ref: TicketMap) => { map = ref }}
       />
     ), rootElement)

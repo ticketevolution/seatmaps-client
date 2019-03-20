@@ -38,10 +38,12 @@ export interface DefaultProps {
   onSelection(sections: string[]): void
 }
 
-export interface Props extends Partial<DefaultProps> {
+export interface RequiredProps {
   venueId: string
   configurationId: string
 }
+
+export type Props = Partial<DefaultProps> & RequiredProps
 
 export interface State {
   mapSvg?: SVGSVGElement
