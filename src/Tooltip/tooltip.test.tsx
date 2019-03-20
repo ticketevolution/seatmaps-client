@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Tooltip from './index'
+import Tooltip, { formatCurrency } from './index'
 
 describe('Tooltip', () => {
   it('renders', () => {
@@ -26,5 +26,16 @@ describe('Tooltip', () => {
 
     expect(tooltip.exists()).toBeTruthy()
     expect(tooltip.text().includes(tooltip.instance().props.name)).toBeTruthy()
+  })
+
+  it('renders price', () => {
+    const tooltip = shallow<Tooltip>(<Tooltip ticketGroups={[
+      { section: '', price: 123.45 }
+    ]} />)
+
+    expect(tooltip.exists()).toBeTruthy()
+    expect(tooltip.text().includes(
+      formatCurrency(tooltip.instance().props.ticketGroups[0].price)
+    )).toBeTruthy()
   })
 })

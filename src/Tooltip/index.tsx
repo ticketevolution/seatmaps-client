@@ -1,7 +1,7 @@
 import React, { Component, CSSProperties } from 'react'
 import { NormalizedTicketGroup } from '../types'
 
-const formatCurrency = new Intl.NumberFormat(undefined, {
+export const formatCurrency = new Intl.NumberFormat(undefined, {
   style: 'currency',
   currency: 'USD'
 }).format
