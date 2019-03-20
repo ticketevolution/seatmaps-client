@@ -1,6 +1,8 @@
 import React, { Component, CSSProperties } from 'react'
 import { NormalizedTicketGroup } from '../types'
 
+export const defaultDirection = ['up', 'right']
+
 export const formatCurrency = new Intl.NumberFormat(undefined, {
   style: 'currency',
   currency: 'USD'
@@ -38,28 +40,26 @@ export default class Tooltip extends Component<Props & DefaultProps> {
     name: '',
     x: 0,
     y: 0,
-    color: '#000000'    
+    color: '#000000'
   }
 
   direction(): string[] {
     const container = this.container.current
     const { x, y } = this.props
-    const direction = ['up', 'right']
+    const direction = [...defaultDirection]
 
     if (!container || !container.parentElement) {
       return direction
     }
 
-    if (container.parentElement) {
-      // display to the left of the cursor when the right side of the tooltip is clipped
-      if (x + container.clientWidth > container.parentElement.clientWidth) {
-        direction[1] = 'left'
-      }
+    // display to the left of the cursor when the right side of the tooltip is clipped
+    if (x + container.clientWidth > container.parentElement.clientWidth) {
+      direction[1] = 'left'
+    }
 
-      // display beneath the cursor when the top of the tooltip is clipped
-      if (y < container.clientHeight) {
-        direction[0] = 'down'
-      }
+    // display beneath the cursor when the top of the tooltip is clipped
+    if (y < container.clientHeight) {
+      direction[0] = 'down'
     }
 
     return direction
