@@ -7,16 +7,34 @@ const formatCurrency = new Intl.NumberFormat(undefined, {
 }).format
 
 export interface Props {
-  isActive: boolean
-  ticketGroups: NormalizedTicketGroup[],
-  x: number
-  y: number
-  name: string,
-  color: string
+  x?: number
+  y?: number
+  color?: string
+  isActive?: boolean
+  ticketGroups?: NormalizedTicketGroup[]
+  name?: string
 }
 
-export default class Tooltip extends Component<Props> {
+interface DefaultProps {
+  x: number
+  y: number
+  color: string
+  isActive: boolean
+  ticketGroups: NormalizedTicketGroup[]
+  name: string
+}
+
+export default class Tooltip extends Component<Props & DefaultProps> {
   container = React.createRef<HTMLDivElement>()
+
+  static defaultProps: DefaultProps = {
+    isActive: false,
+    ticketGroups: [],
+    name: '',
+    x: 0,
+    y: 0,
+    color: '#000000'    
+  }
 
   render () {
     const { isActive, ticketGroups, x, y, name, color } = this.props
