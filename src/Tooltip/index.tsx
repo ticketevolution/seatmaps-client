@@ -35,7 +35,6 @@ export default class Tooltip extends Component<Props> {
       pointerEvents: 'none'
     }
 
-
     let renderAboveTarget = true
     let renderRightOfTarget = true
 
