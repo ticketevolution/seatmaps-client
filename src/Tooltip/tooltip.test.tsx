@@ -1,16 +1,9 @@
 import React from 'react'
-import { shallow, ShallowWrapper } from 'enzyme'
-
-import Tooltip, { Props } from './index'
+import { shallow } from 'enzyme'
+import Tooltip from './index'
 
 describe('Tooltip', () => {
-  let wrapper: ShallowWrapper<Props>
-
-  beforeEach(() => {
-    wrapper = shallow(<Tooltip />)
-  })
-
   it('renders', () => {
-    expect(wrapper.exists()).toBe(true)
+    expect(shallow(<Tooltip />).exists()).toBe(true)
   })
 })
