@@ -20,4 +20,11 @@ describe('Tooltip', () => {
     expect(tooltip.exists()).toBeTruthy()
     expect(tooltip.getElement().props.style.opacity).toEqual(1)
   })
+
+  it('renders name', () => {
+    const tooltip = shallow<Tooltip>(<Tooltip name={'example-name'} />)
+
+    expect(tooltip.exists()).toBeTruthy()
+    expect(tooltip.text().includes(tooltip.instance().props.name)).toBeTruthy()
+  })
 })
