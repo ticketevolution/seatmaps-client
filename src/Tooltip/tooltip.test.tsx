@@ -105,4 +105,58 @@ describe('Tooltip', () => {
       expect(tooltip.instance().direction()[0]).toEqual('down')
     })
   })
+
+  describe('position()', () => {
+    it('returns x=x, y=y by default', () => {
+      const tooltip = shallow<Tooltip>(<Tooltip/>).instance()
+
+      expect(
+        tooltip.position().x
+      ).toEqual(
+        tooltip.props.x
+      )
+
+      expect(
+        tooltip.position().y
+      ).toEqual(
+        tooltip.props.y
+      )
+    })
+
+    it('returns x=(x - containerWidth) when container is available and direction is left', () => {
+      const tooltip = shallow<Tooltip>(<Tooltip/>).instance()
+
+      tooltip.container = {
+        current: {
+          clientWidth: 10
+        }
+      } as any
+
+      tooltip.direction = jest.fn(() => (['up', 'left']))
+
+      expect(
+        tooltip.position().x
+      ).toEqual(
+        tooltip.props.x - tooltip.container.current!.clientWidth
+      )
+    })
+
+    it('returns y=(y - containerHeight) when container is available and direction is up', () => {
+      const tooltip = shallow<Tooltip>(<Tooltip/>).instance()
+
+      tooltip.container = {
+        current: {
+          clientHeight: 10
+        }
+      } as any
+
+      tooltip.direction = jest.fn(() => (['up', 'right']))
+
+      expect(
+        tooltip.position().y
+      ).toEqual(
+        tooltip.props.y - tooltip.container.current!.clientHeight
+      )
+    })
+  })
 })
