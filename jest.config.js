@@ -10,7 +10,7 @@ module.exports = {
   },
   preset: 'ts-jest',
   setupFilesAfterEnv: [
-    './node_modules/jest-enzyme/lib/index.js',
+    '<rootDir>/node_modules/jest-enzyme/lib/index.js',
     '<rootDir>/src/setupTests.ts'
   ],
   transformIgnorePatterns: [
