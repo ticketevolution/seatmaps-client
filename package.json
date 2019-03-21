@@ -23,7 +23,8 @@
     "lint": "eslint . --ext js --ext jsx --ext ts --ext tsx --cache",
     "fix": "npm run lint -- --fix",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "check": "npm run lint && npm run check-types && npm run test"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
