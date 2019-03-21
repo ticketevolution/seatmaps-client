@@ -83,7 +83,7 @@ describe('Tooltip', () => {
         current: {
           parentElement: null
         }
-      } as any
+      } as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
       expect(tooltip.instance().direction()).toEqual(defaultDirection)
     })
@@ -98,7 +98,7 @@ describe('Tooltip', () => {
             clientWidth: 5
           }
         }
-      } as any
+      } as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
       expect(tooltip.instance().direction()[1]).toEqual('left')
     })
@@ -113,7 +113,7 @@ describe('Tooltip', () => {
             clientWidth: 5
           }
         }
-      } as any
+      } as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
       expect(tooltip.instance().direction()[1]).toEqual('left')
     })
@@ -126,7 +126,7 @@ describe('Tooltip', () => {
           clientHeight: 5,
           parentElement: {}
         }
-      } as any
+      } as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
       expect(tooltip.instance().direction()[0]).toEqual('down')
     })
@@ -156,14 +156,14 @@ describe('Tooltip', () => {
         current: {
           clientWidth: 10
         }
-      } as any
+      } as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
       tooltip.direction = jest.fn(() => (['up', 'left']))
 
       expect(
         tooltip.position().x
       ).toEqual(
-        tooltip.props.x - tooltip.container.current!.clientWidth
+        tooltip.props.x - tooltip.container.current!.clientWidth // eslint-disable-line @typescript-eslint/no-non-null-assertion
       )
     })
 
@@ -174,14 +174,14 @@ describe('Tooltip', () => {
         current: {
           clientHeight: 10
         }
-      } as any
+      } as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
       tooltip.direction = jest.fn(() => (['up', 'right']))
 
       expect(
         tooltip.position().y
       ).toEqual(
-        tooltip.props.y - tooltip.container.current!.clientHeight
+        tooltip.props.y - tooltip.container.current!.clientHeight // eslint-disable-line @typescript-eslint/no-non-null-assertion
       )
     })
   })
