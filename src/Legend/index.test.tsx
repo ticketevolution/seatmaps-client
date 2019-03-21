@@ -1,3 +1,5 @@
+import 'jest-enzyme'
+
 import React from 'react'
 import { shallow, ShallowWrapper } from 'enzyme'
 
@@ -20,6 +22,10 @@ describe('Legend', () => {
       ranges: []
     }
     wrapper = shallow(<Legend {...props} />)
+  })
+
+  it('renders', () => {
+    expect(wrapper).toExist()
   })
 
   it('renders a button', () => {
