@@ -3,40 +3,66 @@ import { shallow } from 'enzyme'
 import Tooltip, { formatCurrency, defaultDirection } from './index'
 
 describe('Tooltip', () => {
-  it('renders', () => {
-    expect(shallow(<Tooltip />).exists()).toBe(true)
-  })
+  describe('render()', () => {
+    it('renders', () => {
+      expect(shallow(<Tooltip />).exists()).toBe(true)
+    })
 
-  it('renders a transparent element when isActive is false', () => {
-    const tooltip = shallow(<Tooltip isActive={false} />)
+    it('renders a transparent element when isActive is false', () => {
+      const tooltip = shallow(<Tooltip isActive={false} />)
 
-    expect(tooltip.exists()).toBeTruthy()
-    expect(tooltip.getElement().props.style.opacity).toEqual(0)
-  })
+      expect(tooltip.exists()).toBeTruthy()
+      expect(tooltip.getElement().props.style.opacity).toEqual(0)
+    })
 
-  it('renders an opaque element when isActive is true', () => {
-    const tooltip = shallow(<Tooltip isActive />)
+    it('renders an opaque element when isActive is true', () => {
+      const tooltip = shallow(<Tooltip isActive />)
 
-    expect(tooltip.exists()).toBeTruthy()
-    expect(tooltip.getElement().props.style.opacity).toEqual(1)
-  })
+      expect(tooltip.exists()).toBeTruthy()
+      expect(tooltip.getElement().props.style.opacity).toEqual(1)
+    })
 
-  it('renders name', () => {
-    const tooltip = shallow<Tooltip>(<Tooltip name={'example-name'} />)
+    it('renders name', () => {
+      const tooltip = shallow<Tooltip>(<Tooltip name={'example-name'} />)
 
-    expect(tooltip.exists()).toBeTruthy()
-    expect(tooltip.text().includes(tooltip.instance().props.name)).toBeTruthy()
-  })
+      expect(tooltip.exists()).toBeTruthy()
+      expect(tooltip.text().includes(tooltip.instance().props.name)).toBeTruthy()
+    })
 
-  it('renders price', () => {
-    const tooltip = shallow<Tooltip>(<Tooltip ticketGroups={[
-      { section: '', price: 123.45 }
-    ]} />)
+    it('renders the ticket group price', () => {
+      const tooltip = shallow<Tooltip>(<Tooltip ticketGroups={[
+        { section: '', price: 123.45 }
+      ]} />)
 
-    expect(tooltip.exists()).toBeTruthy()
-    expect(tooltip.text().includes(
-      formatCurrency(tooltip.instance().props.ticketGroups[0].price)
-    )).toBeTruthy()
+      expect(tooltip.exists()).toBeTruthy()
+      expect(tooltip.text().includes(
+        formatCurrency(tooltip.instance().props.ticketGroups[0].price)
+      )).toBeTruthy()
+    })
+
+    it('renders the lowest ticket group price when the lowest ticket group price is placed first', () => {
+      const tooltip = shallow<Tooltip>(<Tooltip ticketGroups={[
+        { section: '', price: 123.45 },
+        { section: '', price: 678.90 }
+      ]} />)
+
+      expect(tooltip.exists()).toBeTruthy()
+      expect(tooltip.text().includes(
+        formatCurrency(123.45)
+      )).toBeTruthy()
+    })
+
+    it('renders the lowest ticket group price when the lowest ticket group price is not placed first', () => {
+      const tooltip = shallow<Tooltip>(<Tooltip ticketGroups={[
+        { section: '', price: 678.90 },
+        { section: '', price: 123.45 }
+      ]} />)
+
+      expect(tooltip.exists()).toBeTruthy()
+      expect(tooltip.text().includes(
+        formatCurrency(123.45)
+      )).toBeTruthy()
+    })
   })
 
   describe('direction()', () => {
