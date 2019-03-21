@@ -159,4 +159,25 @@ describe('Tooltip', () => {
       )
     })
   })
+
+  describe('tipStyle()', () => {
+    it('should return a unique style for each direction', () => {
+      const tooltips = Array.from(new Array(4))
+        .map(() => shallow<Tooltip>(<Tooltip/>).instance())
+
+      tooltips[0].direction = jest.fn(() => (['up', 'left']))
+      tooltips[1].direction = jest.fn(() => (['up', 'right']))
+      tooltips[2].direction = jest.fn(() => (['down', 'left']))
+      tooltips[3].direction = jest.fn(() => (['down', 'right']))
+
+      const tipStyles = tooltips.map(tooltip => tooltip.tipStyle())
+      const uniqueTipStyles = Array.from(new Set(tipStyles))
+
+      expect(
+        uniqueTipStyles.length
+      ).toEqual(
+        tipStyles.length
+      )
+    })
+  })
 })
