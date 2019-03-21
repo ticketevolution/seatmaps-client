@@ -9,7 +9,10 @@ module.exports = {
     '^lodash-es$': '<rootDir>/node_modules/lodash/index.js'
   },
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  setupFilesAfterEnv: [
+    './node_modules/jest-enzyme/lib/index.js',
+    '<rootDir>/src/setupTests.ts'
+  ],
   transformIgnorePatterns: [
     '/node_modules/?!(lodash-es)'
   ]
