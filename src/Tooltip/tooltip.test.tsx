@@ -89,7 +89,7 @@ describe('Tooltip', () => {
     })
 
     it('returns left when the right side of the container is clipped and the tooltip is at the x origin', () => {
-      const tooltip = shallow<Tooltip>(<Tooltip x={0}/>)
+      const tooltip = shallow<Tooltip>(<Tooltip x={0} />)
 
       tooltip.instance().container = {
         current: {
@@ -104,7 +104,7 @@ describe('Tooltip', () => {
     })
 
     it('returns left when the right side of the container is clipped and the tooltip is not at the x origin', () => {
-      const tooltip = shallow<Tooltip>(<Tooltip x={1}/>)
+      const tooltip = shallow<Tooltip>(<Tooltip x={1} />)
 
       tooltip.instance().container = {
         current: {
@@ -119,7 +119,7 @@ describe('Tooltip', () => {
     })
 
     it('returns down when the top of the container is clipped and the tooltip is at the y origin', () => {
-      const tooltip = shallow<Tooltip>(<Tooltip y={0}/>)
+      const tooltip = shallow<Tooltip>(<Tooltip y={0} />)
 
       tooltip.instance().container = {
         current: {
@@ -134,7 +134,7 @@ describe('Tooltip', () => {
 
   describe('position()', () => {
     it('returns x=x, y=y by default', () => {
-      const tooltip = shallow<Tooltip>(<Tooltip/>).instance()
+      const tooltip = shallow<Tooltip>(<Tooltip />).instance()
 
       expect(
         tooltip.position().x
@@ -150,7 +150,7 @@ describe('Tooltip', () => {
     })
 
     it('returns x=(x - containerWidth) when container is available and direction is left', () => {
-      const tooltip = shallow<Tooltip>(<Tooltip/>).instance()
+      const tooltip = shallow<Tooltip>(<Tooltip />).instance()
 
       tooltip.container = {
         current: {
@@ -168,7 +168,7 @@ describe('Tooltip', () => {
     })
 
     it('returns y=(y - containerHeight) when container is available and direction is up', () => {
-      const tooltip = shallow<Tooltip>(<Tooltip/>).instance()
+      const tooltip = shallow<Tooltip>(<Tooltip />).instance()
 
       tooltip.container = {
         current: {
@@ -189,7 +189,7 @@ describe('Tooltip', () => {
   describe('tipStyle()', () => {
     it('should return a unique style for each direction', () => {
       const tooltips = Array.from(new Array(4))
-        .map(() => shallow<Tooltip>(<Tooltip/>).instance())
+        .map(() => shallow<Tooltip>(<Tooltip />).instance())
 
       tooltips[0].direction = jest.fn(() => (['up', 'left']))
       tooltips[1].direction = jest.fn(() => (['up', 'right']))

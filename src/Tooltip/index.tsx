@@ -43,7 +43,7 @@ export default class Tooltip extends Component<Props & DefaultProps> {
     color: '#000000'
   }
 
-  direction(): string[] {
+  direction (): string[] {
     const container = this.container.current
     const { x, y } = this.props
     const direction = [...defaultDirection]
@@ -64,8 +64,8 @@ export default class Tooltip extends Component<Props & DefaultProps> {
 
     return direction
   }
-  
-  position(): Point {
+
+  position (): Point {
     const direction = this.direction()
     const point = {
       x: this.props.x,
@@ -86,7 +86,7 @@ export default class Tooltip extends Component<Props & DefaultProps> {
     return point
   }
 
-  tipStyle(): CSSProperties {
+  tipStyle (): CSSProperties {
     const direction = this.direction()
 
     const style: CSSProperties = {
@@ -116,7 +116,7 @@ export default class Tooltip extends Component<Props & DefaultProps> {
     return style
   }
 
-  containerStyle(): CSSProperties {
+  containerStyle (): CSSProperties {
     const { isActive } = this.props
     const direction = this.direction()
     const position = this.position()
@@ -137,7 +137,7 @@ export default class Tooltip extends Component<Props & DefaultProps> {
     }
   }
 
-  swatchStyle(): CSSProperties {
+  swatchStyle (): CSSProperties {
     return {
       width: 10,
       height: 10,
@@ -147,21 +147,21 @@ export default class Tooltip extends Component<Props & DefaultProps> {
     }
   }
 
-  contentStyle(): CSSProperties {
+  contentStyle (): CSSProperties {
     return {
       backgroundColor: 'white',
-      padding: 20      
+      padding: 20
     }
   }
 
-  nameStyle(): CSSProperties {
+  nameStyle (): CSSProperties {
     return {
       display: 'flex',
       alignItems: 'center'
     }
   }
 
-  priceStyle(): CSSProperties {
+  priceStyle (): CSSProperties {
     return {
       fontWeight: 700
     }
@@ -174,10 +174,10 @@ export default class Tooltip extends Component<Props & DefaultProps> {
 
     return (
       <div ref={this.container} style={this.containerStyle()}>
-        <div style={this.tipStyle()}/>
+        <div style={this.tipStyle()} />
         <div style={this.contentStyle()}>
           <div style={this.nameStyle()}>
-            <div style={this.swatchStyle()}/>
+            <div style={this.swatchStyle()} />
             {this.props.name}
           </div>
           <div>
