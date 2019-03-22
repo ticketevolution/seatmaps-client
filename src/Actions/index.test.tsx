@@ -1,3 +1,5 @@
+import 'jest-enzyme'
+
 import React from 'react'
 import { mount, ReactWrapper } from 'enzyme'
 
@@ -23,6 +25,10 @@ describe('Actions', () => {
       onClearSelection: jest.fn()
     }
     wrapper = mount(<Actions {...props} />)
+  })
+
+  it('renders', () => {
+    expect(wrapper).toExist()
   })
 
   it('renders all in the same action group on small screens', () => {

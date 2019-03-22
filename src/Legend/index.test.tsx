@@ -1,3 +1,5 @@
+import 'jest-enzyme'
+
 import React from 'react'
 import { shallow, ShallowWrapper } from 'enzyme'
 
@@ -22,6 +24,10 @@ describe('Legend', () => {
     wrapper = shallow(<Legend {...props} />)
   })
 
+  it('renders', () => {
+    expect(wrapper).toExist()
+  })
+
   it('renders a button', () => {
     expect(wrapper.find(Button)).toHaveLength(1)
   })
@@ -30,7 +36,7 @@ describe('Legend', () => {
     it('toggles the dropdown open/closed', () => {
       wrapper.setState({ isOpen: false })
       wrapper.find(Button).simulate('click')
-      expect(wrapper.state('isOpen')).toBe(true)
+      expect(wrapper).toHaveState('isOpen', true)
     })
   })
 
@@ -61,7 +67,7 @@ describe('Legend', () => {
       wrapper.setProps({ ranges: [ rangeMock ] })
       wrapper.setState({ isOpen: true })
       expect(wrapper.find(Swatch)).toHaveLength(1)
-      expect(wrapper.find(Swatch).prop('color')).toBe(rangeMock.color)
+      expect(wrapper.find(Swatch)).toHaveProp('color', rangeMock.color)
     })
   })
 })
