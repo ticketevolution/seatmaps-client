@@ -413,10 +413,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   onMouseOver = ({ clientX, clientY, target }: React.MouseEvent<HTMLElement>) =>
     this.doHover(target as HTMLElement, clientX, clientY)
 
-  onTouchStart = ({ target }: React.TouchEvent<HTMLElement>) =>
-    this.selectSectionOrZone(
-      this.getSectionFromTarget(target as HTMLElement))
-
   onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) =>
     this.doHoverCleanup(relatedTarget as HTMLElement)
 
@@ -430,9 +426,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   onTouchMove = () => this.setState({ isDragging: true })
 
-  onTouchEnd = () => {
+  onTouchEnd = ({ target }: React.TouchEvent<HTMLElement>) => {
     if (!this.state.isDragging) {
-      this.selectSectionOrZone()
+      this.selectSectionOrZone(
+        this.getSectionFromTarget(target as HTMLElement)
+      )
     }
     this.setState({ isDragging: false })
   }
@@ -556,7 +554,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     return (
       <div
         onMouseOver={this.onMouseOver}
-        onTouchStart={this.onTouchStart}
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
         onClick={this.onClick}
