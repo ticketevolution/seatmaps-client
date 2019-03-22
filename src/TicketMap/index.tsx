@@ -5,7 +5,7 @@ import Actions from '../Actions'
 import Tooltip from '../Tooltip'
 
 import { TicketGroup, NormalizedTicketGroup } from '../types'
-import { State, Props, DefaultProps } from './types'
+import { State, Props, DefaultProps, Manifest } from './types'
 
 import {
   $availableTicketGroups,
@@ -23,12 +23,6 @@ interface PublicApi {
   unhighlightSection: (section?: string) => void
   selectSection: (section: string) => void
   deselectSection: (section?: string) => void
-}
-
-interface Manifest {
-  sections: {
-    [key: string]: object
-  }
 }
 
 interface ElementProperties {
@@ -160,7 +154,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       return
     }
 
-    const mapSvg = this.mapRoot.current.querySelector('svg') as SVGSVGElement
+    const mapSvg = this.mapRoot.current.querySelector('svg')
+    if (!mapSvg) {
+      return
+    }
+
     Object.assign(mapSvg.style, {
       position: 'absolute',
       zIndex: 0,
@@ -173,7 +171,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.setUnavailableColors()
 
     mapSvg.querySelectorAll<HTMLElement>('*[data-section-id]').forEach(path => {
-      path.setAttribute('data-section-id', (path.getAttribute('data-section-id') as string).toLowerCase())
+      const sectionId = path.getAttribute('data-section-id')
+      if (sectionId === null) {
+        return
+      }
+      path.setAttribute('data-section-id', sectionId.toLowerCase())
     })
 
     this.setState({ mapSvg })
@@ -200,50 +202,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     return this.toggleSectionHighlight(section, false)
   }
 
-  toggleSectionHighlight = (section: string, shouldHighlight = true) => {
-    if (!section) {
-      return
-    }
-
-    const sectionId = section.toLowerCase()
-    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.has(sectionId)
-    if (isUnhighlightingSelectedSection) {
-      return
-    }
-
-    return this.fillSection(sectionId, shouldHighlight)
-  }
-
   selectSection = (section: string) => this.toggleSectionSelect(section, true)
 
   deselectSection = (section?: string) => {
     if (!section) {
-      this.clearSelection()
-    } else {
-      return this.toggleSectionSelect(section, false)
+      return this.clearSelection()
     }
-  }
-
-  clearSelection = () => {
-    this.setState({
-      selectedSections: new Set()
-    })
-  }
-
-  toggleSectionSelect = (section: string, shouldHighlight = true) => {
-    if (!section) {
-      return
-    }
-
-    const sectionId = section.toLowerCase()
-    const selectedSections = new Set(this.state.selectedSections)
-    if (shouldHighlight) {
-      selectedSections.add(sectionId)
-    } else {
-      selectedSections.delete(sectionId)
-    }
-
-    this.setState({ selectedSections })
+    return this.toggleSectionSelect(section, false)
   }
 
   updateTicketGroups = (ticketGroups = this.props.ticketGroups) =>
@@ -287,9 +252,49 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Helpers
    */
 
+  clearSelection = () => {
+    this.setState({
+      selectedSections: new Set()
+    })
+  }
+
+  toggleSectionHighlight = (section?: string, shouldHighlight = true) => {
+    if (!section) {
+      return
+    }
+
+    const sectionId = section.toLowerCase()
+    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.has(sectionId)
+    if (isUnhighlightingSelectedSection) {
+      return
+    }
+
+    return this.fillSection(sectionId, shouldHighlight)
+  }
+
+  toggleSectionSelect = (section: string, shouldHighlight = true) => {
+    if (!section) {
+      return
+    }
+
+    const sectionId = section.toLowerCase()
+    if (!$venueSections(this.state).includes(sectionId)) {
+      return
+    }
+
+    const selectedSections = new Set(this.state.selectedSections)
+    if (shouldHighlight) {
+      selectedSections.add(sectionId)
+    } else {
+      selectedSections.delete(sectionId)
+    }
+
+    this.setState({ selectedSections })
+  }
+
   updateMap () {
     this.fillUnavailableColors()
-    Object.keys($ticketGroupsBySection(this.state)).forEach(section => {
+    $venueSections(this.state).forEach(section => {
       this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section))
     })
   }
@@ -325,7 +330,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Coloring
    */
 
-  getDefaultColor (ticketGroups: NormalizedTicketGroup[]): string {
+  getDefaultColor (ticketGroups: NormalizedTicketGroup[] = []): string {
     const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0]
 
     const ranges = $costRanges(this.state, this.props)
@@ -361,9 +366,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   onTouchEnd = ({ target }: React.TouchEvent<HTMLElement>) => {
     if (!this.state.isDragging) {
-      this.doSelect(
-        this.getSectionFromTarget(target as HTMLElement)
-      )
+      this.doSelect(this.getSectionFromTarget(target as HTMLElement))
     }
     this.setState({ isDragging: false })
   }
@@ -393,19 +396,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   doHoverCleanup (enteringElement: HTMLElement): void {
-    const isEnteringText = !!enteringElement && enteringElement.nodeName === 'text'
+    const isEnteringText = !!enteringElement && enteringElement.nodeName.toLowerCase() === 'text'
     if (isEnteringText) {
       return
     }
 
-    const section = this.state.currentHoveredSection
-    if (!section) {
-      return
-    }
-
-    const enteringSection = !!enteringElement && enteringElement.closest('[data-section-id]')
-    const isEnteringTheSameSection = !!enteringSection &&
-      (enteringSection.getAttribute('data-section-id') as string).toLowerCase() === section
+    const enteringSection = this.getSectionFromTarget(enteringElement)
+    const isEnteringTheSameSection = !!enteringSection && enteringSection === this.state.currentHoveredSection
     if (isEnteringTheSameSection) {
       return
     }
@@ -414,19 +411,12 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       tooltipActive: false,
       currentHoveredSection: undefined
     })
-
-    this.unhighlightSection(section)
   }
 
   doSelect (section = this.state.currentHoveredSection) {
     if (!section) {
       return
     }
-
-    if (!$venueSections(this.state).includes(section)) {
-      return
-    }
-
     this.toggleSectionSelect(section, !this.state.selectedSections.has(section))
   }
 
