@@ -22,6 +22,12 @@ export interface SectionMapping {
   }
 }
 
+export interface Manifest {
+  sections: {
+    [key: string]: object
+  }
+}
+
 export interface DefaultProps {
   showLegend: boolean
   mapFontFamily: string

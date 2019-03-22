@@ -20,6 +20,9 @@
       "version": "16.8"
     }
   },
+  "globals": {
+    "fetchMock": "readonly"
+  },
   "rules": {
     "no-unused-expressions": [
       "error",
