@@ -4,10 +4,6 @@ export interface NormalizedTicketGroupsBySection {
   [section: string]: NormalizedTicketGroup[]
 }
 
-export interface NormalizedTicketGroupsBySectionByZone {
-  [zone: string]: NormalizedTicketGroupsBySection
-}
-
 export interface CostRange {
   color: string
   min: number
@@ -20,15 +16,13 @@ export interface Percentiles {
   [key: string]: string
 }
 
-export interface SectionZoneMapping {
+export interface SectionMapping {
   [section: string]: {
     sectionName: string
-    zone?: string
   }
 }
 
 export interface DefaultProps {
-  isZoneDefault: boolean
   showLegend: boolean
   mapFontFamily: string
   selectedSections: string[]
@@ -47,16 +41,13 @@ export type Props = Partial<DefaultProps> & RequiredProps
 
 export interface State {
   mapSvg?: SVGSVGElement
-  sectionZoneMapping: SectionZoneMapping
+  sectionMapping: SectionMapping
   ticketGroups: TicketGroup[]
   selectedSections: Set<string>
-  isZoneToggled: boolean
   isDragging: boolean
-  currentHoveredZone?: string
   currentHoveredSection?: string
   tooltipActive: boolean
   tooltipSectionName: string
-  tooltipZoneId: string
   tooltipX: number
   tooltipY: number
   mapNotFound: boolean

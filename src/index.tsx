@@ -9,7 +9,6 @@ const requiredConfigKeys: (keyof RequiredProps)[] = [
 ]
 
 const optionalConfigKeys: (keyof DefaultProps)[] = [
-  'isZoneDefault',
   'mapFontFamily',
   'selectedSections',
   'onSelection',
