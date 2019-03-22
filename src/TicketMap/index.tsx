@@ -10,8 +10,6 @@ import { State, Props, DefaultProps } from './types'
 import {
   $availableTicketGroups,
   $missingSectionIds,
-  $areAllSectionsInTheZoneSelected,
-  $ticketGroupsBySectionByZone,
   $ticketGroupsBySection,
   $venueSections,
   $costRanges
@@ -29,9 +27,7 @@ interface PublicApi {
 
 interface Manifest {
   sections: {
-    [key: string]: {
-      zone_name: string
-    }
+    [key: string]: object
   }
 }
 
@@ -55,7 +51,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   static defaultProps: DefaultProps = {
     mapsDomain: 'https://maps.ticketevolution.com',
     onSelection: () => { },
-    isZoneDefault: false,
     selectedSections: [],
     sectionPercentiles: {
       '0.2': '#FFC515',
@@ -72,13 +67,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   constructor (props: Props & DefaultProps) {
     super(props)
     this.state = {
-      sectionZoneMapping: {},
+      sectionMapping: {},
       selectedSections: new Set(this.props.selectedSections.filter(section => !!section)),
-      isZoneToggled: this.props.isZoneDefault,
       isDragging: false,
       tooltipActive: false,
       tooltipSectionName: '',
-      tooltipZoneId: '',
       tooltipX: 0,
       tooltipY: 0,
       ticketGroups: this.props.ticketGroups,
@@ -114,10 +107,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   componentDidUpdate (_prevProps: Props, prevState: State) {
     const availableTicketGroupsDidChange = $availableTicketGroups(prevState) !== $availableTicketGroups(this.state)
     const isNoLongerHoveringOnSection = prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined
-    const isNoLongerHoveringOnZone = prevState.currentHoveredZone !== undefined && this.state.currentHoveredZone === undefined
     const selectedSectionsDidChange = !isEqual(this.state.selectedSections, prevState.selectedSections)
 
-    if (this.mapRoot.current && (isNoLongerHoveringOnSection || isNoLongerHoveringOnZone || availableTicketGroupsDidChange || selectedSectionsDidChange)) {
+    if (this.mapRoot.current && (isNoLongerHoveringOnSection || availableTicketGroupsDidChange || selectedSectionsDidChange)) {
       this.updateMap()
     }
 
@@ -153,12 +145,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     const manifest: Manifest = await manifestResponse.json()
 
     this.setState({
-      sectionZoneMapping: Object.entries(manifest.sections)
-        .reduce((memo, [sectionName, section]) => ({
+      sectionMapping: Object.keys(manifest.sections)
+        .reduce((memo, sectionName) => ({
           ...memo,
           [sectionName.toLowerCase()]: {
-            sectionName,
-            zone: section.zone_name ? section.zone_name.toLowerCase() : undefined
+            sectionName
           }
         }), {})
     })
@@ -255,45 +246,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.setState({ selectedSections })
   }
 
-  highlightZone = (zone: string) => this.toggleZoneHighlight(zone, true)
-
-  unhighlightZone = (zone?: string) => {
-    if (!zone) {
-      return this.setState({ currentHoveredZone: undefined })
-    }
-    return this.toggleZoneHighlight(zone, false)
-  }
-
-  toggleZoneHighlight = (zone: string, shouldHighlight = true) => {
-    if (!zone) {
-      return
-    }
-
-    const zoneId = zone.toLowerCase()
-    const isUnhighlightingSelectedZone = !shouldHighlight && $areAllSectionsInTheZoneSelected(this.state)(zoneId)
-    if (isUnhighlightingSelectedZone) {
-      return
-    }
-
-    return this.fillZone(zoneId, shouldHighlight)
-  }
-
-  toggleZoneSelect = (zone: string, shouldHighlight = true) => {
-    if (!zone) {
-      return
-    }
-
-    const sections = Object.keys($ticketGroupsBySectionByZone(this.state)[zone.toLowerCase()])
-    const selectedSections = new Set(this.state.selectedSections)
-    if (shouldHighlight) {
-      sections.forEach(section => selectedSections.add(section))
-    } else {
-      sections.forEach(section => selectedSections.delete(section))
-    }
-
-    this.setState({ selectedSections })
-  }
-
   updateTicketGroups = (ticketGroups = this.props.ticketGroups) =>
     this.setState({ ticketGroups })
 
@@ -337,10 +289,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   updateMap () {
     this.fillUnavailableColors()
-    if (this.state.isZoneToggled) {
-      return Object.keys($ticketGroupsBySectionByZone(this.state)).forEach(zone =>
-        this.fillZone(zone.toLowerCase(), $areAllSectionsInTheZoneSelected(this.state)(zone.toLowerCase())))
-    }
     Object.keys($ticketGroupsBySection(this.state)).forEach(section => {
       this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section))
     })
@@ -357,21 +305,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         'cursor': 'pointer'
       }), section)
     }
-  }
-
-  fillZone (zone: string, shouldHighlight = true) {
-    const ticketGroupsBySection = $ticketGroupsBySectionByZone(this.state)[zone]
-    const allTicketGroupsInZone = Object.values(ticketGroupsBySection)
-      .reduce((memo, ticketGroupsInSection) => [...memo, ...ticketGroupsInSection], [])
-    Object.keys(ticketGroupsBySection).forEach(section => {
-      const isAnAvailableSection = $venueSections(this.state).includes(section)
-      if (isAnAvailableSection) {
-        this.fillPathsForSection(() => ({
-          'fill': this.getDefaultColor(allTicketGroupsInZone),
-          'opacity': shouldHighlight ? '1' : '0.6'
-        }), section)
-      }
-    })
   }
 
   getSectionFromTarget (target: HTMLElement) {
@@ -422,13 +355,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       tooltipY: nativeEvent.offsetY
     })
 
-  onClick = () => this.selectSectionOrZone()
+  onClick = () => this.doSelect()
 
   onTouchMove = () => this.setState({ isDragging: true })
 
   onTouchEnd = ({ target }: React.TouchEvent<HTMLElement>) => {
     if (!this.state.isDragging) {
-      this.selectSectionOrZone(
+      this.doSelect(
         this.getSectionFromTarget(target as HTMLElement)
       )
     }
@@ -449,30 +382,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       return
     }
 
-    const { zone, sectionName } = this.state.sectionZoneMapping[section]
-
-    type NewState =
-      Pick<State, 'tooltipActive' | 'tooltipX' | 'tooltipY' | 'tooltipSectionName'> &
-      Partial<Pick<State, 'currentHoveredSection' | 'currentHoveredZone'>>
-
-    const newState: NewState = {
+    this.highlightSection(section)
+    this.setState({
       tooltipActive: tooltipX !== undefined && tooltipY !== undefined,
       tooltipX: tooltipX !== undefined ? tooltipX : 0,
       tooltipY: tooltipY !== undefined ? tooltipY : 0,
-      tooltipSectionName: sectionName
-    }
-
-    if (this.state.isZoneToggled) {
-      if (zone) {
-        newState.currentHoveredZone = zone
-        this.highlightZone(zone)
-      }
-    } else {
-      newState.currentHoveredSection = section
-      this.highlightSection(section)
-    }
-
-    this.setState(newState)
+      tooltipSectionName: this.state.sectionMapping[section].sectionName,
+      currentHoveredSection: section
+    })
   }
 
   doHoverCleanup (enteringElement: HTMLElement): void {
@@ -495,18 +412,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
     this.setState({
       tooltipActive: false,
-      currentHoveredZone: undefined,
       currentHoveredSection: undefined
     })
-
-    if (this.state.isZoneToggled) {
-      return this.unhighlightZone(this.state.sectionZoneMapping[section].zone)
-    }
 
     this.unhighlightSection(section)
   }
 
-  selectSectionOrZone (section = this.state.currentHoveredSection) {
+  doSelect (section = this.state.currentHoveredSection) {
     if (!section) {
       return
     }
@@ -515,14 +427,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       return
     }
 
-    if (this.state.isZoneToggled) {
-      const { zone } = this.state.sectionZoneMapping[section]
-      if (zone) {
-        this.toggleZoneSelect(zone, !$areAllSectionsInTheZoneSelected(this.state)(zone))
-      }
-    } else {
-      this.toggleSectionSelect(section, !this.state.selectedSections.has(section))
-    }
+    this.toggleSectionSelect(section, !this.state.selectedSections.has(section))
   }
 
   render () {

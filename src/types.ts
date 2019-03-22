@@ -5,6 +5,5 @@ export interface TicketGroup {
 
 export interface NormalizedTicketGroup {
   section: string
-  zone?: string
   price: number
 }
