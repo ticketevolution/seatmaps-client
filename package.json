@@ -24,7 +24,7 @@
     "fix": "npm run lint -- --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "check": "npm run lint && npm run check-types && npm run test"
+    "check": "npm run lint && npm run check-types && npm test -- --coverage"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",

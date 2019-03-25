@@ -34,9 +34,7 @@ start: build ## Start the development server
 	npm start
 
 build: install clean ## Build the project
-	npm run lint
-	npm run check-types
-	npm test
+	npm run check
 	npm run build
 
 analyze: ## Run the webpack analyzer
