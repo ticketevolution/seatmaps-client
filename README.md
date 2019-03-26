@@ -58,13 +58,13 @@ After instantiation, a [public API](#public-api) is available with a limited num
 ### 1. Install via `npm` or `yarn`
 
 ```sh
-npm install --save ticketevolution/seatmaps-client
+npm install --save @ticketevolution/seatmaps-client
 ```
 
 or
 
 ```sh
-yarn add ticketevolution/seatmaps-client
+yarn add @ticketevolution/seatmaps-client
 ```
 
 ### 2. Create a script that includes `ticket-evolution-seatmaps`
