@@ -67,12 +67,12 @@ or
 yarn add @ticketevolution/seatmaps-client
 ```
 
-### 2. Create a script that includes `ticket-evolution-seatmaps`
+### 2. Create a script that includes `@ticketevolution/seatmaps-client`
 
 ```js
 // main.js
 
-import Tevomaps from 'ticket-evolution-seatmaps'
+import Tevomaps from '@ticketevolution/seatmaps-client'
 
 // create a new seatmap
 const seatmap = new Tevomaps({
