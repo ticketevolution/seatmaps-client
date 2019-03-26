@@ -1,18 +1,27 @@
 {
-  "name": "ticket-evolution-seatmaps",
-  "version": "0.7.2",
-  "description": "interactive seatmaps",
-  "repository": {
-    "url": "git@github.com:ticketevolution/seatmaps-client.git",
-    "type": "git"
-  },
+  "name": "@ticketevolution/seatmaps-client",
+  "version": "1.0.0",
+  "description": "A client side JavaScript library that enables users to view interactive seating charts for tickets available via the Ticket Evolution API.",
+  "keywords": [
+    "Ticket Evolution",
+    "seatmaps",
+    "tevo",
+    "tickets",
+    "seating chart"
+  ],
+  "homepage": "https://github.com/ticketevolution/seatmaps-client#readme",
+  "bugs": "https://github.com:ticketevolution/seatmaps-client/issues",
+  "repository": "github:ticketevolution/seatmaps-client",
   "engines": {
     "node": "^10.15.3",
     "npm": "^6.4.1"
   },
-  "main": "build/tevomaps.js",
+  "browser": "build/tevomaps.js",
   "author": "Ticket Evolution, Inc.",
   "license": "UNLICENSED",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "webpack --progress",
     "watch": "npm run build -- --watch",
