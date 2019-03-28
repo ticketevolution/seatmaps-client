@@ -18,7 +18,7 @@
   },
   "browser": "build/tevomaps.js",
   "author": "Ticket Evolution, Inc.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "files": [
     "build"
   ],
