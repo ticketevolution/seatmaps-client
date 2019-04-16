@@ -10,6 +10,7 @@ export interface Props {
   mapSvg: SVGSVGElement
   onClearSelection?: () => void
   showLegend?: boolean
+  showControls?: boolean
   ranges: CostRange[]
 }
 
@@ -108,6 +109,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
                 icon={faPlus}
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
+                name='zoom-in'
               />
 
               <Button
@@ -115,6 +117,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
                 icon={faMinus}
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
+                name='zoom-out'
               />
 
               <Button
@@ -123,6 +126,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
                 text='Reset Zoom'
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
+                name='reset-zoom'
               />
 
               <Button
@@ -131,6 +135,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
                 text={`Clear${isMobile ? '' : ' All'}`}
                 isMobile={isMobile}
                 style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
+                name='clear-selection'
               />
             </React.Fragment>
           )}
