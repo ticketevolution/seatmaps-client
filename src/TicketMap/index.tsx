@@ -348,8 +348,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    * Interaction Callbacks
    */
 
-  onMouseOver = ({ clientX, clientY, target }: React.MouseEvent<HTMLElement>) =>
-    this.doHover(target as HTMLElement, clientX, clientY)
+  onMouseOver = ({ pageX, pageY, target }: React.MouseEvent<HTMLElement>) =>
+    this.doHover(target as HTMLElement, pageX, pageY)
 
   onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) =>
     this.doHoverCleanup(relatedTarget as HTMLElement)
