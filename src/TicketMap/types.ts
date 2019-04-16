@@ -36,6 +36,7 @@ export interface DefaultProps {
   sectionPercentiles: Percentiles
   mapsDomain: string
   onSelection(sections: string[]): void
+  showControls: boolean
 }
 
 export interface RequiredProps {
