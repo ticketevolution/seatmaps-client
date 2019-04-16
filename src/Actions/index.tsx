@@ -10,11 +10,13 @@ export interface Props {
   mapSvg: SVGSVGElement
   onClearSelection?: () => void
   showLegend?: boolean
+  showControls?: boolean
   ranges: CostRange[]
 }
 
 interface DefaultProps {
   showLegend: boolean,
+  showControls: boolean
   onClearSelection(): void
 }
 
@@ -33,6 +35,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
 
   static defaultProps: DefaultProps = {
     showLegend: true,
+    showControls: true,
     onClearSelection: () => {}
   }
 
@@ -97,38 +100,45 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     return (
       <div style={this.styles.container} ref={this.container}>
         <ActionGroup>
-          <Button
-            data-rh='Default'
-            data-custom-at='right'
-            onClick={() => this.mapZoom.zoomIn()}
-            icon={faPlus}
-            isMobile={isMobile}
-            style={{ borderRight: '2px solid lightgray' }}
-          />
+          {this.props.showControls && (
+            <React.Fragment>
+              <Button
+                data-rh='Default'
+                data-custom-at='right'
+                onClick={() => this.mapZoom.zoomIn()}
+                icon={faPlus}
+                isMobile={isMobile}
+                style={{ borderRight: '2px solid lightgray' }}
+                name='zoom-in'
+              />
 
-          <Button
-            onClick={() => this.mapZoom.zoomOut()}
-            icon={faMinus}
-            isMobile={isMobile}
-            style={{ borderRight: '2px solid lightgray' }}
-          />
+              <Button
+                onClick={() => this.mapZoom.zoomOut()}
+                icon={faMinus}
+                isMobile={isMobile}
+                style={{ borderRight: '2px solid lightgray' }}
+                name='zoom-out'
+              />
 
-          <Button
-            onClick={() => this.mapZoom.reset()}
-            icon={faUndoAlt}
-            text='Reset Zoom'
-            isMobile={isMobile}
-            style={{ borderRight: '2px solid lightgray' }}
-          />
+              <Button
+                onClick={() => this.mapZoom.reset()}
+                icon={faUndoAlt}
+                text='Reset Zoom'
+                isMobile={isMobile}
+                style={{ borderRight: '2px solid lightgray' }}
+                name='reset-zoom'
+              />
 
-          <Button
-            onClick={() => this.props.onClearSelection()}
-            icon={faTimesCircle}
-            text={`Clear${isMobile ? '' : ' All'}`}
-            isMobile={isMobile}
-            style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
-          />
-
+              <Button
+                onClick={() => this.props.onClearSelection()}
+                icon={faTimesCircle}
+                text={`Clear${isMobile ? '' : ' All'}`}
+                isMobile={isMobile}
+                style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
+                name='clear-selection'
+              />
+            </React.Fragment>
+          )}
           {isMobile && this.props.showLegend && <Legend isMobile ranges={this.props.ranges} />}
         </ActionGroup>
         {!isMobile && (
