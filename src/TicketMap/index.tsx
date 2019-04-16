@@ -356,8 +356,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   onMouseMove = ({ nativeEvent }: React.MouseEvent<HTMLElement>) =>
     this.setState({
-      tooltipX: nativeEvent.offsetX,
-      tooltipY: nativeEvent.offsetY
+      tooltipX: nativeEvent.pageX,
+      tooltipY: nativeEvent.pageY
     })
 
   onClick = () => this.doSelect()
