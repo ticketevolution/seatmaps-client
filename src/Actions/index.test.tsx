@@ -65,4 +65,12 @@ describe('Actions', () => {
     wrapper.find(Button).forEach(button => button.simulate('click'))
     expect(props.onClearSelection).toHaveBeenCalled()
   })
+
+  it('renders controls when showControls is true', () => {
+    wrapper.setProps({ showControls: true })
+    expect(wrapper).toContainMatchingElement('*[name="zoom-out"]')
+    expect(wrapper).toContainMatchingElement('*[name="reset-zoom"]')
+    expect(wrapper).toContainMatchingElement('*[name="zoom-in"]')
+    expect(wrapper).toContainMatchingElement('*[name="clear-selection"]')
+  })
 })

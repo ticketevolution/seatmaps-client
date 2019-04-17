@@ -55,6 +55,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     },
     ticketGroups: [],
     showLegend: true,
+    showControls: true,
     mapFontFamily: 'inherit'
   }
 
@@ -482,6 +483,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
             onClearSelection={this.clearSelection}
             ranges={$costRanges(this.state, this.props)}
             showLegend={this.props.showLegend}
+            showControls={this.props.showControls}
           />
         )}
       </div>
