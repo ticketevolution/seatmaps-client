@@ -56,6 +56,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     ticketGroups: [],
     showLegend: true,
     showControls: true,
+    mouseControlEnabled: true,
     mapFontFamily: 'inherit'
   }
 
@@ -459,7 +460,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           position: 'relative',
           fontFamily: this.props.mapFontFamily,
           height: '100%',
-          width: '100%'
+          width: '100%',
+          pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none'
         }}
       >
         <Tooltip

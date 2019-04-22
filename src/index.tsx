@@ -15,7 +15,8 @@ const optionalConfigKeys: (keyof DefaultProps)[] = [
   'ticketGroups',
   'sectionPercentiles',
   'mapsDomain',
-  'showControls'
+  'showControls',
+  'mouseControlEnabled'
 ]
 
 export function extractConfigurationFromOptions (options: Props): Props {
