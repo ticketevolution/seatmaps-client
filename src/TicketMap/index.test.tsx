@@ -344,4 +344,16 @@ describe('TicketMap', () => {
       expect(wrapper.state('selectedSections').size).toBe(0)
     })
   })
+
+  describe('render()', () => {
+    it('should allow pointer events when mouseControlEnabled is true', () => {
+      wrapper.setProps({ mouseControlEnabled: true })
+      expect(wrapper).toHaveStyle('pointerEvents', 'initial')
+    })
+
+    it('should allow pointer events when mouseControlEnabled is false', () => {
+      wrapper.setProps({ mouseControlEnabled: false })
+      expect(wrapper).toHaveStyle('pointerEvents', 'none')
+    })
+  })
 })

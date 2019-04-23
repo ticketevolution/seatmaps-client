@@ -37,6 +37,7 @@ export interface DefaultProps {
   mapsDomain: string
   onSelection(sections: string[]): void
   showControls: boolean
+  mouseControlEnabled: boolean
 }
 
 export interface RequiredProps {
