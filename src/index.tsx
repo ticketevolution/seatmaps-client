@@ -16,6 +16,7 @@ const optionalConfigKeys: (keyof DefaultProps)[] = [
   'sectionPercentiles',
   'mapsDomain',
   'showControls',
+  'showLegend',
   'mouseControlEnabled'
 ]
 
