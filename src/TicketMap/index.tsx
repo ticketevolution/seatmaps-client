@@ -180,6 +180,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       path.setAttribute('data-section-id', sectionId.toLowerCase())
     })
 
+    mapSvg.querySelectorAll<HTMLElement>('text').forEach(text => {
+      text.style.pointerEvents = 'none'
+    })
+
     this.setState({ mapSvg })
   }
 
