@@ -17,6 +17,8 @@ import {
 
 export * from './types'
 
+const MAX_SELECT_TRANSLATION_DISTANCE = 5
+
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
   highlightSection: (section: string) => void
@@ -65,13 +67,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.state = {
       sectionMapping: {},
       selectedSections: new Set(this.props.selectedSections.filter(section => !!section)),
-      isDragging: false,
       tooltipActive: false,
       tooltipSectionName: '',
       tooltipX: 0,
       tooltipY: 0,
       ticketGroups: this.props.ticketGroups,
-      mapNotFound: false
+      mapNotFound: false,
+      touchStarts: {}
     }
 
     this.publicApi = {
@@ -368,13 +370,38 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   onClick = () => this.doSelect()
 
-  onTouchMove = () => this.setState({ isDragging: true })
-
-  onTouchEnd = ({ target }: React.TouchEvent<HTMLElement>) => {
-    if (!this.state.isDragging) {
-      this.doSelect(this.getSectionFromTarget(target as HTMLElement))
+  onTouchStart = (event: React.TouchEvent<HTMLElement>) => {
+    if (event.changedTouches.length !== 1) {
+      return
     }
-    this.setState({ isDragging: false })
+
+    const [ touchID ] = Object.getOwnPropertyNames(event.changedTouches)
+    const touch = event.changedTouches[touchID as any]
+
+    this.setState({
+      touchStarts: {
+        ...this.state.touchStarts,
+        [touchID]: {
+          x: touch.pageX,
+          y: touch.pageY
+        }
+      }
+    })
+  }
+
+  onTouchEnd = (event: React.TouchEvent<HTMLElement>) => {
+    if (event.changedTouches.length !== 1) {
+      return
+    }
+
+    const [ touchID ] = Object.getOwnPropertyNames(event.changedTouches)
+    const touch = event.changedTouches[touchID as any]
+    const touchStart = this.state.touchStarts[touchID]
+
+    const translationDistance = Math.sqrt(Math.pow(touchStart.x - touch.pageX, 2) + Math.pow(touchStart.y - touch.pageY, 2))
+    if (translationDistance <= MAX_SELECT_TRANSLATION_DISTANCE) {
+      this.doSelect(this.getSectionFromTarget(event.target as HTMLElement))
+    }
   }
 
   /**
@@ -458,7 +485,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
         onClick={this.onClick}
-        onTouchMove={this.onTouchMove}
+        onTouchStart={this.onTouchStart}
         onTouchEnd={this.onTouchEnd}
         style={{
           position: 'relative',
