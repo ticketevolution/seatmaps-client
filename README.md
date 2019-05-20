@@ -25,15 +25,17 @@ After instantiation, a [public API](#public-api) is available with a limited num
 
 ## Window Object
 
-### 1. Load `seatmaps-client` via `<script>` html tag
+### 1. Download `tevomaps.js`
 
-```html
-<script src="https://raw.githubusercontent.com/ticketevolution/seatmaps-client/master/build/tevomaps.js"></script>
+```sh
+wget https://raw.githubusercontent.com/ticketevolution/seatmaps-client/master/build/tevomaps.js
 ```
 
-### 2. Create a script block to instantiate the Tevomaps
+### 2. Load `tevomaps.js`, create a map root, and build a map
 
 ```html
+<div id='my-map'></div>
+<script src="tevomaps.js"></script>
 <script>
   // create a new seatmap
   var seatmap = new Tevomaps({
