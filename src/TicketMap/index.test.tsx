@@ -7,6 +7,16 @@ import Tooltip from '../Tooltip'
 import Actions from '../Actions'
 import { TicketGroup } from '../types'
 
+const createTouchEvent = (target: HTMLElement, pageX = 0, pageY = 0) => ({
+  target,
+  changedTouches: [
+    {
+      pageX,
+      pageY
+    }
+  ]
+})
+
 describe('TicketMap', () => {
   let wrapper: ShallowWrapper<Props, State, TicketMap>
   let props: Props
@@ -238,25 +248,29 @@ describe('TicketMap', () => {
     })
 
     it('toggles the section in the selectedSections set', () => {
-      wrapper.simulate('touchend', { target })
+      wrapper.simulate('touchstart', createTouchEvent(target))
+      wrapper.simulate('touchend', createTouchEvent(target))
       expect(wrapper.state('selectedSections').has('foo bar')).toBeTruthy()
-      wrapper.simulate('touchend', { target })
+      wrapper.simulate('touchstart', createTouchEvent(target))
+      wrapper.simulate('touchend', createTouchEvent(target))
       expect(wrapper.state('selectedSections').has('foo bar')).toBeFalsy()
     })
 
     it('does not toggle the section in the selectedSections set if the section has no ticket groups', () => {
       wrapper.instance().updateTicketGroups([])
-      wrapper.simulate('touchend', { target })
+      wrapper.simulate('touchstart', createTouchEvent(target))
+      wrapper.simulate('touchend', createTouchEvent(target))
       expect(wrapper.state('selectedSections').has('foo bar')).toBeFalsy()
 
       wrapper.setState({ selectedSections: new Set(['foo bar']) })
-      wrapper.simulate('touchend', { target })
+      wrapper.simulate('touchstart', createTouchEvent(target))
+      wrapper.simulate('touchend', createTouchEvent(target))
       expect(wrapper.state('selectedSections').has('foo bar')).toBeTruthy()
     })
 
     it('does not toggle the section if currently dragging the map', () => {
-      wrapper.simulate('touchmove')
-      wrapper.simulate('touchend', { target })
+      wrapper.simulate('touchstart', createTouchEvent(target))
+      wrapper.simulate('touchend', createTouchEvent(target, 100, 100))
       expect(wrapper.state('selectedSections').has('foo bar')).toBeFalsy()
     })
   })
