@@ -52,11 +52,16 @@ export interface State {
   sectionMapping: SectionMapping
   ticketGroups: TicketGroup[]
   selectedSections: Set<string>
-  isDragging: boolean
   currentHoveredSection?: string
   tooltipActive: boolean
   tooltipSectionName: string
   tooltipX: number
   tooltipY: number
   mapNotFound: boolean
+  touchStarts: {
+    [touchID: number]: {
+      x: number
+      y: number
+    }
+  }
 }
