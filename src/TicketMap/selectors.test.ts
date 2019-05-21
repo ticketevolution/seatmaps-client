@@ -30,12 +30,12 @@ beforeEach(() => {
     },
     ticketGroups: [ ticketGroupFooBar, ticketGroupBizBaz ],
     selectedSections: new Set(),
-    isDragging: false,
     tooltipActive: false,
     tooltipSectionName: '',
     tooltipX: 0,
     tooltipY: 0,
-    mapNotFound: false
+    mapNotFound: false,
+    touchStarts: {}
   }
   props = {
     venueId: '',
