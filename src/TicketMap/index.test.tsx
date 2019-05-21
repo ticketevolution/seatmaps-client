@@ -273,6 +273,12 @@ describe('TicketMap', () => {
       wrapper.simulate('touchend', createTouchEvent(target, 100, 100))
       expect(wrapper.state('selectedSections').has('foo bar')).toBeFalsy()
     })
+
+    it('toggles the section if a touch event drags a small amount', () => {
+      wrapper.simulate('touchstart', createTouchEvent(target))
+      wrapper.simulate('touchend', createTouchEvent(target, 1, 1))
+      expect(wrapper.state('selectedSections').has('foo bar')).toBeTruthy()
+    })
   })
 
   describe('updateTicketGroups', () => {
