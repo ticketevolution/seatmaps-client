@@ -9,12 +9,13 @@ import { TicketGroup } from '../types'
 
 const createTouchEvent = (target: HTMLElement, pageX = 0, pageY = 0) => ({
   target,
-  changedTouches: [
-    {
+  changedTouches: {
+    length: 1,
+    item: () => ({
       pageX,
       pageY
-    }
-  ]
+    })
+  }
 })
 
 describe('TicketMap', () => {

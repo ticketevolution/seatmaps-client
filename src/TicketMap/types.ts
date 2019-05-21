@@ -59,7 +59,7 @@ export interface State {
   tooltipY: number
   mapNotFound: boolean
   touchStarts: {
-    [touchID: string]: {
+    [touchID: number]: {
       x: number
       y: number
     }

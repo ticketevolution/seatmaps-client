@@ -375,13 +375,12 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       return
     }
 
-    const [ touchID ] = Object.getOwnPropertyNames(event.changedTouches)
-    const touch = event.changedTouches[touchID as any]
+    const touch = event.changedTouches.item(0)
 
     this.setState({
       touchStarts: {
         ...this.state.touchStarts,
-        [touchID]: {
+        [touch.identifier]: {
           x: touch.pageX,
           y: touch.pageY
         }
@@ -394,9 +393,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       return
     }
 
-    const [ touchID ] = Object.getOwnPropertyNames(event.changedTouches)
-    const touch = event.changedTouches[touchID as any]
-    const touchStart = this.state.touchStarts[touchID]
+    const touch = event.changedTouches.item(0)
+    const touchStart = this.state.touchStarts[touch.identifier]
 
     const translationDistance = Math.sqrt(Math.pow(touchStart.x - touch.pageX, 2) + Math.pow(touchStart.y - touch.pageY, 2))
     if (translationDistance <= MAX_SELECT_TRANSLATION_DISTANCE) {
