@@ -8,25 +8,17 @@ import ActionGroup from './ActionGroup'
 import Button from '../Button'
 import Legend from '../Legend'
 
-const zoomIn = jest.fn()
-const zoomOut = jest.fn()
-const resetZoom = jest.fn()
-
-jest.mock('svg-pan-zoom/src/svg-pan-zoom.js', () => jest.fn(() => ({
-  zoomIn,
-  zoomOut,
-  reset: resetZoom
-})))
-
 describe('Actions', () => {
   let wrapper: ReactWrapper<Props>
   let props: Props
 
   beforeEach(() => {
     props = {
-      mapSvg: <svg /> as unknown as SVGSVGElement,
       ranges: [],
-      onClearSelection: jest.fn()
+      onClearSelection: jest.fn(),
+      onZoomIn: jest.fn(),
+      onZoomOut: jest.fn(),
+      onResetZoom: jest.fn()
     }
     wrapper = mount(<Actions {...props} />)
   })
@@ -80,17 +72,17 @@ describe('Actions', () => {
 
       it('renders a button that zooms in', () => {
         wrapper.find(Button).forEach(button => button.simulate('click'))
-        expect(zoomIn).toHaveBeenCalled()
+        expect(props.onZoomIn).toHaveBeenCalled()
       })
 
       it('renders a button that zooms out', () => {
         wrapper.find(Button).forEach(button => button.simulate('click'))
-        expect(zoomOut).toHaveBeenCalled()
+        expect(props.onZoomOut).toHaveBeenCalled()
       })
 
       it('renders a button that resets zoom', () => {
         wrapper.find(Button).forEach(button => button.simulate('click'))
-        expect(resetZoom).toHaveBeenCalled()
+        expect(props.onResetZoom).toHaveBeenCalled()
       })
 
       it('renders a button that clears selections', () => {
@@ -126,17 +118,17 @@ describe('Actions', () => {
 
       it('does not render a button that zooms in', () => {
         wrapper.find(Button).forEach(button => button.simulate('click'))
-        expect(zoomIn).not.toHaveBeenCalled()
+        expect(props.onZoomIn).not.toHaveBeenCalled()
       })
 
       it('does not render a button that zooms out', () => {
         wrapper.find(Button).forEach(button => button.simulate('click'))
-        expect(zoomOut).not.toHaveBeenCalled()
+        expect(props.onZoomOut).not.toHaveBeenCalled()
       })
 
       it('does not render a button that resets zoom', () => {
         wrapper.find(Button).forEach(button => button.simulate('click'))
-        expect(resetZoom).not.toHaveBeenCalled()
+        expect(props.onResetZoom).not.toHaveBeenCalled()
       })
 
       it('renders a button that clears selections', () => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { isEqual } from 'lodash-es'
+import { isEqual, cloneDeep } from 'lodash-es'
 
 import Actions from '../Actions'
 import Tooltip from '../Tooltip'
@@ -18,6 +18,10 @@ import {
 export * from './types'
 
 const MAX_SELECT_TRANSLATION_DISTANCE = 5
+
+function distance (a: any, b: any) {
+  return Math.sqrt(Math.pow(a.pageX - b.pageX, 2) + Math.pow(a.pageX - b.pageY, 2))
+}
 
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
@@ -43,6 +47,7 @@ class MapNotFoundError extends Error {
 export default class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi
   mapRoot = React.createRef<HTMLDivElement>()
+  container = React.createRef<HTMLDivElement>()
 
   static defaultProps: DefaultProps = {
     mapsDomain: 'https://maps.ticketevolution.com',
@@ -73,7 +78,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       tooltipY: 0,
       ticketGroups: this.props.ticketGroups,
       mapNotFound: false,
-      touchStarts: {}
+      touchStarts: {},
+      isTouchDevice: false
     }
 
     this.publicApi = {
@@ -90,6 +96,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    */
 
   async componentDidMount () {
+    this.container.current.addEventListener('touchmove', (e) => {
+      e.preventDefault()
+    }, { passive: false })
+
+    this.setState({
+      isTouchDevice: 'ontouchstart' in document.documentElement
+    })
+
     try {
       await this.fetchMap()
       this.setupMap()
@@ -371,35 +385,58 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   onClick = () => this.doSelect()
 
   onTouchStart = (event: React.TouchEvent<HTMLElement>) => {
-    if (event.changedTouches.length !== 1) {
+    // if (event.changedTouches.length !== 2) {
+    //   return
+    // }
+
+    // const touch = event.changedTouches.item(0)
+
+    // this.setState({
+    //   touchStarts: {
+    //     ...this.state.touchStarts,
+    //     [touch.identifier]: {
+    //       x: touch.pageX,
+    //       y: touch.pageY
+    //     }
+    //   }
+    // })
+  }
+
+  onTouchMove = (event: React.TouchEvent<HTMLElement>) => {
+    if (event.touches.length !== 2) {
       return
     }
 
-    const touch = event.changedTouches.item(0)
+    if (!this.state.previousTouches) {
+      this.setState({
+        previousTouches: [
+          { pageX: event.touches.item(0).pageX, pageY: event.touches.item(0).pageY },
+          { pageX: event.touches.item(1).pageX, pageY: event.touches.item(1).pageY }
+        ]
+      })
+      return
+    }
 
-    this.setState({
-      touchStarts: {
-        ...this.state.touchStarts,
-        [touch.identifier]: {
-          x: touch.pageX,
-          y: touch.pageY
-        }
-      }
-    })
+    const initialLength = distance(this.state.previousTouches[0], this.state.previousTouches[1])
+    const currentLength = distance(event.touches.item(0), event.touches.item(1))
+    console.log(initialLength - currentLength)
   }
 
   onTouchEnd = (event: React.TouchEvent<HTMLElement>) => {
-    if (event.changedTouches.length !== 1) {
-      return
-    }
+    this.setState({
+      previousTouches: undefined
+    })
+    // if (event.changedTouches.length !== 2) {
+    //   return
+    // }
 
-    const touch = event.changedTouches.item(0)
-    const touchStart = this.state.touchStarts[touch.identifier]
+    // const touch = event.changedTouches.item(0)
+    // const touchStart = this.state.touchStarts[touch.identifier]
 
-    const translationDistance = Math.sqrt(Math.pow(touchStart.x - touch.pageX, 2) + Math.pow(touchStart.y - touch.pageY, 2))
-    if (translationDistance <= MAX_SELECT_TRANSLATION_DISTANCE) {
-      this.doSelect(this.getSectionFromTarget(event.target as HTMLElement))
-    }
+    // const translationDistance = Math.sqrt(Math.pow(touchStart.x - touch.pageX, 2) + Math.pow(touchStart.y - touch.pageY, 2))
+    // if (translationDistance <= MAX_SELECT_TRANSLATION_DISTANCE) {
+    //   this.doSelect(this.getSectionFromTarget(event.target as HTMLElement))
+    // }
   }
 
   /**
@@ -451,6 +488,15 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.toggleSectionSelect(section, !this.state.selectedSections.has(section))
   }
 
+  handleZoomIn = () => {
+  }
+
+  handleZoomOut = () => {
+  }
+
+  handleResetZoom = () => {
+  }
+
   render () {
     if (this.state.mapNotFound) {
       return (
@@ -479,28 +525,31 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
     return (
       <div
+        ref={this.container}
         onMouseOver={this.onMouseOver}
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
         onClick={this.onClick}
         onTouchStart={this.onTouchStart}
+        onTouchMove={this.onTouchMove}
         onTouchEnd={this.onTouchEnd}
         style={{
           position: 'relative',
           fontFamily: this.props.mapFontFamily,
           height: '100%',
           width: '100%',
-          pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none'
+          pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none',
+          touchAction: 'manipulation'
         }}
       >
-        <Tooltip
+        {!this.state.isTouchDevice && <Tooltip
           isActive={this.state.tooltipActive}
           x={this.state.tooltipX}
           y={this.state.tooltipY}
           name={this.state.tooltipSectionName}
           color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
-        />
+        />}
         <div
           ref={this.mapRoot}
           style={{
@@ -510,11 +559,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         />
         {this.state.mapSvg && (
           <Actions
-            mapSvg={this.state.mapSvg}
             onClearSelection={this.clearSelection}
             ranges={$costRanges(this.state, this.props)}
             showLegend={this.props.showLegend}
             showControls={this.props.showControls}
+            onZoomIn={this.handleZoomIn}
+            onZoomOut={this.handleZoomOut}
+            onResetZoom={this.handleResetZoom}
           />
         )}
       </div>

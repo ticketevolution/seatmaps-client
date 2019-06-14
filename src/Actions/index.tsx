@@ -1,5 +1,4 @@
 import React from 'react'
-import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import { faTimesCircle, faPlus, faMinus, faUndoAlt } from '@fortawesome/free-solid-svg-icons'
 import Legend from '../Legend'
 import Button from '../Button'
@@ -7,11 +6,13 @@ import ActionGroup from './ActionGroup'
 import { CostRange } from 'src/TicketMap'
 
 export interface Props {
-  mapSvg: SVGSVGElement
   onClearSelection?: () => void
   showLegend?: boolean
   showControls?: boolean
   ranges: CostRange[]
+  onZoomIn: () => void
+  onZoomOut: () => void
+  onResetZoom: () => void
 }
 
 interface DefaultProps {
@@ -26,7 +27,6 @@ interface State {
 
 export default class Actions extends React.Component<Props & DefaultProps, State> {
   container = React.createRef<HTMLDivElement>()
-  mapZoom: any // eslint-disable-line @typescript-eslint/no-explicit-any
   timer?: number
 
   state: State = {
@@ -37,14 +37,6 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     showLegend: true,
     showControls: true,
     onClearSelection: () => { }
-  }
-
-  constructor(props: Props & DefaultProps) {
-    super(props)
-
-    this.mapZoom = svgPanZoom(this.props.mapSvg, {
-      minZoom: 0.8
-    })
   }
 
   get styles(): { [key: string]: React.CSSProperties } {
@@ -106,7 +98,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
               <Button
                 data-rh='Default'
                 data-custom-at='right'
-                onClick={() => this.mapZoom.zoomIn()}
+                onClick={() => this.props.onZoomIn()}
                 icon={faPlus}
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
@@ -114,7 +106,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
               />
 
               <Button
-                onClick={() => this.mapZoom.zoomOut()}
+                onClick={() => this.props.onZoomOut()}
                 icon={faMinus}
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
@@ -122,7 +114,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
               />
 
               <Button
-                onClick={() => this.mapZoom.reset()}
+                onClick={() => this.props.onResetZoom()}
                 icon={faUndoAlt}
                 text='Reset Zoom'
                 isMobile={isMobile}
