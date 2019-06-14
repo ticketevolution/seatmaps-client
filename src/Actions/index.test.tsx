@@ -10,9 +10,13 @@ import Legend from '../Legend'
 
 const zoomIn = jest.fn()
 const zoomOut = jest.fn()
-const reset = jest.fn()
+const resetZoom = jest.fn()
 
-jest.mock('svg-pan-zoom/src/svg-pan-zoom.js', () => jest.fn(() => ({ zoomIn, zoomOut, reset })))
+jest.mock('svg-pan-zoom/src/svg-pan-zoom.js', () => jest.fn(() => ({
+  zoomIn,
+  zoomOut,
+  reset: resetZoom
+})))
 
 describe('Actions', () => {
   let wrapper: ReactWrapper<Props>
@@ -31,46 +35,114 @@ describe('Actions', () => {
     expect(wrapper).toExist()
   })
 
-  it('renders all in the same action group on small screens', () => {
+  it('renders the actions and legend in one group on mobile browsers', () => {
+    wrapper.setProps({ showControls: true, showLegend: true })
     wrapper.setState({ isMobile: true })
-    const actionGroup = wrapper.find(ActionGroup)
-    expect(actionGroup).toHaveLength(1)
-    expect(actionGroup.at(0).find(Button)).toHaveLength(5)
+    expect(wrapper.find(ActionGroup)).toHaveLength(1)
   })
 
-  it('renders the legend in a separate action group on large screens', () => {
-    wrapper.setProps({ showLegend: true })
+  it('renders the actions and legend in separate groups on mobile browsers', () => {
+    wrapper.setProps({ showControls: true, showLegend: true })
     wrapper.setState({ isMobile: false })
-    const actionGroup = wrapper.find(ActionGroup)
-    expect(actionGroup).toHaveLength(2)
-    expect(actionGroup.at(1).find(Legend)).toHaveLength(1)
+    expect(wrapper.find(ActionGroup)).toHaveLength(2)
+    expect(wrapper.find(ActionGroup).at(1).find(Legend)).toHaveLength(1)
   })
 
-  it('renders a button to zoom in', () => {
-    wrapper.find(Button).forEach(button => button.simulate('click'))
-    expect(zoomIn).toHaveBeenCalled()
-  })
+  describe('when controls are visible', () => {
+    beforeEach(() => {
+      wrapper.setProps({ showControls: true })
+    })
 
-  it('renders a button to zoom out', () => {
-    wrapper.find(Button).forEach(button => button.simulate('click'))
-    expect(zoomOut).toHaveBeenCalled()
-  })
+    describe('on desktop browsers', () => {
+      beforeEach(() => {
+        wrapper.setState({ isMobile: false })
+      })
 
-  it('renders a button to reset', () => {
-    wrapper.find(Button).forEach(button => button.simulate('click'))
-    expect(reset).toHaveBeenCalled()
-  })
+      it('matches snapshot', () => {
+        expect(wrapper).toMatchSnapshot()
+      })
 
-  it('renders a button to clear selections', () => {
-    wrapper.find(Button).forEach(button => button.simulate('click'))
-    expect(props.onClearSelection).toHaveBeenCalled()
-  })
+      it('renders a clear selection button', () => {
+        expect(wrapper).toContainMatchingElement('[name="clear-selection"]')
+      })
 
-  it('renders controls when showControls is true', () => {
-    wrapper.setProps({ showControls: true })
-    expect(wrapper).toContainMatchingElement('*[name="zoom-out"]')
-    expect(wrapper).toContainMatchingElement('*[name="reset-zoom"]')
-    expect(wrapper).toContainMatchingElement('*[name="zoom-in"]')
-    expect(wrapper).toContainMatchingElement('*[name="clear-selection"]')
+      it('renders a zoom in button', () => {
+        expect(wrapper).toContainMatchingElement('[name="zoom-in"]')
+      })
+
+      it('renders a zoom out button', () => {
+        expect(wrapper).toContainMatchingElement('[name="zoom-out"]')
+      })
+
+      it('renders a reset zoom button', () => {
+        expect(wrapper).toContainMatchingElement('[name="reset-zoom"]')
+      })
+
+      it('renders a button that zooms in', () => {
+        wrapper.find(Button).forEach(button => button.simulate('click'))
+        expect(zoomIn).toHaveBeenCalled()
+      })
+
+      it('renders a button that zooms out', () => {
+        wrapper.find(Button).forEach(button => button.simulate('click'))
+        expect(zoomOut).toHaveBeenCalled()
+      })
+
+      it('renders a button that resets zoom', () => {
+        wrapper.find(Button).forEach(button => button.simulate('click'))
+        expect(resetZoom).toHaveBeenCalled()
+      })
+
+      it('renders a button that clears selections', () => {
+        wrapper.find(Button).forEach(button => button.simulate('click'))
+        expect(props.onClearSelection).toHaveBeenCalled()
+      })
+    })
+
+    describe('on mobile browsers', () => {
+      beforeEach(() => {
+        wrapper.setState({ isMobile: true })
+      })
+
+      it('matches snapshot', () => {
+        expect(wrapper).toMatchSnapshot()
+      })
+
+      it('renders a clear selection button', () => {
+        expect(wrapper).toContainMatchingElement('[name="clear-selection"]')
+      })
+
+      it('does not render a zoom in button', () => {
+        expect(wrapper).not.toContainMatchingElement('[name="zoom-in"]')
+      })
+
+      it('does not render a zoom out button', () => {
+        expect(wrapper).not.toContainMatchingElement('[name="zoom-out"]')
+      })
+
+      it('does not render a reset zoom button', () => {
+        expect(wrapper).not.toContainMatchingElement('[name="reset-zoom"]')
+      })
+
+      it('does not render a button that zooms in', () => {
+        wrapper.find(Button).forEach(button => button.simulate('click'))
+        expect(zoomIn).not.toHaveBeenCalled()
+      })
+
+      it('does not render a button that zooms out', () => {
+        wrapper.find(Button).forEach(button => button.simulate('click'))
+        expect(zoomOut).not.toHaveBeenCalled()
+      })
+
+      it('does not render a button that resets zoom', () => {
+        wrapper.find(Button).forEach(button => button.simulate('click'))
+        expect(resetZoom).not.toHaveBeenCalled()
+      })
+
+      it('renders a button that clears selections', () => {
+        wrapper.find(Button).forEach(button => button.simulate('click'))
+        expect(props.onClearSelection).toHaveBeenCalled()
+      })
+    })
   })
 })

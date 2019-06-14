@@ -36,10 +36,10 @@ export default class Actions extends React.Component<Props & DefaultProps, State
   static defaultProps: DefaultProps = {
     showLegend: true,
     showControls: true,
-    onClearSelection: () => {}
+    onClearSelection: () => { }
   }
 
-  constructor (props: Props & DefaultProps) {
+  constructor(props: Props & DefaultProps) {
     super(props)
 
     this.mapZoom = svgPanZoom(this.props.mapSvg, {
@@ -47,7 +47,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     })
   }
 
-  get styles (): { [key: string]: React.CSSProperties } {
+  get styles(): { [key: string]: React.CSSProperties } {
     return {
       container: {
         position: 'absolute',
@@ -74,11 +74,11 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.timer = window.setInterval(this.updateIsMobile, 200)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     window.clearInterval(this.timer)
   }
 
@@ -94,13 +94,14 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     }
   }
 
-  render () {
+  render() {
     const { isMobile } = this.state
+    const { showControls, showLegend } = this.props
 
     return (
       <div style={this.styles.container} ref={this.container}>
         <ActionGroup>
-          {this.props.showControls && (
+          {showControls && !isMobile && (
             <React.Fragment>
               <Button
                 data-rh='Default'
@@ -128,22 +129,23 @@ export default class Actions extends React.Component<Props & DefaultProps, State
                 style={{ borderRight: '2px solid lightgray' }}
                 name='reset-zoom'
               />
-
-              <Button
-                onClick={() => this.props.onClearSelection()}
-                icon={faTimesCircle}
-                text={`Clear${isMobile ? '' : ' All'}`}
-                isMobile={isMobile}
-                style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
-                name='clear-selection'
-              />
             </React.Fragment>
           )}
-          {isMobile && this.props.showLegend && <Legend isMobile ranges={this.props.ranges} />}
+          {showControls && (
+            <Button
+              onClick={() => this.props.onClearSelection()}
+              icon={faTimesCircle}
+              text={`Clear${isMobile ? '' : ' All'}`}
+              isMobile={isMobile}
+              style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
+              name='clear-selection'
+            />
+          )}
+          {isMobile && showLegend && <Legend isMobile ranges={this.props.ranges} />}
         </ActionGroup>
         {!isMobile && (
           <ActionGroup>
-            {this.props.showLegend && <Legend ranges={this.props.ranges} />}
+            {showLegend && <Legend ranges={this.props.ranges} />}
           </ActionGroup>
         )}
       </div>
