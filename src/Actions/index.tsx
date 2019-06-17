@@ -86,7 +86,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     }
   }
 
-  render() {
+  render () {
     const { isMobile } = this.state
     const { showControls, showLegend } = this.props
 

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { isEqual, cloneDeep } from 'lodash-es'
+import { isEqual, } from 'lodash-es'
 
 import Actions from '../Actions'
 import Tooltip from '../Tooltip'
+import initializeZoom from '../zoom'
 
 import { TicketGroup, NormalizedTicketGroup } from '../types'
 import { State, Props, DefaultProps, Manifest } from './types'
@@ -18,10 +19,6 @@ import {
 export * from './types'
 
 const MAX_SELECT_TRANSLATION_DISTANCE = 5
-
-function distance (a: any, b: any) {
-  return Math.sqrt(Math.pow(a.pageX - b.pageX, 2) + Math.pow(a.pageX - b.pageY, 2))
-}
 
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
@@ -145,6 +142,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     // we set in future methods.
     if (this.mapRoot.current) {
       this.mapRoot.current.innerHTML = mapHtml
+      const svg = this.mapRoot.current.querySelector('svg')
+      if (svg) {
+        initializeZoom(svg)
+      }
     }
   }
 
@@ -384,61 +385,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   onClick = () => this.doSelect()
 
-  onTouchStart = (event: React.TouchEvent<HTMLElement>) => {
-    // if (event.changedTouches.length !== 2) {
-    //   return
-    // }
-
-    // const touch = event.changedTouches.item(0)
-
-    // this.setState({
-    //   touchStarts: {
-    //     ...this.state.touchStarts,
-    //     [touch.identifier]: {
-    //       x: touch.pageX,
-    //       y: touch.pageY
-    //     }
-    //   }
-    // })
-  }
-
-  onTouchMove = (event: React.TouchEvent<HTMLElement>) => {
-    if (event.touches.length !== 2) {
-      return
-    }
-
-    if (!this.state.previousTouches) {
-      this.setState({
-        previousTouches: [
-          { pageX: event.touches.item(0).pageX, pageY: event.touches.item(0).pageY },
-          { pageX: event.touches.item(1).pageX, pageY: event.touches.item(1).pageY }
-        ]
-      })
-      return
-    }
-
-    const initialLength = distance(this.state.previousTouches[0], this.state.previousTouches[1])
-    const currentLength = distance(event.touches.item(0), event.touches.item(1))
-    console.log(initialLength - currentLength)
-  }
-
-  onTouchEnd = (event: React.TouchEvent<HTMLElement>) => {
-    this.setState({
-      previousTouches: undefined
-    })
-    // if (event.changedTouches.length !== 2) {
-    //   return
-    // }
-
-    // const touch = event.changedTouches.item(0)
-    // const touchStart = this.state.touchStarts[touch.identifier]
-
-    // const translationDistance = Math.sqrt(Math.pow(touchStart.x - touch.pageX, 2) + Math.pow(touchStart.y - touch.pageY, 2))
-    // if (translationDistance <= MAX_SELECT_TRANSLATION_DISTANCE) {
-    //   this.doSelect(this.getSectionFromTarget(event.target as HTMLElement))
-    // }
-  }
-
   /**
    * Interactions
    */
@@ -530,9 +476,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
         onClick={this.onClick}
-        onTouchStart={this.onTouchStart}
-        onTouchMove={this.onTouchMove}
-        onTouchEnd={this.onTouchEnd}
         style={{
           position: 'relative',
           fontFamily: this.props.mapFontFamily,
