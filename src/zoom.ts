@@ -118,4 +118,9 @@ export default function (svg: SVGSVGElement) {
   svg.addEventListener('mouseup', () => {
     dragging = false
   })
+
+  svg.addEventListener('wheel', e => e.preventDefault(), { passive: false })
+  svg.addEventListener('wheel', event => {
+    console.log(event.deltaY, event.deltaMode)
+  })
 }
