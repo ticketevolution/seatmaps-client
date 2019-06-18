@@ -18,8 +18,6 @@ import {
 
 export * from './types'
 
-const MAX_SELECT_TRANSLATION_DISTANCE = 5
-
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
   highlightSection: (section: string) => void
@@ -93,10 +91,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    */
 
   async componentDidMount () {
-    this.container.current.addEventListener('touchmove', (e) => {
-      e.preventDefault()
-    }, { passive: false })
-
     this.setState({
       isTouchDevice: 'ontouchstart' in document.documentElement
     })
@@ -481,8 +475,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           fontFamily: this.props.mapFontFamily,
           height: '100%',
           width: '100%',
-          pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none',
-          touchAction: 'manipulation'
+          pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none'
         }}
       >
         {!this.state.isTouchDevice && <Tooltip
