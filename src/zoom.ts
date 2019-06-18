@@ -1,3 +1,4 @@
+const ZOOM_COEFFICIENT = 5
 
 // determines the magnitude of a vector
 function magnitude (ax: number, ay: number, bx: number, by: number) {
@@ -121,6 +122,19 @@ export default function (svg: SVGSVGElement) {
 
   svg.addEventListener('wheel', e => e.preventDefault(), { passive: false })
   svg.addEventListener('wheel', event => {
-    console.log(event.deltaY, event.deltaMode)
+    if (event.deltaMode !== WheelEvent.DOM_DELTA_PIXEL) {
+      return
+    }
+
+    ivbw = svg.viewBox.baseVal.width
+    ivbh = svg.viewBox.baseVal.height
+
+    svg.viewBox.baseVal.height *= 1 + (event.deltaY / svg.clientHeight * ZOOM_COEFFICIENT)
+    svg.viewBox.baseVal.width *= 1 + (event.deltaY / svg.clientWidth * ZOOM_COEFFICIENT)
+
+    svg.viewBox.baseVal.x -= (svg.viewBox.baseVal.width - ivbw) / 2
+    svg.viewBox.baseVal.y -= (svg.viewBox.baseVal.height - ivbh) / 2
+
+    console.log(svg.viewBox.baseVal)
   })
 }
