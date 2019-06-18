@@ -1,15 +1,21 @@
 
-function distance (a: any, b: any) {
-  return Math.sqrt(Math.pow(a.pageX - b.pageX, 2) + Math.pow(a.pageX - b.pageY, 2))
+function magnitude (ax: number, ay: number, bx: number, by: number) {
+  return Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2))
+}
+
+function svgPointFromClientPoint (referencePoint: DOMPoint, svg: SVGSVGElement, x: number, y: number): number[] {
+  referencePoint.x = x
+  referencePoint.y = y
+
+  let p = referencePoint.matrixTransform(svg.getScreenCTM()!.inverse())
+  return [p.x, p.y]
 }
 
 export default function (svg: SVGSVGElement) {
-  let initialTouchAX: number
-  let initialTouchAY: number
-  let initialTouchBX: number
-  let initialTouchBY: number
-  let initialTouchMidX: number
-  let initialTouchMidY: number
+  let iTouchAX: number
+  let iTouchAY: number
+  let iTouchBX: number
+  let iTouchBY: number
   let ivbX: number
   let ivbY: number
   let ivbH: number
@@ -24,13 +30,12 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
-    initialTouchAX = e.touches.item(0)!.clientX
-    initialTouchAY = e.touches.item(0)!.clientY
-    initialTouchBX = e.touches.item(1)!.clientX
-    initialTouchBY = e.touches.item(1)!.clientY
+    iTouchAX = e.touches.item(0)!.clientX
+    iTouchAY = e.touches.item(0)!.clientY
+    iTouchBX = e.touches.item(1)!.clientX
+    iTouchBY = e.touches.item(1)!.clientY
 
     const vb = svg.getAttribute('viewBox')!.split(' ').map(Number)
-    console.log(vb)
     ivbX = vb[0]
     ivbY = vb[1]
     ivbW = vb[2]
@@ -42,32 +47,27 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
-    let touchAX = e.touches.item(0)!.clientX
-    let touchAY = e.touches.item(0)!.clientY
-    let touchBX = e.touches.item(1)!.clientX
-    let touchBY = e.touches.item(1)!.clientY
+    const touchAX = e.touches.item(0)!.clientX
+    const touchAY = e.touches.item(0)!.clientY
+    const touchBX = e.touches.item(1)!.clientX
+    const touchBY = e.touches.item(1)!.clientY
 
-    referencePoint.x = (touchAX + touchBX) / 2
-    referencePoint.y = (touchAY + touchBY) / 2
+    const [ touchMidX, touchMidY ] = svgPointFromClientPoint(referencePoint, svg, (touchAX + touchBX) / 2, (touchAY + touchBY) / 2)
+    const [ iTouchMidX, iTouchMidY ] = svgPointFromClientPoint(referencePoint, svg, (iTouchAX + iTouchBX) / 2, (iTouchAY + iTouchBY) / 2)
 
-    let p = referencePoint.matrixTransform(svg.getScreenCTM()!.inverse())
+    const iTouchMag = magnitude(iTouchAX, iTouchAY, iTouchBX, iTouchBY)
+    const touchMag = magnitude(touchAX, touchAY, touchBX, touchBY)
+    const magRatio = iTouchMag / touchMag
 
-    let touchMidX = p.x
-    let touchMidY = p.y
+    const vbh = ivbH * magRatio
+    const vbw = ivbW * magRatio
 
-    referencePoint.x = (initialTouchAX + initialTouchBX) / 2
-    referencePoint.y = (initialTouchAY + initialTouchBY) / 2
+    const dvbh = vbh - ivbH
+    const dvbw = vbw - ivbW
 
-    p = referencePoint.matrixTransform(svg.getScreenCTM()!.inverse())
+    const vbx = ivbX - touchMidX + iTouchMidX - (dvbh / 2)
+    const vby = ivbY - touchMidY + iTouchMidY - (dvbw / 2)
 
-    initialTouchMidX = p.x
-    initialTouchMidY = p.y
-
-    console.log('i', initialTouchMidX, initialTouchMidY)
-    console.log(touchMidX, touchMidY)
-
-    const vbx = ivbX - touchMidX + initialTouchMidX
-    const vby = ivbY - touchMidY + initialTouchMidY
-    svg.setAttribute('viewBox', `${vbx} ${vby} ${ivbW} ${ivbH}`)
+    svg.setAttribute('viewBox', `${vbx} ${vby} ${vbw} ${vbh}`)
   })
 }
