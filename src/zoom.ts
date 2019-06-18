@@ -46,11 +46,10 @@ export default function (svg: SVGSVGElement) {
     iTouchBY = e.touches.item(1)!.clientY
 
     // update the initial viewbox
-    const vb = svg.getAttribute('viewBox')!.split(' ').map(Number)
-    ivbx = vb[0]
-    ivby = vb[1]
-    ivbw = vb[2]
-    ivbh = vb[3]
+    ivbx = svg.viewBox.baseVal.x
+    ivby = svg.viewBox.baseVal.y
+    ivbw = svg.viewBox.baseVal.width
+    ivbh = svg.viewBox.baseVal.height
   })
 
   svg.addEventListener('touchmove', e => {
@@ -75,18 +74,15 @@ export default function (svg: SVGSVGElement) {
     const magRatio = iTouchMag / touchMag
 
     // magnitude components of the viewbox vector
-    const vbh = ivbh * magRatio
-    const vbw = ivbw * magRatio
+    svg.viewBox.baseVal.height = ivbh * magRatio
+    svg.viewBox.baseVal.width = ivbw * magRatio
 
     // change in the magnitude components of the viewbox vector
-    const dvbh = vbh - ivbh
-    const dvbw = vbw - ivbw
+    const dvbh = svg.viewBox.baseVal.height - ivbh
+    const dvbw = svg.viewBox.baseVal.width - ivbw
 
     // position components of the viewbox vector
-    const vbx = ivbx - touchMidX + iTouchMidX - (dvbh / 2)
-    const vby = ivby - touchMidY + iTouchMidY - (dvbw / 2)
-
-    // update the viewbox
-    svg.setAttribute('viewBox', `${vbx} ${vby} ${vbw} ${vbh}`)
+    svg.viewBox.baseVal.x = ivbx - touchMidX + iTouchMidX - (dvbh / 2)
+    svg.viewBox.baseVal.y = ivby - touchMidY + iTouchMidY - (dvbw / 2)
   })
 }
