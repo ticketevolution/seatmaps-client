@@ -85,4 +85,40 @@ export default function (svg: SVGSVGElement) {
     svg.viewBox.baseVal.x = ivbx - touchMidX + iTouchMidX - (dvbh / 2)
     svg.viewBox.baseVal.y = ivby - touchMidY + iTouchMidY - (dvbw / 2)
   })
+
+  // initial mouse points in the client coordinate space
+  let iMouseClientX: number
+  let iMouseClientY: number
+
+  let dragging = false
+
+  svg.addEventListener('mousedown', event => {
+    iMouseClientX = event.clientX
+    iMouseClientY = event.clientY
+
+    // update the initial viewbox
+    ivbx = svg.viewBox.baseVal.x
+    ivby = svg.viewBox.baseVal.y
+
+    dragging = true
+  })
+
+  svg.addEventListener('mousemove', event => {
+    if (!dragging) {
+      return
+    }
+
+    const mouseClientX = event.pageX
+    const mouseClientY = event.pageY
+
+    const [ mouseSVGX, mouseSVGY ] = svgPointFromClientPoint(referencePoint, svg, mouseClientX, mouseClientY)
+    const [ iMouseSVGX, iMouseSVGY ] = svgPointFromClientPoint(referencePoint, svg, iMouseClientX, iMouseClientY)
+
+    svg.viewBox.baseVal.x = ivbx - mouseSVGX + iMouseSVGX
+    svg.viewBox.baseVal.y = ivby - mouseSVGY + iMouseSVGY
+  })
+
+  svg.addEventListener('mouseup', () => {
+    dragging = false
+  })
 }
