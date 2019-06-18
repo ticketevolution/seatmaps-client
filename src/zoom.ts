@@ -108,10 +108,7 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
-    const mouseClientX = event.pageX
-    const mouseClientY = event.pageY
-
-    const [ mouseSVGX, mouseSVGY ] = svgPointFromClientPoint(referencePoint, svg, mouseClientX, mouseClientY)
+    const [ mouseSVGX, mouseSVGY ] = svgPointFromClientPoint(referencePoint, svg, event.pageX, event.pageY)
     const [ iMouseSVGX, iMouseSVGY ] = svgPointFromClientPoint(referencePoint, svg, iMouseClientX, iMouseClientY)
 
     svg.viewBox.baseVal.x = ivbx - mouseSVGX + iMouseSVGX
