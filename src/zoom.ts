@@ -14,6 +14,10 @@ function svgPointFromClientPoint (referencePoint: DOMPoint, svg: SVGSVGElement, 
   return [p.x, p.y]
 }
 
+function preventDefault (event: UIEvent) {
+  event.preventDefault()
+}
+
 export default function (svg: SVGSVGElement) {
   // initial touch points (x and y components of points a and b)
   let iTouchAX: number
@@ -30,11 +34,8 @@ export default function (svg: SVGSVGElement) {
   // used to convert screen coordinates into coordinates in the svg space
   const referencePoint = svg.createSVGPoint()
 
-  // disables full page zooming and panning on safari mobile
-  svg.addEventListener('touchmove', e => e.preventDefault(), { passive: false })
-
   // for each touch start with exactly two touches, update the initial touch points and viewbox
-  svg.addEventListener('touchstart', e => {
+  function handleTouchStart(e: TouchEvent) {
     // only respong when two fingers are on the screen
     if (e.touches.length !== 2) {
       return
@@ -51,9 +52,9 @@ export default function (svg: SVGSVGElement) {
     ivby = svg.viewBox.baseVal.y
     ivbw = svg.viewBox.baseVal.width
     ivbh = svg.viewBox.baseVal.height
-  })
+  }
 
-  svg.addEventListener('touchmove', e => {
+  function handleTouchMove () {
     // only respond when two fingers are on the screen
     if (e.touches.length !== 2) {
       return
@@ -85,7 +86,7 @@ export default function (svg: SVGSVGElement) {
     // position components of the viewbox vector
     svg.viewBox.baseVal.x = ivbx - touchMidX + iTouchMidX - (dvbh / 2)
     svg.viewBox.baseVal.y = ivby - touchMidY + iTouchMidY - (dvbw / 2)
-  })
+  }
 
   // initial mouse points in the client coordinate space
   let iMouseClientX: number
@@ -93,7 +94,7 @@ export default function (svg: SVGSVGElement) {
 
   let dragging = false
 
-  svg.addEventListener('mousedown', event => {
+  function handleMouseDown (event: MouseEvent) {
     iMouseClientX = event.clientX
     iMouseClientY = event.clientY
 
@@ -102,9 +103,9 @@ export default function (svg: SVGSVGElement) {
     ivby = svg.viewBox.baseVal.y
 
     dragging = true
-  })
+  }
 
-  svg.addEventListener('mousemove', event => {
+  function handleMouseMove (event: MouseEvent) {
     if (!dragging) {
       return
     }
@@ -114,14 +115,13 @@ export default function (svg: SVGSVGElement) {
 
     svg.viewBox.baseVal.x = ivbx - mouseSVGX + iMouseSVGX
     svg.viewBox.baseVal.y = ivby - mouseSVGY + iMouseSVGY
-  })
+  }
 
-  svg.addEventListener('mouseup', () => {
+  function handleMouseUp () {
     dragging = false
-  })
+  }
 
-  svg.addEventListener('wheel', e => e.preventDefault(), { passive: false })
-  svg.addEventListener('wheel', event => {
+  function handleWheel (event: WheelEvent) {
     if (event.deltaMode !== WheelEvent.DOM_DELTA_PIXEL) {
       return
     }
@@ -134,7 +134,26 @@ export default function (svg: SVGSVGElement) {
 
     svg.viewBox.baseVal.x -= (svg.viewBox.baseVal.width - ivbw) / 2
     svg.viewBox.baseVal.y -= (svg.viewBox.baseVal.height - ivbh) / 2
+  }
 
-    console.log(svg.viewBox.baseVal)
-  })
+  // disables full page zooming and panning on safari mobile
+  svg.addEventListener('touchmove', preventDefault, { passive: false })
+  svg.addEventListener('touchstart', handleTouchStart)
+  svg.addEventListener('touchmove', handleTouchMove)
+  svg.addEventListener('mousedown', handleMouseDown)
+  svg.addEventListener('mousemove', handleMouseMove)
+  svg.addEventListener('mouseup', handleMouseUp)
+  svg.addEventListener('wheel', preventDefault, { passive: false })
+  svg.addEventListener('wheel', handleWheel)
+
+  return () => {
+    svg.removeEventListener('touchmove', preventDefault)
+    svg.removeEventListener('touchstart', handleTouchStart)
+    svg.removeEventListener('touchmove', handleTouchMove)
+    svg.removeEventListener('mousedown', handleMouseDown)
+    svg.removeEventListener('mousemove', handleMouseMove)
+    svg.removeEventListener('mouseup', handleMouseUp)
+    svg.removeEventListener('wheel', preventDefault)
+    svg.removeEventListener('wheel', handleWheel)
+  }
 }

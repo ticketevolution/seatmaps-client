@@ -43,6 +43,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi
   mapRoot = React.createRef<HTMLDivElement>()
   container = React.createRef<HTMLDivElement>()
+  cleanUpZoom?: () => void
 
   static defaultProps: DefaultProps = {
     mapsDomain: 'https://maps.ticketevolution.com',
@@ -107,6 +108,12 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     }
   }
 
+  componentWillUnmount () {
+    if (this.cleanUpZoom) {
+      this.cleanUpZoom()
+    }
+  }
+
   componentDidUpdate (_prevProps: Props, prevState: State) {
     const availableTicketGroupsDidChange = $availableTicketGroups(prevState) !== $availableTicketGroups(this.state)
     const isNoLongerHoveringOnSection = prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined
@@ -138,7 +145,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       this.mapRoot.current.innerHTML = mapHtml
       const svg = this.mapRoot.current.querySelector('svg')
       if (svg) {
-        initializeZoom(svg)
+        this.cleanUpZoom = initializeZoom(svg)
       }
     }
   }
