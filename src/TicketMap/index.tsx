@@ -490,7 +490,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           fontFamily: this.props.mapFontFamily,
           height: '100%',
           width: '100%',
-          pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none'
+          pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none',
+          '-webkit-touch-callout': 'none',
+          '-webkit-user-select': 'none',
+          '-khtml-user-select': 'none',
+          '-moz-user-select': 'none',
+          '-ms-user-select': 'none',
+          'user-select': 'none'
         }}
       >
         <Tooltip
