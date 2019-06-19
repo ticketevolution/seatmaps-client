@@ -70,7 +70,7 @@ export default function (svg: SVGSVGElement) {
     updateInitialViewbox()
   }
 
-  function handleTouchMove () {
+  function handleTouchMove (e: TouchEvent) {
     // only respond when two fingers are on the screen
     if (e.touches.length !== 2) {
       return
