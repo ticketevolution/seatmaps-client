@@ -5,15 +5,6 @@ function magnitude (ax: number, ay: number, bx: number, by: number) {
   return Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2))
 }
 
-// converts a point from the page coordinate space to a point in the svg coordinate space
-function svgPointFromClientPoint (referencePoint: DOMPoint, svg: SVGSVGElement, x: number, y: number): number[] {
-  referencePoint.x = x
-  referencePoint.y = y
-
-  let p = referencePoint.matrixTransform(svg.getScreenCTM()!.inverse())
-  return [p.x, p.y]
-}
-
 function preventDefault (event: UIEvent) {
   event.preventDefault()
 }
@@ -26,6 +17,23 @@ export interface ZoomControl {
 }
 
 export default function (svg: SVGSVGElement) {
+  // used to convert screen coordinates into coordinates in the svg space
+  const referencePoint = svg.createSVGPoint()
+
+  // converts a point from the page coordinate space to a point in the svg coordinate space
+  function svgPoint (x: number, y: number): number[] {
+    const matrix = svg.getScreenCTM()
+    if (!matrix) {
+      throw new Error('cannot convert dom point to svg point due to missing conversion matrix')
+    }
+
+    referencePoint.x = x
+    referencePoint.y = y
+
+    let p = referencePoint.matrixTransform(matrix.inverse())
+    return [p.x, p.y]
+  }
+
   // initial touch points (x and y components of points a and b)
   let iTouchAX: number
   let iTouchAY: number
@@ -51,9 +59,6 @@ export default function (svg: SVGSVGElement) {
   const ovbw = svg.viewBox.baseVal.width
   const ovbh = svg.viewBox.baseVal.height
 
-  // used to convert screen coordinates into coordinates in the svg space
-  const referencePoint = svg.createSVGPoint()
-
   // for each touch start with exactly two touches, update the initial touch points and viewbox
   function handleTouchStart (e: TouchEvent) {
     // only respong when two fingers are on the screen
@@ -61,11 +66,17 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
+    const iTouchA = e.touches.item(0)
+    const iTouchB = e.touches.item(1)
+    if (!iTouchA || !iTouchB) {
+      return
+    }
+
     // update initial touch points
-    iTouchAX = e.touches.item(0)!.clientX
-    iTouchAY = e.touches.item(0)!.clientY
-    iTouchBX = e.touches.item(1)!.clientX
-    iTouchBY = e.touches.item(1)!.clientY
+    iTouchAX = iTouchA.clientX
+    iTouchAY = iTouchA.clientY
+    iTouchBX = iTouchB.clientX
+    iTouchBY = iTouchB.clientY
 
     updateInitialViewbox()
   }
@@ -76,15 +87,21 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
+    const touchA = e.touches.item(0)
+    const touchB = e.touches.item(1)
+    if (!touchA || !touchB) {
+      return
+    }
+
     // current points of the touch vector
-    const touchAX = e.touches.item(0)!.clientX
-    const touchAY = e.touches.item(0)!.clientY
-    const touchBX = e.touches.item(1)!.clientX
-    const touchBY = e.touches.item(1)!.clientY
+    const touchAX = touchA.clientX
+    const touchAY = touchA.clientY
+    const touchBX = touchB.clientX
+    const touchBY = touchB.clientY
 
     // initial and current touch vector midpoints
-    const [ touchMidX, touchMidY ] = svgPointFromClientPoint(referencePoint, svg, (touchAX + touchBX) / 2, (touchAY + touchBY) / 2)
-    const [ iTouchMidX, iTouchMidY ] = svgPointFromClientPoint(referencePoint, svg, (iTouchAX + iTouchBX) / 2, (iTouchAY + iTouchBY) / 2)
+    const [ touchMidX, touchMidY ] = svgPoint((touchAX + touchBX) / 2, (touchAY + touchBY) / 2)
+    const [ iTouchMidX, iTouchMidY ] = svgPoint((iTouchAX + iTouchBX) / 2, (iTouchAY + iTouchBY) / 2)
 
     // rate of change of the touch vector
     const iTouchMag = magnitude(iTouchAX, iTouchAY, iTouchBX, iTouchBY)
@@ -124,8 +141,8 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
-    const [ mouseSVGX, mouseSVGY ] = svgPointFromClientPoint(referencePoint, svg, event.pageX, event.pageY)
-    const [ iMouseSVGX, iMouseSVGY ] = svgPointFromClientPoint(referencePoint, svg, iMouseClientX, iMouseClientY)
+    const [ mouseSVGX, mouseSVGY ] = svgPoint(event.pageX, event.pageY)
+    const [ iMouseSVGX, iMouseSVGY ] = svgPoint(iMouseClientX, iMouseClientY)
 
     svg.viewBox.baseVal.x = ivbx - mouseSVGX + iMouseSVGX
     svg.viewBox.baseVal.y = ivby - mouseSVGY + iMouseSVGY
