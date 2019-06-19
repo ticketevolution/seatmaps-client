@@ -18,6 +18,13 @@ function preventDefault (event: UIEvent) {
   event.preventDefault()
 }
 
+export interface ZoomControl {
+  zoomIn: (percent: number) => void
+  zoomOut: (percent: number) => void
+  reset: () => void
+  teardown: () => void
+}
+
 export default function (svg: SVGSVGElement) {
   // initial touch points (x and y components of points a and b)
   let iTouchAX: number
@@ -25,17 +32,30 @@ export default function (svg: SVGSVGElement) {
   let iTouchBX: number
   let iTouchBY: number
 
-  // initial viewbox of the svg element
+  // initial viewbox of the svg element (before the latest manipulation)
   let ivbx: number
   let ivby: number
   let ivbh: number
   let ivbw: number
 
+  function updateInitialViewbox () {
+    ivbx = svg.viewBox.baseVal.x
+    ivby = svg.viewBox.baseVal.y
+    ivbw = svg.viewBox.baseVal.width
+    ivbh = svg.viewBox.baseVal.height
+  }
+
+  // original viewBox of the svg element (before the first manipulation)
+  const ovbx = svg.viewBox.baseVal.x
+  const ovby = svg.viewBox.baseVal.y
+  const ovbw = svg.viewBox.baseVal.width
+  const ovbh = svg.viewBox.baseVal.height
+
   // used to convert screen coordinates into coordinates in the svg space
   const referencePoint = svg.createSVGPoint()
 
   // for each touch start with exactly two touches, update the initial touch points and viewbox
-  function handleTouchStart(e: TouchEvent) {
+  function handleTouchStart (e: TouchEvent) {
     // only respong when two fingers are on the screen
     if (e.touches.length !== 2) {
       return
@@ -47,11 +67,7 @@ export default function (svg: SVGSVGElement) {
     iTouchBX = e.touches.item(1)!.clientX
     iTouchBY = e.touches.item(1)!.clientY
 
-    // update the initial viewbox
-    ivbx = svg.viewBox.baseVal.x
-    ivby = svg.viewBox.baseVal.y
-    ivbw = svg.viewBox.baseVal.width
-    ivbh = svg.viewBox.baseVal.height
+    updateInitialViewbox()
   }
 
   function handleTouchMove () {
@@ -98,9 +114,7 @@ export default function (svg: SVGSVGElement) {
     iMouseClientX = event.clientX
     iMouseClientY = event.clientY
 
-    // update the initial viewbox
-    ivbx = svg.viewBox.baseVal.x
-    ivby = svg.viewBox.baseVal.y
+    updateInitialViewbox()
 
     dragging = true
   }
@@ -126,8 +140,7 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
-    ivbw = svg.viewBox.baseVal.width
-    ivbh = svg.viewBox.baseVal.height
+    updateInitialViewbox()
 
     svg.viewBox.baseVal.height *= 1 + (event.deltaY / svg.clientHeight * ZOOM_COEFFICIENT)
     svg.viewBox.baseVal.width *= 1 + (event.deltaY / svg.clientWidth * ZOOM_COEFFICIENT)
@@ -146,7 +159,27 @@ export default function (svg: SVGSVGElement) {
   svg.addEventListener('wheel', preventDefault, { passive: false })
   svg.addEventListener('wheel', handleWheel)
 
-  return () => {
+  function zoomIn (percent: number) {
+    updateInitialViewbox()
+
+    svg.viewBox.baseVal.height *= 1 - percent
+    svg.viewBox.baseVal.width *= 1 - percent
+    svg.viewBox.baseVal.x -= (svg.viewBox.baseVal.width - ivbw) / 2
+    svg.viewBox.baseVal.y -= (svg.viewBox.baseVal.height - ivbh) / 2
+  }
+
+  function zoomOut (percent: number) {
+    zoomIn(0 - percent)
+  }
+
+  function reset () {
+    svg.viewBox.baseVal.x = ovbx
+    svg.viewBox.baseVal.y = ovby
+    svg.viewBox.baseVal.width = ovbw
+    svg.viewBox.baseVal.height = ovbh
+  }
+
+  function teardown () {
     svg.removeEventListener('touchmove', preventDefault)
     svg.removeEventListener('touchstart', handleTouchStart)
     svg.removeEventListener('touchmove', handleTouchMove)
@@ -155,5 +188,12 @@ export default function (svg: SVGSVGElement) {
     svg.removeEventListener('mouseup', handleMouseUp)
     svg.removeEventListener('wheel', preventDefault)
     svg.removeEventListener('wheel', handleWheel)
+  }
+
+  return {
+    zoomIn,
+    zoomOut,
+    reset,
+    teardown
   }
 }

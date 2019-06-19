@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { isEqual, } from 'lodash-es'
+import { isEqual } from 'lodash-es'
 
 import Actions from '../Actions'
 import Tooltip from '../Tooltip'
-import initializeZoom from '../zoom'
+import initializeZoom, { ZoomControl } from '../zoom'
 
 import { TicketGroup, NormalizedTicketGroup } from '../types'
 import { State, Props, DefaultProps, Manifest } from './types'
@@ -43,7 +43,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi
   mapRoot = React.createRef<HTMLDivElement>()
   container = React.createRef<HTMLDivElement>()
-  cleanUpZoom?: () => void
+  zoom?: ZoomControl
 
   static defaultProps: DefaultProps = {
     mapsDomain: 'https://maps.ticketevolution.com',
@@ -109,8 +109,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   componentWillUnmount () {
-    if (this.cleanUpZoom) {
-      this.cleanUpZoom()
+    if (this.zoom) {
+      this.zoom.teardown()
     }
   }
 
@@ -145,7 +145,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       this.mapRoot.current.innerHTML = mapHtml
       const svg = this.mapRoot.current.querySelector('svg')
       if (svg) {
-        this.cleanUpZoom = initializeZoom(svg)
+        this.zoom = initializeZoom(svg)
       }
     }
   }
@@ -436,12 +436,21 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   handleZoomIn = () => {
+    if (this.zoom) {
+      this.zoom.zoomIn(0.1)
+    }
   }
 
   handleZoomOut = () => {
+    if (this.zoom) {
+      this.zoom.zoomOut(0.1)
+    }
   }
 
   handleResetZoom = () => {
+    if (this.zoom) {
+      this.zoom.reset()
+    }
   }
 
   render () {
