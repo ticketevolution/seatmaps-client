@@ -39,7 +39,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     onClearSelection: () => { }
   }
 
-  get styles(): { [key: string]: React.CSSProperties } {
+  get styles (): { [key: string]: React.CSSProperties } {
     return {
       container: {
         position: 'absolute',
@@ -66,11 +66,11 @@ export default class Actions extends React.Component<Props & DefaultProps, State
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.timer = window.setInterval(this.updateIsMobile, 200)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.clearInterval(this.timer)
   }
 
