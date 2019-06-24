@@ -167,8 +167,11 @@ export default function (svg: SVGSVGElement) {
 
     updateInitialViewbox()
 
-    viewbox.height *= 1 + (event.deltaY / svg.clientHeight * ZOOM_COEFFICIENT)
-    viewbox.width *= 1 + (event.deltaY / svg.clientWidth * ZOOM_COEFFICIENT)
+    // Scroll movements (track pad two finger swipe and pinch, scrollwheel movements) usually only change vertical offset.
+    const delta = event.deltaY
+
+    viewbox.height *= 1 + (delta / svg.clientHeight * ZOOM_COEFFICIENT)
+    viewbox.width *= 1 + (delta / svg.clientWidth * ZOOM_COEFFICIENT)
 
     viewbox.x -= (viewbox.width - ivbw) / 2
     viewbox.y -= (viewbox.height - ivbh) / 2
