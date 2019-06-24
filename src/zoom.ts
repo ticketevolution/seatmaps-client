@@ -51,18 +51,20 @@ export default function (svg: SVGSVGElement) {
   let ivbh: number
   let ivbw: number
 
+  const viewbox = svg.viewBox.baseVal
+
   function updateInitialViewbox () {
-    ivbx = svg.viewBox.baseVal.x
-    ivby = svg.viewBox.baseVal.y
-    ivbw = svg.viewBox.baseVal.width
-    ivbh = svg.viewBox.baseVal.height
+    ivbx = viewbox.x
+    ivby = viewbox.y
+    ivbw = viewbox.width
+    ivbh = viewbox.height
   }
 
   // original viewBox of the svg element (before the first manipulation)
-  const ovbx = svg.viewBox.baseVal.x
-  const ovby = svg.viewBox.baseVal.y
-  const ovbw = svg.viewBox.baseVal.width
-  const ovbh = svg.viewBox.baseVal.height
+  const ovbx = viewbox.x
+  const ovby = viewbox.y
+  const ovbw = viewbox.width
+  const ovbh = viewbox.height
 
   // for each touch start with exactly two touches, update the initial touch points and viewbox
   function handleTouchStart (e: TouchEvent) {
@@ -114,16 +116,16 @@ export default function (svg: SVGSVGElement) {
     const magRatio = iTouchMag / touchMag
 
     // magnitude components of the viewbox vector
-    svg.viewBox.baseVal.height = ivbh * magRatio
-    svg.viewBox.baseVal.width = ivbw * magRatio
+    viewbox.height = ivbh * magRatio
+    viewbox.width = ivbw * magRatio
 
     // change in the magnitude components of the viewbox vector
-    const dvbh = svg.viewBox.baseVal.height - ivbh
-    const dvbw = svg.viewBox.baseVal.width - ivbw
+    const dvbh = viewbox.height - ivbh
+    const dvbw = viewbox.width - ivbw
 
     // position components of the viewbox vector
-    svg.viewBox.baseVal.x = ivbx - touchMidX + iTouchMidX - (dvbh / 2)
-    svg.viewBox.baseVal.y = ivby - touchMidY + iTouchMidY - (dvbw / 2)
+    viewbox.x = ivbx - touchMidX + iTouchMidX - (dvbh / 2)
+    viewbox.y = ivby - touchMidY + iTouchMidY - (dvbw / 2)
   }
 
   // initial mouse points in the client coordinate space
@@ -149,8 +151,8 @@ export default function (svg: SVGSVGElement) {
     const [ mouseSVGX, mouseSVGY ] = svgPoint(event.pageX, event.pageY)
     const [ iMouseSVGX, iMouseSVGY ] = svgPoint(iMouseClientX, iMouseClientY)
 
-    svg.viewBox.baseVal.x = ivbx - mouseSVGX + iMouseSVGX
-    svg.viewBox.baseVal.y = ivby - mouseSVGY + iMouseSVGY
+    viewbox.x = ivbx - mouseSVGX + iMouseSVGX
+    viewbox.y = ivby - mouseSVGY + iMouseSVGY
   }
 
   function handleMouseUp () {
@@ -165,11 +167,11 @@ export default function (svg: SVGSVGElement) {
 
     updateInitialViewbox()
 
-    svg.viewBox.baseVal.height *= 1 + (event.deltaY / svg.clientHeight * ZOOM_COEFFICIENT)
-    svg.viewBox.baseVal.width *= 1 + (event.deltaY / svg.clientWidth * ZOOM_COEFFICIENT)
+    viewbox.height *= 1 + (event.deltaY / svg.clientHeight * ZOOM_COEFFICIENT)
+    viewbox.width *= 1 + (event.deltaY / svg.clientWidth * ZOOM_COEFFICIENT)
 
-    svg.viewBox.baseVal.x -= (svg.viewBox.baseVal.width - ivbw) / 2
-    svg.viewBox.baseVal.y -= (svg.viewBox.baseVal.height - ivbh) / 2
+    viewbox.x -= (viewbox.width - ivbw) / 2
+    viewbox.y -= (viewbox.height - ivbh) / 2
   }
 
   // disables full page zooming and panning on safari mobile
@@ -185,10 +187,10 @@ export default function (svg: SVGSVGElement) {
   function zoomIn (percent: number) {
     updateInitialViewbox()
 
-    svg.viewBox.baseVal.height *= 1 - percent
-    svg.viewBox.baseVal.width *= 1 - percent
-    svg.viewBox.baseVal.x -= (svg.viewBox.baseVal.width - ivbw) / 2
-    svg.viewBox.baseVal.y -= (svg.viewBox.baseVal.height - ivbh) / 2
+    viewbox.height *= 1 - percent
+    viewbox.width *= 1 - percent
+    viewbox.x -= (viewbox.width - ivbw) / 2
+    viewbox.y -= (viewbox.height - ivbh) / 2
   }
 
   function zoomOut (percent: number) {
@@ -197,10 +199,10 @@ export default function (svg: SVGSVGElement) {
 
   // returns the svg to the original zoom level and viewport location
   function reset () {
-    svg.viewBox.baseVal.x = ovbx
-    svg.viewBox.baseVal.y = ovby
-    svg.viewBox.baseVal.width = ovbw
-    svg.viewBox.baseVal.height = ovbh
+    viewbox.x = ovbx
+    viewbox.y = ovby
+    viewbox.width = ovbw
+    viewbox.height = ovbh
   }
 
   function teardown () {
