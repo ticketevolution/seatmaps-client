@@ -5,6 +5,7 @@ function magnitude (ax: number, ay: number, bx: number, by: number) {
   return Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2))
 }
 
+// prevents the default reaction to an event
 function preventDefault (event: UIEvent) {
   event.preventDefault()
 }
@@ -16,6 +17,10 @@ export interface ZoomControl {
   teardown: () => void
 }
 
+/* enables support for touch and mouse control of an svg element's viewport
+* two-finger drags will pan the map
+* mouse scrolling and pinching will zoom in and out
+*/
 export default function (svg: SVGSVGElement) {
   // used to convert screen coordinates into coordinates in the svg space
   const referencePoint = svg.createSVGPoint()
@@ -153,6 +158,7 @@ export default function (svg: SVGSVGElement) {
   }
 
   function handleWheel (event: WheelEvent) {
+    // there are many possible units, but we only support pixels
     if (event.deltaMode !== WheelEvent.DOM_DELTA_PIXEL) {
       return
     }
@@ -189,6 +195,7 @@ export default function (svg: SVGSVGElement) {
     zoomIn(0 - percent)
   }
 
+  // returns the svg to the original zoom level and viewport location
   function reset () {
     svg.viewBox.baseVal.x = ovbx
     svg.viewBox.baseVal.y = ovby
