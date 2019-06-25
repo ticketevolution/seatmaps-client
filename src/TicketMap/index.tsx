@@ -3,6 +3,7 @@ import { isEqual } from 'lodash-es'
 
 import Actions from '../Actions'
 import Tooltip from '../Tooltip'
+import ZoomHelper from '../ZoomHelper'
 import initializeZoom, { ZoomControl } from '../zoom'
 
 import { TicketGroup, NormalizedTicketGroup } from '../types'
@@ -520,6 +521,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
             onResetZoom={this.handleResetZoom}
           />
         )}
+        {/* {this.state.isTouchDevice && <ZoomHelper />} */}
+        <ZoomHelper />
       </div>
     )
   }
