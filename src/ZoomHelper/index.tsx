@@ -26,7 +26,7 @@ const containerStyle = {
 const discoveredStyle = {
   transition: 'opacity .4s 4s, visibility .4s 4s',
   opacity: 0,
-  visibility: 0
+  visibility: 'hidden'
 }
 
 const imageStyle = {
