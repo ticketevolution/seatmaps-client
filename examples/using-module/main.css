@@ -1,9 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
 body {
-    margin: 0;
+    margin: 100vw 100vh;
 }
 
+#container {
+    width: 100vw;
+    height: 100vh;
+}
 #map {
     margin-left: 100px;
     margin-top: 100px;

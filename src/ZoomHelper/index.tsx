@@ -63,8 +63,10 @@ export default class ZoomHelper extends React.Component {
   }
 
   componentDidMount () {
-    window.addEventListener('wheel', this.handleViewportChange)
-    window.addEventListener('resize', this.handleViewportChange)
+    setTimeout(() => {
+      window.addEventListener('wheel', this.handleViewportChange)
+      window.addEventListener('resize', this.handleViewportChange)
+    }, 500)
   }
 
   componentDidUnmount () {
