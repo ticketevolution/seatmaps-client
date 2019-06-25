@@ -18,7 +18,15 @@ const containerStyle = {
   fontSize: '2vw',
   fontWeight: 700,
   textTransform: 'uppercase',
-  textAlign: 'center'
+  textAlign: 'center',
+  opacity: 1,
+  visibility: 'visible'
+}
+
+const discoveredStyle = {
+  transition: 'opacity .4s 4s, visibility .4s 4s',
+  opacity: 0,
+  visibility: 0
 }
 
 const imageStyle = {
@@ -26,10 +34,51 @@ const imageStyle = {
   alignSelf: 'end'
 }
 
+interface State {
+  discovered: boolean
+}
+
 export default class ZoomHelper extends React.Component {
+  state: State = {
+    discovered: false
+  }
+
+  container = React.createRef<HTMLElement>()
+
+  handleViewportChange = () => {
+    if (this.state.discovered) {
+      return
+    }
+
+    if (!this.container.current) {
+      return
+    }
+
+    const bounds = this.container.current.getBoundingClientRect()
+    if (bounds.top < window.innerHeight && bounds.top + bounds.height > 0 && bounds.left <= window.innerWidth && bounds.left + bounds.width > 0) {
+      this.setState({
+        discovered: true
+      })
+    }
+  }
+
+  componentDidMount () {
+    window.addEventListener('wheel', this.handleViewportChange)
+    window.addEventListener('resize', this.handleViewportChange)
+  }
+
+  componentDidUnmount () {
+    window.removeEventListener('wheel', this.handleViewportChange)
+    window.removeEventListener('resize', this.handleViewportChange)
+  }
+
   render () {
+    const style = {
+      ...containerStyle,
+      ...(this.state.discovered ? discoveredStyle : {})
+    }
     return (
-      <div style={containerStyle}>
+      <div style={style} ref={this.container}>
         <link href='https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap' rel='stylesheet' />
         <img style={imageStyle} src={PinchZoomInIcon} />
         <img style={imageStyle} src={TwoFingerSlideIcon} />
