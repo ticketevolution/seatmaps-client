@@ -129,14 +129,14 @@ export default function (svg: SVGSVGElement) {
   }
 
   // initial mouse points in the client coordinate space
-  let iMouseClientX: number
-  let iMouseClientY: number
+  let iMouseX: number
+  let iMouseY: number
 
   let dragging = false
 
   function handleMouseDown (event: MouseEvent) {
-    iMouseClientX = event.clientX
-    iMouseClientY = event.clientY
+    iMouseX = event.clientX
+    iMouseY = event.clientY
 
     updateInitialViewbox()
 
@@ -148,8 +148,8 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
-    const [ mouseSVGX, mouseSVGY ] = svgPoint(event.pageX, event.pageY)
-    const [ iMouseSVGX, iMouseSVGY ] = svgPoint(iMouseClientX, iMouseClientY)
+    const [ mouseSVGX, mouseSVGY ] = svgPoint(event.clientX, event.clientY)
+    const [ iMouseSVGX, iMouseSVGY ] = svgPoint(iMouseX, iMouseY)
 
     viewbox.x = ivbx - mouseSVGX + iMouseSVGX
     viewbox.y = ivby - mouseSVGY + iMouseSVGY
@@ -170,8 +170,8 @@ export default function (svg: SVGSVGElement) {
     // Scroll movements (track pad two finger swipe and pinch, scrollwheel movements) usually only change vertical offset.
     const delta = event.deltaY
 
-    viewbox.height *= 1 + (delta / svg.clientHeight * ZOOM_COEFFICIENT)
-    viewbox.width *= 1 + (delta / svg.clientWidth * ZOOM_COEFFICIENT)
+    viewbox.height = viewbox.height * (1 + (delta / window.innerHeight * ZOOM_COEFFICIENT))
+    viewbox.width = viewbox.width * (1 + (delta / window.innerWidth * ZOOM_COEFFICIENT))
 
     viewbox.x -= (viewbox.width - ivbw) / 2
     viewbox.y -= (viewbox.height - ivbh) / 2
