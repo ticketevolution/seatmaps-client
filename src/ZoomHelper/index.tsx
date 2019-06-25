@@ -66,6 +66,7 @@ export default class ZoomHelper extends React.Component {
     setTimeout(() => {
       window.addEventListener('wheel', this.handleViewportChange)
       window.addEventListener('resize', this.handleViewportChange)
+      this.handleViewportChange()
     }, 500)
   }
 
