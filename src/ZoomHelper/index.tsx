@@ -70,7 +70,7 @@ export default class ZoomHelper extends React.Component {
     }, 500)
   }
 
-  componentDidUnmount () {
+  componentWillUnmount () {
     window.removeEventListener('wheel', this.handleViewportChange)
     window.removeEventListener('resize', this.handleViewportChange)
   }
