@@ -94,12 +94,14 @@ export default function (svg: SVGSVGElement) {
   const ovbh = viewbox.height
 
   function scale (scale: number) {
-    updateInitialViewbox()
+    const initialViewboxHeight = viewbox.height
+    const initialViewboxWidth = viewbox.width
 
     viewbox.height *= scale
     viewbox.width *= scale
-    viewbox.x -= (viewbox.width - ivbw) / 2
-    viewbox.y -= (viewbox.height - ivbh) / 2
+    
+    viewbox.x -= (viewbox.width - initialViewboxWidth) / 2
+    viewbox.y -= (viewbox.height - initialViewboxHeight) / 2
   }
 
   function zoomIn (percent: number) {
