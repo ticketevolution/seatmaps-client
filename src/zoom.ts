@@ -93,15 +93,19 @@ export default function (svg: SVGSVGElement) {
   const ovbw = viewbox.width
   const ovbh = viewbox.height
 
+  function translate (x: number, y: number) {
+    viewbox.x += x
+    viewbox.y += y
+  }
+
   function scale (scale: number) {
     const initialViewboxHeight = viewbox.height
     const initialViewboxWidth = viewbox.width
 
     viewbox.height *= scale
     viewbox.width *= scale
-    
-    viewbox.x -= (viewbox.width - initialViewboxWidth) / 2
-    viewbox.y -= (viewbox.height - initialViewboxHeight) / 2
+
+    translate(0 - (viewbox.width - initialViewboxWidth) / 2, 0 - (viewbox.height - initialViewboxHeight) / 2)
   }
 
   function zoomIn (percent: number) {
@@ -237,12 +241,10 @@ export default function (svg: SVGSVGElement) {
       viewbox.height = viewbox.height * (1 + (delta / window.innerHeight * ZOOM_COEFFICIENT))
       viewbox.width = viewbox.width * (1 + (delta / window.innerWidth * ZOOM_COEFFICIENT))
 
-      viewbox.x -= (viewbox.width - ivbw) / 2
-      viewbox.y -= (viewbox.height - ivbh) / 2
+      translate(0 - (viewbox.width - ivbw) / 2, 0 - (viewbox.height - ivbh) / 2)
     } else {
       // Handle non-controlled scrolls as pan inputs.
-      viewbox.x += deltaX * SCROLL_PAN_COEFFICIENT
-      viewbox.y += deltaY * SCROLL_PAN_COEFFICIENT
+      translate(deltaX * SCROLL_PAN_COEFFICIENT, deltaY * SCROLL_PAN_COEFFICIENT)
     }
   }
 
