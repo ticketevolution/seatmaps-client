@@ -1,4 +1,5 @@
 const ZOOM_COEFFICIENT = 5
+const SCROLL_PAN_COEFFICIENT = .5
 
 // determines the magnitude of a vector
 function magnitude (ax: number, ay: number, bx: number, by: number) {
@@ -6,8 +7,33 @@ function magnitude (ax: number, ay: number, bx: number, by: number) {
 }
 
 // prevents the default reaction to an event
-function preventDefault (event: UIEvent) {
+function preventDefault (event: Event) {
   event.preventDefault()
+}
+
+// retrieves the line height of the page by generating an unstyled, blank span and measuring its height
+function getScrollLineHeight () {
+  const iframe = document.createElement('iframe')
+  iframe.src = '#'
+  document.body.appendChild(iframe)
+
+  const doc = iframe.contentDocument
+  if (!doc) {
+    throw new Error('unable to create an iframe to test for line height')
+  }
+
+  doc.open()
+  doc.write('<!DOCTYPE html><html><head></head><body><span>a</span></body></html>')
+  doc.close()
+
+  const testElement = doc.querySelector('span')
+  if (!testElement) {
+    throw new Error('unable to find test element for line height test')
+  }
+
+  const lineHeight = testElement.offsetHeight
+  document.body.removeChild(iframe)
+  return lineHeight
 }
 
 export interface ZoomControl {
@@ -17,7 +43,8 @@ export interface ZoomControl {
   teardown: () => void
 }
 
-/* enables support for touch and mouse control of an svg element's viewport
+/*
+* enables support for touch and mouse control of an svg element's viewport
 * two-finger drags will pan the map
 * mouse scrolling and pinching will zoom in and out
 */
@@ -65,6 +92,27 @@ export default function (svg: SVGSVGElement) {
   const ovby = viewbox.y
   const ovbw = viewbox.width
   const ovbh = viewbox.height
+
+  function zoomIn (percent: number) {
+    updateInitialViewbox()
+
+    viewbox.height *= 1 - percent
+    viewbox.width *= 1 - percent
+    viewbox.x -= (viewbox.width - ivbw) / 2
+    viewbox.y -= (viewbox.height - ivbh) / 2
+  }
+
+  function zoomOut (percent: number) {
+    zoomIn(0 - percent)
+  }
+
+  // returns the svg to the original zoom level and viewport location
+  function reset () {
+    viewbox.x = ovbx
+    viewbox.y = ovby
+    viewbox.width = ovbw
+    viewbox.height = ovbh
+  }
 
   // for each touch start with exactly two touches, update the initial touch points and viewbox
   function handleTouchStart (e: TouchEvent) {
@@ -159,19 +207,44 @@ export default function (svg: SVGSVGElement) {
     dragging = false
   }
 
+  const lineHeight = getScrollLineHeight()
+
   function handleWheel (event: WheelEvent) {
-    // there are many possible units, but we only support pixels
-    if (event.deltaMode !== WheelEvent.DOM_DELTA_PIXEL) {
+    let deltaX, deltaY
+
+    if (event.deltaMode === WheelEvent.DOM_DELTA_PIXEL) {
+      deltaX = event.deltaX
+      deltaY = event.deltaY
+    } else if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) {
+      deltaX = event.deltaX * lineHeight
+      deltaY = event.deltaY * lineHeight
+    } else {
       return
     }
 
     updateInitialViewbox()
 
-    // Scroll movements (track pad two finger swipe and pinch, scrollwheel movements) usually only change vertical offset.
-    const delta = event.deltaY
+    if (event.ctrlKey) {
+      // Handle controlled scrolls as zoom inputs.
+      const delta = deltaY
 
-    viewbox.height = viewbox.height * (1 + (delta / window.innerHeight * ZOOM_COEFFICIENT))
-    viewbox.width = viewbox.width * (1 + (delta / window.innerWidth * ZOOM_COEFFICIENT))
+      viewbox.height = viewbox.height * (1 + (delta / window.innerHeight * ZOOM_COEFFICIENT))
+      viewbox.width = viewbox.width * (1 + (delta / window.innerWidth * ZOOM_COEFFICIENT))
+
+      viewbox.x -= (viewbox.width - ivbw) / 2
+      viewbox.y -= (viewbox.height - ivbh) / 2
+    } else {
+      // Handle non-controlled scrolls as pan inputs.
+      viewbox.x += deltaX * SCROLL_PAN_COEFFICIENT
+      viewbox.y += deltaY * SCROLL_PAN_COEFFICIENT
+    }
+  }
+
+  function handleGestureChange (event: any) {
+    updateInitialViewbox()
+
+    viewbox.width = ovbw * 1 / event.scale
+    viewbox.height = ovbh * 1 / event.scale
 
     viewbox.x -= (viewbox.width - ivbw) / 2
     viewbox.y -= (viewbox.height - ivbh) / 2
@@ -186,27 +259,10 @@ export default function (svg: SVGSVGElement) {
   svg.addEventListener('mouseup', handleMouseUp)
   svg.addEventListener('wheel', preventDefault, { passive: false })
   svg.addEventListener('wheel', handleWheel)
-
-  function zoomIn (percent: number) {
-    updateInitialViewbox()
-
-    viewbox.height *= 1 - percent
-    viewbox.width *= 1 - percent
-    viewbox.x -= (viewbox.width - ivbw) / 2
-    viewbox.y -= (viewbox.height - ivbh) / 2
-  }
-
-  function zoomOut (percent: number) {
-    zoomIn(0 - percent)
-  }
-
-  // returns the svg to the original zoom level and viewport location
-  function reset () {
-    viewbox.x = ovbx
-    viewbox.y = ovby
-    viewbox.width = ovbw
-    viewbox.height = ovbh
-  }
+  svg.addEventListener('gesturestart', preventDefault, { passive: false })
+  svg.addEventListener('gesturechange', preventDefault, { passive: false })
+  svg.addEventListener('gesturechange', handleGestureChange)
+  svg.addEventListener('gestureend', preventDefault, { passive: false })
 
   function teardown () {
     svg.removeEventListener('touchmove', preventDefault)
@@ -217,6 +273,10 @@ export default function (svg: SVGSVGElement) {
     svg.removeEventListener('mouseup', handleMouseUp)
     svg.removeEventListener('wheel', preventDefault)
     svg.removeEventListener('wheel', handleWheel)
+    svg.removeEventListener('gesturestart', preventDefault)
+    svg.removeEventListener('gesturechange', preventDefault)
+    svg.removeEventListener('gesturechange', handleGestureChange)
+    svg.removeEventListener('gestureend', preventDefault)
   }
 
   return {
