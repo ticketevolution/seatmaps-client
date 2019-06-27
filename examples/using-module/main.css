@@ -2,13 +2,7 @@
 
 body {
     margin: 0;
-}
-
-#container {
-    width: 100vw;
-    height: 100vh;
-}
-#map {
+}#map {
     margin-left: 100px;
     margin-top: 100px;
 }
