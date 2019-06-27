@@ -93,17 +93,21 @@ export default function (svg: SVGSVGElement) {
   const ovbw = viewbox.width
   const ovbh = viewbox.height
 
-  function zoomIn (percent: number) {
+  function scale (scale: number) {
     updateInitialViewbox()
 
-    viewbox.height *= 1 - percent
-    viewbox.width *= 1 - percent
+    viewbox.height *= scale
+    viewbox.width *= scale
     viewbox.x -= (viewbox.width - ivbw) / 2
     viewbox.y -= (viewbox.height - ivbh) / 2
   }
 
+  function zoomIn (percent: number) {
+    scale(1 - percent)
+  }
+
   function zoomOut (percent: number) {
-    zoomIn(0 - percent)
+    scale(1 + percent)
   }
 
   // returns the svg to the original zoom level and viewport location
