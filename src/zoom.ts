@@ -1,5 +1,5 @@
 const ZOOM_COEFFICIENT = 5
-const SCROLL_PAN_COEFFICIENT = .5
+const SCROLL_PAN_COEFFICIENT = 0.5
 
 // determines the magnitude of a vector
 function magnitude (ax: number, ay: number, bx: number, by: number) {
