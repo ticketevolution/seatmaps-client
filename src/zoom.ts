@@ -17,16 +17,15 @@ function getScrollLineHeight () {
   iframe.src = '#'
   document.body.appendChild(iframe)
 
-  const doc = iframe.contentDocument
-  if (!doc) {
+  if (!iframe.contentDocument) {
     throw new Error('unable to create an iframe to test for line height')
   }
 
-  doc.open()
-  doc.write('<!DOCTYPE html><html><head></head><body><span>a</span></body></html>')
-  doc.close()
+  iframe.contentDocument.open()
+  iframe.contentDocument.write('<!DOCTYPE html><html><head></head><body><span>a</span></body></html>')
+  iframe.contentDocument.close()
 
-  const testElement = doc.querySelector('span')
+  const testElement = iframe.contentDocument.querySelector('span')
   if (!testElement) {
     throw new Error('unable to find test element for line height test')
   }
@@ -72,26 +71,26 @@ export default function (svg: SVGSVGElement) {
   let iTouchBX: number
   let iTouchBY: number
 
-  // initial viewbox of the svg element (before the latest manipulation)
-  let ivbx: number
-  let ivby: number
-  let ivbh: number
-  let ivbw: number
+  // initial viewbox of the svg element (at the beginning of the current manipulation)
+  let initialViewboxX: number
+  let initialViewboxY: number
+  let initialViewboxHeight: number
+  let initialViewboxWidth: number
 
   const viewbox = svg.viewBox.baseVal
 
   function updateInitialViewbox () {
-    ivbx = viewbox.x
-    ivby = viewbox.y
-    ivbw = viewbox.width
-    ivbh = viewbox.height
+    initialViewboxX = viewbox.x
+    initialViewboxY = viewbox.y
+    initialViewboxWidth = viewbox.width
+    initialViewboxHeight = viewbox.height
   }
 
   // original viewBox of the svg element (before the first manipulation)
-  const ovbx = viewbox.x
-  const ovby = viewbox.y
-  const ovbw = viewbox.width
-  const ovbh = viewbox.height
+  const originalViewboxX = viewbox.x
+  const originalViewboxY = viewbox.y
+  const originalViewboxWidth = viewbox.width
+  const originalViewboxHeight = viewbox.height
 
   function translate (x: number, y: number) {
     viewbox.x += x
@@ -108,31 +107,33 @@ export default function (svg: SVGSVGElement) {
     translate(0 - (viewbox.width - initialViewboxWidth) / 2, 0 - (viewbox.height - initialViewboxHeight) / 2)
   }
 
+  // decreases the size of the map, relative to the viewport size
   function zoomIn (percent: number) {
     scale(1 - percent)
   }
 
+  // increases the size of the map, relative to the viewport size
   function zoomOut (percent: number) {
     scale(1 + percent)
   }
 
-  // returns the svg to the original zoom level and viewport location
+  // resets the svg's viewport to its original version
   function reset () {
-    viewbox.x = ovbx
-    viewbox.y = ovby
-    viewbox.width = ovbw
-    viewbox.height = ovbh
+    viewbox.x = originalViewboxX
+    viewbox.y = originalViewboxY
+    viewbox.width = originalViewboxWidth
+    viewbox.height = originalViewboxHeight
   }
 
   // for each touch start with exactly two touches, update the initial touch points and viewbox
-  function handleTouchStart (e: TouchEvent) {
-    // only respong when two fingers are on the screen
-    if (e.touches.length !== 2) {
+  function handleTouchStart (event: TouchEvent) {
+    // only respond when two fingers are on the screen
+    if (event.touches.length !== 2) {
       return
     }
 
-    const iTouchA = e.touches.item(0)
-    const iTouchB = e.touches.item(1)
+    const iTouchA = event.touches.item(0)
+    const iTouchB = event.touches.item(1)
     if (!iTouchA || !iTouchB) {
       return
     }
@@ -146,15 +147,12 @@ export default function (svg: SVGSVGElement) {
     updateInitialViewbox()
   }
 
-  function handleTouchMove (e: TouchEvent) {
-    // only respond when two fingers are on the screen
-    if (e.touches.length !== 2) {
-      return
-    }
+  function handleTouchMove (event: TouchEvent) {
+    const touchA = event.touches.item(0)
+    const touchB = event.touches.item(1)
 
-    const touchA = e.touches.item(0)
-    const touchB = e.touches.item(1)
-    if (!touchA || !touchB) {
+    // only respond when two fingers are on the screen
+    if (event.touches.length !== 2 || !touchA || !touchB) {
       return
     }
 
@@ -174,16 +172,16 @@ export default function (svg: SVGSVGElement) {
     const magRatio = iTouchMag / touchMag
 
     // magnitude components of the viewbox vector
-    viewbox.height = ivbh * magRatio
-    viewbox.width = ivbw * magRatio
+    viewbox.height = initialViewboxHeight * magRatio
+    viewbox.width = initialViewboxWidth * magRatio
 
     // change in the magnitude components of the viewbox vector
-    const dvbh = viewbox.height - ivbh
-    const dvbw = viewbox.width - ivbw
+    const dvbh = viewbox.height - initialViewboxHeight
+    const dvbw = viewbox.width - initialViewboxWidth
 
     // position components of the viewbox vector
-    viewbox.x = ivbx - touchMidX + iTouchMidX - (dvbh / 2)
-    viewbox.y = ivby - touchMidY + iTouchMidY - (dvbw / 2)
+    viewbox.x = initialViewboxX - touchMidX + iTouchMidX - (dvbh / 2)
+    viewbox.y = initialViewboxY - touchMidY + iTouchMidY - (dvbw / 2)
   }
 
   // initial mouse points in the client coordinate space
@@ -209,11 +207,11 @@ export default function (svg: SVGSVGElement) {
     const [ mouseSVGX, mouseSVGY ] = svgPoint(event.clientX, event.clientY)
     const [ iMouseSVGX, iMouseSVGY ] = svgPoint(iMouseX, iMouseY)
 
-    viewbox.x = ivbx - mouseSVGX + iMouseSVGX
-    viewbox.y = ivby - mouseSVGY + iMouseSVGY
+    viewbox.x = initialViewboxX - mouseSVGX + iMouseSVGX
+    viewbox.y = initialViewboxY - mouseSVGY + iMouseSVGY
   }
 
-  function handleMouseUp () {
+  function stopDragging () {
     dragging = false
   }
 
@@ -241,7 +239,7 @@ export default function (svg: SVGSVGElement) {
       viewbox.height = viewbox.height * (1 + (delta / window.innerHeight * ZOOM_COEFFICIENT))
       viewbox.width = viewbox.width * (1 + (delta / window.innerWidth * ZOOM_COEFFICIENT))
 
-      translate(0 - (viewbox.width - ivbw) / 2, 0 - (viewbox.height - ivbh) / 2)
+      translate(0 - (viewbox.width - initialViewboxWidth) / 2, 0 - (viewbox.height - initialViewboxHeight) / 2)
     } else {
       // Handle non-controlled scrolls as pan inputs.
       translate(deltaX * SCROLL_PAN_COEFFICIENT, deltaY * SCROLL_PAN_COEFFICIENT)
@@ -251,11 +249,11 @@ export default function (svg: SVGSVGElement) {
   function handleGestureChange (event: any) {
     updateInitialViewbox()
 
-    viewbox.width = ovbw * 1 / event.scale
-    viewbox.height = ovbh * 1 / event.scale
+    viewbox.width = originalViewboxWidth * 1 / event.scale
+    viewbox.height = originalViewboxHeight * 1 / event.scale
 
-    viewbox.x -= (viewbox.width - ivbw) / 2
-    viewbox.y -= (viewbox.height - ivbh) / 2
+    viewbox.x -= (viewbox.width - initialViewboxWidth) / 2
+    viewbox.y -= (viewbox.height - initialViewboxHeight) / 2
   }
 
   // disables full page zooming and panning on safari mobile
@@ -264,7 +262,8 @@ export default function (svg: SVGSVGElement) {
   svg.addEventListener('touchmove', handleTouchMove)
   svg.addEventListener('mousedown', handleMouseDown)
   svg.addEventListener('mousemove', handleMouseMove)
-  svg.addEventListener('mouseup', handleMouseUp)
+  svg.addEventListener('mouseup', stopDragging)
+  svg.addEventListener('mouseleave', stopDragging)
   svg.addEventListener('wheel', preventDefault, { passive: false })
   svg.addEventListener('wheel', handleWheel)
   svg.addEventListener('gesturestart', preventDefault, { passive: false })
@@ -278,7 +277,8 @@ export default function (svg: SVGSVGElement) {
     svg.removeEventListener('touchmove', handleTouchMove)
     svg.removeEventListener('mousedown', handleMouseDown)
     svg.removeEventListener('mousemove', handleMouseMove)
-    svg.removeEventListener('mouseup', handleMouseUp)
+    svg.removeEventListener('mouseup', stopDragging)
+    svg.removeEventListener('mouseleave', stopDragging)
     svg.removeEventListener('wheel', preventDefault)
     svg.removeEventListener('wheel', handleWheel)
     svg.removeEventListener('gesturestart', preventDefault)
