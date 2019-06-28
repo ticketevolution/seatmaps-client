@@ -109,25 +109,25 @@ describe('TicketMap', () => {
     })
 
     it('highlights the section', () => {
-      wrapper.simulate('mouseover', { pageX: 10, pageY: 10, target })
+      wrapper.simulate('mouseover', { clientX: 10, clientY: 10, target })
       expect(fillSectionSpy).toHaveBeenCalledTimes(1)
       expect(fillSectionSpy).toHaveBeenCalledWith('foo bar', true)
     })
 
     it('does not highlight if the event target does not have a section ID', () => {
       target.removeAttribute('data-section-id')
-      wrapper.simulate('mouseover', { pageX: 10, pageY: 10, target })
+      wrapper.simulate('mouseover', { clientX: 10, clientY: 10, target })
       expect(fillSectionSpy).not.toHaveBeenCalled()
     })
 
     it('does not highlight if the section is not in the manifest', () => {
       target.setAttribute('data-section-id', 'biz baz')
-      wrapper.simulate('mouseover', { pageX: 10, pageY: 10, target })
+      wrapper.simulate('mouseover', { clientX: 10, clientY: 10, target })
       expect(fillSectionSpy).not.toHaveBeenCalled()
     })
 
     it('updates the tooltip', () => {
-      wrapper.simulate('mouseover', { pageX: 10, pageY: 10, target })
+      wrapper.simulate('mouseover', { clientX: 10, clientY: 10, target })
       expect(wrapper).toHaveState({
         tooltipActive: true,
         tooltipX: 10,
@@ -191,8 +191,8 @@ describe('TicketMap', () => {
       })
       wrapper.simulate('mousemove', {
         nativeEvent: {
-          pageX: 30,
-          pageY: 30
+          clientX: 30,
+          clientY: 30
         }
       })
       expect(wrapper).toHaveState({

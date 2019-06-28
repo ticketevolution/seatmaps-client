@@ -122,7 +122,7 @@ export default class Tooltip extends Component<Props & DefaultProps> {
     const position = this.position()
 
     return {
-      position: 'absolute',
+      position: 'fixed',
       zIndex: 1,
       transition: 'top .1s, left .1s',
       opacity: isActive ? 1 : 0,
