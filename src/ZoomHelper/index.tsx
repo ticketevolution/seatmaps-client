@@ -24,7 +24,7 @@ const containerStyle = {
 }
 
 const discoveredStyle = {
-  transition: 'opacity .4s 4s, visibility .4s 4s',
+  transition: 'opacity .4s, visibility .4s',
   opacity: 0,
   visibility: 'hidden'
 }
@@ -45,6 +45,12 @@ export default class ZoomHelper extends React.Component {
 
   container = React.createRef<HTMLElement>()
 
+  hide = () => {
+    this.setState({
+      discovered: true
+    })
+  }
+
   handleViewportChange = () => {
     if (this.state.discovered) {
       return
@@ -56,9 +62,7 @@ export default class ZoomHelper extends React.Component {
 
     const bounds = this.container.current.getBoundingClientRect()
     if (bounds.top < window.innerHeight && bounds.top + bounds.height > 0 && bounds.left <= window.innerWidth && bounds.left + bounds.width > 0) {
-      this.setState({
-        discovered: true
-      })
+      setTimeout(this.hide, 4000)
     }
   }
 
@@ -80,8 +84,9 @@ export default class ZoomHelper extends React.Component {
       ...containerStyle,
       ...(this.state.discovered ? discoveredStyle : {})
     }
+
     return (
-      <div style={style} ref={this.container}>
+      <div style={style} ref={this.container} onClick={this.hide}>
         <link href='https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap' rel='stylesheet' />
         <img style={imageStyle} src={PinchZoomInIcon} />
         <img style={imageStyle} src={TwoFingerSlideIcon} />
