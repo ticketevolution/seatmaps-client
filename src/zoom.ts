@@ -132,6 +132,8 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
+    event.preventDefault()
+
     const iTouchA = event.touches.item(0)
     const iTouchB = event.touches.item(1)
     if (!iTouchA || !iTouchB) {
@@ -155,6 +157,8 @@ export default function (svg: SVGSVGElement) {
     if (event.touches.length !== 2 || !touchA || !touchB) {
       return
     }
+
+    event.preventDefault()
 
     // current points of the touch vector
     const touchAX = touchA.clientX
@@ -230,6 +234,8 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
+    event.preventDefault()
+
     updateInitialViewbox()
 
     if (event.ctrlKey) {
@@ -257,14 +263,12 @@ export default function (svg: SVGSVGElement) {
   }
 
   // disables full page zooming and panning on safari mobile
-  svg.addEventListener('touchmove', preventDefault, { passive: false })
-  svg.addEventListener('touchstart', handleTouchStart)
-  svg.addEventListener('touchmove', handleTouchMove)
+  svg.addEventListener('touchstart', handleTouchStart, { passive: false })
+  svg.addEventListener('touchmove', handleTouchMove, { passive: false })
   svg.addEventListener('mousedown', handleMouseDown)
   svg.addEventListener('mousemove', handleMouseMove)
   svg.addEventListener('mouseup', stopDragging)
   svg.addEventListener('mouseleave', stopDragging)
-  svg.addEventListener('wheel', preventDefault, { passive: false })
   svg.addEventListener('wheel', handleWheel)
   svg.addEventListener('gesturestart', preventDefault, { passive: false })
   svg.addEventListener('gesturechange', preventDefault, { passive: false })
@@ -272,14 +276,12 @@ export default function (svg: SVGSVGElement) {
   svg.addEventListener('gestureend', preventDefault, { passive: false })
 
   function teardown () {
-    svg.removeEventListener('touchmove', preventDefault)
     svg.removeEventListener('touchstart', handleTouchStart)
     svg.removeEventListener('touchmove', handleTouchMove)
     svg.removeEventListener('mousedown', handleMouseDown)
     svg.removeEventListener('mousemove', handleMouseMove)
     svg.removeEventListener('mouseup', stopDragging)
     svg.removeEventListener('mouseleave', stopDragging)
-    svg.removeEventListener('wheel', preventDefault)
     svg.removeEventListener('wheel', handleWheel)
     svg.removeEventListener('gesturestart', preventDefault)
     svg.removeEventListener('gesturechange', preventDefault)
