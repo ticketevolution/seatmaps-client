@@ -125,6 +125,8 @@ export default function (svg: SVGSVGElement) {
     viewbox.height = originalViewboxHeight
   }
 
+  let touching = false
+
   // for each touch start with exactly two touches, update the initial touch points and viewbox
   function handleTouchStart (event: TouchEvent) {
     // only respond when two fingers are on the screen
@@ -132,6 +134,7 @@ export default function (svg: SVGSVGElement) {
       return
     }
 
+    touching = true
     event.preventDefault()
 
     const iTouchA = event.touches.item(0)
@@ -186,6 +189,12 @@ export default function (svg: SVGSVGElement) {
     // position components of the viewbox vector
     viewbox.x = initialViewboxX - touchMidX + iTouchMidX - (dvbh / 2)
     viewbox.y = initialViewboxY - touchMidY + iTouchMidY - (dvbw / 2)
+  }
+
+  function handleTouchEnd (event: TouchEvent) {
+    if (event.touches.length < 2) {
+      touching = false
+    }
   }
 
   // initial mouse points in the client coordinate space
@@ -253,6 +262,10 @@ export default function (svg: SVGSVGElement) {
   }
 
   function handleGestureChange (event: any) {
+    if (touching) {
+      return
+    }
+
     updateInitialViewbox()
 
     viewbox.width = originalViewboxWidth * 1 / event.scale
@@ -265,6 +278,7 @@ export default function (svg: SVGSVGElement) {
   // disables full page zooming and panning on safari mobile
   svg.addEventListener('touchstart', handleTouchStart, { passive: false })
   svg.addEventListener('touchmove', handleTouchMove, { passive: false })
+  svg.addEventListener('touchend', handleTouchEnd, { passive: false })
   svg.addEventListener('mousedown', handleMouseDown)
   svg.addEventListener('mousemove', handleMouseMove)
   svg.addEventListener('mouseup', stopDragging)
@@ -278,6 +292,7 @@ export default function (svg: SVGSVGElement) {
   function teardown () {
     svg.removeEventListener('touchstart', handleTouchStart)
     svg.removeEventListener('touchmove', handleTouchMove)
+    svg.removeEventListener('touchend', handleTouchEnd) 
     svg.removeEventListener('mousedown', handleMouseDown)
     svg.removeEventListener('mousemove', handleMouseMove)
     svg.removeEventListener('mouseup', stopDragging)
