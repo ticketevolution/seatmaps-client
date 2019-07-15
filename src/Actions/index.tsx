@@ -98,7 +98,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
               <Button
                 data-rh='Default'
                 data-custom-at='right'
-                onClick={() => this.props.onZoomIn()}
+                onClick={this.props.onZoomIn}
                 icon={faPlus}
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
@@ -106,7 +106,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
               />
 
               <Button
-                onClick={() => this.props.onZoomOut()}
+                onClick={this.props.onZoomOut}
                 icon={faMinus}
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
@@ -114,7 +114,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
               />
 
               <Button
-                onClick={() => this.props.onResetZoom()}
+                onClick={this.props.onResetZoom}
                 icon={faUndoAlt}
                 text='Reset Zoom'
                 isMobile={isMobile}
@@ -125,7 +125,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
           )}
           {showControls && (
             <Button
-              onClick={() => this.props.onClearSelection()}
+              onClick={this.props.onClearSelection}
               icon={faTimesCircle}
               text={`Clear${isMobile ? '' : ' All'}`}
               isMobile={isMobile}
