@@ -292,7 +292,7 @@ export default function (svg: SVGSVGElement) {
   function teardown () {
     svg.removeEventListener('touchstart', handleTouchStart)
     svg.removeEventListener('touchmove', handleTouchMove)
-    svg.removeEventListener('touchend', handleTouchEnd) 
+    svg.removeEventListener('touchend', handleTouchEnd)
     svg.removeEventListener('mousedown', handleMouseDown)
     svg.removeEventListener('mousemove', handleMouseMove)
     svg.removeEventListener('mouseup', stopDragging)
