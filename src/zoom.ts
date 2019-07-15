@@ -1,5 +1,6 @@
 const ZOOM_COEFFICIENT = 5
 const SCROLL_PAN_COEFFICIENT = 0.5
+const MOUSE_MOVEMENT_TRAP_LOWER_BOUND = 50
 
 // determines the magnitude of a vector
 function magnitude (ax: number, ay: number, bx: number, by: number) {
@@ -207,9 +208,18 @@ export default function (svg: SVGSVGElement) {
     iMouseX = event.clientX
     iMouseY = event.clientY
 
+    event.stopPropagation()
     updateInitialViewbox()
 
     dragging = true
+  }
+
+  // dragging the svg will also trigger click events, so we must trap them
+  // unless they drag the svg a very small distance (common with trackpads)
+  function handleClick (e: MouseEvent) {
+    if (magnitude(event.clientX, event.clientY, iMouseX, iMouseY) > MOUSE_MOVEMENT_TRAP_LOWER_BOUND) {
+      e.stopPropagation()
+    }
   }
 
   function handleMouseMove (event: MouseEvent) {
@@ -224,7 +234,7 @@ export default function (svg: SVGSVGElement) {
     viewbox.y = initialViewboxY - mouseSVGY + iMouseSVGY
   }
 
-  function stopDragging () {
+  function stopDragging (event: MouseEvent) {
     dragging = false
   }
 
@@ -280,6 +290,7 @@ export default function (svg: SVGSVGElement) {
   svg.addEventListener('touchmove', handleTouchMove, { passive: false })
   svg.addEventListener('touchend', handleTouchEnd, { passive: false })
   svg.addEventListener('mousedown', handleMouseDown)
+  svg.addEventListener('click', handleClick)
   svg.addEventListener('mousemove', handleMouseMove)
   svg.addEventListener('mouseup', stopDragging)
   svg.addEventListener('mouseleave', stopDragging)
