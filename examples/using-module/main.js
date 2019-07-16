@@ -4,6 +4,5 @@ import ticketGroups from '../data/ticket-groups-1591449'
 window.seatmap = new Tevomaps({
   venueId: '896',
   configurationId: '14341',
-  ticketGroups,
-  mouseControlEnabled: false
+  ticketGroups
 }).build('map')

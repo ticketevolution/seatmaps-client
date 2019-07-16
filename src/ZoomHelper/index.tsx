@@ -20,7 +20,8 @@ const containerStyle = {
   textTransform: 'uppercase',
   textAlign: 'center',
   opacity: 1,
-  visibility: 'visible'
+  visibility: 'visible',
+  lineHeight: 'initial'
 }
 
 const discoveredStyle = {
