@@ -35,7 +35,8 @@ beforeEach(() => {
     tooltipX: 0,
     tooltipY: 0,
     mapNotFound: false,
-    touchStarts: {}
+    touchStarts: {},
+    isTouchDevice: false
   }
   props = {
     venueId: '',

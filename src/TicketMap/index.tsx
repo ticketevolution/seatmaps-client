@@ -3,6 +3,8 @@ import { isEqual } from 'lodash-es'
 
 import Actions from '../Actions'
 import Tooltip from '../Tooltip'
+import ZoomHelper from '../ZoomHelper'
+import initializeZoom, { ZoomControl } from '../zoom'
 
 import { TicketGroup, NormalizedTicketGroup } from '../types'
 import { State, Props, DefaultProps, Manifest } from './types'
@@ -16,8 +18,6 @@ import {
 } from './selectors'
 
 export * from './types'
-
-const MAX_SELECT_TRANSLATION_DISTANCE = 5
 
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void
@@ -43,6 +43,8 @@ class MapNotFoundError extends Error {
 export default class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi
   mapRoot = React.createRef<HTMLDivElement>()
+  container = React.createRef<HTMLDivElement>()
+  zoom?: ZoomControl
 
   static defaultProps: DefaultProps = {
     mapsDomain: 'https://maps.ticketevolution.com',
@@ -73,7 +75,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       tooltipY: 0,
       ticketGroups: this.props.ticketGroups,
       mapNotFound: false,
-      touchStarts: {}
+      touchStarts: {},
+      isTouchDevice: false
     }
 
     this.publicApi = {
@@ -90,6 +93,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    */
 
   async componentDidMount () {
+    this.setState({
+      isTouchDevice: 'ontouchstart' in document.documentElement
+    })
+
     try {
       await this.fetchMap()
       this.setupMap()
@@ -99,6 +106,12 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       if (error.name === 'MapNotFoundError') {
         this.setState({ mapNotFound: true })
       }
+    }
+  }
+
+  componentWillUnmount () {
+    if (this.zoom) {
+      this.zoom.teardown()
     }
   }
 
@@ -118,6 +131,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     if ($missingSectionIds(prevState) !== $missingSectionIds(this.state) && $missingSectionIds(this.state).length > 0) {
       console.warn('Unknown section names found in ticket groups: %o', $missingSectionIds(this.state))
     }
+
+    if (_prevProps.mouseControlEnabled !== this.props.mouseControlEnabled && this.zoom) {
+      if (this.props.mouseControlEnabled) {
+        this.zoom.enable()
+      } else {
+        this.zoom.disable()
+      }
+    }
   }
 
   async fetchMap () {
@@ -131,6 +152,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     // we set in future methods.
     if (this.mapRoot.current) {
       this.mapRoot.current.innerHTML = mapHtml
+      const svg = this.mapRoot.current.querySelector('svg')
+      if (svg && this.props.mouseControlEnabled) {
+        this.zoom = initializeZoom(svg)
+      }
     }
   }
 
@@ -370,38 +395,6 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   onClick = () => this.doSelect()
 
-  onTouchStart = (event: React.TouchEvent<HTMLElement>) => {
-    if (event.changedTouches.length !== 1) {
-      return
-    }
-
-    const touch = event.changedTouches.item(0)
-
-    this.setState({
-      touchStarts: {
-        ...this.state.touchStarts,
-        [touch.identifier]: {
-          x: touch.pageX,
-          y: touch.pageY
-        }
-      }
-    })
-  }
-
-  onTouchEnd = (event: React.TouchEvent<HTMLElement>) => {
-    if (event.changedTouches.length !== 1) {
-      return
-    }
-
-    const touch = event.changedTouches.item(0)
-    const touchStart = this.state.touchStarts[touch.identifier]
-
-    const translationDistance = Math.sqrt(Math.pow(touchStart.x - touch.pageX, 2) + Math.pow(touchStart.y - touch.pageY, 2))
-    if (translationDistance <= MAX_SELECT_TRANSLATION_DISTANCE) {
-      this.doSelect(this.getSectionFromTarget(event.target as HTMLElement))
-    }
-  }
-
   /**
    * Interactions
    */
@@ -451,6 +444,24 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     this.toggleSectionSelect(section, !this.state.selectedSections.has(section))
   }
 
+  handleZoomIn = () => {
+    if (this.zoom) {
+      this.zoom.zoomIn(0.1)
+    }
+  }
+
+  handleZoomOut = () => {
+    if (this.zoom) {
+      this.zoom.zoomOut(0.1)
+    }
+  }
+
+  handleResetZoom = () => {
+    if (this.zoom) {
+      this.zoom.reset()
+    }
+  }
+
   render () {
     if (this.state.mapNotFound) {
       return (
@@ -479,12 +490,11 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
     return (
       <div
+        ref={this.container}
         onMouseOver={this.onMouseOver}
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
         onClick={this.onClick}
-        onTouchStart={this.onTouchStart}
-        onTouchEnd={this.onTouchEnd}
         style={{
           position: 'relative',
           fontFamily: this.props.mapFontFamily,
@@ -493,14 +503,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
           pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none'
         }}
       >
-        <Tooltip
+        {!this.state.isTouchDevice && <Tooltip
           isActive={this.state.tooltipActive}
           x={this.state.tooltipX}
           y={this.state.tooltipY}
           name={this.state.tooltipSectionName}
           color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
           ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
-        />
+        />}
         <div
           ref={this.mapRoot}
           style={{
@@ -510,13 +520,16 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         />
         {this.state.mapSvg && (
           <Actions
-            mapSvg={this.state.mapSvg}
             onClearSelection={this.clearSelection}
             ranges={$costRanges(this.state, this.props)}
             showLegend={this.props.showLegend}
             showControls={this.props.showControls}
+            onZoomIn={this.handleZoomIn}
+            onZoomOut={this.handleZoomOut}
+            onResetZoom={this.handleResetZoom}
           />
         )}
+        {this.state.isTouchDevice && this.props.mouseControlEnabled && <ZoomHelper />}
       </div>
     )
   }

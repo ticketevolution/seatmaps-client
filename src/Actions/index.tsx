@@ -1,5 +1,4 @@
 import React from 'react'
-import svgPanZoom from 'svg-pan-zoom/src/svg-pan-zoom.js'
 import { faTimesCircle, faPlus, faMinus, faUndoAlt } from '@fortawesome/free-solid-svg-icons'
 import Legend from '../Legend'
 import Button from '../Button'
@@ -7,11 +6,13 @@ import ActionGroup from './ActionGroup'
 import { CostRange } from 'src/TicketMap'
 
 export interface Props {
-  mapSvg: SVGSVGElement
   onClearSelection?: () => void
   showLegend?: boolean
   showControls?: boolean
   ranges: CostRange[]
+  onZoomIn: () => void
+  onZoomOut: () => void
+  onResetZoom: () => void
 }
 
 interface DefaultProps {
@@ -26,7 +27,6 @@ interface State {
 
 export default class Actions extends React.Component<Props & DefaultProps, State> {
   container = React.createRef<HTMLDivElement>()
-  mapZoom: any // eslint-disable-line @typescript-eslint/no-explicit-any
   timer?: number
 
   state: State = {
@@ -36,15 +36,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
   static defaultProps: DefaultProps = {
     showLegend: true,
     showControls: true,
-    onClearSelection: () => {}
-  }
-
-  constructor (props: Props & DefaultProps) {
-    super(props)
-
-    this.mapZoom = svgPanZoom(this.props.mapSvg, {
-      minZoom: 0.8
-    })
+    onClearSelection: () => { }
   }
 
   get styles (): { [key: string]: React.CSSProperties } {
@@ -96,16 +88,17 @@ export default class Actions extends React.Component<Props & DefaultProps, State
 
   render () {
     const { isMobile } = this.state
+    const { showControls, showLegend } = this.props
 
     return (
       <div style={this.styles.container} ref={this.container}>
         <ActionGroup>
-          {this.props.showControls && (
+          {showControls && !isMobile && (
             <React.Fragment>
               <Button
                 data-rh='Default'
                 data-custom-at='right'
-                onClick={() => this.mapZoom.zoomIn()}
+                onClick={this.props.onZoomIn}
                 icon={faPlus}
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
@@ -113,7 +106,7 @@ export default class Actions extends React.Component<Props & DefaultProps, State
               />
 
               <Button
-                onClick={() => this.mapZoom.zoomOut()}
+                onClick={this.props.onZoomOut}
                 icon={faMinus}
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
@@ -121,29 +114,30 @@ export default class Actions extends React.Component<Props & DefaultProps, State
               />
 
               <Button
-                onClick={() => this.mapZoom.reset()}
+                onClick={this.props.onResetZoom}
                 icon={faUndoAlt}
                 text='Reset Zoom'
                 isMobile={isMobile}
                 style={{ borderRight: '2px solid lightgray' }}
                 name='reset-zoom'
               />
-
-              <Button
-                onClick={() => this.props.onClearSelection()}
-                icon={faTimesCircle}
-                text={`Clear${isMobile ? '' : ' All'}`}
-                isMobile={isMobile}
-                style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
-                name='clear-selection'
-              />
             </React.Fragment>
           )}
-          {isMobile && this.props.showLegend && <Legend isMobile ranges={this.props.ranges} />}
+          {showControls && (
+            <Button
+              onClick={this.props.onClearSelection}
+              icon={faTimesCircle}
+              text={`Clear${isMobile ? '' : ' All'}`}
+              isMobile={isMobile}
+              style={{ borderRight: isMobile ? '2px solid lightgray' : undefined }}
+              name='clear-selection'
+            />
+          )}
+          {isMobile && showLegend && <Legend isMobile ranges={this.props.ranges} />}
         </ActionGroup>
         {!isMobile && (
           <ActionGroup>
-            {this.props.showLegend && <Legend ranges={this.props.ranges} />}
+            {showLegend && <Legend ranges={this.props.ranges} />}
           </ActionGroup>
         )}
       </div>

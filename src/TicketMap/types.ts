@@ -64,4 +64,6 @@ export interface State {
       y: number
     }
   }
+  isTouchDevice: boolean
+  previousTouches?: any
 }
