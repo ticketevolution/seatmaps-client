@@ -131,6 +131,14 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     if ($missingSectionIds(prevState) !== $missingSectionIds(this.state) && $missingSectionIds(this.state).length > 0) {
       console.warn('Unknown section names found in ticket groups: %o', $missingSectionIds(this.state))
     }
+
+    if (_prevProps.mouseControlEnabled !== this.props.mouseControlEnabled) {
+      if(this.props.mouseControlEnabled) {
+        this.zoom.enable()
+      } else {
+        this.zoom.disable()
+      }
+    }
   }
 
   async fetchMap () {
@@ -521,7 +529,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
             onResetZoom={this.handleResetZoom}
           />
         )}
-        {this.state.isTouchDevice && <ZoomHelper />}
+        {this.state.isTouchDevice && this.props.mouseControlEnabled && <ZoomHelper />}
       </div>
     )
   }

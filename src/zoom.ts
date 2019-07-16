@@ -41,6 +41,8 @@ export interface ZoomControl {
   zoomOut: (percent: number) => void
   reset: () => void
   teardown: () => void
+  enable: () => void
+  disable: () => void
 }
 
 /*
@@ -285,20 +287,22 @@ export default function (svg: SVGSVGElement) {
     viewbox.y -= (viewbox.height - initialViewboxHeight) / 2
   }
 
-  // disables full page zooming and panning on safari mobile
-  svg.addEventListener('touchstart', handleTouchStart, { passive: false })
-  svg.addEventListener('touchmove', handleTouchMove, { passive: false })
-  svg.addEventListener('touchend', handleTouchEnd, { passive: false })
-  svg.addEventListener('mousedown', handleMouseDown)
-  svg.addEventListener('click', handleClick)
-  svg.addEventListener('mousemove', handleMouseMove)
-  svg.addEventListener('mouseup', stopDragging)
-  svg.addEventListener('mouseleave', stopDragging)
-  svg.addEventListener('wheel', handleWheel)
-  svg.addEventListener('gesturestart', preventDefault, { passive: false })
-  svg.addEventListener('gesturechange', preventDefault, { passive: false })
-  svg.addEventListener('gesturechange', handleGestureChange)
-  svg.addEventListener('gestureend', preventDefault, { passive: false })
+  function setup () {
+    // disables full page zooming and panning on safari mobile
+    svg.addEventListener('touchstart', handleTouchStart, { passive: false })
+    svg.addEventListener('touchmove', handleTouchMove, { passive: false })
+    svg.addEventListener('touchend', handleTouchEnd, { passive: false })
+    svg.addEventListener('mousedown', handleMouseDown)
+    svg.addEventListener('click', handleClick)
+    svg.addEventListener('mousemove', handleMouseMove)
+    svg.addEventListener('mouseup', stopDragging)
+    svg.addEventListener('mouseleave', stopDragging)
+    svg.addEventListener('wheel', handleWheel)
+    svg.addEventListener('gesturestart', preventDefault, { passive: false })
+    svg.addEventListener('gesturechange', preventDefault, { passive: false })
+    svg.addEventListener('gesturechange', handleGestureChange)
+    svg.addEventListener('gestureend', preventDefault, { passive: false })
+  }
 
   function teardown () {
     svg.removeEventListener('touchstart', handleTouchStart)
@@ -315,10 +319,14 @@ export default function (svg: SVGSVGElement) {
     svg.removeEventListener('gestureend', preventDefault)
   }
 
+  setup()
+  
   return {
     zoomIn,
     zoomOut,
     reset,
-    teardown
+    teardown,
+    enable: setup,
+    disable: teardown
   }
 }
