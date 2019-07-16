@@ -132,8 +132,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       console.warn('Unknown section names found in ticket groups: %o', $missingSectionIds(this.state))
     }
 
-    if (_prevProps.mouseControlEnabled !== this.props.mouseControlEnabled) {
-      if(this.props.mouseControlEnabled) {
+    if (_prevProps.mouseControlEnabled !== this.props.mouseControlEnabled && this.zoom) {
+      if (this.props.mouseControlEnabled) {
         this.zoom.enable()
       } else {
         this.zoom.disable()
@@ -153,7 +153,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     if (this.mapRoot.current) {
       this.mapRoot.current.innerHTML = mapHtml
       const svg = this.mapRoot.current.querySelector('svg')
-      if (svg) {
+      if (svg && this.props.mouseControlEnabled) {
         this.zoom = initializeZoom(svg)
       }
     }
