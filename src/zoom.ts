@@ -234,7 +234,7 @@ export default function (svg: SVGSVGElement) {
     viewbox.y = initialViewboxY - mouseSVGY + iMouseSVGY
   }
 
-  function stopDragging (event: MouseEvent) {
+  function stopDragging () {
     dragging = false
   }
 
