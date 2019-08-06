@@ -141,7 +141,7 @@ This is the same effect used for clicking on a section to deselect it. It revert
 |-------------|-----------------------------------------------------------------------------------------------------------------------|
 | TicketGroup | `{`<br>&nbsp;&nbsp;&nbsp;&nbsp;`tevo_section_name: string;`<br>&nbsp;&nbsp;&nbsp;&nbsp;`retail_price: number;`<br>`}` |
 
-# Contributing
+# Contributing & Development
 
 The below instructions will get the project up and running on your local machine for development and testing purposes.
 
