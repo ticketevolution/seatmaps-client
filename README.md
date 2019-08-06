@@ -8,10 +8,10 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/ticketevolution/seatmaps-client/badge.svg?targetFile=package.json)](https://snyk.io/test/github/ticketevolution/seatmaps-client?targetFile=package.json)
 
 
-A client side JavaScript library that enables users to view seatmaps for available tickets on Ticket Evolution.
+A client side JavaScript library that enables users to view seatmaps for available tickets on Ticket Evolution by:
 
-1. Fetch the map SVG and manifest JSON, with the given `venueId` and `configurationId`, from Ticket Evolution AWS S3 buckets using the `mapsDomain`.
-1. Render the map in the provided DOM element.
+1. Fetching the map SVG and manifest JSON, with the given `venueId` and `configurationId`, from Ticket Evolution AWS S3 buckets using the `mapsDomain` (defaults to maps.ticketevolution.com).
+1. Rendering the map in the provided DOM element via the `.build` function which accepts the `id` of the element as an argument (see below for an example DOM setup).
 1. Color map sections according to the `sectionPercentile` configurations and the available `ticketGroups` (and any `selectedSections` if provided).
 1. Render a tooltip when the user hovers over a section, which will provide quantity and price information.
 
@@ -143,7 +143,7 @@ This is the same effect used for clicking on a section to deselect it. It revert
 
 # Contributing
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+The below instructions will get the project up and running on your local machine for development and testing purposes.
 
 ## System Prerequisites
 
@@ -175,3 +175,18 @@ A slew of npm/yarn scripts are also present to make development a bit easier:
 | `start`   | Starts the `using-module` example using `webpack-dev-server`                        |
 | `analyze` | Analyses the build process that would create `build/tevomaps.js`                    |
 | `lint`    | Uses `eslint` to lint all source code                                               |
+
+# Contributing Cont.
+
+Once you have completed the above steps, contribution to the repository is as follows:
+
+1. Create an issue on GitHub to address your concerns
+1. In the issue state the feature request or problem (give exact steps for replicating problems)
+1. Give a detailed description of a solution to the problem or the behavior of the feature request
+1. If you plan to submit a PR then create a branch named as such `<issue-number>-<brief-branch-description>`
+1. <brief-branch-description> should be 2-3 words that can most accurately describe the intent of the code in the branch
+1. Write the code to create the feature or address the problem
+1. Before opening a PR against master: run `npm run build` and bump the version number in the package.json according to (semantic versioning rules)[https://semver.org]
+1. Open a PR of your branch against master
+1. Respond to any comments
+1. When all checks are passing and you have received a :+1:, squash & merge your PR
