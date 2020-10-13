@@ -59,7 +59,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           }
           isMobile={false}
           name="zoom-in"
-          onClick={[Function]}
+          onClick={[MockFunction]}
           style={
             Object {
               "borderRight": "2px solid lightgray",
@@ -70,7 +70,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
             data-custom-at="right"
             data-rh="Default"
             name="zoom-in"
-            onClick={[Function]}
+            onClick={[MockFunction]}
             style={
               Object {
                 "alignItems": "center",
@@ -113,6 +113,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
               size={null}
               spin={false}
               style={Object {}}
+              swapOpacity={false}
               symbol={false}
               title=""
               transform={null}
@@ -153,7 +154,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           }
           isMobile={false}
           name="zoom-out"
-          onClick={[Function]}
+          onClick={[MockFunction]}
           style={
             Object {
               "borderRight": "2px solid lightgray",
@@ -162,7 +163,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
         >
           <div
             name="zoom-out"
-            onClick={[Function]}
+            onClick={[MockFunction]}
             style={
               Object {
                 "alignItems": "center",
@@ -205,6 +206,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
               size={null}
               spin={false}
               style={Object {}}
+              swapOpacity={false}
               symbol={false}
               title=""
               transform={null}
@@ -245,7 +247,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           }
           isMobile={false}
           name="reset-zoom"
-          onClick={[Function]}
+          onClick={[MockFunction]}
           style={
             Object {
               "borderRight": "2px solid lightgray",
@@ -255,7 +257,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
         >
           <div
             name="reset-zoom"
-            onClick={[Function]}
+            onClick={[MockFunction]}
             style={
               Object {
                 "alignItems": "center",
@@ -302,6 +304,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                   "marginRight": 8,
                 }
               }
+              swapOpacity={false}
               symbol={false}
               title=""
               transform={null}
@@ -347,7 +350,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           }
           isMobile={false}
           name="clear-selection"
-          onClick={[Function]}
+          onClick={[MockFunction]}
           style={
             Object {
               "borderRight": undefined,
@@ -357,7 +360,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
         >
           <div
             name="clear-selection"
-            onClick={[Function]}
+            onClick={[MockFunction]}
             style={
               Object {
                 "alignItems": "center",
@@ -404,6 +407,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                   "marginRight": 8,
                 }
               }
+              swapOpacity={false}
               symbol={false}
               title=""
               transform={null}
@@ -524,6 +528,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                       "marginRight": 8,
                     }
                   }
+                  swapOpacity={false}
                   symbol={false}
                   title=""
                   transform={null}
@@ -618,7 +623,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
           }
           isMobile={true}
           name="clear-selection"
-          onClick={[Function]}
+          onClick={[MockFunction]}
           style={
             Object {
               "borderRight": "2px solid lightgray",
@@ -628,7 +633,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
         >
           <div
             name="clear-selection"
-            onClick={[Function]}
+            onClick={[MockFunction]}
             style={
               Object {
                 "alignItems": "center",
@@ -675,6 +680,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                   "marginRight": 4,
                 }
               }
+              swapOpacity={false}
               symbol={false}
               title=""
               transform={null}
@@ -781,6 +787,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                       "marginRight": 4,
                     }
                   }
+                  swapOpacity={false}
                   symbol={false}
                   title=""
                   transform={null}
