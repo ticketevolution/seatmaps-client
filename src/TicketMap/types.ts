@@ -63,7 +63,8 @@ export interface State {
       x: number
       y: number
     }
-  }
+  },
+  dragging: boolean
   isTouchDevice: boolean
   previousTouches?: any
 }

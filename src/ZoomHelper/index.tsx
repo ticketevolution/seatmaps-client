@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import PinchZoomInIcon from './pinch-zoom-in.svg'
 import TwoFingerSlideIcon from './two-finger-slide.svg'
 
-const containerStyle = {
+const containerStyle: CSSProperties = {
   position: 'absolute',
   backgroundColor: 'rgba(0, 0, 0, 0.8)',
   width: '100%',
@@ -24,7 +24,7 @@ const containerStyle = {
   lineHeight: 'initial'
 }
 
-const discoveredStyle = {
+const discoveredStyle: CSSProperties  = {
   transition: 'opacity .4s, visibility .4s',
   opacity: 0,
   visibility: 'hidden'
@@ -44,7 +44,7 @@ export default class ZoomHelper extends React.Component {
     discovered: false
   }
 
-  container = React.createRef<HTMLElement>()
+  container = React.createRef<HTMLDivElement>()
 
   hide = () => {
     this.setState({

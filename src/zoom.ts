@@ -1,3 +1,5 @@
+import { getReferencePoint, getScreenCTM, getViewBox } from "./utils"
+
 const ZOOM_COEFFICIENT = 5
 const SCROLL_PAN_COEFFICIENT = 0.5
 const MOUSE_MOVEMENT_TRAP_LOWER_BOUND = 50
@@ -52,11 +54,11 @@ export interface ZoomControl {
 */
 export default function (svg: SVGSVGElement) {
   // used to convert screen coordinates into coordinates in the svg space
-  const referencePoint = svg.createSVGPoint()
+  const referencePoint = getReferencePoint(svg)
 
   // converts a point from the page coordinate space to a point in the svg coordinate space
   function svgPoint (x: number, y: number): number[] {
-    const matrix = svg.getScreenCTM()
+    const matrix = getScreenCTM(svg)
     if (!matrix) {
       throw new Error('cannot convert dom point to svg point due to missing conversion matrix')
     }
@@ -80,7 +82,7 @@ export default function (svg: SVGSVGElement) {
   let initialViewboxHeight: number
   let initialViewboxWidth: number
 
-  const viewbox = svg.viewBox.baseVal
+  const viewbox = getViewBox(svg)
 
   function updateInitialViewbox () {
     initialViewboxX = viewbox.x
@@ -219,7 +221,7 @@ export default function (svg: SVGSVGElement) {
   // dragging the svg will also trigger click events, so we must trap them
   // unless they drag the svg a very small distance (common with trackpads)
   function handleClick (e: MouseEvent) {
-    if (magnitude(event.clientX, event.clientY, iMouseX, iMouseY) > MOUSE_MOVEMENT_TRAP_LOWER_BOUND) {
+    if (magnitude(e.clientX, e.clientY, iMouseX, iMouseY) > MOUSE_MOVEMENT_TRAP_LOWER_BOUND) {
       e.stopPropagation()
     }
   }

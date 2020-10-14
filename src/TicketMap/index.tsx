@@ -76,6 +76,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       ticketGroups: this.props.ticketGroups,
       mapNotFound: false,
       touchStarts: {},
+      dragging: false,
       isTouchDevice: false
     }
 
@@ -395,6 +396,19 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   onClick = () => this.doSelect()
 
+  onTouchMove = (e: React.TouchEvent<HTMLElement>) => {
+    this.setState({dragging: true})
+  }
+
+  onTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
+    e.preventDefault()
+    
+    if ( !this.state.dragging ){
+      this.doSelect()
+    }
+    this.setState({dragging: false})
+  }
+
   /**
    * Interactions
    */
@@ -495,6 +509,8 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
         onClick={this.onClick}
+        onTouchEnd={this.onTouchEnd}
+        onTouchMove={this.onTouchMove}
         style={{
           position: 'relative',
           fontFamily: this.props.mapFontFamily,
