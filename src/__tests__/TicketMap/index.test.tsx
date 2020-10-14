@@ -58,12 +58,6 @@ describe("TicketMap", () => {
   const mountComponent = (responses = [mapResponse, manifestResponse]) => {
     fetchMock.mockResponses(...responses);
     wrapper = mount(<TicketMap {...props} />);
-    wrapper.debug()
-
-    // fetchMock.mockReset();
-    // fetchMock.mockResponses(...responses);
-    // wrapper.instance().mapRoot = { current: mapRoot };
-    // wrapper.instance().componentDidMount()
     fillSectionSpy = jest.spyOn(wrapper.instance(), "fillSection");
     return new Promise(setImmediate);
   };
