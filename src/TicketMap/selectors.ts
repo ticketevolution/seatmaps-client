@@ -1,4 +1,3 @@
-import React from 'react'
 import { defaultMemoize, createSelectorCreator } from 'reselect'
 import { isEqual } from 'lodash-es'
 
