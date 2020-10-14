@@ -1,5 +1,32 @@
 import React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
+import { mount, ReactWrapper, render, shallow, ShallowWrapper } from "enzyme";
+
+const getReferencePointMock = jest.fn();
+const getScreenCTMMock = jest.fn();
+const getViewBoxMock = jest.fn();
+
+const mockPoint = {
+  x: 0,
+  y: 0,
+  w: 0,
+  z: 0,
+  toJSON: jest.fn(),
+  matrixTransform: () => {
+    return mockPoint
+  }
+}
+
+jest.mock("../../utils", () => ({
+  ...jest.requireActual("../../utils"),
+  getReferencePoint: getReferencePointMock,
+  getScreenCTM: getScreenCTMMock,
+  getViewBox: getViewBoxMock,
+}));
+
+getReferencePointMock.mockReturnValue(mockPoint)
+getScreenCTMMock.mockReturnValue(mockPoint)
+getViewBoxMock.mockReturnValue(mockPoint)
+
 
 import TicketMap from "../../TicketMap/index";
 import { State, Props, Manifest } from "../../TicketMap/types";
@@ -19,7 +46,7 @@ const createTouchEvent = (target: HTMLElement, pageX = 0, pageY = 0) => ({
 });
 
 describe("TicketMap", () => {
-  let wrapper: ShallowWrapper<Props, State, TicketMap>;
+  let wrapper: ReactWrapper<Props, State, TicketMap>;
   let props: Props;
   let manifestResponse: [string, { status: number }];
   let mapResponse: [string, { status: number }];
@@ -27,11 +54,16 @@ describe("TicketMap", () => {
   let manifest: Manifest;
   let ticketGroup: TicketGroup;
   let fillSectionSpy: jest.SpyInstance;
-
+  
   const mountComponent = (responses = [mapResponse, manifestResponse]) => {
     fetchMock.mockResponses(...responses);
-    wrapper = shallow(<TicketMap {...props} />);
-    wrapper.instance().mapRoot = { current: mapRoot };
+    wrapper = mount(<TicketMap {...props} />);
+    wrapper.debug()
+
+    // fetchMock.mockReset();
+    // fetchMock.mockResponses(...responses);
+    // wrapper.instance().mapRoot = { current: mapRoot };
+    // wrapper.instance().componentDidMount()
     fillSectionSpy = jest.spyOn(wrapper.instance(), "fillSection");
     return new Promise(setImmediate);
   };
@@ -61,7 +93,7 @@ describe("TicketMap", () => {
   });
 
   afterEach(() => {
-    fetchMock.mockClear();
+    fetchMock.mockReset();
   });
 
   it("fetches the map associated with the venue and config IDs", async () => {
@@ -74,8 +106,9 @@ describe("TicketMap", () => {
   it("renders a not found image if the map fetch fails", async () => {
     jest.spyOn(global.console, "error").mockImplementationOnce(() => {});
     await mountComponent([[mapResponse[0], { status: 404 }]]);
+    wrapper.update()
     expect(wrapper).toHaveState("mapNotFound", true);
-    expect(wrapper).toContainMatchingElement("img");
+    expect(wrapper.find("img")).toHaveLength(1);
     expect(wrapper).toIncludeText("Seating chart not available.");
   });
 
@@ -94,6 +127,7 @@ describe("TicketMap", () => {
 
   it("renders an Action menu", async () => {
     await mountComponent();
+    wrapper.update();
     expect(wrapper.find(Actions)).toExist();
   });
 
@@ -252,7 +286,7 @@ describe("TicketMap", () => {
       target.setAttribute("data-section-id", "foo bar");
       props.ticketGroups = [ticketGroup];
       await mountComponent();
-      wrapper.setState({ currentHoveredSection: "foo bar" });
+      wrapper.setState({ currentHoveredSection: "foo bar"});
     });
 
     it("toggles the section in the selectedSections set", () => {
@@ -278,7 +312,8 @@ describe("TicketMap", () => {
 
     it("does not toggle the section if currently dragging the map", () => {
       wrapper.simulate("touchstart", createTouchEvent(target));
-      wrapper.simulate("touchend", createTouchEvent(target, 100, 100));
+      wrapper.simulate("touchmove", createTouchEvent(target));
+      wrapper.simulate("touchend", createTouchEvent(target));
       expect(wrapper.state("selectedSections").has("foo bar")).toBeFalsy();
     });
 
@@ -374,14 +409,16 @@ describe("TicketMap", () => {
   });
 
   describe("render()", () => {
-    it("should allow pointer events when mouseControlEnabled is true", () => {
+    it("should allow pointer events when mouseControlEnabled is true", async () => {
+      await mountComponent()
       wrapper.setProps({ mouseControlEnabled: true });
-      expect(wrapper).toHaveStyle("pointerEvents", "initial");
+      expect(wrapper.find("div").first()).toHaveStyle("pointerEvents", "initial");
     });
 
-    it("should allow pointer events when mouseControlEnabled is false", () => {
+    it("should allow pointer events when mouseControlEnabled is false", async () => {
+      await mountComponent()
       wrapper.setProps({ mouseControlEnabled: false });
-      expect(wrapper).toHaveStyle("pointerEvents", "none");
+      expect(wrapper.find("div").first()).toHaveStyle("pointerEvents", "none");
     });
   });
 });
