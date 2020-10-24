@@ -1,286 +1,325 @@
-import React, { Component } from 'react'
-import { isEqual } from 'lodash-es'
+import React, { Component } from "react";
+import { isEqual } from "lodash-es";
 
-import Actions from '../Actions'
-import Tooltip from '../Tooltip'
-import ZoomHelper from '../ZoomHelper'
-import initializeZoom, { ZoomControl } from '../zoom'
+import Actions from "../Actions";
+import Tooltip from "../Tooltip";
+import ZoomHelper from "../ZoomHelper";
+import initializeZoom, { ZoomControl } from "../utils/zoom";
 
-import { TicketGroup, NormalizedTicketGroup } from '../types'
-import { State, Props, DefaultProps, Manifest } from './types'
+import { TicketGroup, NormalizedTicketGroup } from "../types";
+import { State, Props, DefaultProps, Manifest } from "./types";
 
 import {
   $availableTicketGroups,
   $missingSectionIds,
   $ticketGroupsBySection,
   $venueSections,
-  $costRanges
-} from './selectors'
+  $costRanges,
+} from "../utils/selectors";
 
-export * from './types'
+export * from "./types";
 
 interface PublicApi {
-  updateTicketGroups: (ticketGroups: TicketGroup[]) => void
-  highlightSection: (section: string) => void
-  unhighlightSection: (section?: string) => void
-  selectSection: (section: string) => void
-  deselectSection: (section?: string) => void
+  updateTicketGroups: (ticketGroups: TicketGroup[]) => void;
+  highlightSection: (section: string) => void;
+  unhighlightSection: (section?: string) => void;
+  selectSection: (section: string) => void;
+  deselectSection: (section?: string) => void;
 }
 
 interface ElementProperties {
-  [key: string]: string
+  [key: string]: string;
 }
 
-type PropertiesForElement = (element: Element) => ElementProperties
+type PropertiesForElement = (element: Element) => ElementProperties;
 
 class MapNotFoundError extends Error {
-  name = 'MapNotFoundError'
-  constructor (message = 'This map is not currently available.') {
-    super(message)
+  name = "MapNotFoundError";
+  constructor(message = "This map is not currently available.") {
+    super(message);
   }
 }
 
 export default class TicketMap extends Component<Props & DefaultProps, State> {
-  publicApi: PublicApi
-  mapRoot = React.createRef<HTMLDivElement>()
-  container = React.createRef<HTMLDivElement>()
-  zoom?: ZoomControl
+  publicApi: PublicApi;
+  mapRoot = React.createRef<HTMLDivElement>();
+  container = React.createRef<HTMLDivElement>();
+  zoom?: ZoomControl;
 
   static defaultProps: DefaultProps = {
-    mapsDomain: 'https://maps.ticketevolution.com',
-    onSelection: () => { },
+    mapsDomain: "https://maps.ticketevolution.com",
+    onSelection: () => {},
     selectedSections: [],
     sectionPercentiles: {
-      '0.2': '#FFC515',
-      '0.4': '#f2711c',
-      '0.6': '#D6226A',
-      '0.8': '#a333c8',
-      '1': '#2A6EBB'
+      "0.2": "#FFC515",
+      "0.4": "#f2711c",
+      "0.6": "#D6226A",
+      "0.8": "#a333c8",
+      "1": "#2A6EBB",
     },
     ticketGroups: [],
     showLegend: true,
     showControls: true,
     mouseControlEnabled: true,
-    mapFontFamily: 'inherit'
-  }
+    mapFontFamily: "inherit",
+  };
 
-  constructor (props: Props & DefaultProps) {
-    super(props)
+  constructor(props: Props & DefaultProps) {
+    super(props);
     this.state = {
       sectionMapping: {},
-      selectedSections: new Set(this.props.selectedSections.filter(section => !!section)),
+      selectedSections: new Set(
+        this.props.selectedSections.filter((section) => !!section)
+      ),
       tooltipActive: false,
-      tooltipSectionName: '',
+      tooltipSectionName: "",
       tooltipX: 0,
       tooltipY: 0,
       ticketGroups: this.props.ticketGroups,
       mapNotFound: false,
       touchStarts: {},
       dragging: false,
-      isTouchDevice: false
-    }
+      isTouchDevice: false,
+    };
 
     this.publicApi = {
       updateTicketGroups: this.updateTicketGroups,
       highlightSection: this.highlightSection,
       unhighlightSection: this.unhighlightSection,
       selectSection: this.selectSection,
-      deselectSection: this.deselectSection
-    }
+      deselectSection: this.deselectSection,
+    };
   }
 
   /**
    * Lifecycle
    */
 
-  async componentDidMount () {
+  async componentDidMount() {
     this.setState({
-      isTouchDevice: 'ontouchstart' in document.documentElement
-    })
+      isTouchDevice: "ontouchstart" in document.documentElement,
+    });
 
     try {
-      await this.fetchMap()
-      this.setupMap()
-      await this.fetchManifest()
+      await this.fetchMap();
+      this.setupMap();
+      await this.fetchManifest();
     } catch (error) {
-      console.error(error)
-      if (error.name === 'MapNotFoundError') {
-        this.setState({ mapNotFound: true })
+      console.error(error);
+      if (error.name === "MapNotFoundError") {
+        this.setState({ mapNotFound: true });
       }
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.zoom) {
-      this.zoom.teardown()
+      this.zoom.teardown();
     }
   }
 
-  componentDidUpdate (_prevProps: Props, prevState: State) {
-    const availableTicketGroupsDidChange = $availableTicketGroups(prevState) !== $availableTicketGroups(this.state)
-    const isNoLongerHoveringOnSection = prevState.currentHoveredSection !== undefined && this.state.currentHoveredSection === undefined
-    const selectedSectionsDidChange = !isEqual(this.state.selectedSections, prevState.selectedSections)
+  componentDidUpdate(_prevProps: Props, prevState: State) {
+    const availableTicketGroupsDidChange =
+      $availableTicketGroups(prevState) !== $availableTicketGroups(this.state);
+    const isNoLongerHoveringOnSection =
+      prevState.currentHoveredSection !== undefined &&
+      this.state.currentHoveredSection === undefined;
+    const selectedSectionsDidChange = !isEqual(
+      this.state.selectedSections,
+      prevState.selectedSections
+    );
 
-    if (this.mapRoot.current && (isNoLongerHoveringOnSection || availableTicketGroupsDidChange || selectedSectionsDidChange)) {
-      this.updateMap()
+    if (
+      this.mapRoot.current &&
+      (isNoLongerHoveringOnSection ||
+        availableTicketGroupsDidChange ||
+        selectedSectionsDidChange)
+    ) {
+      this.updateMap();
     }
 
     if (selectedSectionsDidChange) {
-      this.props.onSelection(Array.from(this.state.selectedSections))
+      this.props.onSelection(Array.from(this.state.selectedSections));
     }
 
-    if ($missingSectionIds(prevState) !== $missingSectionIds(this.state) && $missingSectionIds(this.state).length > 0) {
-      console.warn('Unknown section names found in ticket groups: %o', $missingSectionIds(this.state))
+    if (
+      $missingSectionIds(prevState) !== $missingSectionIds(this.state) &&
+      $missingSectionIds(this.state).length > 0
+    ) {
+      console.warn(
+        "Unknown section names found in ticket groups: %o",
+        $missingSectionIds(this.state)
+      );
     }
 
-    if (_prevProps.mouseControlEnabled !== this.props.mouseControlEnabled && this.zoom) {
+    if (
+      _prevProps.mouseControlEnabled !== this.props.mouseControlEnabled &&
+      this.zoom
+    ) {
       if (this.props.mouseControlEnabled) {
-        this.zoom.enable()
+        this.zoom.enable();
       } else {
-        this.zoom.disable()
+        this.zoom.disable();
       }
     }
   }
 
-  async fetchMap () {
-    const mapResponse = await fetch(`${this.configFilePath}/map.svg`)
+  async fetchMap() {
+    const mapResponse = await fetch(`${this.configFilePath}/map.svg`);
     if (!mapResponse.ok) {
-      throw new MapNotFoundError()
+      throw new MapNotFoundError();
     }
-    const mapHtml = await mapResponse.text()
+    const mapHtml = await mapResponse.text();
     // Can't use dangerouslySetInnerHTML={{ __html: this.state.mapHtml }} in this case because
     // re-rendering would inject all this HTML again, which would break all the event bindings
     // we set in future methods.
     if (this.mapRoot.current) {
-      this.mapRoot.current.innerHTML = mapHtml
-      const svg = this.mapRoot.current.querySelector('svg')
+      this.mapRoot.current.innerHTML = mapHtml;
+      const svg = this.mapRoot.current.querySelector("svg");
       if (svg && this.props.mouseControlEnabled) {
-        this.zoom = initializeZoom(svg)
+        this.zoom = initializeZoom(svg);
       }
     }
   }
 
-  async fetchManifest () {
-    const manifestResponse = await fetch(`${this.configFilePath}/manifest.json`)
+  async fetchManifest() {
+    const manifestResponse = await fetch(
+      `${this.configFilePath}/manifest.json`
+    );
     if (!manifestResponse.ok) {
-      throw Error('There was an error fetching the venue map data, please try again')
+      throw Error(
+        "There was an error fetching the venue map data, please try again"
+      );
     }
 
-    const manifest: Manifest = await manifestResponse.json()
+    const manifest: Manifest = await manifestResponse.json();
 
     this.setState({
-      sectionMapping: Object.keys(manifest.sections)
-        .reduce((memo, sectionName) => ({
+      sectionMapping: Object.keys(manifest.sections).reduce(
+        (memo, sectionName) => ({
           ...memo,
           [sectionName.toLowerCase()]: {
-            sectionName
-          }
-        }), {})
-    })
+            sectionName,
+          },
+        }),
+        {}
+      ),
+    });
   }
 
-  setupMap () {
+  setupMap() {
     if (!this.mapRoot.current) {
-      return
+      return;
     }
 
-    const mapSvg = this.mapRoot.current.querySelector('svg')
+    const mapSvg = this.mapRoot.current.querySelector("svg");
     if (!mapSvg) {
-      return
+      return;
     }
 
     Object.assign(mapSvg.style, {
-      position: 'absolute',
+      position: "absolute",
       zIndex: 0,
       top: 0,
       left: 0,
-      height: '100%',
-      width: '100%'
-    })
+      height: "100%",
+      width: "100%",
+    });
 
-    this.setUnavailableColors()
+    this.setUnavailableColors();
 
-    mapSvg.querySelectorAll<HTMLElement>('*[data-section-id]').forEach(path => {
-      const sectionId = path.getAttribute('data-section-id')
-      if (sectionId === null) {
-        return
-      }
-      path.setAttribute('data-section-id', sectionId.toLowerCase())
-    })
+    mapSvg
+      .querySelectorAll<HTMLElement>("*[data-section-id]")
+      .forEach((path) => {
+        const sectionId = path.getAttribute("data-section-id");
+        if (sectionId === null) {
+          return;
+        }
+        path.setAttribute("data-section-id", sectionId.toLowerCase());
+      });
 
-    mapSvg.querySelectorAll<HTMLElement>('text').forEach(text => {
-      text.style.pointerEvents = 'none'
-    })
+    mapSvg.querySelectorAll<HTMLElement>("text").forEach((text) => {
+      text.style.pointerEvents = "none";
+    });
 
-    this.setState({ mapSvg })
+    this.setState({ mapSvg });
   }
 
   /**
    * Properties
    */
 
-  get configFilePath () {
-    return `${this.props.mapsDomain}/${this.props.venueId}/${this.props.configurationId}`
+  get configFilePath() {
+    return `${this.props.mapsDomain}/${this.props.venueId}/${this.props.configurationId}`;
   }
 
   /**
    * Public Methods
    */
 
-  highlightSection = (section: string) => this.toggleSectionHighlight(section, true)
+  highlightSection = (section: string) =>
+    this.toggleSectionHighlight(section, true);
 
   unhighlightSection = (section?: string) => {
     if (!section) {
-      return this.setState({ currentHoveredSection: undefined })
+      return this.setState({ currentHoveredSection: undefined });
     }
-    return this.toggleSectionHighlight(section, false)
-  }
+    return this.toggleSectionHighlight(section, false);
+  };
 
-  selectSection = (section: string) => this.toggleSectionSelect(section, true)
+  selectSection = (section: string) => this.toggleSectionSelect(section, true);
 
   deselectSection = (section?: string) => {
     if (!section) {
-      return this.clearSelection()
+      return this.clearSelection();
     }
-    return this.toggleSectionSelect(section, false)
-  }
+    return this.toggleSectionSelect(section, false);
+  };
 
   updateTicketGroups = (ticketGroups = this.props.ticketGroups) =>
-    this.setState({ ticketGroups })
+    this.setState({ ticketGroups });
 
   /**
    * Colors
    */
 
   setUnavailableColors = () =>
-    this.fillPathsForSection(element =>
-      ({ 'data-unavailable-color': element.getAttribute('fill') as string }))
+    this.fillPathsForSection((element) => ({
+      "data-unavailable-color": element.getAttribute("fill") as string,
+    }));
 
   fillUnavailableColors = () =>
-    this.fillPathsForSection(element => ({
-      'fill': element.getAttribute('data-unavailable-color') as string,
-      'opacity': '1',
-      'stroke-width': '1',
-      'stroke': '#FFFFFF'
-    }))
+    this.fillPathsForSection((element) => ({
+      fill: element.getAttribute("data-unavailable-color") as string,
+      opacity: "1",
+      "stroke-width": "1",
+      stroke: "#FFFFFF",
+    }));
 
-  fillPathsForSection = (propertiesForElement: PropertiesForElement, section?: string): void =>
-    this.getAllPaths(section).forEach(element =>
-      Object.entries(propertiesForElement(element))
-        .forEach(([property, value]) =>
-          element.setAttribute(property, value)))
+  fillPathsForSection = (
+    propertiesForElement: PropertiesForElement,
+    section?: string
+  ): void =>
+    this.getAllPaths(section).forEach((element) =>
+      Object.entries(
+        propertiesForElement(element)
+      ).forEach(([property, value]) => element.setAttribute(property, value))
+    );
 
   getAllPaths = (id?: string) => {
     if (!this.mapRoot.current) {
-      return []
+      return [];
     }
 
-    return Array.from(this.mapRoot.current.querySelectorAll(`[data-section-id${id ? `="${id}"` : ''}]`))
-      .reduce((memo, element) => {
-        const children = element.querySelectorAll('path')
-        return memo.concat(children.length ? Array.from(children) : [element])
-      }, [] as Element[])
-  }
+    return Array.from(
+      this.mapRoot.current.querySelectorAll(
+        `[data-section-id${id ? `="${id}"` : ""}]`
+      )
+    ).reduce((memo, element) => {
+      const children = element.querySelectorAll("path");
+      return memo.concat(children.length ? Array.from(children) : [element]);
+    }, [] as Element[]);
+  };
 
   /**
    * Helpers
@@ -288,94 +327,105 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
 
   clearSelection = () => {
     this.setState({
-      selectedSections: new Set()
-    })
-  }
+      selectedSections: new Set(),
+    });
+  };
 
   toggleSectionHighlight = (section?: string, shouldHighlight = true) => {
     if (!section) {
-      return
+      return;
     }
 
-    const sectionId = section.toLowerCase()
-    const isUnhighlightingSelectedSection = !shouldHighlight && this.state.selectedSections.has(sectionId)
+    const sectionId = section.toLowerCase();
+    const isUnhighlightingSelectedSection =
+      !shouldHighlight && this.state.selectedSections.has(sectionId);
     if (isUnhighlightingSelectedSection) {
-      return
+      return;
     }
 
-    return this.fillSection(sectionId, shouldHighlight)
-  }
+    return this.fillSection(sectionId, shouldHighlight);
+  };
 
   toggleSectionSelect = (section: string, shouldHighlight = true) => {
     if (!section) {
-      return
+      return;
     }
 
-    const sectionId = section.toLowerCase()
+    const sectionId = section.toLowerCase();
     if (!$venueSections(this.state).includes(sectionId)) {
-      return
+      return;
     }
 
-    const selectedSections = new Set(this.state.selectedSections)
+    const selectedSections = new Set(this.state.selectedSections);
     if (shouldHighlight) {
-      selectedSections.add(sectionId)
+      selectedSections.add(sectionId);
     } else {
-      selectedSections.delete(sectionId)
+      selectedSections.delete(sectionId);
     }
 
-    this.setState({ selectedSections })
+    this.setState({ selectedSections });
+  };
+
+  updateMap() {
+    this.fillUnavailableColors();
+    $venueSections(this.state).forEach((section) => {
+      this.fillSection(
+        section.toLowerCase(),
+        this.state.selectedSections.has(section)
+      );
+    });
   }
 
-  updateMap () {
-    this.fillUnavailableColors()
-    $venueSections(this.state).forEach(section => {
-      this.fillSection(section.toLowerCase(), this.state.selectedSections.has(section))
-    })
-  }
-
-  fillSection (section: string, shouldHighlight = true) {
-    const isAnAvailableSection = $venueSections(this.state).includes(section)
+  fillSection(section: string, shouldHighlight = true) {
+    const isAnAvailableSection = $venueSections(this.state).includes(section);
     if (isAnAvailableSection) {
-      this.fillPathsForSection(() => ({
-        'fill': this.getDefaultColor($ticketGroupsBySection(this.state)[section]),
-        'opacity': shouldHighlight ? '1' : '0.6',
-        'stroke-width': '1',
-        'stroke': shouldHighlight ? '#4a4a4a' : '#FFFFFF',
-        'cursor': 'pointer'
-      }), section)
+      this.fillPathsForSection(
+        () => ({
+          fill: this.getDefaultColor(
+            $ticketGroupsBySection(this.state)[section]
+          ),
+          opacity: shouldHighlight ? "1" : "0.6",
+          "stroke-width": "1",
+          stroke: shouldHighlight ? "#4a4a4a" : "#FFFFFF",
+          cursor: "pointer",
+        }),
+        section
+      );
     }
   }
 
-  getSectionFromTarget (target: HTMLElement) {
-    const element = target.closest('[data-section-id]')
+  getSectionFromTarget(target: HTMLElement) {
+    const element = target.closest("[data-section-id]");
     if (!element) {
-      return
+      return;
     }
 
-    const sectionId = element.getAttribute('data-section-id')
+    const sectionId = element.getAttribute("data-section-id");
     if (!sectionId) {
-      return
+      return;
     }
 
-    return sectionId.toLowerCase()
+    return sectionId.toLowerCase();
   }
 
   /**
    * Coloring
    */
 
-  getDefaultColor (ticketGroups: NormalizedTicketGroup[] = []): string {
-    const lowestTicketPriceInSection = ticketGroups.map(({ price }) => price).sort((a, b) => a - b)[0]
+  getDefaultColor(ticketGroups: NormalizedTicketGroup[] = []): string {
+    const lowestTicketPriceInSection = ticketGroups
+      .map(({ price }) => price)
+      .sort((a, b) => a - b)[0];
 
-    const ranges = $costRanges(this.state, this.props)
+    const ranges = $costRanges(this.state, this.props);
 
     for (const range of ranges) {
       if (range.max > lowestTicketPriceInSection) {
-        return range.color
+        return range.color;
       }
     }
 
-    return ranges[ranges.length - 1].color
+    return ranges[ranges.length - 1].color;
   }
 
   /**
@@ -383,123 +433,139 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
    */
 
   onMouseOver = ({ clientX, clientY, target }: React.MouseEvent<HTMLElement>) =>
-    this.doHover(target as HTMLElement, clientX, clientY)
+    this.doHover(target as HTMLElement, clientX, clientY);
 
   onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) =>
-    this.doHoverCleanup(relatedTarget as HTMLElement)
+    this.doHoverCleanup(relatedTarget as HTMLElement);
 
   onMouseMove = ({ nativeEvent }: React.MouseEvent<HTMLElement>) =>
     this.setState({
       tooltipX: nativeEvent.clientX,
-      tooltipY: nativeEvent.clientY
-    })
+      tooltipY: nativeEvent.clientY,
+    });
 
-  onClick = () => this.doSelect()
+  onClick = () => this.doSelect();
 
   onTouchMove = (e: React.TouchEvent<HTMLElement>) => {
-    this.setState({dragging: true})
-  }
+    this.setState({ dragging: true });
+  };
 
   onTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
-    e.preventDefault()
-    
-    if ( !this.state.dragging ){
-      this.doSelect()
+    e.preventDefault();
+
+    if (!this.state.dragging) {
+      this.doSelect();
     }
-    this.setState({dragging: false})
-  }
+    this.setState({ dragging: false });
+  };
 
   /**
    * Interactions
    */
 
-  doHover (target: HTMLElement, tooltipX?: number, tooltipY?: number) {
-    const section = this.getSectionFromTarget(target)
+  doHover(target: HTMLElement, tooltipX?: number, tooltipY?: number) {
+    const section = this.getSectionFromTarget(target);
     if (!section) {
-      return
+      return;
     }
 
     if (!$venueSections(this.state).includes(section)) {
-      return
+      return;
     }
 
-    this.highlightSection(section)
+    this.highlightSection(section);
     this.setState({
       tooltipActive: tooltipX !== undefined && tooltipY !== undefined,
       tooltipX: tooltipX !== undefined ? tooltipX : 0,
       tooltipY: tooltipY !== undefined ? tooltipY : 0,
       tooltipSectionName: this.state.sectionMapping[section].sectionName,
-      currentHoveredSection: section
-    })
+      currentHoveredSection: section,
+    });
   }
 
-  doHoverCleanup (enteringElement: HTMLElement): void {
-    const isEnteringText = !!enteringElement && enteringElement.nodeName.toLowerCase() === 'text'
+  doHoverCleanup(enteringElement: HTMLElement): void {
+    const isEnteringText =
+      !!enteringElement && enteringElement.nodeName.toLowerCase() === "text";
     if (isEnteringText) {
-      return
+      return;
     }
 
-    const enteringSection = this.getSectionFromTarget(enteringElement)
-    const isEnteringTheSameSection = !!enteringSection && enteringSection === this.state.currentHoveredSection
+    const enteringSection = this.getSectionFromTarget(enteringElement);
+    const isEnteringTheSameSection =
+      !!enteringSection && enteringSection === this.state.currentHoveredSection;
     if (isEnteringTheSameSection) {
-      return
+      return;
     }
 
     this.setState({
       tooltipActive: false,
-      currentHoveredSection: undefined
-    })
+      currentHoveredSection: undefined,
+    });
   }
 
-  doSelect (section = this.state.currentHoveredSection) {
+  doSelect(section = this.state.currentHoveredSection) {
     if (!section) {
-      return
+      return;
     }
-    this.toggleSectionSelect(section, !this.state.selectedSections.has(section))
+    this.toggleSectionSelect(
+      section,
+      !this.state.selectedSections.has(section)
+    );
   }
 
   handleZoomIn = () => {
     if (this.zoom) {
-      this.zoom.zoomIn(0.1)
+      this.zoom.zoomIn(0.1);
     }
-  }
+  };
 
   handleZoomOut = () => {
     if (this.zoom) {
-      this.zoom.zoomOut(0.1)
+      this.zoom.zoomOut(0.1);
     }
-  }
+  };
 
   handleResetZoom = () => {
     if (this.zoom) {
-      this.zoom.reset()
+      this.zoom.reset();
     }
-  }
+  };
 
-  render () {
+  render() {
     if (this.state.mapNotFound) {
       return (
-        <div style={{
-          left: 0,
-          position: 'relative',
-          textAlign: 'left'
-        }}>
-          <div style={{
-            color: 'white',
-            fontFamily: 'Nunito Sans',
-            padding: '50px 30px',
-            position: 'absolute',
-            textAlign: 'left'
-          }}>
-            <div style={{
-              fontWeight: 600,
-              fontSize: '1.375em'
-            }}>Seating chart not available.</div>
+        <div
+          style={{
+            left: 0,
+            position: "relative",
+            textAlign: "left",
+          }}
+        >
+          <div
+            style={{
+              color: "white",
+              fontFamily: "Nunito Sans",
+              padding: "50px 30px",
+              position: "absolute",
+              textAlign: "left",
+            }}
+          >
+            <div
+              style={{
+                fontWeight: 600,
+                fontSize: "1.375em",
+              }}
+            >
+              Seating chart not available.
+            </div>
             <div style={{ fontWeight: 300 }}>(It was abducted by aliens)</div>
           </div>
-          <img src='https://maps.ticketevolution.com/maps/not_available.jpg' style={{ width: '100%', textAlign: 'left' }} />
+          <img
+            src="https://maps.ticketevolution.com/maps/not_available.jpg"
+            style={{ width: "100%", textAlign: "left" }}
+          />
         </div>
-      )
+      );
     }
 
     return (
@@ -512,26 +578,39 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
         onTouchEnd={this.onTouchEnd}
         onTouchMove={this.onTouchMove}
         style={{
-          position: 'relative',
+          position: "relative",
           fontFamily: this.props.mapFontFamily,
-          height: '100%',
-          width: '100%',
-          pointerEvents: this.props.mouseControlEnabled ? 'initial' : 'none'
+          height: "100%",
+          width: "100%",
+          pointerEvents: this.props.mouseControlEnabled ? "initial" : "none",
         }}
       >
-        {!this.state.isTouchDevice && <Tooltip
-          isActive={this.state.tooltipActive}
-          x={this.state.tooltipX}
-          y={this.state.tooltipY}
-          name={this.state.tooltipSectionName}
-          color={this.state.currentHoveredSection ? this.getDefaultColor($ticketGroupsBySection(this.state)[this.state.currentHoveredSection]) : ''}
-          ticketGroups={$availableTicketGroups(this.state).filter(ticketGroup => ticketGroup.section === this.state.currentHoveredSection)}
-        />}
+        {!this.state.isTouchDevice && (
+          <Tooltip
+            isActive={this.state.tooltipActive}
+            x={this.state.tooltipX}
+            y={this.state.tooltipY}
+            name={this.state.tooltipSectionName}
+            color={
+              this.state.currentHoveredSection
+                ? this.getDefaultColor(
+                    $ticketGroupsBySection(this.state)[
+                      this.state.currentHoveredSection
+                    ]
+                  )
+                : ""
+            }
+            ticketGroups={$availableTicketGroups(this.state).filter(
+              (ticketGroup) =>
+                ticketGroup.section === this.state.currentHoveredSection
+            )}
+          />
+        )}
         <div
           ref={this.mapRoot}
           style={{
-            cursor: '-webkit-grab',
-            opacity: this.state.mapSvg ? 1 : 0
+            cursor: "-webkit-grab",
+            opacity: this.state.mapSvg ? 1 : 0,
           }}
         />
         {this.state.mapSvg && (
@@ -545,8 +624,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
             onResetZoom={this.handleResetZoom}
           />
         )}
-        {this.state.isTouchDevice && this.props.mouseControlEnabled && <ZoomHelper />}
+        {this.state.isTouchDevice && this.props.mouseControlEnabled && (
+          <ZoomHelper />
+        )}
       </div>
-    )
+    );
   }
 }
