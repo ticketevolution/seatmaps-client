@@ -5,8 +5,8 @@ import {
   $ticketGroupsBySection,
   $venueSections,
 } from "../../utils/selectors";
-import { State, Props, Percentiles } from "../../TicketMap/types";
-import { TicketGroup } from "../../types";
+import { State, Props, Percentiles } from "../../types/TicketMap";
+import { TicketGroup } from "../../types/TicketGroups";
 
 let ticketGroupFooBar: TicketGroup;
 let ticketGroupBizBaz: TicketGroup;
