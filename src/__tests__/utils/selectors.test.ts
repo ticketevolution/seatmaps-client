@@ -4,7 +4,7 @@ import {
   $costRanges,
   $ticketGroupsBySection,
   $venueSections,
-} from "../../TicketMap/selectors";
+} from "../../utils/selectors";
 import { State, Props, Percentiles } from "../../TicketMap/types";
 import { TicketGroup } from "../../types";
 
@@ -37,6 +37,7 @@ beforeEach(() => {
     mapNotFound: false,
     touchStarts: {},
     isTouchDevice: false,
+    dragging: false,
   };
   props = {
     venueId: "",
