@@ -28,10 +28,10 @@ getScreenCTMMock.mockReturnValue(mockPoint);
 getViewBoxMock.mockReturnValue(mockPoint);
 
 import TicketMap from "../../TicketMap/index";
-import { State, Props, Manifest } from "../../TicketMap/types";
+import { State, Props, Manifest } from "../../types/TicketMap";
 import Tooltip from "../../Tooltip";
 import Actions from "../../Actions";
-import { TicketGroup } from "../../types";
+import { TicketGroup } from "../../types/TicketGroups";
 
 const createTouchEvent = (target: HTMLElement, pageX = 0, pageY = 0) => ({
   target,

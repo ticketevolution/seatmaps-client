@@ -1,13 +1,13 @@
 import { defaultMemoize, createSelectorCreator } from "reselect";
 import { isEqual } from "lodash-es";
 
-import { NormalizedTicketGroup } from "../types";
+import { NormalizedTicketGroup } from "../types/TicketGroups";
 import {
   State,
   Props,
   NormalizedTicketGroupsBySection,
   CostRange,
-} from "../TicketMap/types";
+} from "../types/TicketMap";
 
 const $ticketGroups = (state: State) => state.ticketGroups;
 const $sectionMapping = (state: State) => state.sectionMapping;

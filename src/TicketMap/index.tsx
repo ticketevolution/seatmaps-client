@@ -6,8 +6,8 @@ import Tooltip from "../Tooltip";
 import ZoomHelper from "../ZoomHelper";
 import initializeZoom, { ZoomControl } from "../utils/zoom";
 
-import { TicketGroup, NormalizedTicketGroup } from "../types";
-import { State, Props, DefaultProps, Manifest } from "./types";
+import { TicketGroup, NormalizedTicketGroup } from "../types/TicketGroups";
+import { State, Props, DefaultProps, Manifest } from "../types/TicketMap";
 
 import {
   $availableTicketGroups,
@@ -17,7 +17,7 @@ import {
   $costRanges,
 } from "../utils/selectors";
 
-export * from "./types";
+export * from "../types/TicketMap";
 
 interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void;
