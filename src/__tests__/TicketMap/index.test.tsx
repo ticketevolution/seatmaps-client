@@ -1,5 +1,5 @@
 import React from "react";
-import { mount, ReactWrapper } from "enzyme";
+import { mount, ReactWrapper, shallow, ShallowWrapper } from "enzyme";
 
 const getReferencePointMock = jest.fn();
 const getScreenCTMMock = jest.fn();
@@ -15,6 +15,17 @@ const mockPoint = {
     return mockPoint;
   },
 };
+
+const initializeZoomMock = jest.fn();
+const actualZoom = jest.requireActual("../../utils/zoom");
+
+jest.mock("../../utils/zoom", () => ({
+  __esModule: true,
+  ...actualZoom,
+  default: initializeZoomMock,
+}));
+
+initializeZoomMock.mockImplementation(actualZoom.default);
 
 jest.mock("../../utils/utils", () => ({
   ...jest.requireActual("../../utils/utils"),
@@ -32,6 +43,7 @@ import { State, Props, Manifest } from "../../types/TicketMap";
 import Tooltip from "../../Tooltip";
 import Actions from "../../Actions";
 import { TicketGroup } from "../../types/TicketGroups";
+import ZoomHelper from "../../ZoomHelper";
 
 const createTouchEvent = (target: HTMLElement, pageX = 0, pageY = 0) => ({
   target,
@@ -46,6 +58,7 @@ const createTouchEvent = (target: HTMLElement, pageX = 0, pageY = 0) => ({
 
 describe("TicketMap", () => {
   let wrapper: ReactWrapper<Props, State, TicketMap>;
+  let comp: ShallowWrapper<Props, State, TicketMap>;
   let props: Props;
   let manifestResponse: [string, { status: number }];
   let mapResponse: [string, { status: number }];
@@ -58,6 +71,13 @@ describe("TicketMap", () => {
     fetchMock.mockResponses(...responses);
     wrapper = mount(<TicketMap {...props} />);
     fillSectionSpy = jest.spyOn(wrapper.instance(), "fillSection");
+    return new Promise(setImmediate);
+  };
+
+  const shallowComponent = (responses = [mapResponse, manifestResponse]) => {
+    fetchMock.mockResponses(...responses);
+    comp = shallow(<TicketMap {...props} />);
+    fillSectionSpy = jest.spyOn(comp.instance(), "fillSection");
     return new Promise(setImmediate);
   };
 
@@ -75,7 +95,7 @@ describe("TicketMap", () => {
       },
     };
     mapResponse = [
-      '<svg><path data-section-id="foo bar" /></svg>',
+      '<svg><path data-section-id="foo bar" /><text>Foo Bar</text></svg>',
       { status: 200 },
     ];
     manifestResponse = [JSON.stringify(manifest), { status: 200 }];
@@ -103,6 +123,16 @@ describe("TicketMap", () => {
     expect(wrapper).toHaveState("mapNotFound", true);
     expect(wrapper.find("img")).toHaveLength(1);
     expect(wrapper).toIncludeText("Seating chart not available.");
+  });
+
+  it("when error is different than mapNotFound ", async () => {
+    jest.spyOn(global.console, "error").mockImplementationOnce(() => {});
+    await mountComponent([
+      [mapResponse[0], { status: 200 }],
+      [manifestResponse[0], { status: 400 }],
+    ]);
+    wrapper.update();
+    expect(wrapper).toHaveState("mapNotFound", false);
   });
 
   it("fetches the manifest associated with the venue and config IDs", async () => {
@@ -166,6 +196,18 @@ describe("TicketMap", () => {
         tooltipActive: true,
         tooltipX: 10,
         tooltipY: 10,
+        tooltipSectionName: "foo bar",
+        currentHoveredSection: "foo bar",
+      });
+    });
+
+    it("tooltip should be placed at 0;0 and inactive by default", () => {
+      wrapper.instance().doHover(target);
+
+      expect(wrapper).toHaveState({
+        tooltipActive: false,
+        tooltipX: 0,
+        tooltipY: 0,
         tooltipSectionName: "foo bar",
         currentHoveredSection: "foo bar",
       });
@@ -325,6 +367,34 @@ describe("TicketMap", () => {
       wrapper.instance().updateTicketGroups([ticketGroup]);
       expect(wrapper.state("ticketGroups")).toContain(ticketGroup);
     });
+
+    it("should log warning with missing section ids", () => {
+      const warnMock = jest.spyOn(console, "warn");
+      wrapper.instance().updateTicketGroups([
+        {
+          tevo_section_name: "fake section",
+          retail_price: 10,
+        },
+      ]);
+      expect(
+        warnMock
+      ).toHaveBeenCalledWith(
+        "Unknown section names found in ticket groups: %o",
+        ["fake section"]
+      );
+    });
+
+    it("should use props ticket groups as default", async () => {
+      props.ticketGroups = [ticketGroup];
+      await mountComponent();
+      jest.spyOn(wrapper.instance(), "setState");
+
+      wrapper.instance().updateTicketGroups();
+
+      expect(wrapper.instance().setState).toHaveBeenCalledWith({
+        ticketGroups: props.ticketGroups,
+      });
+    });
   });
 
   describe("highlightSection", () => {
@@ -415,6 +485,290 @@ describe("TicketMap", () => {
       await mountComponent();
       wrapper.setProps({ mouseControlEnabled: false });
       expect(wrapper.find("div").first()).toHaveStyle("pointerEvents", "none");
+    });
+
+    it("should enable zoom when mouseControlEnabled is changed to true", async () => {
+      const enableMock = jest.fn();
+      initializeZoomMock.mockReturnValue({
+        enable: enableMock,
+        disable: jest.fn(),
+      });
+      await mountComponent();
+      wrapper.setProps({ mouseControlEnabled: false });
+      wrapper.update();
+      wrapper.setProps({ mouseControlEnabled: true });
+      wrapper.update();
+      expect(enableMock).toHaveBeenCalled();
+    });
+
+    it("should not initialize zoom when mouseControlEnabled is false", async () => {
+      props.mouseControlEnabled = false;
+
+      await mountComponent();
+
+      expect(initializeZoomMock).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("componentWillUnmount", () => {
+    const tearDownMock = jest.fn();
+    beforeAll(() => {
+      initializeZoomMock.mockReturnValue({
+        teardown: tearDownMock,
+      });
+    });
+
+    describe("when zoom is enabled", () => {
+      it("tears down zoom", async () => {
+        await mountComponent();
+        wrapper.unmount();
+        expect(tearDownMock).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe("when zoom is not enabled", () => {
+      beforeAll(() => {
+        initializeZoomMock.mockReturnValue(undefined);
+      });
+
+      it("tears down zoom", async () => {
+        await mountComponent();
+        wrapper.unmount();
+        expect(tearDownMock).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe("on mobile devices", () => {
+    it("should render zoom helper", async () => {
+      await shallowComponent();
+      comp.instance().setState({ isTouchDevice: true });
+      comp.update();
+
+      expect(comp.find(ZoomHelper)).toExist();
+    });
+  });
+
+  describe("setup", () => {
+    it("should not set map in state if dom element is not found", async () => {
+      await mountComponent();
+      const getMapRootElementMock = jest.spyOn(
+        wrapper.instance(),
+        "getMapRootElement"
+      );
+      getMapRootElementMock.mockReturnValue(undefined as any);
+      jest.spyOn(wrapper.instance(), "setState");
+      wrapper.update();
+      wrapper.instance().setupMap();
+
+      expect(wrapper.instance().setState).not.toHaveBeenCalledWith({
+        mapSvg: expect.anything(),
+      });
+    });
+
+    it("should not set map in state if no svg element found", async () => {
+      await mountComponent();
+      const getMapRootElementMock = jest.spyOn(
+        wrapper.instance(),
+        "getMapRootElement"
+      );
+
+      const querySelectorMock = jest.fn();
+      querySelectorMock.mockReturnValue(undefined);
+
+      getMapRootElementMock.mockReturnValue({
+        querySelector: querySelectorMock,
+      } as any);
+      jest.spyOn(wrapper.instance(), "setState");
+      wrapper.update();
+      wrapper.instance().setupMap();
+
+      expect(wrapper.instance().setState).not.toHaveBeenCalledWith({
+        mapSvg: expect.anything(),
+      });
+    });
+
+    it("when section has no section id attribute should not be set", async () => {
+      const mapResponseNoSectionId: [string, { status: number }] = [
+        "<svg><path data-section-id /></svg>",
+        { status: 200 },
+      ];
+      await mountComponent([mapResponseNoSectionId, manifestResponse]);
+
+      wrapper.instance().setupMap();
+
+      const section = wrapper.instance().getMapRootElement();
+      expect(section!.querySelector("path")).toBeDefined();
+      expect(section!.getAttribute("data-section-id")).toBe(null);
+    });
+  });
+
+  describe("getAllPath", () => {
+    it("should return empty array if map element not found", async () => {
+      await mountComponent();
+      const getMapRootElementMock = jest.spyOn(
+        wrapper.instance(),
+        "getMapRootElement"
+      );
+      getMapRootElementMock.mockReturnValue(undefined as any);
+      wrapper.update();
+
+      const result = wrapper.instance().getAllPaths();
+
+      expect(result).toStrictEqual([]);
+    });
+
+    it("should concat all path elements", async () => {
+      const mapResponseNoSectionId: [string, { status: number }] = [
+        '<svg><path id="p1" data-section-id="1"><path id="p2"/><path id="p3"/></path><path id="p4" data-section-id="4"/></svg>',
+        { status: 200 },
+      ];
+      await mountComponent([mapResponseNoSectionId, manifestResponse]);
+
+      const result = wrapper.instance().getAllPaths();
+
+      const section = wrapper.instance().getMapRootElement();
+      expect(result).toStrictEqual([
+        section!.querySelector("#p2"),
+        section!.querySelector("#p3"),
+        section!.querySelector("#p4"),
+      ]);
+    });
+  });
+
+  describe("toggleSectionHighlight", () => {
+    it("should not call fill section if section is undefined", async () => {
+      await mountComponent();
+
+      wrapper.instance().toggleSectionHighlight();
+
+      expect(fillSectionSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("toggleSectionSelect", () => {
+    it("should not call fill section if section is undefined", async () => {
+      await mountComponent();
+
+      wrapper.instance().toggleSectionSelect(undefined as any);
+
+      expect(fillSectionSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("fillSection", () => {
+    it("should highlight by default", async () => {
+      const mapResponseNoSectionId: [string, { status: number }] = [
+        '<svg><path id="p1" data-section-id="1"><path id="p2"/></path><path id="p3" data-section-id="4"/></svg>',
+        { status: 200 },
+      ];
+      await mountComponent([mapResponseNoSectionId, manifestResponse]);
+
+      wrapper.instance().fillSection("1");
+
+      const section = wrapper.instance().getMapRootElement();
+      expect(section!.querySelector("#p2")!.getAttribute("opacity")).toBe("1");
+      expect(section!.querySelector("#p3")!.getAttribute("opacity")).toBe("1");
+    });
+  });
+
+  describe("getSectionFromTarget", () => {
+    let target: HTMLElement;
+
+    it("should return undefined if section has empty id", async () => {
+      target = document.createElement("path");
+      target.setAttribute("data-section-id", "");
+
+      expect(wrapper.instance().getSectionFromTarget(target)).toBeUndefined();
+    });
+  });
+
+  describe("getDefaultColor", () => {
+    it("should return last range color", async () => {
+      props.ticketGroups = [
+        { retail_price: 10, tevo_section_name: "tkt-1" },
+        { retail_price: 100, tevo_section_name: "tkt-1" },
+      ];
+
+      await mountComponent();
+
+      const result = wrapper.instance().getDefaultColor([
+        { price: 10, section: "tkt-1" },
+        { price: 100, section: "tkt-1" },
+      ]);
+
+      expect(result).toBe(wrapper.props().sectionPercentiles!["0.6"]);
+    });
+  });
+
+  describe("zoom events", () => {
+    it("handleZoomIn should call zoom in", async () => {
+      const zoomInMock = jest.fn();
+      initializeZoomMock.mockReturnValue({
+        zoomIn: zoomInMock,
+      });
+
+      await mountComponent();
+
+      wrapper.instance().handleZoomIn();
+
+      expect(zoomInMock).toHaveBeenCalledWith(0.1);
+    });
+
+    it("handleZoomIn should not fail if zoom is not initialized", async () => {
+      initializeZoomMock.mockReturnValue(undefined);
+
+      await mountComponent();
+
+      expect(() => {
+        wrapper.instance().handleZoomIn();
+      }).not.toThrow();
+    });
+
+    it("handleZoomOut should call zoom out", async () => {
+      const zoomOutMock = jest.fn();
+      initializeZoomMock.mockReturnValue({
+        zoomOut: zoomOutMock,
+      });
+
+      await mountComponent();
+
+      wrapper.instance().handleZoomOut();
+
+      expect(zoomOutMock).toHaveBeenCalledWith(0.1);
+    });
+
+    it("handleZoomOut should not fail if zoom is not initialized", async () => {
+      initializeZoomMock.mockReturnValue(undefined);
+
+      await mountComponent();
+
+      expect(() => {
+        wrapper.instance().handleZoomOut();
+      }).not.toThrow();
+    });
+
+    it("handleResetZoom should call zoom in", async () => {
+      const resetMock = jest.fn();
+      initializeZoomMock.mockReturnValue({
+        reset: resetMock,
+      });
+
+      await mountComponent();
+
+      wrapper.instance().handleResetZoom();
+
+      expect(resetMock).toHaveBeenCalled();
+    });
+
+    it("handleResetZoom should not fail if zoom is not initialized", async () => {
+      initializeZoomMock.mockReturnValue(undefined);
+
+      await mountComponent();
+
+      expect(() => {
+        wrapper.instance().handleResetZoom();
+      }).not.toThrow();
     });
   });
 });

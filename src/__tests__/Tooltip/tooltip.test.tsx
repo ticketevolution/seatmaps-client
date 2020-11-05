@@ -170,6 +170,21 @@ describe("Tooltip", () => {
         tooltip.props.y - tooltip.container.current!.clientHeight // eslint-disable-line @typescript-eslint/no-non-null-assertion
       );
     });
+
+    it("returns same point when container is available and direction is bottom right", () => {
+      const tooltip = shallow<Tooltip>(<Tooltip />).instance();
+
+      tooltip.container = {
+        current: {
+          clientHeight: 10,
+        },
+      } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+      tooltip.direction = jest.fn(() => ["down", "right"]);
+
+      expect(tooltip.position().y).toEqual(tooltip.props.y);
+      expect(tooltip.position().x).toEqual(tooltip.props.x);
+    });
   });
 
   describe("tipStyle()", () => {
@@ -187,6 +202,56 @@ describe("Tooltip", () => {
       const uniqueTipStyles = Array.from(new Set(tipStyles));
 
       expect(uniqueTipStyles.length).toEqual(tipStyles.length);
+    });
+  });
+
+  describe("containerStyle()", () => {
+    it("should return a unique style for each direction", () => {
+      const commonStyles = {
+        position: "fixed",
+        zIndex: 1,
+        transition: "top .1s, left .1s",
+        opacity: 0,
+        padding: 5,
+        display: "flex",
+        filter: "drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)",
+        pointerEvents: "none",
+        top: 0,
+        left: 0,
+      };
+      const tooltips = Array.from(new Array(4)).map(() =>
+        shallow<Tooltip>(<Tooltip />).instance()
+      );
+
+      tooltips[0].direction = jest.fn(() => ["up", "left"]);
+      tooltips[1].direction = jest.fn(() => ["up", "right"]);
+      tooltips[2].direction = jest.fn(() => ["down", "left"]);
+      tooltips[3].direction = jest.fn(() => ["down", "right"]);
+
+      const containerStyle = tooltips.map((tooltip) =>
+        tooltip.containerStyle()
+      );
+
+      expect(containerStyle[0]).toEqual({
+        ...commonStyles,
+        flexDirection: "column-reverse",
+        alignItems: "flex-end",
+      });
+      expect(containerStyle[1]).toEqual({
+        ...commonStyles,
+        flexDirection: "column-reverse",
+        alignItems: "flex-start",
+      });
+      expect(containerStyle[2]).toEqual({
+        ...commonStyles,
+        flexDirection: "column",
+        alignItems: "flex-end",
+      });
+      expect(containerStyle[3]).toEqual({
+        ...commonStyles,
+        flexDirection: "column",
+        alignItems: "flex-start",
+      });
     });
   });
 });
