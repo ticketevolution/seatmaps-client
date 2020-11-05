@@ -335,6 +335,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           </div>
         </Button>
         <Button
+          className="clear-selection"
           icon={
             Object {
               "icon": Array [
@@ -359,6 +360,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           text="Clear All"
         >
           <div
+            className="clear-selection"
             name="clear-selection"
             onClick={[MockFunction]}
             style={
@@ -608,6 +610,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
         }
       >
         <Button
+          className="clear-selection"
           icon={
             Object {
               "icon": Array [
@@ -632,6 +635,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
           text="Clear"
         >
           <div
+            className="clear-selection"
             name="clear-selection"
             onClick={[MockFunction]}
             style={

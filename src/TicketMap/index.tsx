@@ -91,13 +91,17 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     };
   }
 
+  isTouchDevice = () => {
+    return "ontouchstart" in document.documentElement;
+  };
+
   /**
    * Lifecycle
    */
 
   async componentDidMount() {
     this.setState({
-      isTouchDevice: "ontouchstart" in document.documentElement,
+      isTouchDevice: this.isTouchDevice(),
     });
 
     try {
@@ -207,12 +211,17 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     });
   }
 
+  getMapRootElement = () => {
+    return this.mapRoot.current;
+  };
+
   setupMap() {
-    if (!this.mapRoot.current) {
+    const mapRootElement = this.getMapRootElement();
+    if (!mapRootElement) {
       return;
     }
 
-    const mapSvg = this.mapRoot.current.querySelector("svg");
+    const mapSvg = mapRootElement.querySelector("svg");
     if (!mapSvg) {
       return;
     }
@@ -232,7 +241,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       .querySelectorAll<HTMLElement>("*[data-section-id]")
       .forEach((path) => {
         const sectionId = path.getAttribute("data-section-id");
-        if (sectionId === null) {
+        if (!sectionId) {
           return;
         }
         path.setAttribute("data-section-id", sectionId.toLowerCase());
@@ -307,12 +316,13 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
     );
 
   getAllPaths = (id?: string) => {
-    if (!this.mapRoot.current) {
+    const mapRootElement = this.getMapRootElement();
+    if (!mapRootElement) {
       return [];
     }
 
     return Array.from(
-      this.mapRoot.current.querySelectorAll(
+      mapRootElement.querySelectorAll(
         `[data-section-id${id ? `="${id}"` : ""}]`
       )
     ).reduce((memo, element) => {

@@ -135,5 +135,90 @@ describe("Actions", () => {
         expect(props.onClearSelection).toHaveBeenCalled();
       });
     });
+
+    describe("when component is unmounted", () => {
+      beforeEach(() => {
+        jest.spyOn(window, "clearInterval");
+      });
+
+      it("should clear the interval", () => {
+        wrapper.unmount();
+        expect(clearInterval).toHaveBeenCalled();
+      });
+    });
+
+    describe("updateIsMobile", () => {
+      it("should not call setState if the container is not defined", () => {
+        const getCurrentContainerMock = jest.fn();
+        getCurrentContainerMock.mockReturnValue(
+          (undefined as any) as HTMLDivElement
+        );
+        (wrapper.instance() as Actions).getCurrentContainer = getCurrentContainerMock;
+        jest.spyOn(wrapper.instance(), "setState");
+        wrapper.update();
+
+        (wrapper.instance() as Actions).updateIsMobile();
+
+        expect(getCurrentContainerMock).toHaveBeenCalledTimes(1);
+        expect(wrapper.instance().setState).not.toHaveBeenCalled();
+      });
+
+      it("should set isMobile true if container width is mobile", () => {
+        const getCurrentContainerMock = jest.fn();
+        getCurrentContainerMock.mockReturnValue(({
+          clientWidth: 699,
+        } as any) as HTMLDivElement);
+        (wrapper.instance() as Actions).getCurrentContainer = getCurrentContainerMock;
+        wrapper.instance().setState({ isMobile: false });
+        jest.spyOn(wrapper.instance(), "setState");
+        wrapper.update();
+
+        (wrapper.instance() as Actions).updateIsMobile();
+
+        expect(getCurrentContainerMock).toHaveBeenCalledTimes(1);
+        expect(wrapper.instance().setState).toHaveBeenCalledWith({
+          isMobile: true,
+        });
+      });
+
+      it("should set isMobile false if container width is not mobile", () => {
+        const getCurrentContainerMock = jest.fn();
+        getCurrentContainerMock.mockReturnValue(({
+          clientWidth: 700,
+        } as any) as HTMLDivElement);
+        (wrapper.instance() as Actions).getCurrentContainer = getCurrentContainerMock;
+        jest.spyOn(wrapper.instance(), "setState");
+        wrapper.update();
+
+        (wrapper.instance() as Actions).updateIsMobile();
+
+        expect(getCurrentContainerMock).toHaveBeenCalledTimes(1);
+        expect(wrapper.instance().setState).toHaveBeenCalledWith({
+          isMobile: false,
+        });
+      });
+    });
+  });
+});
+
+describe("default props", () => {
+  let wrapper: ReactWrapper<Props>;
+  let props: Props;
+  const mock = jest.spyOn(Actions.defaultProps, "onClearSelection");
+
+  beforeEach(() => {
+    props = {
+      ranges: [],
+      onZoomIn: jest.fn(),
+      onZoomOut: jest.fn(),
+      onResetZoom: jest.fn(),
+    };
+    wrapper = mount(<Actions {...props} />);
+  });
+
+  it("onClearSelection", () => {
+    wrapper.update();
+    wrapper.find(Button).first().simulate("click");
+    expect(mock).toHaveBeenCalledTimes(1);
   });
 });
