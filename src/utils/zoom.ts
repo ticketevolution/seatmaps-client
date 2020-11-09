@@ -335,6 +335,7 @@ export default function (svg: SVGSVGElement) {
     svg.removeEventListener("touchmove", handleTouchMove);
     svg.removeEventListener("touchend", handleTouchEnd);
     svg.removeEventListener("mousedown", handleMouseDown);
+    svg.removeEventListener("click", handleClick);
     svg.removeEventListener("mousemove", handleMouseMove);
     svg.removeEventListener("mouseup", stopDragging);
     svg.removeEventListener("mouseleave", stopDragging);
