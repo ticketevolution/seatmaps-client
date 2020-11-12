@@ -53,7 +53,6 @@ export default class Legend extends Component<Props, State> {
             style={{
               position: "absolute",
               backgroundColor: "white",
-              left: -2,
               right: -2,
               border: "2px solid lightgray",
               borderRadius: "0 0 5px 5px",
