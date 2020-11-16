@@ -326,9 +326,11 @@ describe("TicketMap", () => {
 
     it("toggles the section in the selectedSections set", () => {
       wrapper.simulate("touchstart", createTouchEvent(target));
+      wrapper.simulate("click");
       wrapper.simulate("touchend", createTouchEvent(target));
       expect(wrapper.state("selectedSections").has("foo bar")).toBeTruthy();
       wrapper.simulate("touchstart", createTouchEvent(target));
+      wrapper.simulate("click");
       wrapper.simulate("touchend", createTouchEvent(target));
       expect(wrapper.state("selectedSections").has("foo bar")).toBeFalsy();
     });
@@ -336,11 +338,13 @@ describe("TicketMap", () => {
     it("does not toggle the section in the selectedSections set if the section has no ticket groups", () => {
       wrapper.instance().updateTicketGroups([]);
       wrapper.simulate("touchstart", createTouchEvent(target));
+      wrapper.simulate("click");
       wrapper.simulate("touchend", createTouchEvent(target));
       expect(wrapper.state("selectedSections").has("foo bar")).toBeFalsy();
 
       wrapper.setState({ selectedSections: new Set(["foo bar"]) });
       wrapper.simulate("touchstart", createTouchEvent(target));
+      wrapper.simulate("click");
       wrapper.simulate("touchend", createTouchEvent(target));
       expect(wrapper.state("selectedSections").has("foo bar")).toBeTruthy();
     });
@@ -354,6 +358,7 @@ describe("TicketMap", () => {
 
     it("toggles the section if a touch event drags a small amount", () => {
       wrapper.simulate("touchstart", createTouchEvent(target));
+      wrapper.simulate("click");
       wrapper.simulate("touchend", createTouchEvent(target, 1, 1));
       expect(wrapper.state("selectedSections").has("foo bar")).toBeTruthy();
     });

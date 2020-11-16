@@ -461,11 +461,10 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   };
 
   onTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    if (!this.state.dragging) {
-      this.doSelect();
+    if (this.state.dragging) {
+      e.preventDefault();
     }
+
     this.setState({ dragging: false });
   };
 
