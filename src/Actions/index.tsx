@@ -88,7 +88,8 @@ export default class Actions extends React.Component<
       return;
     }
 
-    const isMobile = currentContainer.clientWidth < 700;
+    const isMobile =
+      window.innerWidth < 520 || currentContainer.clientWidth < 400;
 
     if (this.state.isMobile !== isMobile) {
       this.setState({ isMobile });

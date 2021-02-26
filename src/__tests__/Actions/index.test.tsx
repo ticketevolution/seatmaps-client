@@ -166,7 +166,7 @@ describe("Actions", () => {
       it("should set isMobile true if container width is mobile", () => {
         const getCurrentContainerMock = jest.fn();
         getCurrentContainerMock.mockReturnValue(({
-          clientWidth: 699,
+          clientWidth: 399,
         } as any) as HTMLDivElement);
         (wrapper.instance() as Actions).getCurrentContainer = getCurrentContainerMock;
         wrapper.instance().setState({ isMobile: false });
@@ -184,8 +184,53 @@ describe("Actions", () => {
       it("should set isMobile false if container width is not mobile", () => {
         const getCurrentContainerMock = jest.fn();
         getCurrentContainerMock.mockReturnValue(({
-          clientWidth: 700,
+          clientWidth: 400,
         } as any) as HTMLDivElement);
+        (wrapper.instance() as Actions).getCurrentContainer = getCurrentContainerMock;
+        jest.spyOn(wrapper.instance(), "setState");
+        wrapper.update();
+
+        (wrapper.instance() as Actions).updateIsMobile();
+
+        expect(getCurrentContainerMock).toHaveBeenCalledTimes(1);
+        expect(wrapper.instance().setState).toHaveBeenCalledWith({
+          isMobile: false,
+        });
+      });
+
+      it("should set isMobile true if window width is mobile", () => {
+        const getCurrentContainerMock = jest.fn();
+        getCurrentContainerMock.mockReturnValue(({
+          clientWidth: 400,
+        } as any) as HTMLDivElement);
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: 519,
+        });
+        (wrapper.instance() as Actions).getCurrentContainer = getCurrentContainerMock;
+        wrapper.instance().setState({ isMobile: false });
+        jest.spyOn(wrapper.instance(), "setState");
+        wrapper.update();
+
+        (wrapper.instance() as Actions).updateIsMobile();
+
+        expect(getCurrentContainerMock).toHaveBeenCalledTimes(1);
+        expect(wrapper.instance().setState).toHaveBeenCalledWith({
+          isMobile: true,
+        });
+      });
+
+      it("should set isMobile false if container width is not mobile", () => {
+        const getCurrentContainerMock = jest.fn();
+        getCurrentContainerMock.mockReturnValue(({
+          clientWidth: 400,
+        } as any) as HTMLDivElement);
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: 520,
+        });
         (wrapper.instance() as Actions).getCurrentContainer = getCurrentContainerMock;
         jest.spyOn(wrapper.instance(), "setState");
         wrapper.update();
