@@ -680,11 +680,17 @@ describe("TicketMap", () => {
   describe("getSectionFromTarget", () => {
     let target: HTMLElement;
 
-    it("should return undefined if section has empty id", async () => {
+    it("returns undefined if section has empty id", async () => {
       target = document.createElement("path");
       target.setAttribute("data-section-id", "");
 
       expect(wrapper.instance().getSectionFromTarget(target)).toBeUndefined();
+    });
+
+    it("returns undefined if passed target is undefined", async () => {
+      expect(
+        wrapper.instance().getSectionFromTarget(null as any)
+      ).toBeUndefined();
     });
   });
 
