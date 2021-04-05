@@ -405,6 +405,9 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   getSectionFromTarget(target: HTMLElement) {
+    if (!target) {
+      return;
+    }
     const element = target.closest("[data-section-id]");
     if (!element) {
       return;
