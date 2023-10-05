@@ -1,0 +1,19 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "dev": {
+      "cache": false
+    },
+    "@ticketevolution/seatmaps-client#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["esm/**", "cjs/**", "umd/**"]
+    },
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "lint": {},
+    "check-ts": {
+      "cache": false
+    }
+  }
+}

@@ -9,21 +9,20 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:jest/recommended",
     "standard",
-    "standard-react"
+    "standard-react",
+    "prettier"
   ],
-  "plugins": [
-    "@typescript-eslint",
-    "react"
-  ],
+  "plugins": ["@typescript-eslint", "react", "prettier"],
   "settings": {
     "react": {
-      "version": "16.8"
+      "version": "18"
     }
   },
   "globals": {
     "fetchMock": "readonly"
   },
   "rules": {
+    "prettier/prettier": "error",
     "no-unused-expressions": [
       "error",
       {
@@ -32,11 +31,6 @@
       }
     ],
     "no-plusplus": "off",
-    "indent": "off",
-    "@typescript-eslint/indent": [
-      "error",
-      2
-    ],
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/member-delimiter-style": "off",
     "@typescript-eslint/explicit-member-accessibility": "off",
