@@ -1,4 +1,4 @@
-import React, { Component, CSSProperties } from "react";
+import React, { Component } from "react";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Button from "../Button";
 import Swatch from "./swatch";
@@ -18,7 +18,6 @@ export interface Range {
 
 export interface Props {
   ranges: Range[];
-  style?: CSSProperties;
   isMobile?: boolean;
 }
 
@@ -28,7 +27,6 @@ interface State {
 
 export default class Legend extends Component<Props, State> {
   static defaultProps = {
-    style: {},
     isMobile: false,
   };
 

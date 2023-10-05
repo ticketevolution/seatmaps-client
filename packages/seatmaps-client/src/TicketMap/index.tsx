@@ -69,7 +69,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     this.state = {
       sectionMapping: {},
       selectedSections: new Set(
-        this.props.selectedSections.filter((section) => !!section)
+        this.props.selectedSections.filter((section) => !!section),
       ),
       tooltipActive: false,
       tooltipSectionName: "",
@@ -110,7 +110,12 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
       await this.fetchManifest();
     } catch (error) {
       console.error(error);
-      if (error && typeof error === 'object' && 'name' in error && error.name === "MapNotFoundError") {
+      if (
+        error &&
+        typeof error === "object" &&
+        "name" in error &&
+        error.name === "MapNotFoundError"
+      ) {
         this.setState({ mapNotFound: true });
       }
     }
@@ -130,7 +135,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
       this.state.currentHoveredSection === undefined;
     const selectedSectionsDidChange = !isEqual(
       this.state.selectedSections,
-      prevState.selectedSections
+      prevState.selectedSections,
     );
 
     if (
@@ -152,7 +157,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     ) {
       console.warn(
         "Unknown section names found in ticket groups: %o",
-        $missingSectionIds(this.state)
+        $missingSectionIds(this.state),
       );
     }
 
@@ -188,11 +193,11 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
 
   async fetchManifest() {
     const manifestResponse = await fetch(
-      `${this.configFilePath}/manifest.json`
+      `${this.configFilePath}/manifest.json`,
     );
     if (!manifestResponse.ok) {
       throw Error(
-        "There was an error fetching the venue map data, please try again"
+        "There was an error fetching the venue map data, please try again",
       );
     }
 
@@ -206,7 +211,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
             sectionName,
           },
         }),
-        {}
+        {},
       ),
     });
   }
@@ -307,12 +312,12 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
 
   fillPathsForSection = (
     propertiesForElement: PropertiesForElement,
-    section?: string
+    section?: string,
   ): void =>
     this.getAllPaths(section).forEach((element) =>
-      Object.entries(
-        propertiesForElement(element)
-      ).forEach(([property, value]) => element.setAttribute(property, value))
+      Object.entries(propertiesForElement(element)).forEach(
+        ([property, value]) => element.setAttribute(property, value),
+      ),
     );
 
   getAllPaths = (id?: string) => {
@@ -323,8 +328,8 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
 
     return Array.from(
       mapRootElement.querySelectorAll(
-        `[data-section-id${id ? `="${id}"` : ""}]`
-      )
+        `[data-section-id${id ? `="${id}"` : ""}]`,
+      ),
     ).reduce((memo, element) => {
       const children = element.querySelectorAll("path");
       return memo.concat(children.length ? Array.from(children) : [element]);
@@ -381,7 +386,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     $venueSections(this.state).forEach((section) => {
       this.fillSection(
         section.toLowerCase(),
-        this.state.selectedSections.has(section)
+        this.state.selectedSections.has(section),
       );
     });
   }
@@ -392,14 +397,14 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
       this.fillPathsForSection(
         () => ({
           fill: this.getDefaultColor(
-            $ticketGroupsBySection(this.state)[section]
+            $ticketGroupsBySection(this.state)[section],
           ),
           opacity: shouldHighlight ? "1" : "0.6",
           "stroke-width": "1",
           stroke: shouldHighlight ? "#4a4a4a" : "#FFFFFF",
           cursor: "pointer",
         }),
-        section
+        section,
       );
     }
   }
@@ -459,7 +464,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
 
   onClick = () => this.doSelect();
 
-  onTouchMove = (e: React.TouchEvent<HTMLElement>) => {
+  onTouchMove = () => {
     this.setState({ dragging: true });
   };
 
@@ -521,7 +526,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     }
     this.toggleSectionSelect(
       section,
-      !this.state.selectedSections.has(section)
+      !this.state.selectedSections.has(section),
     );
   }
 
@@ -608,13 +613,13 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
                 ? this.getDefaultColor(
                     $ticketGroupsBySection(this.state)[
                       this.state.currentHoveredSection
-                    ]
+                    ],
                   )
                 : ""
             }
             ticketGroups={$availableTicketGroups(this.state).filter(
               (ticketGroup) =>
-                ticketGroup.section === this.state.currentHoveredSection
+                ticketGroup.section === this.state.currentHoveredSection,
             )}
           />
         )}

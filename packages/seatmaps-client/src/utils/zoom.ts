@@ -26,7 +26,7 @@ function getScrollLineHeight() {
 
   iframe.contentDocument.open();
   iframe.contentDocument.write(
-    "<!DOCTYPE html><html><head></head><body><span>a</span></body></html>"
+    "<!DOCTYPE html><html><head></head><body><span>a</span></body></html>",
   );
   iframe.contentDocument.close();
 
@@ -63,14 +63,14 @@ export default function (svg: SVGSVGElement) {
     const matrix = getScreenCTM(svg);
     if (!matrix) {
       throw new Error(
-        "cannot convert dom point to svg point due to missing conversion matrix"
+        "cannot convert dom point to svg point due to missing conversion matrix",
       );
     }
 
     referencePoint.x = x;
     referencePoint.y = y;
 
-    let p = referencePoint.matrixTransform(matrix.inverse());
+    const p = referencePoint.matrixTransform(matrix.inverse());
     return [p.x, p.y];
   }
 
@@ -115,7 +115,7 @@ export default function (svg: SVGSVGElement) {
 
     translate(
       0 - (viewbox.width - initialViewboxWidth) / 2,
-      0 - (viewbox.height - initialViewboxHeight) / 2
+      0 - (viewbox.height - initialViewboxHeight) / 2,
     );
   }
 
@@ -184,11 +184,11 @@ export default function (svg: SVGSVGElement) {
     // initial and current touch vector midpoints
     const [touchMidX, touchMidY] = svgPoint(
       (touchAX + touchBX) / 2,
-      (touchAY + touchBY) / 2
+      (touchAY + touchBY) / 2,
     );
     const [iTouchMidX, iTouchMidY] = svgPoint(
       (iTouchAX + iTouchBX) / 2,
-      (iTouchAY + iTouchBY) / 2
+      (iTouchAY + iTouchBY) / 2,
     );
 
     // rate of change of the touch vector
@@ -288,26 +288,32 @@ export default function (svg: SVGSVGElement) {
 
       translate(
         0 - (viewbox.width - initialViewboxWidth) / 2,
-        0 - (viewbox.height - initialViewboxHeight) / 2
+        0 - (viewbox.height - initialViewboxHeight) / 2,
       );
     } else {
       // Handle non-controlled scrolls as pan inputs.
       translate(
         deltaX * SCROLL_PAN_COEFFICIENT,
-        deltaY * SCROLL_PAN_COEFFICIENT
+        deltaY * SCROLL_PAN_COEFFICIENT,
       );
     }
   }
 
-  function handleGestureChange(event: any) {
+  type GestureEvent = Event & {
+    readonly rotation: number;
+    readonly scale: number;
+  };
+
+  function handleGestureChange(event: Event) {
     if (touching) {
       return;
     }
 
     updateInitialViewbox();
 
-    viewbox.width = (originalViewboxWidth * 1) / event.scale;
-    viewbox.height = (originalViewboxHeight * 1) / event.scale;
+    viewbox.width = (originalViewboxWidth * 1) / (event as GestureEvent).scale;
+    viewbox.height =
+      (originalViewboxHeight * 1) / (event as GestureEvent).scale;
 
     viewbox.x -= (viewbox.width - initialViewboxWidth) / 2;
     viewbox.y -= (viewbox.height - initialViewboxHeight) / 2;

@@ -1,66 +1,76 @@
-import 'unfetch/polyfill'
-import React from 'react'
-import { render } from 'react-dom'
-import union from 'lodash-es/union'
-import pick from 'lodash-es/pick'
-import { TicketMap, Props, RequiredProps, DefaultProps, PublicApi } from './TicketMap'
+import "unfetch/polyfill";
+import React from "react";
+import { render } from "react-dom";
+import union from "lodash-es/union";
+import pick from "lodash-es/pick";
+import {
+  TicketMap,
+  Props,
+  RequiredProps,
+  DefaultProps,
+  PublicApi,
+} from "./TicketMap";
 
 const requiredConfigKeys: (keyof RequiredProps)[] = [
-  'venueId',
-  'configurationId'
-]
+  "venueId",
+  "configurationId",
+];
 
 const optionalConfigKeys: (keyof DefaultProps)[] = [
-  'mapFontFamily',
-  'selectedSections',
-  'onSelection',
-  'ticketGroups',
-  'sectionPercentiles',
-  'mapsDomain',
-  'showControls',
-  'showLegend',
-  'mouseControlEnabled'
-]
+  "mapFontFamily",
+  "selectedSections",
+  "onSelection",
+  "ticketGroups",
+  "sectionPercentiles",
+  "mapsDomain",
+  "showControls",
+  "showLegend",
+  "mouseControlEnabled",
+];
 
-export function extractConfigurationFromOptions (options: Props): Props {
-  const keys = union(requiredConfigKeys, optionalConfigKeys)
-  return pick(options, keys)
+export function extractConfigurationFromOptions(options: Props): Props {
+  const keys = union(requiredConfigKeys, optionalConfigKeys);
+  return pick(options, keys);
 }
 
-export function validateOptions (options: Props) {
-  for (let key of requiredConfigKeys) {
-    if (!options.hasOwnProperty(key)) {
-      throw new Error(`Seatmap configuration requires a '${key}' value.`)
+export function validateOptions(options: Props) {
+  for (const key of requiredConfigKeys) {
+    if (!(key in options)) {
+      throw new Error(`Seatmap configuration requires a '${key}' value.`);
     }
   }
 }
 
 export default class SeatmapFactory {
-  configuration: Props
+  configuration: Props;
 
-  constructor (options: Props) {
-    validateOptions(options)
-    this.configuration = extractConfigurationFromOptions(options)
+  constructor(options: Props) {
+    validateOptions(options);
+    this.configuration = extractConfigurationFromOptions(options);
   }
 
-  build (rootElementId: string): PublicApi | undefined {
+  build(rootElementId: string): PublicApi | undefined {
     if (!rootElementId) {
-      throw new Error('Seatmaps must be initialized with a DOM element.')
+      throw new Error("Seatmaps must be initialized with a DOM element.");
     }
 
-    const rootElement = document.getElementById(rootElementId)
+    const rootElement = document.getElementById(rootElementId);
     if (!rootElement) {
-      throw new Error('Seatmaps must be initialized with a DOM element.')
+      throw new Error("Seatmaps must be initialized with a DOM element.");
     }
 
     let map: TicketMap | undefined;
 
-    render((
+    render(
       <TicketMap
         {...this.configuration}
-        ref={(ref: TicketMap) => { map = ref }} />
-    ), rootElement)
+        ref={(ref: TicketMap) => {
+          map = ref;
+        }}
+      />,
+      rootElement,
+    );
 
-    return map?.publicApi
+    return map?.publicApi;
   }
 }

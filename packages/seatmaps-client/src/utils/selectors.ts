@@ -22,7 +22,7 @@ export const $missingSectionIds = createDeepEqualSelector(
   (sectionMapping, ticketGroups) =>
     ticketGroups
       .map((ticketGroup) => ticketGroup.tevo_section_name.toLowerCase())
-      .filter((sectionId) => sectionMapping[sectionId] === undefined)
+      .filter((sectionId) => sectionMapping[sectionId] === undefined),
 );
 
 export const $availableTicketGroups = createDeepEqualSelector(
@@ -30,25 +30,24 @@ export const $availableTicketGroups = createDeepEqualSelector(
   $sectionMapping,
   (ticketGroups, sectionMapping) =>
     ticketGroups
-      .map(
-        (ticketGroup): NormalizedTicketGroup => {
-          const section = ticketGroup.tevo_section_name.toLowerCase();
-          const isSectionInTheManifest = sectionMapping[section];
+      .map((ticketGroup): NormalizedTicketGroup => {
+        const section = ticketGroup.tevo_section_name.toLowerCase();
+        const isSectionInTheManifest = sectionMapping[section];
 
-          return (
-            isSectionInTheManifest && {
-              section,
-              price: ticketGroup.retail_price,
-            }
-          );
-        }
-      )
-      .filter((ticketGroup) => ticketGroup)
+        return (
+          isSectionInTheManifest && {
+            section,
+            price: ticketGroup.retail_price,
+          }
+        );
+      })
+      .filter((ticketGroup) => ticketGroup),
 );
 
 const $priceSortedTicketGroups = createDeepEqualSelector(
   $ticketGroups,
-  (ticketGroups) => ticketGroups.sort((a, b) => a.retail_price - b.retail_price)
+  (ticketGroups) =>
+    ticketGroups.sort((a, b) => a.retail_price - b.retail_price),
 );
 
 export const $costRanges = createDeepEqualSelector(
@@ -63,7 +62,7 @@ export const $costRanges = createDeepEqualSelector(
           min: 0,
           max: 0,
           ticketGroups: [],
-        })
+        }),
       )
       .sort((a, b) => a.percentile - b.percentile);
 
@@ -88,7 +87,7 @@ export const $costRanges = createDeepEqualSelector(
     });
 
     return costRanges;
-  }
+  },
 );
 
 export const $ticketGroupsBySection = createDeepEqualSelector(
@@ -102,11 +101,11 @@ export const $ticketGroupsBySection = createDeepEqualSelector(
           ticketGroup,
         ],
       }),
-      {}
-    )
+      {},
+    ),
 );
 
 export const $venueSections = createDeepEqualSelector(
   $ticketGroupsBySection,
-  Object.keys
+  Object.keys,
 );

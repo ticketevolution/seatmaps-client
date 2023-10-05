@@ -66,5 +66,6 @@ export interface State {
   };
   dragging: boolean;
   isTouchDevice: boolean;
-  previousTouches?: any;
+  // NOTE: unused internaly, should be removed in next version
+  previousTouches?: unknown;
 }
