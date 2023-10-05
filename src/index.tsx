@@ -1,7 +1,9 @@
+import 'unfetch/polyfill'
 import React from 'react'
 import { render } from 'react-dom'
-import { union, pick } from 'lodash-es'
-import TicketMap, { Props, RequiredProps, DefaultProps } from './TicketMap'
+import union from 'lodash-es/union'
+import pick from 'lodash-es/pick'
+import { TicketMap, Props, RequiredProps, DefaultProps, PublicApi } from './TicketMap'
 
 const requiredConfigKeys: (keyof RequiredProps)[] = [
   'venueId',
@@ -41,7 +43,7 @@ export default class SeatmapFactory {
     this.configuration = extractConfigurationFromOptions(options)
   }
 
-  build (rootElementId: string) {
+  build (rootElementId: string): PublicApi | undefined {
     if (!rootElementId) {
       throw new Error('Seatmaps must be initialized with a DOM element.')
     }
@@ -51,7 +53,7 @@ export default class SeatmapFactory {
       throw new Error('Seatmaps must be initialized with a DOM element.')
     }
 
-    let map!: TicketMap
+    let map: TicketMap | undefined;
 
     render((
       <TicketMap
@@ -59,6 +61,6 @@ export default class SeatmapFactory {
         ref={(ref: TicketMap) => { map = ref }} />
     ), rootElement)
 
-    return map.publicApi
+    return map?.publicApi
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { isEqual } from "lodash-es";
+import isEqual from "lodash-es/isEqual";
 
 import Actions from "../Actions";
 import Tooltip from "../Tooltip";
@@ -19,7 +19,7 @@ import {
 
 export * from "../types/TicketMap";
 
-interface PublicApi {
+export interface PublicApi {
   updateTicketGroups: (ticketGroups: TicketGroup[]) => void;
   highlightSection: (section: string) => void;
   unhighlightSection: (section?: string) => void;
@@ -40,7 +40,7 @@ class MapNotFoundError extends Error {
   }
 }
 
-export default class TicketMap extends Component<Props & DefaultProps, State> {
+export class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi;
   mapRoot = React.createRef<HTMLDivElement>();
   container = React.createRef<HTMLDivElement>();
@@ -110,7 +110,7 @@ export default class TicketMap extends Component<Props & DefaultProps, State> {
       await this.fetchManifest();
     } catch (error) {
       console.error(error);
-      if (error.name === "MapNotFoundError") {
+      if (error && typeof error === 'object' && 'name' in error && error.name === "MapNotFoundError") {
         this.setState({ mapNotFound: true });
       }
     }

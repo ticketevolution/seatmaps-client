@@ -38,7 +38,7 @@ getReferencePointMock.mockReturnValue(mockPoint);
 getScreenCTMMock.mockReturnValue(mockPoint);
 getViewBoxMock.mockReturnValue(mockPoint);
 
-import TicketMap from "../../TicketMap/index";
+import {TicketMap} from "../../TicketMap/index";
 import { State, Props, Manifest } from "../../types/TicketMap";
 import Tooltip from "../../Tooltip";
 import Actions from "../../Actions";
