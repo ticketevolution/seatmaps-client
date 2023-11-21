@@ -15,6 +15,13 @@ jobs:
     if: github.repository == 'ticketevolution/seatmaps-client' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
+      - name: Generate a token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.TEVO_GITHUB_TOKEN_GENERATOR_APP_ID }}
+          private-key: ${{ secrets.TEVO_GITHUB_TOKEN_GENERATOR_PRIVATE_KEY }}
+
       - uses: actions/checkout@v3
 
       - uses: ./.github/actions/ci-setup
@@ -25,5 +32,5 @@ jobs:
         with:
           publish: pnpm run release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
