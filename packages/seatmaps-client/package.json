@@ -1,6 +1,6 @@
 {
   "name": "@ticketevolution/seatmaps-client",
-  "version": "2.0.0-rc.1",
+  "version": "1.3.4",
   "description": "A client side JavaScript library that enables users to view interactive seating charts for tickets available via the Ticket Evolution API.",
   "keywords": [
     "Ticket Evolution",

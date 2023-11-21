@@ -1,0 +1,19 @@
+name: "CI checks"
+runs:
+  using: "composite"
+  steps:
+    - name: Build
+      run: pnpm run build
+      shell: bash
+
+    - name: Typecheck
+      run: pnpm run typecheck
+      shell: bash
+
+    - name: Lint
+      run: pnpm run lint
+      shell: bash
+
+    - name: Test
+      run: pnpm run test --silent
+      shell: bash
