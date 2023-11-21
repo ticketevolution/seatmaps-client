@@ -1,0 +1,14 @@
+{
+  "name": "examples-umd-minimal",
+  "private": true,
+  "scripts": {
+    "run-example": "vite --force"
+  },
+  "dependencies": {
+    "@-/mock-data": "workspace:*",
+    "@ticketevolution/seatmaps-client": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "4.4.11"
+  }
+}

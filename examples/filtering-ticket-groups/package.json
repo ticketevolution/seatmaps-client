@@ -1,0 +1,14 @@
+{
+  "name": "examples-filtering-ticket-group",
+  "private": true,
+  "scripts": {
+    "run-example": "vite --force"
+  },
+  "dependencies": {
+    "@ticketevolution/seatmaps-client": "workspace:*"
+  },
+  "devDependencies": {
+    "@-/mock-data": "workspace:*",
+    "vite": "4.4.11"
+  }
+}

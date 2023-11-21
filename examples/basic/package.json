@@ -1,0 +1,16 @@
+{
+  "name": "examples-basic",
+  "private": true,
+  "scripts": {
+    "run-example": "vite --force"
+  },
+  "dependencies": {
+    "@ticketevolution/seatmaps-client": "workspace:*",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@-/mock-data": "workspace:*",
+    "vite": "4.4.11"
+  }
+}
