@@ -2,12 +2,16 @@
   "name": "monorepo-root",
   "private": true,
   "scripts": {
-    "bump": "changeset version && pnpm update-manifests",
+    "bump": "changeset version",
+    "changeset": "changeset",
     "dev": "turbo run dev",
+    "run-examples": "turbo run run-example",
     "build": "turbo run build",
+    "build:watch": "turbo run build:watch",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
     "lint": "turbo run lint",
     "check-ts": "turbo run check-ts",
-    "changeset": "changeset",
     "release": "turbo run build && changeset publish",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
@@ -21,5 +25,10 @@
     "husky": "8.0.3",
     "turbo": "^1.10.14",
     "typescript": "5.2.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.19.4"
+    }
   }
 }

@@ -6,10 +6,10 @@
     "browser": true
   },
   "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:jest/recommended",
     "standard",
     "standard-react",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
     "prettier"
   ],
   "plugins": ["@typescript-eslint", "react", "prettier"],
@@ -21,6 +21,7 @@
   "globals": {
     "fetchMock": "readonly"
   },
+  "ignorePatterns": ["cjs", "esm", "umd"],
   "rules": {
     "prettier/prettier": "error",
     "no-unused-expressions": [
