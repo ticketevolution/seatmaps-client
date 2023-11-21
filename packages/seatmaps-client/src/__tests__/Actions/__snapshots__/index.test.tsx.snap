@@ -6,13 +6,14 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
   onResetZoom={[MockFunction]}
   onZoomIn={[MockFunction]}
   onZoomOut={[MockFunction]}
-  ranges={Array []}
+  ranges={[]}
   showControls={true}
   showLegend={true}
 >
   <div
+    data-testid="seatmaps-actions-menu"
     style={
-      Object {
+      {
         "alignItems": "flex-start",
         "bottom": 10,
         "display": "flex",
@@ -29,10 +30,10 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
       }
     }
   >
-    <default_1>
+    <_default>
       <div
         style={
-          Object {
+          {
             "backgroundColor": "white",
             "border": "2px solid lightgray",
             "borderRadius": 5,
@@ -44,14 +45,19 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
         <Button
           data-custom-at="right"
           data-rh="Default"
+          data-testid="zoom-in"
           icon={
-            Object {
-              "icon": Array [
+            {
+              "icon": [
                 448,
                 512,
-                Array [],
-                "f067",
-                "M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z",
+                [
+                  10133,
+                  61543,
+                  "add",
+                ],
+                "2b",
+                "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
               ],
               "iconName": "plus",
               "prefix": "fas",
@@ -61,7 +67,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           name="zoom-in"
           onClick={[MockFunction]}
           style={
-            Object {
+            {
               "borderRight": "2px solid lightgray",
             }
           }
@@ -69,10 +75,11 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           <div
             data-custom-at="right"
             data-rh="Default"
+            data-testid="zoom-in"
             name="zoom-in"
             onClick={[MockFunction]}
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "backgroundColor": "transparent",
                 "border": "none",
@@ -87,18 +94,26 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
             }
           >
             <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
               border={false}
+              bounce={false}
               className=""
+              fade={false}
               fixedWidth={false}
-              flip={null}
+              flip={false}
               icon={
-                Object {
-                  "icon": Array [
+                {
+                  "icon": [
                     448,
                     512,
-                    Array [],
-                    "f067",
-                    "M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z",
+                    [
+                      10133,
+                      61543,
+                      "add",
+                    ],
+                    "2b",
+                    "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
                   ],
                   "iconName": "plus",
                   "prefix": "fas",
@@ -107,46 +122,57 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
               inverse={false}
               listItem={false}
               mask={null}
+              maskId={null}
               pull={null}
               pulse={false}
               rotation={null}
+              shake={false}
               size={null}
               spin={false}
-              style={Object {}}
+              spinPulse={false}
+              spinReverse={false}
+              style={{}}
               swapOpacity={false}
               symbol={false}
               title=""
+              titleId={null}
               transform={null}
             >
               <svg
                 aria-hidden="true"
-                className="svg-inline--fa fa-plus fa-w-14 "
+                className="svg-inline--fa fa-plus "
                 data-icon="plus"
                 data-prefix="fas"
                 focusable="false"
                 role="img"
-                style={Object {}}
+                style={{}}
                 viewBox="0 0 448 512"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
                   fill="currentColor"
-                  style={Object {}}
+                  style={{}}
                 />
               </svg>
             </FontAwesomeIcon>
           </div>
         </Button>
         <Button
+          data-testid="zoom-out"
           icon={
-            Object {
-              "icon": Array [
+            {
+              "icon": [
                 448,
                 512,
-                Array [],
+                [
+                  8211,
+                  8722,
+                  10134,
+                  "subtract",
+                ],
                 "f068",
-                "M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z",
+                "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
               ],
               "iconName": "minus",
               "prefix": "fas",
@@ -156,16 +182,17 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           name="zoom-out"
           onClick={[MockFunction]}
           style={
-            Object {
+            {
               "borderRight": "2px solid lightgray",
             }
           }
         >
           <div
+            data-testid="zoom-out"
             name="zoom-out"
             onClick={[MockFunction]}
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "backgroundColor": "transparent",
                 "border": "none",
@@ -180,18 +207,27 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
             }
           >
             <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
               border={false}
+              bounce={false}
               className=""
+              fade={false}
               fixedWidth={false}
-              flip={null}
+              flip={false}
               icon={
-                Object {
-                  "icon": Array [
+                {
+                  "icon": [
                     448,
                     512,
-                    Array [],
+                    [
+                      8211,
+                      8722,
+                      10134,
+                      "subtract",
+                    ],
                     "f068",
-                    "M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z",
+                    "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
                   ],
                   "iconName": "minus",
                   "prefix": "fas",
@@ -200,48 +236,58 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
               inverse={false}
               listItem={false}
               mask={null}
+              maskId={null}
               pull={null}
               pulse={false}
               rotation={null}
+              shake={false}
               size={null}
               spin={false}
-              style={Object {}}
+              spinPulse={false}
+              spinReverse={false}
+              style={{}}
               swapOpacity={false}
               symbol={false}
               title=""
+              titleId={null}
               transform={null}
             >
               <svg
                 aria-hidden="true"
-                className="svg-inline--fa fa-minus fa-w-14 "
+                className="svg-inline--fa fa-minus "
                 data-icon="minus"
                 data-prefix="fas"
                 focusable="false"
                 role="img"
-                style={Object {}}
+                style={{}}
                 viewBox="0 0 448 512"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+                  d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"
                   fill="currentColor"
-                  style={Object {}}
+                  style={{}}
                 />
               </svg>
             </FontAwesomeIcon>
           </div>
         </Button>
         <Button
+          data-testid="reset-zoom"
           icon={
-            Object {
-              "icon": Array [
+            {
+              "icon": [
                 512,
                 512,
-                Array [],
+                [
+                  "rotate-back",
+                  "rotate-backward",
+                  "undo-alt",
+                ],
                 "f2ea",
-                "M255.545 8c-66.269.119-126.438 26.233-170.86 68.685L48.971 40.971C33.851 25.851 8 36.559 8 57.941V192c0 13.255 10.745 24 24 24h134.059c21.382 0 32.09-25.851 16.971-40.971l-41.75-41.75c30.864-28.899 70.801-44.907 113.23-45.273 92.398-.798 170.283 73.977 169.484 169.442C423.236 348.009 349.816 424 256 424c-41.127 0-79.997-14.678-110.63-41.556-4.743-4.161-11.906-3.908-16.368.553L89.34 422.659c-4.872 4.872-4.631 12.815.482 17.433C133.798 479.813 192.074 504 256 504c136.966 0 247.999-111.033 248-247.998C504.001 119.193 392.354 7.755 255.545 8z",
+                "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
               ],
-              "iconName": "undo-alt",
+              "iconName": "rotate-left",
               "prefix": "fas",
             }
           }
@@ -249,17 +295,18 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           name="reset-zoom"
           onClick={[MockFunction]}
           style={
-            Object {
+            {
               "borderRight": "2px solid lightgray",
             }
           }
           text="Reset Zoom"
         >
           <div
+            data-testid="reset-zoom"
             name="reset-zoom"
             onClick={[MockFunction]}
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "backgroundColor": "transparent",
                 "border": "none",
@@ -274,50 +321,63 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
             }
           >
             <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
               border={false}
+              bounce={false}
               className=""
+              fade={false}
               fixedWidth={false}
-              flip={null}
+              flip={false}
               icon={
-                Object {
-                  "icon": Array [
+                {
+                  "icon": [
                     512,
                     512,
-                    Array [],
+                    [
+                      "rotate-back",
+                      "rotate-backward",
+                      "undo-alt",
+                    ],
                     "f2ea",
-                    "M255.545 8c-66.269.119-126.438 26.233-170.86 68.685L48.971 40.971C33.851 25.851 8 36.559 8 57.941V192c0 13.255 10.745 24 24 24h134.059c21.382 0 32.09-25.851 16.971-40.971l-41.75-41.75c30.864-28.899 70.801-44.907 113.23-45.273 92.398-.798 170.283 73.977 169.484 169.442C423.236 348.009 349.816 424 256 424c-41.127 0-79.997-14.678-110.63-41.556-4.743-4.161-11.906-3.908-16.368.553L89.34 422.659c-4.872 4.872-4.631 12.815.482 17.433C133.798 479.813 192.074 504 256 504c136.966 0 247.999-111.033 248-247.998C504.001 119.193 392.354 7.755 255.545 8z",
+                    "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
                   ],
-                  "iconName": "undo-alt",
+                  "iconName": "rotate-left",
                   "prefix": "fas",
                 }
               }
               inverse={false}
               listItem={false}
               mask={null}
+              maskId={null}
               pull={null}
               pulse={false}
               rotation={null}
+              shake={false}
               size={null}
               spin={false}
+              spinPulse={false}
+              spinReverse={false}
               style={
-                Object {
+                {
                   "marginRight": 8,
                 }
               }
               swapOpacity={false}
               symbol={false}
               title=""
+              titleId={null}
               transform={null}
             >
               <svg
                 aria-hidden="true"
-                className="svg-inline--fa fa-undo-alt fa-w-16 "
-                data-icon="undo-alt"
+                className="svg-inline--fa fa-rotate-left "
+                data-icon="rotate-left"
                 data-prefix="fas"
                 focusable="false"
                 role="img"
                 style={
-                  Object {
+                  {
                     "marginRight": 8,
                   }
                 }
@@ -325,9 +385,9 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M255.545 8c-66.269.119-126.438 26.233-170.86 68.685L48.971 40.971C33.851 25.851 8 36.559 8 57.941V192c0 13.255 10.745 24 24 24h134.059c21.382 0 32.09-25.851 16.971-40.971l-41.75-41.75c30.864-28.899 70.801-44.907 113.23-45.273 92.398-.798 170.283 73.977 169.484 169.442C423.236 348.009 349.816 424 256 424c-41.127 0-79.997-14.678-110.63-41.556-4.743-4.161-11.906-3.908-16.368.553L89.34 422.659c-4.872 4.872-4.631 12.815.482 17.433C133.798 479.813 192.074 504 256 504c136.966 0 247.999-111.033 248-247.998C504.001 119.193 392.354 7.755 255.545 8z"
+                  d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"
                   fill="currentColor"
-                  style={Object {}}
+                  style={{}}
                 />
               </svg>
             </FontAwesomeIcon>
@@ -337,15 +397,19 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
         <Button
           className="clear-selection"
           icon={
-            Object {
-              "icon": Array [
+            {
+              "icon": [
                 512,
                 512,
-                Array [],
+                [
+                  61532,
+                  "times-circle",
+                  "xmark-circle",
+                ],
                 "f057",
-                "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z",
+                "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
               ],
-              "iconName": "times-circle",
+              "iconName": "circle-xmark",
               "prefix": "fas",
             }
           }
@@ -353,7 +417,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           name="clear-selection"
           onClick={[MockFunction]}
           style={
-            Object {
+            {
               "borderRight": undefined,
             }
           }
@@ -364,7 +428,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
             name="clear-selection"
             onClick={[MockFunction]}
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "backgroundColor": "transparent",
                 "border": "none",
@@ -379,50 +443,63 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
             }
           >
             <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
               border={false}
+              bounce={false}
               className=""
+              fade={false}
               fixedWidth={false}
-              flip={null}
+              flip={false}
               icon={
-                Object {
-                  "icon": Array [
+                {
+                  "icon": [
                     512,
                     512,
-                    Array [],
+                    [
+                      61532,
+                      "times-circle",
+                      "xmark-circle",
+                    ],
                     "f057",
-                    "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z",
+                    "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
                   ],
-                  "iconName": "times-circle",
+                  "iconName": "circle-xmark",
                   "prefix": "fas",
                 }
               }
               inverse={false}
               listItem={false}
               mask={null}
+              maskId={null}
               pull={null}
               pulse={false}
               rotation={null}
+              shake={false}
               size={null}
               spin={false}
+              spinPulse={false}
+              spinReverse={false}
               style={
-                Object {
+                {
                   "marginRight": 8,
                 }
               }
               swapOpacity={false}
               symbol={false}
               title=""
+              titleId={null}
               transform={null}
             >
               <svg
                 aria-hidden="true"
-                className="svg-inline--fa fa-times-circle fa-w-16 "
-                data-icon="times-circle"
+                className="svg-inline--fa fa-circle-xmark "
+                data-icon="circle-xmark"
                 data-prefix="fas"
                 focusable="false"
                 role="img"
                 style={
-                  Object {
+                  {
                     "marginRight": 8,
                   }
                 }
@@ -430,9 +507,9 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
                   fill="currentColor"
-                  style={Object {}}
+                  style={{}}
                 />
               </svg>
             </FontAwesomeIcon>
@@ -440,11 +517,11 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           </div>
         </Button>
       </div>
-    </default_1>
-    <default_1>
+    </_default>
+    <_default>
       <div
         style={
-          Object {
+          {
             "backgroundColor": "white",
             "border": "2px solid lightgray",
             "borderRadius": 5,
@@ -455,25 +532,24 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
       >
         <Legend
           isMobile={false}
-          ranges={Array []}
-          style={Object {}}
+          ranges={[]}
         >
           <div
             style={
-              Object {
+              {
                 "position": "relative",
               }
             }
           >
             <Button
               icon={
-                Object {
-                  "icon": Array [
-                    448,
+                {
+                  "icon": [
                     512,
-                    Array [],
+                    512,
+                    [],
                     "f078",
-                    "M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z",
+                    "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
                   ],
                   "iconName": "chevron-down",
                   "prefix": "fas",
@@ -486,7 +562,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
               <div
                 onClick={[Function]}
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "backgroundColor": "transparent",
                     "border": "none",
@@ -500,18 +576,22 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                 }
               >
                 <FontAwesomeIcon
+                  beat={false}
+                  beatFade={false}
                   border={false}
+                  bounce={false}
                   className=""
+                  fade={false}
                   fixedWidth={false}
-                  flip={null}
+                  flip={false}
                   icon={
-                    Object {
-                      "icon": Array [
-                        448,
+                    {
+                      "icon": [
                         512,
-                        Array [],
+                        512,
+                        [],
                         "f078",
-                        "M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z",
+                        "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
                       ],
                       "iconName": "chevron-down",
                       "prefix": "fas",
@@ -520,40 +600,45 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                   inverse={false}
                   listItem={false}
                   mask={null}
+                  maskId={null}
                   pull={null}
                   pulse={false}
                   rotation={null}
+                  shake={false}
                   size={null}
                   spin={false}
+                  spinPulse={false}
+                  spinReverse={false}
                   style={
-                    Object {
+                    {
                       "marginRight": 8,
                     }
                   }
                   swapOpacity={false}
                   symbol={false}
                   title=""
+                  titleId={null}
                   transform={null}
                 >
                   <svg
                     aria-hidden="true"
-                    className="svg-inline--fa fa-chevron-down fa-w-14 "
+                    className="svg-inline--fa fa-chevron-down "
                     data-icon="chevron-down"
                     data-prefix="fas"
                     focusable="false"
                     role="img"
                     style={
-                      Object {
+                      {
                         "marginRight": 8,
                       }
                     }
-                    viewBox="0 0 448 512"
+                    viewBox="0 0 512 512"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
                       fill="currentColor"
-                      style={Object {}}
+                      style={{}}
                     />
                   </svg>
                 </FontAwesomeIcon>
@@ -563,7 +648,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           </div>
         </Legend>
       </div>
-    </default_1>
+    </_default>
   </div>
 </Actions>
 `;
@@ -574,33 +659,34 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
   onResetZoom={[MockFunction]}
   onZoomIn={[MockFunction]}
   onZoomOut={[MockFunction]}
-  ranges={Array []}
+  ranges={[]}
   showControls={true}
   showLegend={true}
 >
   <div
+    data-testid="seatmaps-actions-menu"
     style={
-      Object {
+      {
         "alignItems": "flex-start",
-        "bottom": 0,
+        "bottom": 10,
         "display": "flex",
         "fontSize": "0.75em",
         "justifyContent": "space-between",
-        "left": 0,
+        "left": 10,
         "maxWidth": "100%",
         "opacity": 0.9,
         "pointerEvents": "none",
         "position": "absolute",
-        "right": 0,
-        "top": 0,
+        "right": 10,
+        "top": 10,
         "whiteSpace": "nowrap",
       }
     }
   >
-    <default_1>
+    <_default>
       <div
         style={
-          Object {
+          {
             "backgroundColor": "white",
             "border": "2px solid lightgray",
             "borderRadius": 5,
@@ -610,36 +696,43 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
         }
       >
         <Button
-          className="clear-selection"
+          data-custom-at="right"
+          data-rh="Default"
+          data-testid="zoom-in"
           icon={
-            Object {
-              "icon": Array [
+            {
+              "icon": [
+                448,
                 512,
-                512,
-                Array [],
-                "f057",
-                "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z",
+                [
+                  10133,
+                  61543,
+                  "add",
+                ],
+                "2b",
+                "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
               ],
-              "iconName": "times-circle",
+              "iconName": "plus",
               "prefix": "fas",
             }
           }
-          isMobile={true}
-          name="clear-selection"
+          isMobile={false}
+          name="zoom-in"
           onClick={[MockFunction]}
           style={
-            Object {
+            {
               "borderRight": "2px solid lightgray",
             }
           }
-          text="Clear"
         >
           <div
-            className="clear-selection"
-            name="clear-selection"
+            data-custom-at="right"
+            data-rh="Default"
+            data-testid="zoom-in"
+            name="zoom-in"
             onClick={[MockFunction]}
             style={
-              Object {
+              {
                 "alignItems": "center",
                 "backgroundColor": "transparent",
                 "border": "none",
@@ -649,105 +742,480 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                 "display": "flex",
                 "justifyContent": "center",
                 "outline": "none",
-                "padding": "0.25em 0.5em",
+                "padding": "0.5em 1em",
               }
             }
           >
             <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
               border={false}
+              bounce={false}
               className=""
+              fade={false}
               fixedWidth={false}
-              flip={null}
+              flip={false}
               icon={
-                Object {
-                  "icon": Array [
+                {
+                  "icon": [
+                    448,
                     512,
-                    512,
-                    Array [],
-                    "f057",
-                    "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z",
+                    [
+                      10133,
+                      61543,
+                      "add",
+                    ],
+                    "2b",
+                    "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
                   ],
-                  "iconName": "times-circle",
+                  "iconName": "plus",
                   "prefix": "fas",
                 }
               }
               inverse={false}
               listItem={false}
               mask={null}
+              maskId={null}
               pull={null}
               pulse={false}
               rotation={null}
+              shake={false}
               size={null}
               spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={{}}
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-plus "
+                data-icon="plus"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={{}}
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+          </div>
+        </Button>
+        <Button
+          data-testid="zoom-out"
+          icon={
+            {
+              "icon": [
+                448,
+                512,
+                [
+                  8211,
+                  8722,
+                  10134,
+                  "subtract",
+                ],
+                "f068",
+                "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
+              ],
+              "iconName": "minus",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="zoom-out"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": "2px solid lightgray",
+            }
+          }
+        >
+          <div
+            data-testid="zoom-out"
+            name="zoom-out"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": "2px solid lightgray",
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    448,
+                    512,
+                    [
+                      8211,
+                      8722,
+                      10134,
+                      "subtract",
+                    ],
+                    "f068",
+                    "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
+                  ],
+                  "iconName": "minus",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={{}}
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-minus "
+                data-icon="minus"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={{}}
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+          </div>
+        </Button>
+        <Button
+          data-testid="reset-zoom"
+          icon={
+            {
+              "icon": [
+                512,
+                512,
+                [
+                  "rotate-back",
+                  "rotate-backward",
+                  "undo-alt",
+                ],
+                "f2ea",
+                "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
+              ],
+              "iconName": "rotate-left",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="reset-zoom"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": "2px solid lightgray",
+            }
+          }
+          text="Reset Zoom"
+        >
+          <div
+            data-testid="reset-zoom"
+            name="reset-zoom"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": "2px solid lightgray",
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    512,
+                    512,
+                    [
+                      "rotate-back",
+                      "rotate-backward",
+                      "undo-alt",
+                    ],
+                    "f2ea",
+                    "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
+                  ],
+                  "iconName": "rotate-left",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
               style={
-                Object {
-                  "marginRight": 4,
+                {
+                  "marginRight": 8,
                 }
               }
               swapOpacity={false}
               symbol={false}
               title=""
+              titleId={null}
               transform={null}
             >
               <svg
                 aria-hidden="true"
-                className="svg-inline--fa fa-times-circle fa-w-16 "
-                data-icon="times-circle"
+                className="svg-inline--fa fa-rotate-left "
+                data-icon="rotate-left"
                 data-prefix="fas"
                 focusable="false"
                 role="img"
                 style={
-                  Object {
-                    "marginRight": 4,
+                  {
+                    "marginRight": 8,
                   }
                 }
                 viewBox="0 0 512 512"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+                  d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"
                   fill="currentColor"
-                  style={Object {}}
+                  style={{}}
                 />
               </svg>
             </FontAwesomeIcon>
-            Clear
+            Reset Zoom
           </div>
         </Button>
+        <Button
+          className="clear-selection"
+          icon={
+            {
+              "icon": [
+                512,
+                512,
+                [
+                  61532,
+                  "times-circle",
+                  "xmark-circle",
+                ],
+                "f057",
+                "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
+              ],
+              "iconName": "circle-xmark",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="clear-selection"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": undefined,
+            }
+          }
+          text="Clear All"
+        >
+          <div
+            className="clear-selection"
+            name="clear-selection"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": undefined,
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    512,
+                    512,
+                    [
+                      61532,
+                      "times-circle",
+                      "xmark-circle",
+                    ],
+                    "f057",
+                    "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
+                  ],
+                  "iconName": "circle-xmark",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={
+                {
+                  "marginRight": 8,
+                }
+              }
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-circle-xmark "
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={
+                  {
+                    "marginRight": 8,
+                  }
+                }
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+            Clear All
+          </div>
+        </Button>
+      </div>
+    </_default>
+    <_default>
+      <div
+        style={
+          {
+            "backgroundColor": "white",
+            "border": "2px solid lightgray",
+            "borderRadius": 5,
+            "display": "flex",
+            "pointerEvents": "all",
+          }
+        }
+      >
         <Legend
-          isMobile={true}
-          ranges={Array []}
-          style={Object {}}
+          isMobile={false}
+          ranges={[]}
         >
           <div
             style={
-              Object {
+              {
                 "position": "relative",
               }
             }
           >
             <Button
               icon={
-                Object {
-                  "icon": Array [
-                    448,
+                {
+                  "icon": [
                     512,
-                    Array [],
+                    512,
+                    [],
                     "f078",
-                    "M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z",
+                    "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
                   ],
                   "iconName": "chevron-down",
                   "prefix": "fas",
                 }
               }
-              isMobile={true}
+              isMobile={false}
               onClick={[Function]}
               text="Show Map Legend"
             >
               <div
                 onClick={[Function]}
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "backgroundColor": "transparent",
                     "border": "none",
@@ -756,23 +1224,27 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                     "display": "flex",
                     "justifyContent": "center",
                     "outline": "none",
-                    "padding": "0.25em 0.5em",
+                    "padding": "0.5em 1em",
                   }
                 }
               >
                 <FontAwesomeIcon
+                  beat={false}
+                  beatFade={false}
                   border={false}
+                  bounce={false}
                   className=""
+                  fade={false}
                   fixedWidth={false}
-                  flip={null}
+                  flip={false}
                   icon={
-                    Object {
-                      "icon": Array [
-                        448,
+                    {
+                      "icon": [
                         512,
-                        Array [],
+                        512,
+                        [],
                         "f078",
-                        "M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z",
+                        "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
                       ],
                       "iconName": "chevron-down",
                       "prefix": "fas",
@@ -781,40 +1253,45 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                   inverse={false}
                   listItem={false}
                   mask={null}
+                  maskId={null}
                   pull={null}
                   pulse={false}
                   rotation={null}
+                  shake={false}
                   size={null}
                   spin={false}
+                  spinPulse={false}
+                  spinReverse={false}
                   style={
-                    Object {
-                      "marginRight": 4,
+                    {
+                      "marginRight": 8,
                     }
                   }
                   swapOpacity={false}
                   symbol={false}
                   title=""
+                  titleId={null}
                   transform={null}
                 >
                   <svg
                     aria-hidden="true"
-                    className="svg-inline--fa fa-chevron-down fa-w-14 "
+                    className="svg-inline--fa fa-chevron-down "
                     data-icon="chevron-down"
                     data-prefix="fas"
                     focusable="false"
                     role="img"
                     style={
-                      Object {
-                        "marginRight": 4,
+                      {
+                        "marginRight": 8,
                       }
                     }
-                    viewBox="0 0 448 512"
+                    viewBox="0 0 512 512"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
                       fill="currentColor"
-                      style={Object {}}
+                      style={{}}
                     />
                   </svg>
                 </FontAwesomeIcon>
@@ -824,7 +1301,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
           </div>
         </Legend>
       </div>
-    </default_1>
+    </_default>
   </div>
 </Actions>
 `;

@@ -1,5 +1,5 @@
 import { defaultMemoize, createSelectorCreator } from "reselect";
-import isEqual from "lodash-es/isEqual";
+import isEqual from "lodash.isequal";
 
 import { NormalizedTicketGroup } from "../types/TicketGroups";
 import {

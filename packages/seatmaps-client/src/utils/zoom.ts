@@ -54,7 +54,7 @@ export interface ZoomControl {
  * two-finger drags will pan the map
  * mouse scrolling and pinching will zoom in and out
  */
-export default function (svg: SVGSVGElement) {
+export function initializeZoom(svg: SVGSVGElement) {
   // used to convert screen coordinates into coordinates in the svg space
   const referencePoint = getReferencePoint(svg);
 

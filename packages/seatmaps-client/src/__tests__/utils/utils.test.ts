@@ -1,3 +1,4 @@
+import { describe, expect, it, jest } from "@jest/globals";
 import { getReferencePoint, getScreenCTM, getViewBox } from "../../utils/utils";
 
 const svg = {
@@ -8,8 +9,8 @@ const svg = {
   },
 };
 
-describe(getReferencePoint, () => {
-  const svgMock = (svg as any) as SVGSVGElement;
+describe("getReferencePoint", () => {
+  const svgMock = svg as unknown as SVGSVGElement;
 
   it("should call createSvgPoint function", () => {
     getReferencePoint(svgMock);
@@ -17,8 +18,8 @@ describe(getReferencePoint, () => {
   });
 });
 
-describe(getScreenCTM, () => {
-  const svgMock = (svg as any) as SVGSVGElement;
+describe("getScreenCTM", () => {
+  const svgMock = svg as unknown as SVGSVGElement;
 
   it("should call getScreenCTM function", () => {
     getScreenCTM(svgMock);
@@ -26,8 +27,8 @@ describe(getScreenCTM, () => {
   });
 });
 
-describe(getViewBox, () => {
-  const svgMock = (svg as any) as SVGSVGElement;
+describe("getViewBox", () => {
+  const svgMock = svg as unknown as SVGSVGElement;
 
   it("should call getViewBox function", () => {
     expect(getViewBox(svgMock)).toBe(svgMock.viewBox.baseVal);

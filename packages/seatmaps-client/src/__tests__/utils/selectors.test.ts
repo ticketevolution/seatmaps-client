@@ -7,6 +7,7 @@ import {
 } from "../../utils/selectors";
 import { State, Props, Percentiles } from "../../types/TicketMap";
 import { TicketGroup } from "../../types/TicketGroups";
+import { beforeEach, describe, expect, it } from "@jest/globals";
 
 let ticketGroupFooBar: TicketGroup;
 let ticketGroupBizBaz: TicketGroup;
@@ -107,10 +108,10 @@ describe("$costRanges", () => {
 
   it("adds ticket groups to their associated cost range", () => {
     expect($costRanges(state, props)[0].ticketGroups).toContainEqual(
-      ticketGroupFooBar
+      ticketGroupFooBar,
     );
     expect($costRanges(state, props)[1].ticketGroups).toContainEqual(
-      ticketGroupBizBaz
+      ticketGroupBizBaz,
     );
   });
 });

@@ -173,7 +173,11 @@ export default class Tooltip extends Component<Props & DefaultProps> {
       .sort((a, b) => a - b);
 
     return (
-      <div ref={this.container} style={this.containerStyle()}>
+      <div
+        ref={this.container}
+        style={this.containerStyle()}
+        data-testid="seatmaps-tooltip"
+      >
         <div style={this.tipStyle()} />
         <div style={this.contentStyle()}>
           <div style={this.nameStyle()}>

@@ -1,8 +1,8 @@
 import "unfetch/polyfill";
 import React from "react";
 import { render } from "react-dom";
-import union from "lodash-es/union";
-import pick from "lodash-es/pick";
+import union from "lodash.union";
+import pick from "lodash.pick";
 import {
   TicketMap,
   Props,
@@ -41,7 +41,7 @@ export function validateOptions(options: Props) {
   }
 }
 
-export default class SeatmapFactory {
+export class SeatmapFactory {
   configuration: Props;
 
   constructor(options: Props) {
@@ -74,3 +74,7 @@ export default class SeatmapFactory {
     return map?.publicApi;
   }
 }
+
+export { TicketMap };
+
+export const Tevomaps = SeatmapFactory;

@@ -38,7 +38,9 @@ export default class Actions extends React.Component<
   timer?: number;
 
   state: State = {
-    isMobile: true,
+    // initial value, would correct itself after first render
+    // TODO: we should refactor this to an FC component and some variant of useMediaQuery
+    isMobile: false,
   };
 
   static defaultProps: DefaultProps = {
@@ -105,7 +107,11 @@ export default class Actions extends React.Component<
     const { showControls, showLegend } = this.props;
 
     return (
-      <div style={this.styles.container} ref={this.container}>
+      <div
+        style={this.styles.container}
+        ref={this.container}
+        data-testid="seatmaps-actions-menu"
+      >
         <ActionGroup>
           {showControls && !isMobile && (
             <React.Fragment>
@@ -117,6 +123,7 @@ export default class Actions extends React.Component<
                 isMobile={isMobile}
                 style={{ borderRight: "2px solid lightgray" }}
                 name="zoom-in"
+                data-testid="zoom-in"
               />
 
               <Button
@@ -125,6 +132,7 @@ export default class Actions extends React.Component<
                 isMobile={isMobile}
                 style={{ borderRight: "2px solid lightgray" }}
                 name="zoom-out"
+                data-testid="zoom-out"
               />
 
               <Button
@@ -134,6 +142,7 @@ export default class Actions extends React.Component<
                 isMobile={isMobile}
                 style={{ borderRight: "2px solid lightgray" }}
                 name="reset-zoom"
+                data-testid="reset-zoom"
               />
             </React.Fragment>
           )}

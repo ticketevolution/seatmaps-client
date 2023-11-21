@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import isEqual from "lodash-es/isEqual";
+import isEqual from "lodash.isequal";
 
 import Actions from "../Actions";
 import Tooltip from "../Tooltip";
 import ZoomHelper from "../ZoomHelper";
-import initializeZoom, { ZoomControl } from "../utils/zoom";
+import { ZoomControl, initializeZoom } from "../utils/zoom";
 
 import { TicketGroup, NormalizedTicketGroup } from "../types/TicketGroups";
 import { State, Props, DefaultProps, Manifest } from "../types/TicketMap";
@@ -39,6 +39,9 @@ class MapNotFoundError extends Error {
     super(message);
   }
 }
+
+export const highlightedSectionColor = "#4a4a4a";
+export const unhighlightedSectionColor = "#FFFFFF";
 
 export class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi;
@@ -108,6 +111,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
       await this.fetchMap();
       this.setupMap();
       await this.fetchManifest();
+      this.updateMap();
     } catch (error) {
       console.error(error);
       if (
@@ -225,7 +229,6 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     if (!mapRootElement) {
       return;
     }
-
     const mapSvg = mapRootElement.querySelector("svg");
     if (!mapSvg) {
       return;
@@ -307,7 +310,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
       fill: element.getAttribute("data-unavailable-color") as string,
       opacity: "1",
       "stroke-width": "1",
-      stroke: "#FFFFFF",
+      stroke: unhighlightedSectionColor,
     }));
 
   fillPathsForSection = (
@@ -361,7 +364,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     return this.fillSection(sectionId, shouldHighlight);
   };
 
-  toggleSectionSelect = (section: string, shouldHighlight = true) => {
+  toggleSectionSelect = (section?: string | null, shouldHighlight = true) => {
     if (!section) {
       return;
     }
@@ -401,7 +404,9 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
           ),
           opacity: shouldHighlight ? "1" : "0.6",
           "stroke-width": "1",
-          stroke: shouldHighlight ? "#4a4a4a" : "#FFFFFF",
+          stroke: shouldHighlight
+            ? highlightedSectionColor
+            : unhighlightedSectionColor,
           cursor: "pointer",
         }),
         section,
@@ -409,7 +414,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     }
   }
 
-  getSectionFromTarget(target: HTMLElement) {
+  getSectionFromTarget(target?: HTMLElement | null) {
     if (!target) {
       return;
     }
@@ -579,6 +584,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
           </div>
           <img
             src="https://maps.ticketevolution.com/maps/not_available.jpg"
+            alt={"Seating chart not available. It was abducted by aliens."}
             style={{ width: "100%", textAlign: "left" }}
           />
         </div>

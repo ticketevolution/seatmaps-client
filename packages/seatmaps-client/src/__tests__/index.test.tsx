@@ -1,13 +1,13 @@
-import { render } from "react-dom";
-import SeatmapFactory, {
+import { jest, describe, beforeEach, it, expect } from "@jest/globals";
+import {
+  SeatmapFactory,
   extractConfigurationFromOptions,
   validateOptions,
 } from "../index";
 import { Props } from "../TicketMap";
+import ReactDOM from "react-dom";
 
-jest.mock("react-dom", () => ({
-  render: jest.fn((component) => component.ref(component)),
-}));
+const renderSpy = jest.spyOn(ReactDOM, "render").mockImplementation(() => {});
 
 describe("SeatmapFactory", () => {
   let options: Props;
@@ -28,24 +28,25 @@ describe("SeatmapFactory", () => {
 
     it("throws an error if rootElementId is not provided", () => {
       expect(() => factory.build("")).toThrow(
-        "Seatmaps must be initialized with a DOM element."
+        "Seatmaps must be initialized with a DOM element.",
       );
     });
 
     it("throws an error if rootElementId is not associated with a DOM element", () => {
       expect(() => factory.build("foo")).toThrow(
-        "Seatmaps must be initialized with a DOM element."
+        "Seatmaps must be initialized with a DOM element.",
       );
     });
 
     it("mounts the TicketMap component into the root element", () => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       (global as any).document.getElementById = jest.fn(
-        () => (global as any).document.body
+        () => (global as any).document.body,
       );
       /* eslint-enable @typescript-eslint/no-explicit-any */
+      expect(renderSpy).not.toHaveBeenCalled();
       factory.build("fooId");
-      expect(render).toHaveBeenCalled();
+      expect(renderSpy).toHaveBeenCalled();
     });
   });
 
@@ -57,17 +58,17 @@ describe("SeatmapFactory", () => {
 
     it("returns a subset of properties from the input options", () => {
       const result = extractConfigurationFromOptions(options);
-      expect(result).toMatchObject(options);
+      expect(result).toMatchObject(
+        options as unknown as Record<string, unknown>,
+      );
     });
 
     it("only returns properties from options which are either optional or required config params", () => {
-      /* eslint-disable @typescript-eslint/no-object-literal-type-assertion */
       const result = extractConfigurationFromOptions({
         ...options,
         ticketGroups: [],
         foo: "bar",
       } as Props);
-      /* eslint-enable @typescript-eslint/no-object-literal-type-assertion */
       expect(result).toMatchObject({ ...options, ticketGroups: [] });
     });
   });
@@ -78,11 +79,9 @@ describe("SeatmapFactory", () => {
     });
 
     it("throws an error if any required properties are missing from options", () => {
-      /* eslint-disable @typescript-eslint/no-object-literal-type-assertion */
       expect(() => validateOptions({ venueId: "4" } as Props)).toThrow(
-        `Seatmap configuration requires a 'configurationId' value.`
+        `Seatmap configuration requires a 'configurationId' value.`,
       );
-      /* eslint-enable @typescript-eslint/no-object-literal-type-assertion */
     });
   });
 });

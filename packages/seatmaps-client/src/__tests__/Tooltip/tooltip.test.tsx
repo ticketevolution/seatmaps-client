@@ -3,33 +3,39 @@ import "jest-enzyme";
 import React from "react";
 import { shallow } from "enzyme";
 import Tooltip, { formatCurrency, defaultDirection } from "../../Tooltip/index";
+import { describe, expect, it, jest } from "@jest/globals";
 
 describe("Tooltip", () => {
   describe("render()", () => {
     it("renders", () => {
-      expect(shallow(<Tooltip />)).toExist();
+      expect(shallow(<Tooltip />).isEmptyRender()).toEqual(false);
     });
 
     it("renders a transparent element when isActive is false", () => {
-      expect(shallow(<Tooltip isActive={false} />)).toHaveStyle("opacity", 0);
+      expect(
+        shallow(<Tooltip isActive={false} />).prop("style"),
+      ).toHaveProperty("opacity", 0);
     });
 
     it("renders an opaque element when isActive is true", () => {
-      expect(shallow(<Tooltip isActive />)).toHaveStyle("opacity", 1);
+      expect(shallow(<Tooltip isActive />).prop("style")).toHaveProperty(
+        "opacity",
+        1,
+      );
     });
 
     it("renders name", () => {
-      expect(shallow(<Tooltip name={"example-name"} />)).toIncludeText(
-        "example-name"
-      );
+      expect(
+        shallow(<Tooltip name={"example-name"} />).contains("example-name"),
+      ).toBe(true);
     });
 
     it("renders the ticket group price", () => {
       const tooltip = shallow(
-        <Tooltip ticketGroups={[{ section: "", price: 123.45 }]} />
+        <Tooltip ticketGroups={[{ section: "", price: 123.45 }]} />,
       );
 
-      expect(tooltip).toIncludeText(formatCurrency(123.45));
+      expect(tooltip.contains(formatCurrency(123.45))).toEqual(true);
     });
 
     it("renders the lowest ticket group price when the lowest ticket group price is placed first", () => {
@@ -39,12 +45,11 @@ describe("Tooltip", () => {
             { section: "", price: 123.45 },
             { section: "", price: 678.9 },
           ]}
-        />
+        />,
       );
 
-      expect(tooltip).toIncludeText(formatCurrency(123.45));
-
-      expect(tooltip).not.toIncludeText(formatCurrency(678.9));
+      expect(tooltip.contains(formatCurrency(123.45))).toEqual(true);
+      expect(tooltip.contains(formatCurrency(678.9))).toEqual(false);
     });
 
     it("renders the lowest ticket group price when the lowest ticket group price is not placed first", () => {
@@ -54,12 +59,11 @@ describe("Tooltip", () => {
             { section: "", price: 678.9 },
             { section: "", price: 123.45 },
           ]}
-        />
+        />,
       );
 
-      expect(tooltip).toIncludeText(formatCurrency(123.45));
-
-      expect(tooltip).not.toIncludeText(formatCurrency(678.9));
+      expect(tooltip.contains(formatCurrency(123.45))).toEqual(true);
+      expect(tooltip.contains(formatCurrency(678.9))).toEqual(false);
     });
   });
 
@@ -151,7 +155,7 @@ describe("Tooltip", () => {
       tooltip.direction = jest.fn(() => ["up", "left"]);
 
       expect(tooltip.position().x).toEqual(
-        tooltip.props.x - tooltip.container.current!.clientWidth // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        tooltip.props.x - tooltip.container.current!.clientWidth, // eslint-disable-line @typescript-eslint/no-non-null-assertion
       );
     });
 
@@ -167,7 +171,7 @@ describe("Tooltip", () => {
       tooltip.direction = jest.fn(() => ["up", "right"]);
 
       expect(tooltip.position().y).toEqual(
-        tooltip.props.y - tooltip.container.current!.clientHeight // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        tooltip.props.y - tooltip.container.current!.clientHeight, // eslint-disable-line @typescript-eslint/no-non-null-assertion
       );
     });
 
@@ -190,7 +194,7 @@ describe("Tooltip", () => {
   describe("tipStyle()", () => {
     it("should return a unique style for each direction", () => {
       const tooltips = Array.from(new Array(4)).map(() =>
-        shallow<Tooltip>(<Tooltip />).instance()
+        shallow<Tooltip>(<Tooltip />).instance(),
       );
 
       tooltips[0].direction = jest.fn(() => ["up", "left"]);
@@ -220,7 +224,7 @@ describe("Tooltip", () => {
         left: 0,
       };
       const tooltips = Array.from(new Array(4)).map(() =>
-        shallow<Tooltip>(<Tooltip />).instance()
+        shallow<Tooltip>(<Tooltip />).instance(),
       );
 
       tooltips[0].direction = jest.fn(() => ["up", "left"]);
@@ -229,7 +233,7 @@ describe("Tooltip", () => {
       tooltips[3].direction = jest.fn(() => ["down", "right"]);
 
       const containerStyle = tooltips.map((tooltip) =>
-        tooltip.containerStyle()
+        tooltip.containerStyle(),
       );
 
       expect(containerStyle[0]).toEqual({

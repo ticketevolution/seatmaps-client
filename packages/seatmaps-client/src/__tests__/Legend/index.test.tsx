@@ -6,6 +6,7 @@ import { shallow, ShallowWrapper } from "enzyme";
 import Legend, { Props, Range } from "../../Legend/index";
 import Button from "../../Button";
 import Swatch from "../../Legend/swatch";
+import { beforeEach, describe, expect, it } from "@jest/globals";
 
 describe("Legend", () => {
   let wrapper: ShallowWrapper<Props>;
@@ -25,7 +26,7 @@ describe("Legend", () => {
   });
 
   it("renders", () => {
-    expect(wrapper).toExist();
+    expect(wrapper.isEmptyRender()).toEqual(false);
   });
 
   it("renders a button", () => {
@@ -36,14 +37,14 @@ describe("Legend", () => {
     it("toggles the dropdown open/closed", () => {
       wrapper.setState({ isOpen: false });
       wrapper.find(Button).simulate("click");
-      expect(wrapper).toHaveState("isOpen", true);
+      expect(wrapper.state("isOpen")).toEqual(true);
     });
   });
 
   describe("Dropdown", () => {
     it("is closed by default", () => {
       expect(
-        wrapper.children().filterWhere((node) => node.type() !== Button)
+        wrapper.children().filterWhere((node) => node.type() !== Button),
       ).toHaveLength(0);
     });
 
@@ -51,7 +52,7 @@ describe("Legend", () => {
       wrapper.setProps({ ranges: [] });
       wrapper.setState({ isOpen: true });
       expect(
-        wrapper.children().filterWhere((node) => node.type() !== Button)
+        wrapper.children().filterWhere((node) => node.type() !== Button),
       ).toHaveLength(0);
     });
 
@@ -59,7 +60,7 @@ describe("Legend", () => {
       wrapper.setProps({ ranges: [rangeMock] });
       wrapper.setState({ isOpen: false });
       expect(
-        wrapper.children().filterWhere((node) => node.type() !== Button)
+        wrapper.children().filterWhere((node) => node.type() !== Button),
       ).toHaveLength(0);
     });
 
@@ -67,7 +68,7 @@ describe("Legend", () => {
       wrapper.setProps({ ranges: [rangeMock] });
       wrapper.setState({ isOpen: true });
       expect(
-        wrapper.children().filterWhere((node) => node.type() !== Button)
+        wrapper.children().filterWhere((node) => node.type() !== Button),
       ).toHaveLength(1);
     });
 
@@ -75,7 +76,7 @@ describe("Legend", () => {
       wrapper.setProps({ ranges: [rangeMock] });
       wrapper.setState({ isOpen: true });
       expect(wrapper.find(Swatch)).toHaveLength(1);
-      expect(wrapper.find(Swatch)).toHaveProp("color", rangeMock.color);
+      expect(wrapper.find(Swatch).prop("color")).toEqual(rangeMock.color);
     });
   });
 });

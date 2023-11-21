@@ -1,70 +1,77 @@
-const getViewBoxMock = jest.fn();
-const getScreenCTMMock = jest.fn();
-const inverseMock = jest.fn();
-const getReferencePointMock = jest.fn();
-const matrixTransformMock = jest.fn();
-const stopPropagationMock = jest.fn();
-const addEventListenerMock = jest.fn();
-const removeEventListenerMock = jest.fn();
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from "@jest/globals";
+import type { ZoomControl } from "../../utils/zoom";
 
-jest.mock("../../utils/utils", () => {
-  return {
-    ...jest.requireActual("../../utils/utils"),
-    getViewBox: getViewBoxMock,
-    getScreenCTM: getScreenCTMMock,
-    getReferencePoint: getReferencePointMock,
-  };
-});
-
-import zoom, { ZoomControl } from "../../utils/zoom";
-
-const defaultEvent = {
-  preventDefault: jest.fn(),
-  stopPropagation: stopPropagationMock,
-};
-
-const touches = [
-  { clientX: 11, clientY: 11 },
-  { clientX: 19, clientY: 19 },
-];
-
-const touchStartEvent = ({
-  ...defaultEvent,
-  touches: {
-    length: touches.length,
-    item: (index: number) => {
-      return touches[index];
-    },
-  },
-} as any) as Event;
-
-const mouseDownEvent = ({
-  ...defaultEvent,
-  clientX: 10,
-  clientY: 10,
-} as any) as Event;
-
-const events = [
-  { eventName: "touchstart", passiveArg: true },
-  { eventName: "touchmove", passiveArg: true },
-  { eventName: "touchend", passiveArg: true },
-  { eventName: "mousedown", passiveArg: false },
-  { eventName: "click", passiveArg: false },
-  { eventName: "mousemove", passiveArg: false },
-  { eventName: "mouseup", passiveArg: false },
-  { eventName: "mouseleave", passiveArg: false },
-  { eventName: "wheel", passiveArg: false },
-  { eventName: "gesturestart", passiveArg: true },
-  { eventName: "gesturechange", passiveArg: true },
-  { eventName: "gesturechange", passiveArg: false, handlerIndex: 1 },
-  { eventName: "gestureend", passiveArg: true },
-];
-
-describe(zoom, () => {
+describe("zoom", () => {
   let zoomApi: ZoomControl;
   let svg: SVGSVGElement;
   let mockPoint: DOMRect;
   let eventHandlers: { [key: string]: ((e: Event) => void)[] } = {};
+  const addEventListenerMock = jest.fn<typeof document.addEventListener>();
+
+  const inverseMock = jest.fn();
+  const matrixTransformMock = jest.fn();
+  const stopPropagationMock = jest.fn();
+  const removeEventListenerMock = jest.fn();
+  const getViewBoxMock = jest.fn();
+  const getScreenCTMMock = jest.fn();
+  const getReferencePointMock = jest.fn();
+
+  // NOTE: with current mock structure jest fails to mock those without using require("../../utils/zoom")
+  // TODO: probably would be better to not rely on mock resets and isolate sigleton for each test case
+  jest.mock("../../utils/utils", () => ({
+    getViewBox: getViewBoxMock,
+    getScreenCTM: getScreenCTMMock,
+    getReferencePoint: getReferencePointMock,
+  }));
+
+  const defaultEvent = {
+    preventDefault: jest.fn(),
+    stopPropagation: stopPropagationMock,
+  };
+
+  const touches = [
+    { clientX: 11, clientY: 11 },
+    { clientX: 19, clientY: 19 },
+  ];
+
+  const touchStartEvent = {
+    ...defaultEvent,
+    touches: {
+      length: touches.length,
+      item: (index: number) => {
+        return touches[index];
+      },
+    },
+  } as unknown as Event;
+
+  const mouseDownEvent = {
+    ...defaultEvent,
+    clientX: 10,
+    clientY: 10,
+  } as unknown as Event;
+
+  const events = [
+    { eventName: "touchstart", passiveArg: true },
+    { eventName: "touchmove", passiveArg: true },
+    { eventName: "touchend", passiveArg: true },
+    { eventName: "mousedown", passiveArg: false },
+    { eventName: "click", passiveArg: false },
+    { eventName: "mousemove", passiveArg: false },
+    { eventName: "mouseup", passiveArg: false },
+    { eventName: "mouseleave", passiveArg: false },
+    { eventName: "wheel", passiveArg: false },
+    { eventName: "gesturestart", passiveArg: true },
+    { eventName: "gesturechange", passiveArg: true },
+    { eventName: "gesturechange", passiveArg: false, handlerIndex: 1 },
+    { eventName: "gestureend", passiveArg: true },
+  ];
 
   const triggerEvent = (eventName: string, e: Event) => {
     if (eventHandlers[eventName]) {
@@ -92,28 +99,37 @@ describe(zoom, () => {
       (event: string, handler: (e: Event) => void) => {
         eventHandlers[event] = eventHandlers[event] || [];
         eventHandlers[event].push(handler);
-      }
+      },
     );
 
     matrixTransformMock.mockReturnValue({
       x: 4,
       y: 4,
     });
-    getReferencePointMock.mockReturnValue({
-      matrixTransform: matrixTransformMock,
-    });
     inverseMock.mockReturnValue({});
-    getViewBoxMock.mockReturnValue(mockPoint);
-    getScreenCTMMock.mockReturnValue({
-      inverse: inverseMock,
-    });
-    svg = ({
+    getReferencePointMock.mockImplementation(
+      () =>
+        ({
+          matrixTransform: matrixTransformMock,
+        }) as unknown as ReturnType<typeof getReferencePointMock>,
+    );
+    getScreenCTMMock.mockImplementation(
+      () =>
+        ({
+          inverse: inverseMock,
+        }) as unknown as ReturnType<typeof getScreenCTMMock>,
+    );
+    getViewBoxMock.mockImplementation(() => mockPoint);
+    svg = {
       createSVGPoint: jest.fn(),
       getScreenCTM: jest.fn(),
       addEventListener: addEventListenerMock,
       removeEventListener: removeEventListenerMock,
-    } as any) as SVGSVGElement;
-    zoomApi = zoom(svg);
+    } as unknown as SVGSVGElement;
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { initializeZoom } = require("../../utils/zoom");
+    zoomApi = initializeZoom(svg);
   });
 
   afterEach(() => {
@@ -123,29 +139,31 @@ describe(zoom, () => {
   it("should setup event listeners", () => {
     events.forEach((event, index) => {
       if (event.passiveArg) {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(addEventListenerMock).toHaveBeenNthCalledWith(
           index + 1,
           event.eventName,
           eventHandlers[event.eventName][event.handlerIndex || 0],
-          { passive: false }
+          { passive: false },
         );
       } else {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(addEventListenerMock).toHaveBeenNthCalledWith(
           index + 1,
           event.eventName,
-          eventHandlers[event.eventName][event.handlerIndex || 0]
+          eventHandlers[event.eventName][event.handlerIndex || 0],
         );
       }
     });
   });
 
-  it("should setup event listeners", () => {
+  it("should teardown event listeners", () => {
     zoomApi.teardown();
     events.forEach((event, index) => {
       expect(removeEventListenerMock).toHaveBeenNthCalledWith(
         index + 1,
         event.eventName,
-        eventHandlers[event.eventName][event.handlerIndex || 0]
+        eventHandlers[event.eventName][event.handlerIndex || 0],
       );
     });
   });
@@ -184,16 +202,16 @@ describe(zoom, () => {
     });
 
     it("handleGestureChange", () => {
-      const e1 = ({
+      const e1 = {
         ...defaultEvent,
         touches: {
           length: 1,
         },
-      } as any) as Event;
-      const e2 = ({
+      } as unknown as Event;
+      const e2 = {
         ...defaultEvent,
         scale: 2,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("touchend", e1);
       triggerEvent("gesturechange", e2);
 
@@ -204,10 +222,10 @@ describe(zoom, () => {
     });
 
     it("handleGestureChange after handleTouchStart should not update point", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
         scale: 2,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("touchstart", touchStartEvent);
       triggerEvent("gesturechange", e);
 
@@ -218,12 +236,12 @@ describe(zoom, () => {
     });
 
     it("handleWheel when ctrl key is not pressed and delta mode is DOM_DELTA_PIXEL", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
         deltaMode: WheelEvent.DOM_DELTA_PIXEL,
         deltaX: 4,
         deltaY: 4,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("wheel", e);
 
       expect(mockPoint.height).toBe(10);
@@ -233,12 +251,12 @@ describe(zoom, () => {
     });
 
     it("handleWheel when ctrl key is not pressed and delta mode is DOM_DELTA_LINE", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
         deltaMode: WheelEvent.DOM_DELTA_LINE,
         deltaX: 4,
         deltaY: 4,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("wheel", e);
 
       expect(mockPoint.height).toBe(10);
@@ -248,13 +266,13 @@ describe(zoom, () => {
     });
 
     it("handleWheel when ctrl key is pressed and delta mode is DOM_DELTA_PIXEL", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
         deltaMode: WheelEvent.DOM_DELTA_PIXEL,
         deltaX: 10,
         deltaY: 10,
         ctrlKey: true,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("wheel", e);
 
       expect(mockPoint.height).toBe(10.651041666666668);
@@ -264,13 +282,13 @@ describe(zoom, () => {
     });
 
     it("handleWheel when ctrl key is pressed and delta mode is DOM_DELTA_LINE", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
         deltaMode: WheelEvent.DOM_DELTA_LINE,
         deltaX: 10,
         deltaY: 10,
         ctrlKey: true,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("wheel", e);
 
       expect(mockPoint.height).toBe(10);
@@ -280,12 +298,12 @@ describe(zoom, () => {
     });
 
     it("handleWheel should not change point if delta mode is not DOM_DELTA_LINE or DOM_DELTA_PIXEL", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
         deltaX: 10,
         deltaY: 10,
         ctrlKey: true,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("wheel", e);
 
       expect(mockPoint.height).toBe(10);
@@ -295,9 +313,9 @@ describe(zoom, () => {
     });
 
     it("handleMouseMove should do nothing if not dragging", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("mouseleave", e);
       triggerEvent("mousemove", e);
 
@@ -308,16 +326,18 @@ describe(zoom, () => {
     });
 
     it("handleMouseMove if dragging with no matrix should throw error", () => {
-      getScreenCTMMock.mockReturnValue(undefined);
-      const e = ({
+      getScreenCTMMock.mockReturnValue(
+        undefined as unknown as ReturnType<typeof getScreenCTMMock>,
+      );
+      const e = {
         ...defaultEvent,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("mousedown", mouseDownEvent);
 
       expect(() => {
         triggerEvent("mousemove", e);
       }).toThrow(
-        "cannot convert dom point to svg point due to missing conversion matrix"
+        "cannot convert dom point to svg point due to missing conversion matrix",
       );
 
       expect(mockPoint.height).toBe(10);
@@ -327,9 +347,9 @@ describe(zoom, () => {
     });
 
     it("handleMouseMove if dragging", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("mousedown", mouseDownEvent);
       triggerEvent("mousemove", e);
 
@@ -340,24 +360,17 @@ describe(zoom, () => {
     });
 
     it("handleClick should not stop propagation if magnitude is smaller than bound", () => {
-      const e = ({
-        ...defaultEvent,
-        clientX: 20,
-        clientY: 20,
-        iMouseX: 20,
-        iMouseY: 20,
-      } as any) as Event;
       triggerEvent("click", mouseDownEvent);
 
       expect(stopPropagationMock).not.toHaveBeenCalled();
     });
 
     it("handleClick should stop propagation if magnitude is bigger than bound", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
         clientX: 200,
         clientY: 200,
-      } as any) as Event;
+      } as unknown as Event;
       triggerEvent("mousedown", mouseDownEvent);
       triggerEvent("click", e);
 
@@ -365,16 +378,16 @@ describe(zoom, () => {
     });
 
     it("handleTouchEnd with touches < 2 should enable gesturechange to zoom", () => {
-      const e1 = ({
+      const e1 = {
         ...defaultEvent,
         touches: {
           length: 1,
         },
-      } as any) as Event;
-      const e2 = ({
+      } as unknown as Event;
+      const e2 = {
         ...defaultEvent,
         scale: 2,
-      } as any) as Event;
+      } as unknown as Event;
 
       triggerEvent("touchend", e1);
       triggerEvent("gesturechange", e2);
@@ -386,16 +399,16 @@ describe(zoom, () => {
     });
 
     it("handleTouchEnd with touches >= 2 should disable gesturechange zoom", () => {
-      const e1 = ({
+      const e1 = {
         ...defaultEvent,
         touches: {
           length: 2,
         },
-      } as any) as Event;
-      const e2 = ({
+      } as unknown as Event;
+      const e2 = {
         ...defaultEvent,
         scale: 2,
-      } as any) as Event;
+      } as unknown as Event;
 
       triggerEvent("touchstart", touchStartEvent);
       triggerEvent("touchend", e1);
@@ -408,13 +421,13 @@ describe(zoom, () => {
     });
 
     it("handleTouchMove if no touches should not zoom", () => {
-      const e = ({
+      const e = {
         touches: {
           item: () => {
             return undefined;
           },
         },
-      } as any) as Event;
+      } as unknown as Event;
 
       triggerEvent("touchmove", e);
 
@@ -425,14 +438,14 @@ describe(zoom, () => {
     });
 
     it("handleTouchMove if first item is undefined should not zoom", () => {
-      const e = ({
+      const e = {
         touches: {
           length: 2,
           item: () => {
             return undefined;
           },
         },
-      } as any) as Event;
+      } as unknown as Event;
 
       triggerEvent("touchmove", e);
 
@@ -443,17 +456,17 @@ describe(zoom, () => {
     });
 
     it("handleTouchMove if second item is undefined should not zoom", () => {
-      const e = ({
+      const e = {
         touches: {
           length: 2,
           item: (index: number) => {
-            if (index == 0) {
+            if (index === 0) {
               return touches[0];
             }
             return undefined;
           },
         },
-      } as any) as Event;
+      } as unknown as Event;
 
       triggerEvent("touchmove", e);
 
@@ -474,14 +487,14 @@ describe(zoom, () => {
     });
 
     it("handleTouchStart should not modify viewbox if number of touches is < 2", () => {
-      const e = ({
+      const e = {
         touches: {
           length: 1,
           item: () => {
             return undefined;
           },
         },
-      } as any) as Event;
+      } as unknown as Event;
 
       triggerEvent("touchstart", e);
 
@@ -492,7 +505,7 @@ describe(zoom, () => {
     });
 
     it("handleTouchStart should not modify viewbox if first item is undefined", () => {
-      const e = ({
+      const e = {
         ...defaultEvent,
         touches: {
           length: 2,
@@ -500,7 +513,7 @@ describe(zoom, () => {
             return undefined;
           },
         },
-      } as any) as Event;
+      } as unknown as Event;
 
       triggerEvent("touchstart", e);
 
@@ -518,7 +531,7 @@ describe(zoom, () => {
 
       it("Should throw error if span not found in iframe", () => {
         const createElementMock = jest.spyOn(document, "createElement");
-        createElementMock.mockReturnValueOnce(({
+        createElementMock.mockReturnValueOnce({
           contentDocument: {
             open: jest.fn(),
             write: jest.fn(),
@@ -527,31 +540,35 @@ describe(zoom, () => {
               return undefined;
             },
           },
-        } as any) as HTMLElement);
+        } as unknown as HTMLElement);
 
         const appendChildMock = jest.spyOn(document.body, "appendChild");
         appendChildMock.mockImplementationOnce((node: Node) => {
           return node;
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { initializeZoom } = require("../../utils/zoom");
         expect(() => {
-          zoomApi = zoom(svg);
+          zoomApi = initializeZoom(svg);
         }).toThrow("unable to find test element for line height test");
       });
 
       it("Should throw error if iframe not found in document", () => {
         const createElementMock = jest.spyOn(document, "createElement");
-        createElementMock.mockReturnValueOnce(({
+        createElementMock.mockReturnValueOnce({
           contentDocument: undefined,
-        } as any) as HTMLElement);
+        } as unknown as HTMLElement);
 
         const appendChildMock = jest.spyOn(document.body, "appendChild");
         appendChildMock.mockImplementationOnce((node: Node) => {
           return node;
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { initializeZoom } = require("../../utils/zoom");
         expect(() => {
-          zoomApi = zoom(svg);
+          zoomApi = initializeZoom(svg);
         }).toThrow("unable to create an iframe to test for line height");
       });
     });
