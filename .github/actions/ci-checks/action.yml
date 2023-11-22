@@ -15,5 +15,5 @@ runs:
       shell: bash
 
     - name: Test
-      run: pnpm run test --silent
+      run: pnpm run test
       shell: bash
