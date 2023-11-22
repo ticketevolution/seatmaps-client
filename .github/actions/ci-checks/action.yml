@@ -7,7 +7,7 @@ runs:
       shell: bash
 
     - name: Typecheck
-      run: pnpm run typecheck
+      run: pnpm run check-ts
       shell: bash
 
     - name: Lint
