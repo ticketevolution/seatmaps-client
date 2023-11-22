@@ -33,4 +33,4 @@ jobs:
           publish: pnpm run release
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.TEVO_NPM_TOKEN }}
