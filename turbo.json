@@ -1,0 +1,31 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "dev": {
+      "persistent": true,
+      "cache": false
+    },
+    "run-example": {
+      "persistent": true,
+      "cache": false
+    },
+    "@ticketevolution/seatmaps-client#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["esm/**", "cjs/**", "umd/**"]
+    },
+    "build:umd-standalone": {},
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "build:watch": {
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "lint": {},
+    "test": {},
+    "test:watch": {},
+    "check-ts": {
+      "cache": false
+    }
+  }
+}

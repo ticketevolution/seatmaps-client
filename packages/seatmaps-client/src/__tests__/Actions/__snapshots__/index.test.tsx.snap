@@ -1,0 +1,1307 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Actions when controls are visible on desktop browsers matches snapshot 1`] = `
+<Actions
+  onClearSelection={[MockFunction]}
+  onResetZoom={[MockFunction]}
+  onZoomIn={[MockFunction]}
+  onZoomOut={[MockFunction]}
+  ranges={[]}
+  showControls={true}
+  showLegend={true}
+>
+  <div
+    data-testid="seatmaps-actions-menu"
+    style={
+      {
+        "alignItems": "flex-start",
+        "bottom": 10,
+        "display": "flex",
+        "fontSize": "0.75em",
+        "justifyContent": "space-between",
+        "left": 10,
+        "maxWidth": "100%",
+        "opacity": 0.9,
+        "pointerEvents": "none",
+        "position": "absolute",
+        "right": 10,
+        "top": 10,
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    <_default>
+      <div
+        style={
+          {
+            "backgroundColor": "white",
+            "border": "2px solid lightgray",
+            "borderRadius": 5,
+            "display": "flex",
+            "pointerEvents": "all",
+          }
+        }
+      >
+        <Button
+          data-custom-at="right"
+          data-rh="Default"
+          data-testid="zoom-in"
+          icon={
+            {
+              "icon": [
+                448,
+                512,
+                [
+                  10133,
+                  61543,
+                  "add",
+                ],
+                "2b",
+                "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
+              ],
+              "iconName": "plus",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="zoom-in"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": "2px solid lightgray",
+            }
+          }
+        >
+          <div
+            data-custom-at="right"
+            data-rh="Default"
+            data-testid="zoom-in"
+            name="zoom-in"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": "2px solid lightgray",
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    448,
+                    512,
+                    [
+                      10133,
+                      61543,
+                      "add",
+                    ],
+                    "2b",
+                    "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
+                  ],
+                  "iconName": "plus",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={{}}
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-plus "
+                data-icon="plus"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={{}}
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+          </div>
+        </Button>
+        <Button
+          data-testid="zoom-out"
+          icon={
+            {
+              "icon": [
+                448,
+                512,
+                [
+                  8211,
+                  8722,
+                  10134,
+                  "subtract",
+                ],
+                "f068",
+                "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
+              ],
+              "iconName": "minus",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="zoom-out"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": "2px solid lightgray",
+            }
+          }
+        >
+          <div
+            data-testid="zoom-out"
+            name="zoom-out"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": "2px solid lightgray",
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    448,
+                    512,
+                    [
+                      8211,
+                      8722,
+                      10134,
+                      "subtract",
+                    ],
+                    "f068",
+                    "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
+                  ],
+                  "iconName": "minus",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={{}}
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-minus "
+                data-icon="minus"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={{}}
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+          </div>
+        </Button>
+        <Button
+          data-testid="reset-zoom"
+          icon={
+            {
+              "icon": [
+                512,
+                512,
+                [
+                  "rotate-back",
+                  "rotate-backward",
+                  "undo-alt",
+                ],
+                "f2ea",
+                "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
+              ],
+              "iconName": "rotate-left",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="reset-zoom"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": "2px solid lightgray",
+            }
+          }
+          text="Reset Zoom"
+        >
+          <div
+            data-testid="reset-zoom"
+            name="reset-zoom"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": "2px solid lightgray",
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    512,
+                    512,
+                    [
+                      "rotate-back",
+                      "rotate-backward",
+                      "undo-alt",
+                    ],
+                    "f2ea",
+                    "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
+                  ],
+                  "iconName": "rotate-left",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={
+                {
+                  "marginRight": 8,
+                }
+              }
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-rotate-left "
+                data-icon="rotate-left"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={
+                  {
+                    "marginRight": 8,
+                  }
+                }
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+            Reset Zoom
+          </div>
+        </Button>
+        <Button
+          className="clear-selection"
+          icon={
+            {
+              "icon": [
+                512,
+                512,
+                [
+                  61532,
+                  "times-circle",
+                  "xmark-circle",
+                ],
+                "f057",
+                "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
+              ],
+              "iconName": "circle-xmark",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="clear-selection"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": undefined,
+            }
+          }
+          text="Clear All"
+        >
+          <div
+            className="clear-selection"
+            name="clear-selection"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": undefined,
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    512,
+                    512,
+                    [
+                      61532,
+                      "times-circle",
+                      "xmark-circle",
+                    ],
+                    "f057",
+                    "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
+                  ],
+                  "iconName": "circle-xmark",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={
+                {
+                  "marginRight": 8,
+                }
+              }
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-circle-xmark "
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={
+                  {
+                    "marginRight": 8,
+                  }
+                }
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+            Clear All
+          </div>
+        </Button>
+      </div>
+    </_default>
+    <_default>
+      <div
+        style={
+          {
+            "backgroundColor": "white",
+            "border": "2px solid lightgray",
+            "borderRadius": 5,
+            "display": "flex",
+            "pointerEvents": "all",
+          }
+        }
+      >
+        <Legend
+          isMobile={false}
+          ranges={[]}
+        >
+          <div
+            style={
+              {
+                "position": "relative",
+              }
+            }
+          >
+            <Button
+              icon={
+                {
+                  "icon": [
+                    512,
+                    512,
+                    [],
+                    "f078",
+                    "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
+                  ],
+                  "iconName": "chevron-down",
+                  "prefix": "fas",
+                }
+              }
+              isMobile={false}
+              onClick={[Function]}
+              text="Show Map Legend"
+            >
+              <div
+                onClick={[Function]}
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "border": "none",
+                    "borderRadius": 0,
+                    "cursor": "pointer",
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "outline": "none",
+                    "padding": "0.5em 1em",
+                  }
+                }
+              >
+                <FontAwesomeIcon
+                  beat={false}
+                  beatFade={false}
+                  border={false}
+                  bounce={false}
+                  className=""
+                  fade={false}
+                  fixedWidth={false}
+                  flip={false}
+                  icon={
+                    {
+                      "icon": [
+                        512,
+                        512,
+                        [],
+                        "f078",
+                        "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
+                      ],
+                      "iconName": "chevron-down",
+                      "prefix": "fas",
+                    }
+                  }
+                  inverse={false}
+                  listItem={false}
+                  mask={null}
+                  maskId={null}
+                  pull={null}
+                  pulse={false}
+                  rotation={null}
+                  shake={false}
+                  size={null}
+                  spin={false}
+                  spinPulse={false}
+                  spinReverse={false}
+                  style={
+                    {
+                      "marginRight": 8,
+                    }
+                  }
+                  swapOpacity={false}
+                  symbol={false}
+                  title=""
+                  titleId={null}
+                  transform={null}
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="svg-inline--fa fa-chevron-down "
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    style={
+                      {
+                        "marginRight": 8,
+                      }
+                    }
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                      fill="currentColor"
+                      style={{}}
+                    />
+                  </svg>
+                </FontAwesomeIcon>
+                Show Map Legend
+              </div>
+            </Button>
+          </div>
+        </Legend>
+      </div>
+    </_default>
+  </div>
+</Actions>
+`;
+
+exports[`Actions when controls are visible on mobile browsers matches snapshot 1`] = `
+<Actions
+  onClearSelection={[MockFunction]}
+  onResetZoom={[MockFunction]}
+  onZoomIn={[MockFunction]}
+  onZoomOut={[MockFunction]}
+  ranges={[]}
+  showControls={true}
+  showLegend={true}
+>
+  <div
+    data-testid="seatmaps-actions-menu"
+    style={
+      {
+        "alignItems": "flex-start",
+        "bottom": 10,
+        "display": "flex",
+        "fontSize": "0.75em",
+        "justifyContent": "space-between",
+        "left": 10,
+        "maxWidth": "100%",
+        "opacity": 0.9,
+        "pointerEvents": "none",
+        "position": "absolute",
+        "right": 10,
+        "top": 10,
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    <_default>
+      <div
+        style={
+          {
+            "backgroundColor": "white",
+            "border": "2px solid lightgray",
+            "borderRadius": 5,
+            "display": "flex",
+            "pointerEvents": "all",
+          }
+        }
+      >
+        <Button
+          data-custom-at="right"
+          data-rh="Default"
+          data-testid="zoom-in"
+          icon={
+            {
+              "icon": [
+                448,
+                512,
+                [
+                  10133,
+                  61543,
+                  "add",
+                ],
+                "2b",
+                "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
+              ],
+              "iconName": "plus",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="zoom-in"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": "2px solid lightgray",
+            }
+          }
+        >
+          <div
+            data-custom-at="right"
+            data-rh="Default"
+            data-testid="zoom-in"
+            name="zoom-in"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": "2px solid lightgray",
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    448,
+                    512,
+                    [
+                      10133,
+                      61543,
+                      "add",
+                    ],
+                    "2b",
+                    "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
+                  ],
+                  "iconName": "plus",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={{}}
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-plus "
+                data-icon="plus"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={{}}
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+          </div>
+        </Button>
+        <Button
+          data-testid="zoom-out"
+          icon={
+            {
+              "icon": [
+                448,
+                512,
+                [
+                  8211,
+                  8722,
+                  10134,
+                  "subtract",
+                ],
+                "f068",
+                "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
+              ],
+              "iconName": "minus",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="zoom-out"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": "2px solid lightgray",
+            }
+          }
+        >
+          <div
+            data-testid="zoom-out"
+            name="zoom-out"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": "2px solid lightgray",
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    448,
+                    512,
+                    [
+                      8211,
+                      8722,
+                      10134,
+                      "subtract",
+                    ],
+                    "f068",
+                    "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
+                  ],
+                  "iconName": "minus",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={{}}
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-minus "
+                data-icon="minus"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={{}}
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+          </div>
+        </Button>
+        <Button
+          data-testid="reset-zoom"
+          icon={
+            {
+              "icon": [
+                512,
+                512,
+                [
+                  "rotate-back",
+                  "rotate-backward",
+                  "undo-alt",
+                ],
+                "f2ea",
+                "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
+              ],
+              "iconName": "rotate-left",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="reset-zoom"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": "2px solid lightgray",
+            }
+          }
+          text="Reset Zoom"
+        >
+          <div
+            data-testid="reset-zoom"
+            name="reset-zoom"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": "2px solid lightgray",
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    512,
+                    512,
+                    [
+                      "rotate-back",
+                      "rotate-backward",
+                      "undo-alt",
+                    ],
+                    "f2ea",
+                    "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
+                  ],
+                  "iconName": "rotate-left",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={
+                {
+                  "marginRight": 8,
+                }
+              }
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-rotate-left "
+                data-icon="rotate-left"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={
+                  {
+                    "marginRight": 8,
+                  }
+                }
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+            Reset Zoom
+          </div>
+        </Button>
+        <Button
+          className="clear-selection"
+          icon={
+            {
+              "icon": [
+                512,
+                512,
+                [
+                  61532,
+                  "times-circle",
+                  "xmark-circle",
+                ],
+                "f057",
+                "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
+              ],
+              "iconName": "circle-xmark",
+              "prefix": "fas",
+            }
+          }
+          isMobile={false}
+          name="clear-selection"
+          onClick={[MockFunction]}
+          style={
+            {
+              "borderRight": undefined,
+            }
+          }
+          text="Clear All"
+        >
+          <div
+            className="clear-selection"
+            name="clear-selection"
+            onClick={[MockFunction]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "border": "none",
+                "borderRadius": 0,
+                "borderRight": undefined,
+                "cursor": "pointer",
+                "display": "flex",
+                "justifyContent": "center",
+                "outline": "none",
+                "padding": "0.5em 1em",
+              }
+            }
+          >
+            <FontAwesomeIcon
+              beat={false}
+              beatFade={false}
+              border={false}
+              bounce={false}
+              className=""
+              fade={false}
+              fixedWidth={false}
+              flip={false}
+              icon={
+                {
+                  "icon": [
+                    512,
+                    512,
+                    [
+                      61532,
+                      "times-circle",
+                      "xmark-circle",
+                    ],
+                    "f057",
+                    "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
+                  ],
+                  "iconName": "circle-xmark",
+                  "prefix": "fas",
+                }
+              }
+              inverse={false}
+              listItem={false}
+              mask={null}
+              maskId={null}
+              pull={null}
+              pulse={false}
+              rotation={null}
+              shake={false}
+              size={null}
+              spin={false}
+              spinPulse={false}
+              spinReverse={false}
+              style={
+                {
+                  "marginRight": 8,
+                }
+              }
+              swapOpacity={false}
+              symbol={false}
+              title=""
+              titleId={null}
+              transform={null}
+            >
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-circle-xmark "
+                data-icon="circle-xmark"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                style={
+                  {
+                    "marginRight": 8,
+                  }
+                }
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </FontAwesomeIcon>
+            Clear All
+          </div>
+        </Button>
+      </div>
+    </_default>
+    <_default>
+      <div
+        style={
+          {
+            "backgroundColor": "white",
+            "border": "2px solid lightgray",
+            "borderRadius": 5,
+            "display": "flex",
+            "pointerEvents": "all",
+          }
+        }
+      >
+        <Legend
+          isMobile={false}
+          ranges={[]}
+        >
+          <div
+            style={
+              {
+                "position": "relative",
+              }
+            }
+          >
+            <Button
+              icon={
+                {
+                  "icon": [
+                    512,
+                    512,
+                    [],
+                    "f078",
+                    "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
+                  ],
+                  "iconName": "chevron-down",
+                  "prefix": "fas",
+                }
+              }
+              isMobile={false}
+              onClick={[Function]}
+              text="Show Map Legend"
+            >
+              <div
+                onClick={[Function]}
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "border": "none",
+                    "borderRadius": 0,
+                    "cursor": "pointer",
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "outline": "none",
+                    "padding": "0.5em 1em",
+                  }
+                }
+              >
+                <FontAwesomeIcon
+                  beat={false}
+                  beatFade={false}
+                  border={false}
+                  bounce={false}
+                  className=""
+                  fade={false}
+                  fixedWidth={false}
+                  flip={false}
+                  icon={
+                    {
+                      "icon": [
+                        512,
+                        512,
+                        [],
+                        "f078",
+                        "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
+                      ],
+                      "iconName": "chevron-down",
+                      "prefix": "fas",
+                    }
+                  }
+                  inverse={false}
+                  listItem={false}
+                  mask={null}
+                  maskId={null}
+                  pull={null}
+                  pulse={false}
+                  rotation={null}
+                  shake={false}
+                  size={null}
+                  spin={false}
+                  spinPulse={false}
+                  spinReverse={false}
+                  style={
+                    {
+                      "marginRight": 8,
+                    }
+                  }
+                  swapOpacity={false}
+                  symbol={false}
+                  title=""
+                  titleId={null}
+                  transform={null}
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="svg-inline--fa fa-chevron-down "
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    style={
+                      {
+                        "marginRight": 8,
+                      }
+                    }
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                      fill="currentColor"
+                      style={{}}
+                    />
+                  </svg>
+                </FontAwesomeIcon>
+                Show Map Legend
+              </div>
+            </Button>
+          </div>
+        </Legend>
+      </div>
+    </_default>
+  </div>
+</Actions>
+`;

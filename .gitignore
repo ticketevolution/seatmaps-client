@@ -22,3 +22,9 @@ cors.json
 src/parse.js
 .eslintcache
 .stlelintcache
+
+stats
+cjs
+esm
+umd
+.turbo

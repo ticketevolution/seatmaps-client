@@ -1,23 +1,17 @@
 {
-    "compilerOptions": {
-        "outDir": "build",
-        "esModuleInterop": true,
-        "module": "esNext",
-        "target": "esnext",
-        "noEmit": false,
-        "strict": true,
-        "allowJs": true,
-        "noImplicitReturns": true,
-        "jsx": "react",
-        "moduleResolution": "node",
-        "lib": [
-            "esnext",
-            "dom",
-            "es2017.object"
-        ],
-        "baseUrl": ".",
-    },
-    "include": [
-        "src"
-    ]
+  "compilerOptions": {
+    "outDir": "build",
+    "esModuleInterop": true,
+    "module": "esNext",
+    "target": "esnext",
+    "noEmit": true,
+    "strict": true,
+    "allowJs": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": false,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "lib": ["esnext", "dom", "es2017.object"]
+  }
 }

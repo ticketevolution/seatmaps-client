@@ -1,0 +1,36 @@
+name: Publish
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+  push:
+    branches:
+      - master
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  publish:
+    if: github.repository == 'ticketevolution/seatmaps-client' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate a token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.TEVO_GITHUB_TOKEN_GENERATOR_APP_ID }}
+          private-key: ${{ secrets.TEVO_GITHUB_TOKEN_GENERATOR_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/ci-setup
+
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm run release
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          NPM_TOKEN: ${{ secrets.TEVO_NPM_TOKEN }}

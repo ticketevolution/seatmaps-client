@@ -1,0 +1,42 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "extends": [
+    "standard",
+    "standard-react",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "react", "prettier"],
+  "settings": {
+    "react": {
+      "version": "18"
+    }
+  },
+  "globals": {
+    "fetchMock": "readonly"
+  },
+  "ignorePatterns": ["cjs", "esm", "umd"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true
+      }
+    ],
+    "no-plusplus": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/member-delimiter-style": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "camelcase": "off"
+  }
+}
