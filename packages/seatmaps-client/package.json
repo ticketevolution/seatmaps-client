@@ -61,7 +61,6 @@
     "react-dom": ">=16.0.0"
   },
   "devDependencies": {
-    "@-/mock-data": "workspace:*",
     "@cfaester/enzyme-adapter-react-18": "^0.7.1",
     "@jest/expect": "^29.7.0",
     "@jest/globals": "29.6.3",

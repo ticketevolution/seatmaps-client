@@ -1,7 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { TicketMap } from "./src";
-import ticketGroups from "@-/mock-data/data/ticket-groups-1591449.json";
+// eslint-disable-next-line jest/no-mocks-import
+import ticketGroups from "./src/__mocks__/data/ticket-groups-1591449.json";
 
 const rootEl = document.getElementById("map");
 if (!rootEl) {
