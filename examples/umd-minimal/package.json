@@ -9,7 +9,7 @@
     "@ticketevolution/seatmaps-client": "workspace:*"
   },
   "devDependencies": {
-    "vite": "4.4.11"
+    "vite": "4.4.12"
   },
   "version": null
 }
