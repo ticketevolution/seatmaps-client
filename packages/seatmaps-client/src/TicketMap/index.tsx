@@ -565,7 +565,6 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
         >
           <div
             style={{
-              color: "white",
               fontFamily: "Nunito Sans",
               padding: "50px 30px",
               position: "absolute",
@@ -580,13 +579,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
             >
               Seating chart not available.
             </div>
-            <div style={{ fontWeight: 300 }}>(It was abducted by aliens)</div>
           </div>
-          <img
-            src="https://maps.ticketevolution.com/maps/not_available.jpg"
-            alt={"Seating chart not available. It was abducted by aliens."}
-            style={{ width: "100%", textAlign: "left" }}
-          />
         </div>
       );
     }

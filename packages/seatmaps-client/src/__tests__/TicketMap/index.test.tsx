@@ -92,11 +92,6 @@ describe("TicketMap", () => {
     expect(
       await screen.findByText("Seating chart not available."),
     ).toBeInTheDocument();
-    expect(
-      await screen.findByAltText(
-        "Seating chart not available. It was abducted by aliens.",
-      ),
-    ).toBeInTheDocument();
     expect(consoleError).toHaveBeenCalledTimes(1);
     consoleError.mockRestore();
   });
