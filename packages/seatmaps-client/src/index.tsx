@@ -1,4 +1,3 @@
-import "unfetch/polyfill";
 import React from "react";
 import { render } from "react-dom";
 import union from "lodash.union";
