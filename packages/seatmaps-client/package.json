@@ -52,13 +52,13 @@
     "@fortawesome/fontawesome-svg-core": "6.4.2",
     "@fortawesome/free-solid-svg-icons": "6.4.2",
     "@fortawesome/react-fontawesome": "0.2.0",
+    "fetch-ponyfill": "^7.1.0",
     "lodash.isequal": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "lodash.union": "^4.6.0",
     "react-toggled": "1.2.7",
     "remove": "^0.1.5",
-    "reselect": "^4.0.0",
-    "unfetch": "5.0.0"
+    "reselect": "^4.0.0"
   },
   "peerDependencies": {
     "react": ">=16.0.0",
