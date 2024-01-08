@@ -24,12 +24,11 @@
   "sideEffects": false,
   "files": [
     "cjs",
-    "esm",
-    "umd"
+    "esm"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "pnpm build:cjs && pnpm build:esm && pnpm build:umd-minimal && pnpm build:umd-standalone",
+    "build": "pnpm build:cjs && pnpm build:esm",
     "build:watch": "concurrently \"pnpm build:cjs --watch\" \"pnpm build:esm --watch\" \"pnpm build:umd-minimal --watch\" \"pnpm build:umd-standalone --watch\"",
     "release": "pnpm run build && changeset publish",
     "build:cjs": "dotenv -v NODE_ENV=production -- tsup --config ./tsup.config.cjs.ts",
