@@ -56,8 +56,6 @@
     "lodash.isequal": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "lodash.union": "^4.6.0",
-    "react-toggled": "1.2.7",
-    "remove": "^0.1.5",
     "reselect": "^4.0.0"
   },
   "peerDependencies": {

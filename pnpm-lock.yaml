@@ -159,12 +159,6 @@ importers:
       lodash.union:
         specifier: ^4.6.0
         version: 4.6.0
-      react-toggled:
-        specifier: 1.2.7
-        version: 1.2.7(prop-types@15.8.1)(react@18.2.0)
-      remove:
-        specifier: ^0.1.5
-        version: 0.1.5
       reselect:
         specifier: ^4.0.0
         version: 4.1.8
@@ -292,6 +286,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-toggled:
+        specifier: 1.2.7
+        version: 1.2.7(prop-types@15.8.1)(react@18.2.0)
       ts-node:
         specifier: ^10.9.1
         version: 10.9.1(@swc/core@1.3.92)(@types/node@20.8.2)(typescript@5.2.2)
@@ -3174,12 +3171,6 @@ packages:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
     dev: true
 
-  /chainsaw@0.0.9:
-    resolution: {integrity: sha512-nG8PYH+/4xB+8zkV4G844EtfvZ5tTiLFoX3dZ4nhF4t3OCKIb9UvaFyNmeZO2zOSmRWzBoTD+napN6hiL+EgcA==}
-    dependencies:
-      traverse: 0.3.9
-    dev: false
-
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
@@ -5199,12 +5190,6 @@ packages:
     resolution: {integrity: sha512-qdSAmqLF6209RFj4VVItywPMbm3vWylknmB3nvNiUIs72xAimcM8nVYxYr7ncvZq5qzk9MKIZR8ijqD/1QuYjQ==}
     engines: {node: '>= 0.4.0'}
     dev: true
-
-  /hashish@0.0.4:
-    resolution: {integrity: sha512-xyD4XgslstNAs72ENaoFvgMwtv8xhiDtC2AtzCG+8yF7W/Knxxm9BX+e2s25mm+HxMKh0rBmXVOEGF3zNImXvA==}
-    dependencies:
-      traverse: 0.6.8
-    dev: false
 
   /headers-polyfill@3.2.5:
     resolution: {integrity: sha512-tUCGvt191vNSQgttSyJoibR+VO+I6+iCHIUdhzEMJKE+EAL8BwCN7fUOZlY4ofOelNHsK+gEjxB/B+9N3EWtdA==}
@@ -7892,7 +7877,7 @@ packages:
     dependencies:
       prop-types: 15.8.1
       react: 18.2.0
-    dev: false
+    dev: true
 
   /react@18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
@@ -8013,12 +7998,6 @@ packages:
   /remove-trailing-separator@1.1.0:
     resolution: {integrity: sha512-/hS+Y0u3aOfIETiaiirUFwDBDzmXPvO+jAfKTitUngIPzdKc6Z0LoFjM/CK5PL4C+eKwHohlHAb6H0VFfmmUsw==}
     dev: true
-
-  /remove@0.1.5:
-    resolution: {integrity: sha512-AJMA9oWvJzdTjwIGwSQZsjGQiRx73YTmiOWmfCp1fpLa/D4n7jKcpoA+CZiVLJqKcEKUuh1Suq80c5wF+L/qVQ==}
-    dependencies:
-      seq: 0.3.5
-    dev: false
 
   /repeat-element@1.1.4:
     resolution: {integrity: sha512-LFiNfRcSu7KK3evMyYOuCzv3L10TW7yC1G2/+StMjK8Y6Vqd2MG7r/Qjw4ghtuCOjFvlnms/iMmLqpvW/ES/WQ==}
@@ -8303,13 +8282,6 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
-
-  /seq@0.3.5:
-    resolution: {integrity: sha512-sisY2Ln1fj43KBkRtXkesnRHYNdswIkIibvNe/0UKm2GZxjMbqmccpiatoKr/k2qX5VKiLU8xm+tz/74LAho4g==}
-    dependencies:
-      chainsaw: 0.0.9
-      hashish: 0.0.4
-    dev: false
 
   /set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
@@ -8906,15 +8878,6 @@ packages:
     dependencies:
       punycode: 2.3.0
     dev: true
-
-  /traverse@0.3.9:
-    resolution: {integrity: sha512-iawgk0hLP3SxGKDfnDJf8wTz4p2qImnyihM5Hh/sGvQ3K37dPi/w8sRhdNIxYA1TwFwc5mDhIJq+O0RsvXBKdQ==}
-    dev: false
-
-  /traverse@0.6.8:
-    resolution: {integrity: sha512-aXJDbk6SnumuaZSANd21XAo15ucCDE38H4fkqiGsc3MhCK+wOlZvLP9cB/TvpHT0mOyWgC4Z8EwRlzqYSUzdsA==}
-    engines: {node: '>= 0.4'}
-    dev: false
 
   /tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
