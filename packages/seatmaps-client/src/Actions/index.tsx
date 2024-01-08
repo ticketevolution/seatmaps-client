@@ -1,14 +1,12 @@
 import React from "react";
-import {
-  faTimesCircle,
-  faPlus,
-  faMinus,
-  faUndoAlt,
-} from "@fortawesome/free-solid-svg-icons";
 import Legend from "../Legend";
 import Button from "../Button";
 import ActionGroup from "./ActionGroup";
-import { CostRange } from "src/TicketMap";
+import type { CostRange } from "../TicketMap";
+import { IconPlus } from "../icons/Plus";
+import { IconMinus } from "../icons/Minus";
+import { IconUndo } from "../icons/Undo";
+import { IconClose } from "../icons/Close";
 
 export interface Props {
   onClearSelection?: () => void;
@@ -119,7 +117,7 @@ export default class Actions extends React.Component<
                 data-rh="Default"
                 data-custom-at="right"
                 onClick={this.props.onZoomIn}
-                icon={faPlus}
+                icon={<IconPlus />}
                 isMobile={isMobile}
                 style={{ borderRight: "2px solid lightgray" }}
                 name="zoom-in"
@@ -128,7 +126,7 @@ export default class Actions extends React.Component<
 
               <Button
                 onClick={this.props.onZoomOut}
-                icon={faMinus}
+                icon={<IconMinus />}
                 isMobile={isMobile}
                 style={{ borderRight: "2px solid lightgray" }}
                 name="zoom-out"
@@ -137,7 +135,7 @@ export default class Actions extends React.Component<
 
               <Button
                 onClick={this.props.onResetZoom}
-                icon={faUndoAlt}
+                icon={<IconUndo />}
                 text="Reset Zoom"
                 isMobile={isMobile}
                 style={{ borderRight: "2px solid lightgray" }}
@@ -150,7 +148,7 @@ export default class Actions extends React.Component<
             <Button
               className="clear-selection"
               onClick={this.props.onClearSelection}
-              icon={faTimesCircle}
+              icon={<IconClose />}
               text={`Clear${isMobile ? "" : " All"}`}
               isMobile={isMobile}
               style={{

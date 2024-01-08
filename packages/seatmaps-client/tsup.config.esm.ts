@@ -1,6 +1,5 @@
 import { readFileSync } from "node:fs";
 import { defineConfig } from "tsup";
-import svgr from "esbuild-plugin-svgr";
 
 export default defineConfig({
   entryPoints: ["src/index.tsx"],
@@ -17,7 +16,6 @@ export default defineConfig({
   skipNodeModulesBundle: true,
   sourcemap: true,
   esbuildPlugins: [
-    svgr(),
     {
       name: "excludeVendorFromSourceMap",
       setup(build) {

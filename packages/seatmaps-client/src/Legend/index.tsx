@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Button from "../Button";
 import Swatch from "./swatch";
+import { IconChevronDown } from "../icons/ChevronDown";
+import { IconChevronUp } from "../icons/ChevronUp";
 
 const formatCurrency = new Intl.NumberFormat(undefined, {
   style: "currency",
@@ -42,7 +43,7 @@ export default class Legend extends Component<Props, State> {
       <div style={{ position: "relative" }}>
         <Button
           onClick={() => this.setState({ isOpen: !isOpen })}
-          icon={isOpen ? faChevronUp : faChevronDown}
+          icon={isOpen ? <IconChevronUp /> : <IconChevronDown />}
           text={`${isOpen ? "Hide " : "Show "}Map Legend`}
           isMobile={isMobile}
         />

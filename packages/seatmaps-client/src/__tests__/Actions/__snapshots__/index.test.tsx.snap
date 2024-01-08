@@ -46,23 +46,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
           data-custom-at="right"
           data-rh="Default"
           data-testid="zoom-in"
-          icon={
-            {
-              "icon": [
-                448,
-                512,
-                [
-                  10133,
-                  61543,
-                  "add",
-                ],
-                "2b",
-                "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
-              ],
-              "iconName": "plus",
-              "prefix": "fas",
-            }
-          }
+          icon={<IconPlus />}
           isMobile={false}
           name="zoom-in"
           onClick={[MockFunction]}
@@ -87,97 +71,30 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                 "borderRight": "2px solid lightgray",
                 "cursor": "pointer",
                 "display": "flex",
+                "gap": "6px",
                 "justifyContent": "center",
                 "outline": "none",
                 "padding": "0.5em 1em",
               }
             }
           >
-            <FontAwesomeIcon
-              beat={false}
-              beatFade={false}
-              border={false}
-              bounce={false}
-              className=""
-              fade={false}
-              fixedWidth={false}
-              flip={false}
-              icon={
-                {
-                  "icon": [
-                    448,
-                    512,
-                    [
-                      10133,
-                      61543,
-                      "add",
-                    ],
-                    "2b",
-                    "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
-                  ],
-                  "iconName": "plus",
-                  "prefix": "fas",
-                }
-              }
-              inverse={false}
-              listItem={false}
-              mask={null}
-              maskId={null}
-              pull={null}
-              pulse={false}
-              rotation={null}
-              shake={false}
-              size={null}
-              spin={false}
-              spinPulse={false}
-              spinReverse={false}
-              style={{}}
-              swapOpacity={false}
-              symbol={false}
-              title=""
-              titleId={null}
-              transform={null}
-            >
+            <IconPlus>
               <svg
-                aria-hidden="true"
-                className="svg-inline--fa fa-plus "
-                data-icon="plus"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                style={{}}
+                height="16"
                 viewBox="0 0 448 512"
-                xmlns="http://www.w3.org/2000/svg"
+                width="14"
               >
                 <path
-                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
                   fill="currentColor"
-                  style={{}}
                 />
               </svg>
-            </FontAwesomeIcon>
+            </IconPlus>
           </div>
         </Button>
         <Button
           data-testid="zoom-out"
-          icon={
-            {
-              "icon": [
-                448,
-                512,
-                [
-                  8211,
-                  8722,
-                  10134,
-                  "subtract",
-                ],
-                "f068",
-                "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
-              ],
-              "iconName": "minus",
-              "prefix": "fas",
-            }
-          }
+          icon={<IconMinus />}
           isMobile={false}
           name="zoom-out"
           onClick={[MockFunction]}
@@ -200,97 +117,30 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                 "borderRight": "2px solid lightgray",
                 "cursor": "pointer",
                 "display": "flex",
+                "gap": "6px",
                 "justifyContent": "center",
                 "outline": "none",
                 "padding": "0.5em 1em",
               }
             }
           >
-            <FontAwesomeIcon
-              beat={false}
-              beatFade={false}
-              border={false}
-              bounce={false}
-              className=""
-              fade={false}
-              fixedWidth={false}
-              flip={false}
-              icon={
-                {
-                  "icon": [
-                    448,
-                    512,
-                    [
-                      8211,
-                      8722,
-                      10134,
-                      "subtract",
-                    ],
-                    "f068",
-                    "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
-                  ],
-                  "iconName": "minus",
-                  "prefix": "fas",
-                }
-              }
-              inverse={false}
-              listItem={false}
-              mask={null}
-              maskId={null}
-              pull={null}
-              pulse={false}
-              rotation={null}
-              shake={false}
-              size={null}
-              spin={false}
-              spinPulse={false}
-              spinReverse={false}
-              style={{}}
-              swapOpacity={false}
-              symbol={false}
-              title=""
-              titleId={null}
-              transform={null}
-            >
+            <IconMinus>
               <svg
-                aria-hidden="true"
-                className="svg-inline--fa fa-minus "
-                data-icon="minus"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                style={{}}
+                height="16"
                 viewBox="0 0 448 512"
-                xmlns="http://www.w3.org/2000/svg"
+                width="14"
               >
                 <path
-                  d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"
+                  d="M432 256c0 17.7-14.3 32-32 32H48c-17.7 0-32-14.3-32-32s14.3-32 32-32h352c17.7 0 32 14.3 32 32z"
                   fill="currentColor"
-                  style={{}}
                 />
               </svg>
-            </FontAwesomeIcon>
+            </IconMinus>
           </div>
         </Button>
         <Button
           data-testid="reset-zoom"
-          icon={
-            {
-              "icon": [
-                512,
-                512,
-                [
-                  "rotate-back",
-                  "rotate-backward",
-                  "undo-alt",
-                ],
-                "f2ea",
-                "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
-              ],
-              "iconName": "rotate-left",
-              "prefix": "fas",
-            }
-          }
+          icon={<IconUndo />}
           isMobile={false}
           name="reset-zoom"
           onClick={[MockFunction]}
@@ -314,105 +164,31 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                 "borderRight": "2px solid lightgray",
                 "cursor": "pointer",
                 "display": "flex",
+                "gap": "6px",
                 "justifyContent": "center",
                 "outline": "none",
                 "padding": "0.5em 1em",
               }
             }
           >
-            <FontAwesomeIcon
-              beat={false}
-              beatFade={false}
-              border={false}
-              bounce={false}
-              className=""
-              fade={false}
-              fixedWidth={false}
-              flip={false}
-              icon={
-                {
-                  "icon": [
-                    512,
-                    512,
-                    [
-                      "rotate-back",
-                      "rotate-backward",
-                      "undo-alt",
-                    ],
-                    "f2ea",
-                    "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
-                  ],
-                  "iconName": "rotate-left",
-                  "prefix": "fas",
-                }
-              }
-              inverse={false}
-              listItem={false}
-              mask={null}
-              maskId={null}
-              pull={null}
-              pulse={false}
-              rotation={null}
-              shake={false}
-              size={null}
-              spin={false}
-              spinPulse={false}
-              spinReverse={false}
-              style={
-                {
-                  "marginRight": 8,
-                }
-              }
-              swapOpacity={false}
-              symbol={false}
-              title=""
-              titleId={null}
-              transform={null}
-            >
+            <IconUndo>
               <svg
-                aria-hidden="true"
-                className="svg-inline--fa fa-rotate-left "
-                data-icon="rotate-left"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                style={
-                  {
-                    "marginRight": 8,
-                  }
-                }
+                height="16"
                 viewBox="0 0 512 512"
-                xmlns="http://www.w3.org/2000/svg"
+                width="16"
               >
                 <path
-                  d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"
+                  d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2S50.1 48.1 57 55l41.6 41.6c87.6-86.5 228.7-86.2 315.8 1 87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2S177.7 224 168 224H48.5z"
                   fill="currentColor"
-                  style={{}}
                 />
               </svg>
-            </FontAwesomeIcon>
+            </IconUndo>
             Reset Zoom
           </div>
         </Button>
         <Button
           className="clear-selection"
-          icon={
-            {
-              "icon": [
-                512,
-                512,
-                [
-                  61532,
-                  "times-circle",
-                  "xmark-circle",
-                ],
-                "f057",
-                "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
-              ],
-              "iconName": "circle-xmark",
-              "prefix": "fas",
-            }
-          }
+          icon={<IconClose />}
           isMobile={false}
           name="clear-selection"
           onClick={[MockFunction]}
@@ -436,83 +212,25 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                 "borderRight": undefined,
                 "cursor": "pointer",
                 "display": "flex",
+                "gap": "6px",
                 "justifyContent": "center",
                 "outline": "none",
                 "padding": "0.5em 1em",
               }
             }
           >
-            <FontAwesomeIcon
-              beat={false}
-              beatFade={false}
-              border={false}
-              bounce={false}
-              className=""
-              fade={false}
-              fixedWidth={false}
-              flip={false}
-              icon={
-                {
-                  "icon": [
-                    512,
-                    512,
-                    [
-                      61532,
-                      "times-circle",
-                      "xmark-circle",
-                    ],
-                    "f057",
-                    "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
-                  ],
-                  "iconName": "circle-xmark",
-                  "prefix": "fas",
-                }
-              }
-              inverse={false}
-              listItem={false}
-              mask={null}
-              maskId={null}
-              pull={null}
-              pulse={false}
-              rotation={null}
-              shake={false}
-              size={null}
-              spin={false}
-              spinPulse={false}
-              spinReverse={false}
-              style={
-                {
-                  "marginRight": 8,
-                }
-              }
-              swapOpacity={false}
-              symbol={false}
-              title=""
-              titleId={null}
-              transform={null}
-            >
+            <IconClose>
               <svg
-                aria-hidden="true"
-                className="svg-inline--fa fa-circle-xmark "
-                data-icon="circle-xmark"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                style={
-                  {
-                    "marginRight": 8,
-                  }
-                }
+                height="16"
                 viewBox="0 0 512 512"
-                xmlns="http://www.w3.org/2000/svg"
+                width="16"
               >
                 <path
-                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm-81-337c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
                   fill="currentColor"
-                  style={{}}
                 />
               </svg>
-            </FontAwesomeIcon>
+            </IconClose>
             Clear All
           </div>
         </Button>
@@ -542,19 +260,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
             }
           >
             <Button
-              icon={
-                {
-                  "icon": [
-                    512,
-                    512,
-                    [],
-                    "f078",
-                    "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
-                  ],
-                  "iconName": "chevron-down",
-                  "prefix": "fas",
-                }
-              }
+              icon={<IconChevronDown />}
               isMobile={false}
               onClick={[Function]}
               text="Show Map Legend"
@@ -569,79 +275,25 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
                     "borderRadius": 0,
                     "cursor": "pointer",
                     "display": "flex",
+                    "gap": "6px",
                     "justifyContent": "center",
                     "outline": "none",
                     "padding": "0.5em 1em",
                   }
                 }
               >
-                <FontAwesomeIcon
-                  beat={false}
-                  beatFade={false}
-                  border={false}
-                  bounce={false}
-                  className=""
-                  fade={false}
-                  fixedWidth={false}
-                  flip={false}
-                  icon={
-                    {
-                      "icon": [
-                        512,
-                        512,
-                        [],
-                        "f078",
-                        "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
-                      ],
-                      "iconName": "chevron-down",
-                      "prefix": "fas",
-                    }
-                  }
-                  inverse={false}
-                  listItem={false}
-                  mask={null}
-                  maskId={null}
-                  pull={null}
-                  pulse={false}
-                  rotation={null}
-                  shake={false}
-                  size={null}
-                  spin={false}
-                  spinPulse={false}
-                  spinReverse={false}
-                  style={
-                    {
-                      "marginRight": 8,
-                    }
-                  }
-                  swapOpacity={false}
-                  symbol={false}
-                  title=""
-                  titleId={null}
-                  transform={null}
-                >
+                <IconChevronDown>
                   <svg
-                    aria-hidden="true"
-                    className="svg-inline--fa fa-chevron-down "
-                    data-icon="chevron-down"
-                    data-prefix="fas"
-                    focusable="false"
-                    role="img"
-                    style={
-                      {
-                        "marginRight": 8,
-                      }
-                    }
+                    height="16"
                     viewBox="0 0 512 512"
-                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
                   >
                     <path
                       d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
                       fill="currentColor"
-                      style={{}}
                     />
                   </svg>
-                </FontAwesomeIcon>
+                </IconChevronDown>
                 Show Map Legend
               </div>
             </Button>
@@ -699,23 +351,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
           data-custom-at="right"
           data-rh="Default"
           data-testid="zoom-in"
-          icon={
-            {
-              "icon": [
-                448,
-                512,
-                [
-                  10133,
-                  61543,
-                  "add",
-                ],
-                "2b",
-                "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
-              ],
-              "iconName": "plus",
-              "prefix": "fas",
-            }
-          }
+          icon={<IconPlus />}
           isMobile={false}
           name="zoom-in"
           onClick={[MockFunction]}
@@ -740,97 +376,30 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                 "borderRight": "2px solid lightgray",
                 "cursor": "pointer",
                 "display": "flex",
+                "gap": "6px",
                 "justifyContent": "center",
                 "outline": "none",
                 "padding": "0.5em 1em",
               }
             }
           >
-            <FontAwesomeIcon
-              beat={false}
-              beatFade={false}
-              border={false}
-              bounce={false}
-              className=""
-              fade={false}
-              fixedWidth={false}
-              flip={false}
-              icon={
-                {
-                  "icon": [
-                    448,
-                    512,
-                    [
-                      10133,
-                      61543,
-                      "add",
-                    ],
-                    "2b",
-                    "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z",
-                  ],
-                  "iconName": "plus",
-                  "prefix": "fas",
-                }
-              }
-              inverse={false}
-              listItem={false}
-              mask={null}
-              maskId={null}
-              pull={null}
-              pulse={false}
-              rotation={null}
-              shake={false}
-              size={null}
-              spin={false}
-              spinPulse={false}
-              spinReverse={false}
-              style={{}}
-              swapOpacity={false}
-              symbol={false}
-              title=""
-              titleId={null}
-              transform={null}
-            >
+            <IconPlus>
               <svg
-                aria-hidden="true"
-                className="svg-inline--fa fa-plus "
-                data-icon="plus"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                style={{}}
+                height="16"
                 viewBox="0 0 448 512"
-                xmlns="http://www.w3.org/2000/svg"
+                width="14"
               >
                 <path
-                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
                   fill="currentColor"
-                  style={{}}
                 />
               </svg>
-            </FontAwesomeIcon>
+            </IconPlus>
           </div>
         </Button>
         <Button
           data-testid="zoom-out"
-          icon={
-            {
-              "icon": [
-                448,
-                512,
-                [
-                  8211,
-                  8722,
-                  10134,
-                  "subtract",
-                ],
-                "f068",
-                "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
-              ],
-              "iconName": "minus",
-              "prefix": "fas",
-            }
-          }
+          icon={<IconMinus />}
           isMobile={false}
           name="zoom-out"
           onClick={[MockFunction]}
@@ -853,97 +422,30 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                 "borderRight": "2px solid lightgray",
                 "cursor": "pointer",
                 "display": "flex",
+                "gap": "6px",
                 "justifyContent": "center",
                 "outline": "none",
                 "padding": "0.5em 1em",
               }
             }
           >
-            <FontAwesomeIcon
-              beat={false}
-              beatFade={false}
-              border={false}
-              bounce={false}
-              className=""
-              fade={false}
-              fixedWidth={false}
-              flip={false}
-              icon={
-                {
-                  "icon": [
-                    448,
-                    512,
-                    [
-                      8211,
-                      8722,
-                      10134,
-                      "subtract",
-                    ],
-                    "f068",
-                    "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z",
-                  ],
-                  "iconName": "minus",
-                  "prefix": "fas",
-                }
-              }
-              inverse={false}
-              listItem={false}
-              mask={null}
-              maskId={null}
-              pull={null}
-              pulse={false}
-              rotation={null}
-              shake={false}
-              size={null}
-              spin={false}
-              spinPulse={false}
-              spinReverse={false}
-              style={{}}
-              swapOpacity={false}
-              symbol={false}
-              title=""
-              titleId={null}
-              transform={null}
-            >
+            <IconMinus>
               <svg
-                aria-hidden="true"
-                className="svg-inline--fa fa-minus "
-                data-icon="minus"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                style={{}}
+                height="16"
                 viewBox="0 0 448 512"
-                xmlns="http://www.w3.org/2000/svg"
+                width="14"
               >
                 <path
-                  d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"
+                  d="M432 256c0 17.7-14.3 32-32 32H48c-17.7 0-32-14.3-32-32s14.3-32 32-32h352c17.7 0 32 14.3 32 32z"
                   fill="currentColor"
-                  style={{}}
                 />
               </svg>
-            </FontAwesomeIcon>
+            </IconMinus>
           </div>
         </Button>
         <Button
           data-testid="reset-zoom"
-          icon={
-            {
-              "icon": [
-                512,
-                512,
-                [
-                  "rotate-back",
-                  "rotate-backward",
-                  "undo-alt",
-                ],
-                "f2ea",
-                "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
-              ],
-              "iconName": "rotate-left",
-              "prefix": "fas",
-            }
-          }
+          icon={<IconUndo />}
           isMobile={false}
           name="reset-zoom"
           onClick={[MockFunction]}
@@ -967,105 +469,31 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                 "borderRight": "2px solid lightgray",
                 "cursor": "pointer",
                 "display": "flex",
+                "gap": "6px",
                 "justifyContent": "center",
                 "outline": "none",
                 "padding": "0.5em 1em",
               }
             }
           >
-            <FontAwesomeIcon
-              beat={false}
-              beatFade={false}
-              border={false}
-              bounce={false}
-              className=""
-              fade={false}
-              fixedWidth={false}
-              flip={false}
-              icon={
-                {
-                  "icon": [
-                    512,
-                    512,
-                    [
-                      "rotate-back",
-                      "rotate-backward",
-                      "undo-alt",
-                    ],
-                    "f2ea",
-                    "M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z",
-                  ],
-                  "iconName": "rotate-left",
-                  "prefix": "fas",
-                }
-              }
-              inverse={false}
-              listItem={false}
-              mask={null}
-              maskId={null}
-              pull={null}
-              pulse={false}
-              rotation={null}
-              shake={false}
-              size={null}
-              spin={false}
-              spinPulse={false}
-              spinReverse={false}
-              style={
-                {
-                  "marginRight": 8,
-                }
-              }
-              swapOpacity={false}
-              symbol={false}
-              title=""
-              titleId={null}
-              transform={null}
-            >
+            <IconUndo>
               <svg
-                aria-hidden="true"
-                className="svg-inline--fa fa-rotate-left "
-                data-icon="rotate-left"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                style={
-                  {
-                    "marginRight": 8,
-                  }
-                }
+                height="16"
                 viewBox="0 0 512 512"
-                xmlns="http://www.w3.org/2000/svg"
+                width="16"
               >
                 <path
-                  d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"
+                  d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2S50.1 48.1 57 55l41.6 41.6c87.6-86.5 228.7-86.2 315.8 1 87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2S177.7 224 168 224H48.5z"
                   fill="currentColor"
-                  style={{}}
                 />
               </svg>
-            </FontAwesomeIcon>
+            </IconUndo>
             Reset Zoom
           </div>
         </Button>
         <Button
           className="clear-selection"
-          icon={
-            {
-              "icon": [
-                512,
-                512,
-                [
-                  61532,
-                  "times-circle",
-                  "xmark-circle",
-                ],
-                "f057",
-                "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
-              ],
-              "iconName": "circle-xmark",
-              "prefix": "fas",
-            }
-          }
+          icon={<IconClose />}
           isMobile={false}
           name="clear-selection"
           onClick={[MockFunction]}
@@ -1089,83 +517,25 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                 "borderRight": undefined,
                 "cursor": "pointer",
                 "display": "flex",
+                "gap": "6px",
                 "justifyContent": "center",
                 "outline": "none",
                 "padding": "0.5em 1em",
               }
             }
           >
-            <FontAwesomeIcon
-              beat={false}
-              beatFade={false}
-              border={false}
-              bounce={false}
-              className=""
-              fade={false}
-              fixedWidth={false}
-              flip={false}
-              icon={
-                {
-                  "icon": [
-                    512,
-                    512,
-                    [
-                      61532,
-                      "times-circle",
-                      "xmark-circle",
-                    ],
-                    "f057",
-                    "M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z",
-                  ],
-                  "iconName": "circle-xmark",
-                  "prefix": "fas",
-                }
-              }
-              inverse={false}
-              listItem={false}
-              mask={null}
-              maskId={null}
-              pull={null}
-              pulse={false}
-              rotation={null}
-              shake={false}
-              size={null}
-              spin={false}
-              spinPulse={false}
-              spinReverse={false}
-              style={
-                {
-                  "marginRight": 8,
-                }
-              }
-              swapOpacity={false}
-              symbol={false}
-              title=""
-              titleId={null}
-              transform={null}
-            >
+            <IconClose>
               <svg
-                aria-hidden="true"
-                className="svg-inline--fa fa-circle-xmark "
-                data-icon="circle-xmark"
-                data-prefix="fas"
-                focusable="false"
-                role="img"
-                style={
-                  {
-                    "marginRight": 8,
-                  }
-                }
+                height="16"
                 viewBox="0 0 512 512"
-                xmlns="http://www.w3.org/2000/svg"
+                width="16"
               >
                 <path
-                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+                  d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zm-81-337c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
                   fill="currentColor"
-                  style={{}}
                 />
               </svg>
-            </FontAwesomeIcon>
+            </IconClose>
             Clear All
           </div>
         </Button>
@@ -1195,19 +565,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
             }
           >
             <Button
-              icon={
-                {
-                  "icon": [
-                    512,
-                    512,
-                    [],
-                    "f078",
-                    "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
-                  ],
-                  "iconName": "chevron-down",
-                  "prefix": "fas",
-                }
-              }
+              icon={<IconChevronDown />}
               isMobile={false}
               onClick={[Function]}
               text="Show Map Legend"
@@ -1222,79 +580,25 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
                     "borderRadius": 0,
                     "cursor": "pointer",
                     "display": "flex",
+                    "gap": "6px",
                     "justifyContent": "center",
                     "outline": "none",
                     "padding": "0.5em 1em",
                   }
                 }
               >
-                <FontAwesomeIcon
-                  beat={false}
-                  beatFade={false}
-                  border={false}
-                  bounce={false}
-                  className=""
-                  fade={false}
-                  fixedWidth={false}
-                  flip={false}
-                  icon={
-                    {
-                      "icon": [
-                        512,
-                        512,
-                        [],
-                        "f078",
-                        "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z",
-                      ],
-                      "iconName": "chevron-down",
-                      "prefix": "fas",
-                    }
-                  }
-                  inverse={false}
-                  listItem={false}
-                  mask={null}
-                  maskId={null}
-                  pull={null}
-                  pulse={false}
-                  rotation={null}
-                  shake={false}
-                  size={null}
-                  spin={false}
-                  spinPulse={false}
-                  spinReverse={false}
-                  style={
-                    {
-                      "marginRight": 8,
-                    }
-                  }
-                  swapOpacity={false}
-                  symbol={false}
-                  title=""
-                  titleId={null}
-                  transform={null}
-                >
+                <IconChevronDown>
                   <svg
-                    aria-hidden="true"
-                    className="svg-inline--fa fa-chevron-down "
-                    data-icon="chevron-down"
-                    data-prefix="fas"
-                    focusable="false"
-                    role="img"
-                    style={
-                      {
-                        "marginRight": 8,
-                      }
-                    }
+                    height="16"
                     viewBox="0 0 512 512"
-                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
                   >
                     <path
                       d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
                       fill="currentColor"
-                      style={{}}
                     />
                   </svg>
-                </FontAwesomeIcon>
+                </IconChevronDown>
                 Show Map Legend
               </div>
             </Button>

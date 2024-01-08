@@ -49,9 +49,6 @@
     "check": "npm run lint && npm run check-ts && npm test -- --coverage"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "6.4.2",
-    "@fortawesome/free-solid-svg-icons": "6.4.2",
-    "@fortawesome/react-fontawesome": "0.2.0",
     "fetch-ponyfill": "^7.1.0",
     "lodash.isequal": "^4.5.0",
     "lodash.pick": "^4.4.0",
@@ -84,7 +81,6 @@
     "concurrently": "^8.2.1",
     "dotenv-cli": "^7.3.0",
     "enzyme": "3.11.0",
-    "esbuild-plugin-svgr": "^2.1.0",
     "esbuild-visualizer": "^0.4.1",
     "eslint": "8.51.0",
     "eslint-config-prettier": "^9.0.0",

@@ -3,8 +3,6 @@ import "jest-enzyme";
 import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import ZoomHelper from "../../ZoomHelper/index";
-import PinchZoomInIcon from "../../ZoomHelper/pinch-zoom-in.svg";
-import TwoFingerSlideIcon from "../../ZoomHelper/two-finger-slide.svg";
 import {
   afterEach,
   beforeEach,
@@ -31,13 +29,8 @@ describe("ZoomHelper", () => {
 
   describe("render()", () => {
     it("renders", () => {
-      expect(comp.find("img")).toHaveLength(2);
-      expect(comp.find("img").find(".zoom-in-icon").props().src).toBe(
-        PinchZoomInIcon,
-      );
-      expect(comp.find("img").find(".slide-icon").props().src).toBe(
-        TwoFingerSlideIcon,
-      );
+      expect(comp.find(".zoom-in-icon")).toHaveLength(1);
+      expect(comp.find(".slide-icon")).toHaveLength(1);
     });
 
     it("should set discovered to true when container is clicked", () => {
