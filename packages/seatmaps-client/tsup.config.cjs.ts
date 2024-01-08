@@ -1,5 +1,4 @@
 import { defineConfig } from "tsup";
-import svgr from "esbuild-plugin-svgr";
 
 export default defineConfig({
   entryPoints: ["src/index.tsx"],
@@ -15,6 +14,5 @@ export default defineConfig({
   keepNames: true,
   skipNodeModulesBundle: true,
   sourcemap: true,
-  esbuildPlugins: [svgr()],
   format: ["cjs"],
 });

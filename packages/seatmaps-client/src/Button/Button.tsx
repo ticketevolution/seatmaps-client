@@ -1,9 +1,7 @@
 import React from "react";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
-  icon?: IconDefinition;
+  icon?: React.ReactNode;
   text?: string;
   isMobile?: boolean;
 }
@@ -28,15 +26,11 @@ export default function Button({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        gap: isMobile ? "4px" : "6px",
         ...(style || {}),
       }}
     >
-      {icon && (
-        <FontAwesomeIcon
-          icon={icon}
-          style={text ? { marginRight: isMobile ? 4 : 8 } : {}}
-        />
-      )}
+      {icon}
       {text}
     </div>
   );

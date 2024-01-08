@@ -1,7 +1,6 @@
 import { readFileSync } from "node:fs";
 import { defineConfig } from "tsup";
 import umd from "umd";
-import svgr from "esbuild-plugin-svgr";
 import { peerDependencies, dependencies } from "./package.json";
 
 const INCLUDE_DEPENDENCIES = process.env.INCLUDE_DEPENDENCIES === "true";
@@ -47,7 +46,6 @@ export default defineConfig({
   },
   sourcemap: true,
   esbuildPlugins: [
-    svgr(),
     {
       name: "excludeVendorFromSourceMap",
       setup(build) {
