@@ -104,66 +104,71 @@ export default class Actions extends React.Component<
     const { isMobile } = this.state;
     const { showControls, showLegend } = this.props;
 
+    const showLeftActions = showControls || (isMobile && showLegend);
+    const showRightActions = !isMobile && showLegend;
+
     return (
       <div
         style={this.styles.container}
         ref={this.container}
         data-testid="seatmaps-actions-menu"
       >
-        <ActionGroup>
-          {showControls && !isMobile && (
-            <React.Fragment>
-              <Button
-                data-rh="Default"
-                data-custom-at="right"
-                onClick={this.props.onZoomIn}
-                icon={<IconPlus />}
-                isMobile={isMobile}
-                style={{ borderRight: "2px solid lightgray" }}
-                name="zoom-in"
-                data-testid="zoom-in"
-              />
-
-              <Button
-                onClick={this.props.onZoomOut}
-                icon={<IconMinus />}
-                isMobile={isMobile}
-                style={{ borderRight: "2px solid lightgray" }}
-                name="zoom-out"
-                data-testid="zoom-out"
-              />
-
-              <Button
-                onClick={this.props.onResetZoom}
-                icon={<IconUndo />}
-                text="Reset Zoom"
-                isMobile={isMobile}
-                style={{ borderRight: "2px solid lightgray" }}
-                name="reset-zoom"
-                data-testid="reset-zoom"
-              />
-            </React.Fragment>
-          )}
-          {showControls && (
-            <Button
-              className="clear-selection"
-              onClick={this.props.onClearSelection}
-              icon={<IconClose />}
-              text={`Clear${isMobile ? "" : " All"}`}
-              isMobile={isMobile}
-              style={{
-                borderRight: isMobile ? "2px solid lightgray" : undefined,
-              }}
-              name="clear-selection"
-            />
-          )}
-          {isMobile && showLegend && (
-            <Legend isMobile ranges={this.props.ranges} />
-          )}
-        </ActionGroup>
-        {!isMobile && (
+        {showLeftActions && (
           <ActionGroup>
-            {showLegend && <Legend ranges={this.props.ranges} />}
+            {!isMobile && showControls && (
+              <React.Fragment>
+                <Button
+                  data-rh="Default"
+                  data-custom-at="right"
+                  onClick={this.props.onZoomIn}
+                  icon={<IconPlus />}
+                  isMobile={isMobile}
+                  style={{ borderRight: "2px solid lightgray" }}
+                  name="zoom-in"
+                  data-testid="zoom-in"
+                />
+
+                <Button
+                  onClick={this.props.onZoomOut}
+                  icon={<IconMinus />}
+                  isMobile={isMobile}
+                  style={{ borderRight: "2px solid lightgray" }}
+                  name="zoom-out"
+                  data-testid="zoom-out"
+                />
+
+                <Button
+                  onClick={this.props.onResetZoom}
+                  icon={<IconUndo />}
+                  text="Reset Zoom"
+                  isMobile={isMobile}
+                  style={{ borderRight: "2px solid lightgray" }}
+                  name="reset-zoom"
+                  data-testid="reset-zoom"
+                />
+              </React.Fragment>
+            )}
+            {showControls && (
+              <Button
+                className="clear-selection"
+                onClick={this.props.onClearSelection}
+                icon={<IconClose />}
+                text={`Clear${isMobile ? "" : " All"}`}
+                isMobile={isMobile}
+                style={{
+                  borderRight: isMobile ? "2px solid lightgray" : undefined,
+                }}
+                name="clear-selection"
+              />
+            )}
+            {isMobile && showLegend && (
+              <Legend isMobile ranges={this.props.ranges} />
+            )}
+          </ActionGroup>
+        )}
+        {showRightActions && (
+          <ActionGroup>
+            <Legend ranges={this.props.ranges} />
           </ActionGroup>
         )}
       </div>
