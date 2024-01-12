@@ -1,5 +1,11 @@
 # @ticketevolution/seatmaps-client
 
+## 3.0.1
+
+### Patch Changes
+
+- 3343aa4: fix: hiding empty controls containers when controls are disabled
+
 ## 3.0.0
 
 ### Major Changes
