@@ -5,7 +5,7 @@ import fetchPonyfill from "fetch-ponyfill";
 import Actions from "../Actions";
 import Tooltip from "../Tooltip";
 import ZoomHelper from "../ZoomHelper";
-import MissingSeatMapLogo from "./MissingSeatMapLogo";
+import MissingSeatMapLogo from "../icons/MissingSeatMapLogo";
 
 import { ZoomControl, initializeZoom } from "../utils/zoom";
 
