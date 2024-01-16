@@ -580,8 +580,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
               flex: "1 0 30%",
             }}
           >
-            {!this.props.missingSeatMapLogo && <MissingSeatMapLogo />}
-            {this.props.missingSeatMapLogo}
+            {this.props.missingSeatMapLogo || <MissingSeatMapLogo />}
             <div
               style={{
                 fontWeight: 400,
