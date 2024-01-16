@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import isEqual from "lodash.isequal";
+import fetchPonyfill from "fetch-ponyfill";
 
 import Actions from "../Actions";
 import Tooltip from "../Tooltip";
@@ -45,6 +46,8 @@ class MapNotFoundError extends Error {
 export const highlightedSectionColor = "#4a4a4a";
 export const unhighlightedSectionColor = "#FFFFFF";
 
+// Needed to support SSR in some cases - in case user wants to prerender/cache map html serverside.
+const { fetch: isomorphicFetch } = fetchPonyfill();
 export class TicketMap extends Component<Props & DefaultProps, State> {
   publicApi: PublicApi;
   mapRoot = React.createRef<HTMLDivElement>();
@@ -180,7 +183,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   async fetchMap() {
-    const mapResponse = await fetch(`${this.configFilePath}/map.svg`);
+    const mapResponse = await isomorphicFetch(`${this.configFilePath}/map.svg`);
     if (!mapResponse.ok) {
       throw new MapNotFoundError();
     }
@@ -198,7 +201,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
   }
 
   async fetchManifest() {
-    const manifestResponse = await fetch(
+    const manifestResponse = await isomorphicFetch(
       `${this.configFilePath}/manifest.json`,
     );
     if (!manifestResponse.ok) {

@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
-import PinchZoomInIcon from "./pinch-zoom-in.svg";
-import TwoFingerSlideIcon from "./two-finger-slide.svg";
+import { IconPinchZoomIn } from "../icons/PinchZoomIn";
+import { IconTwoFingerSlide } from "../icons/TwoFingerSlide";
 
 const containerStyle: CSSProperties = {
   position: "absolute",
@@ -106,16 +106,8 @@ export default class ZoomHelper extends React.Component {
           href="https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap"
           rel="stylesheet"
         />
-        <img
-          style={imageStyle}
-          src={PinchZoomInIcon}
-          className="zoom-in-icon"
-        />
-        <img
-          style={imageStyle}
-          src={TwoFingerSlideIcon}
-          className="slide-icon"
-        />
+        <IconPinchZoomIn className="zoom-in-icon" style={imageStyle} />
+        <IconTwoFingerSlide className="slide-icon" style={imageStyle} />
         <div>pinch to zoom in/out</div>
         <div>use two fingers to move map</div>
       </div>
