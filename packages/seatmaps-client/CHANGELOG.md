@@ -1,5 +1,12 @@
 # @ticketevolution/seatmaps-client
 
+## 3.1.0
+
+### Minor Changes
+
+- c255500: Removed UFO image and alien mentions.
+- c255500: Added SVG react component for missing seatmap.
+
 ## 3.0.1
 
 ### Patch Changes
