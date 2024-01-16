@@ -108,7 +108,7 @@ describe("TicketMap", () => {
     await waitFor(() => {
       render(<TicketMap {...dataProps} />);
     });
-    expect(screen.queryByText("Seating chart not available.")).toBeNull();
+    expect(screen.queryByText("Seating Chart Coming Soon")).toBeNull();
     expect(consoleError).toHaveBeenCalledTimes(1);
     consoleError.mockRestore();
   });

@@ -38,6 +38,7 @@ export interface DefaultProps {
   onSelection(sections: string[]): void;
   showControls: boolean;
   mouseControlEnabled: boolean;
+  missingSeatMapLogo?: React.ReactNode;
 }
 
 export interface RequiredProps {
