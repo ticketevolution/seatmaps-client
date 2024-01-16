@@ -90,7 +90,7 @@ describe("TicketMap", () => {
       render(<TicketMap {...dataProps} />);
     });
     expect(
-      await screen.findByText("Seating chart not available."),
+      await screen.findByText("Seating Chart Coming Soon"),
     ).toBeInTheDocument();
     expect(consoleError).toHaveBeenCalledTimes(1);
     consoleError.mockRestore();
@@ -108,7 +108,7 @@ describe("TicketMap", () => {
     await waitFor(() => {
       render(<TicketMap {...dataProps} />);
     });
-    expect(screen.queryByText("Seating chart not available.")).toBeNull();
+    expect(screen.queryByText("Seating Chart Coming Soon")).toBeNull();
     expect(consoleError).toHaveBeenCalledTimes(1);
     consoleError.mockRestore();
   });

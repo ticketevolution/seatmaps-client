@@ -5,6 +5,8 @@ import fetchPonyfill from "fetch-ponyfill";
 import Actions from "../Actions";
 import Tooltip from "../Tooltip";
 import ZoomHelper from "../ZoomHelper";
+import MissingSeatMapLogo from "../icons/MissingSeatMapLogo";
+
 import { ZoomControl, initializeZoom } from "../utils/zoom";
 
 import { TicketGroup, NormalizedTicketGroup } from "../types/TicketGroups";
@@ -561,26 +563,31 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
       return (
         <div
           style={{
-            left: 0,
-            position: "relative",
-            textAlign: "left",
+            height: "100vh",
+            width: "100vw",
+            display: "flex",
+            flexWrap: "wrap",
+            fontFamily: "Nunito Sans",
           }}
         >
           <div
             style={{
-              fontFamily: "Nunito Sans",
-              padding: "50px 30px",
-              position: "absolute",
-              textAlign: "left",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              textAlign: "center",
+              flex: "1 0 30%",
             }}
           >
+            {this.props.missingSeatMapLogo || <MissingSeatMapLogo />}
             <div
               style={{
-                fontWeight: 600,
-                fontSize: "1.375em",
+                fontWeight: 400,
+                fontSize: "1.2em",
               }}
             >
-              Seating chart not available.
+              Seating Chart Coming Soon
             </div>
           </div>
         </div>
