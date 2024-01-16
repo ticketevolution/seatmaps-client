@@ -563,8 +563,8 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
       return (
         <div
           style={{
-            height: "100vh",
-            width: "100vw",
+            height: "100%",
+            width: "100%",
             display: "flex",
             flexWrap: "wrap",
             fontFamily: "Nunito Sans",
