@@ -1,5 +1,11 @@
 # @ticketevolution/seatmaps-client
 
+## 3.1.1
+
+### Patch Changes
+
+- 73a8b6d: Fixed height and width for empty seat map icon
+
 ## 3.1.0
 
 ### Minor Changes
