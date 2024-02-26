@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@-/mock-data": "workspace:*",
-    "vite": "4.4.11"
+    "vite": "5.1.4"
   },
   "version": null
 }
