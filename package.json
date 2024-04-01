@@ -18,13 +18,13 @@
     "pre-push-hook": "pnpm run lint && pnpm run check-ts"
   },
   "devDependencies": {
-    "@changesets/cli": "2.26.2",
-    "@typescript-eslint/eslint-plugin": "6.7.4",
-    "@typescript-eslint/parser": "6.7.4",
-    "eslint": "8.50.0",
-    "husky": "8.0.3",
-    "turbo": "^1.10.14",
-    "typescript": "5.2.2"
+    "@changesets/cli": "2.27.1",
+    "@typescript-eslint/eslint-plugin": "7.4.0",
+    "@typescript-eslint/parser": "7.4.0",
+    "eslint": "8.57.0",
+    "husky": "9.0.11",
+    "turbo": "^1.13.0",
+    "typescript": "5.4.3"
   },
   "pnpm": {
     "overrides": {
