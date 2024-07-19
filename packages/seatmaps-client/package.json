@@ -18,9 +18,15 @@
   "repository": "github:ticketevolution/seatmaps-client",
   "author": "Ticket Evolution, Inc.",
   "license": "MIT",
-  "main": "./cjs/index.js",
-  "module": "./esm/index.mjs",
   "types": "./cjs/index.d.ts",
+  "main": "./dist/bundle.umd.cjs",
+  "module": "./dist/bundle.js",
+  "exports": {
+    ".": {
+      "import": "./dist/bundle.js",
+      "require": "./dist/bundle.umd.cjs"
+    }
+  },
   "sideEffects": false,
   "files": [
     "cjs",
@@ -29,6 +35,7 @@
   "scripts": {
     "dev": "vite",
     "build": "pnpm build:cjs && pnpm build:esm",
+    "vite-build": "vite build",
     "build:watch": "concurrently \"pnpm build:cjs --watch\" \"pnpm build:esm --watch\" \"pnpm build:umd-minimal --watch\" \"pnpm build:umd-standalone --watch\"",
     "release": "pnpm run build && changeset publish",
     "build:cjs": "dotenv -v NODE_ENV=production -- tsup --config ./tsup.config.cjs.ts",
@@ -77,6 +84,7 @@
     "@types/umd": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "6.7.4",
     "@typescript-eslint/parser": "6.7.4",
+    "@vitejs/plugin-react": "^4.3.1",
     "concurrently": "^8.2.1",
     "dotenv-cli": "^7.3.0",
     "enzyme": "3.11.0",

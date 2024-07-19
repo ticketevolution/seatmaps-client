@@ -5,6 +5,7 @@
     "bump": "changeset version",
     "changeset": "changeset",
     "dev": "turbo run dev",
+    "vite-build": "vite build",
     "run-examples": "turbo run run-example",
     "build": "turbo run build",
     "build:watch": "turbo run build:watch",
@@ -24,7 +25,8 @@
     "eslint": "8.50.0",
     "husky": "8.0.3",
     "turbo": "^1.10.14",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "vite": "^5.3.4"
   },
   "pnpm": {
     "overrides": {
