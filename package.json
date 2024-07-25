@@ -5,7 +5,6 @@
     "bump": "changeset version",
     "changeset": "changeset",
     "dev": "turbo run dev",
-    "vite-build": "vite build",
     "run-examples": "turbo run run-example",
     "build": "turbo run build",
     "build:watch": "turbo run build:watch",

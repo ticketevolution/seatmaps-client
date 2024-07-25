@@ -18,15 +18,8 @@
   "repository": "github:ticketevolution/seatmaps-client",
   "author": "Ticket Evolution, Inc.",
   "license": "MIT",
-  "types": "./cjs/index.d.ts",
-  "main": "./dist/bundle.umd.cjs",
-  "module": "./dist/bundle.js",
-  "exports": {
-    ".": {
-      "import": "./dist/bundle.js",
-      "require": "./dist/bundle.umd.cjs"
-    }
-  },
+  "main": "./cjs/index.js",
+  "module": "./esm/index.mjs",
   "sideEffects": false,
   "files": [
     "cjs",
