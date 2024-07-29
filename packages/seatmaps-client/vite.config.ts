@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.tsx"),
-      name: "Tevomaps", // Global variable name for your library
+      name: "Tevomaps",
       fileName: () => `bundle.js`,
       formats: ["umd"],
     },
@@ -16,9 +16,9 @@ export default defineConfig({
       external: [],
       output: {
         globals: {},
-        name: "Tevomaps", // Ensure this matches the global variable
-        format: "umd", // Ensure the esm format
-        exports: "named", // Explicitly specify named exports
+        name: "Tevomaps",
+        format: "umd",
+        exports: "named",
       },
       plugins: [
         inject({

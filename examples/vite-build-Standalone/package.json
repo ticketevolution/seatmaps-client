@@ -1,0 +1,15 @@
+{
+  "name": "vite-build-standalone",
+  "private": true,
+  "scripts": {
+    "run-example": "node vite-server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "portfinder": "^1.0.32"
+  },
+  "devDependencies": {
+    "vite": "4.4.11"
+  },
+  "version": null
+}
