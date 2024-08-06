@@ -2,11 +2,13 @@
   "name": "vite-build-standalone",
   "private": true,
   "scripts": {
-    "run-example": "node vite-server.js"
+    "run-example": "node vite-server.mjs"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "portfinder": "^1.0.32"
+    "express-rate-limit": "^7.4.0",
+    "portfinder": "^1.0.32",
+    "@ticketevolution/seatmaps-client": "workspace:*"
   },
   "devDependencies": {
     "vite": "4.4.11"

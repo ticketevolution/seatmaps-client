@@ -1,13 +1,13 @@
-import { defineConfig } from "vite";
+import inject from "@rollup/plugin-inject";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
-import inject from "@rollup/plugin-inject";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.tsx"),
+      entry: resolve("src/index.tsx"),
       name: "Tevomaps",
       fileName: () => `bundle.js`,
       formats: ["umd"],

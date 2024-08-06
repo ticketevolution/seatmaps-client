@@ -2,11 +2,8 @@ const fs = require("fs");
 const path = require("path");
 
 // Source and destination paths
-const src = path.resolve(__dirname, "packages/seatmaps-client/dist/bundle.js");
-const dest = path.resolve(
-  __dirname,
-  "examples/vite-build-standalone/bundle.js",
-);
+const src = path.resolve("dist/bundle.js");
+const dest = path.resolve("../../examples/vite-build-standalone/bundle.js");
 
 // Ensure the destination directory exists
 fs.mkdirSync(path.dirname(dest), { recursive: true });

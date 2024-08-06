@@ -5,10 +5,10 @@ const portfinder = require("portfinder");
 const app = express();
 
 // Serve static files from the current directory
-app.use(express.static(__dirname));
+app.use(express.static());
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.join("index.html"));
 });
 
 // Use portfinder to get an available port

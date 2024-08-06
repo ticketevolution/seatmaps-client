@@ -1,34 +1,31 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="data:," />
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
-      rel="stylesheet"
-    />
-  </head>
-
-  <body style="margin: 0">
-    <div id="map" style="height: 100vh; width: 100vw"></div>
-    <script src="bundle.js"></script>
-    <script referrerpolicy="origin">
-      window.onload = function () {
-        const data = {
-          ticketGroups: [
-            {
-              tevo_section_name: "upper end zone 232",
-              retail_price: 100,
-            },
-          ],
-        };
-        window.seatmapsInstance = new Tevomaps({
-          venueId: "896",
-          configurationId: "14341",
-          mapFontFamily: '"Open Sans", sans-serif',
-          ticketGroups: data.ticketGroups,
-        }).build("map");
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:,">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+</head>
+<body style="margin: 0;">
+  <div id="map" style="height: 100vh; width: 100vw;"></div>
+  <script src="node_modules/@ticketevolution/seatmaps-client/dist/bundle.js"></script>
+  <script>
+    window.onload = function() {
+      const data = {
+        "ticketGroups": [
+          {
+            "tevo_section_name": "upper end zone 232",
+            "retail_price": 100
+          }
+        ]
       };
-    </script>
-  </body>
+
+      window.seatmapsInstance = new window.Tevomaps({
+        venueId: '896',
+        configurationId: '14341',
+        mapFontFamily: '"Open Sans", sans-serif',
+        ticketGroups: data.ticketGroups
+      }).build('map');
+    }
+  </script>
+</body>
 </html>
