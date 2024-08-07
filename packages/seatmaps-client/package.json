@@ -51,14 +51,11 @@
     "check": "npm run lint && npm run check-ts && npm test -- --coverage"
   },
   "dependencies": {
-    "express": "^4.19.2",
     "fetch-ponyfill": "^7.1.0",
     "lodash.isequal": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "lodash.union": "^4.6.0",
-    "portfinder": "^1.0.32",
-    "reselect": "^4.0.0",
-    "rollup-plugin-copy": "^3.5.0"
+    "reselect": "^4.0.0"
   },
   "peerDependencies": {
     "react": ">=16.0.0",
@@ -115,7 +112,6 @@
     "tsup": "7.2.0",
     "typescript": "5.2.2",
     "umd": "3.0.3",
-    "vite": "4.4.11",
-    "vite-plugin-static-copy": "^1.0.6"
+    "vite": "4.4.11"
   }
 }
