@@ -146,15 +146,6 @@ importers:
       '@ticketevolution/seatmaps-client':
         specifier: workspace:*
         version: link:../../packages/seatmaps-client
-      express:
-        specifier: ^4.19.2
-        version: 4.19.2
-      express-rate-limit:
-        specifier: ^7.4.0
-        version: 7.4.0(express@4.19.2)
-      portfinder:
-        specifier: ^1.0.32
-        version: 1.0.32
       serve:
         specifier: ^14.2.3
         version: 14.2.3
@@ -5162,15 +5153,6 @@ packages:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
     dev: true
-
-  /express-rate-limit@7.4.0(express@4.19.2):
-    resolution: {integrity: sha512-v1204w3cXu5gCDmAvgvzI6qjzZzoMWKnyVDk3ACgfswTQLYiGen+r8w0VnXnGMmzEN/g8fwIQ4JrFFd4ZP6ssg==}
-    engines: {node: '>= 16'}
-    peerDependencies:
-      express: 4 || 5 || ^5.0.0-beta.1
-    dependencies:
-      express: 4.19.2
-    dev: false
 
   /express@4.19.2:
     resolution: {integrity: sha512-5T6nhjsT+EOMzuck8JjBHARTHfMht0POzlA60WV2pMD3gyXw2LZnZ+ueGdNxG+0calOJcWKbpFcuzLZ91YWq9Q==}
