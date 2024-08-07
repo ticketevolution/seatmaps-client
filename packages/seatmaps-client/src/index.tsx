@@ -1,13 +1,13 @@
+import pick from "lodash.pick";
+import union from "lodash.union";
 import React from "react";
 import { render } from "react-dom";
-import union from "lodash.union";
-import pick from "lodash.pick";
 import {
-  TicketMap,
-  Props,
-  RequiredProps,
   DefaultProps,
+  Props,
   PublicApi,
+  RequiredProps,
+  TicketMap,
 } from "./TicketMap";
 
 const requiredConfigKeys: (keyof RequiredProps)[] = [

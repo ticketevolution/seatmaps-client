@@ -15,10 +15,7 @@
     "release": "turbo run build && changeset publish",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
-    "pre-push-hook": "pnpm run lint && pnpm run check-ts",
-    "vite-build-main": "pnpm --filter './packages/seatmaps-client' run vite-build",
-    "vite-serve": "node examples/vite-build-standalone/server.mjs",
-    "build-and-serve": "pnpm run vite-build && pnpm run vite-serve"
+    "pre-push-hook": "pnpm run lint && pnpm run check-ts"
   },
   "devDependencies": {
     "@changesets/cli": "2.26.2",

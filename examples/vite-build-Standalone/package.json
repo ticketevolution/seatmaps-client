@@ -5,10 +5,11 @@
     "run-example": "node vite-server.mjs"
   },
   "dependencies": {
+    "@ticketevolution/seatmaps-client": "workspace:*",
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
     "portfinder": "^1.0.32",
-    "@ticketevolution/seatmaps-client": "workspace:*"
+    "serve": "^14.2.3"
   },
   "devDependencies": {
     "vite": "4.4.11"

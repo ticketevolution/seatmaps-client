@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "pnpm build:cjs && pnpm build:esm",
+    "build": "pnpm build:cjs && pnpm build:esm && pnpm vite-build",
     "vite-build": "vite build",
     "build:watch": "concurrently \"pnpm build:cjs --watch\" \"pnpm build:esm --watch\" \"pnpm build:umd-minimal --watch\" \"pnpm build:umd-standalone --watch\"",
     "release": "pnpm run build && changeset publish",
