@@ -20,10 +20,13 @@
   "license": "MIT",
   "main": "./cjs/index.js",
   "module": "./esm/index.mjs",
+  "types": "./cjs/index.d.ts",
+  "browser": "./dist/bundle.js",
   "sideEffects": false,
   "files": [
     "cjs",
-    "esm"
+    "esm",
+    "dist"
   ],
   "scripts": {
     "dev": "vite",

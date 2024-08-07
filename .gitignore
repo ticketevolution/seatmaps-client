@@ -27,4 +27,5 @@ stats
 cjs
 esm
 umd
+dist
 .turbo
