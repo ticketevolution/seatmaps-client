@@ -1,0 +1,15 @@
+{
+  "name": "vite-build-standalone",
+  "private": true,
+  "scripts": {
+    "run-example": "pnpm serve ."
+  },
+  "dependencies": {
+    "@ticketevolution/seatmaps-client": "workspace:*",
+    "serve": "^14.2.3"
+  },
+  "devDependencies": {
+    "vite": "4.4.11"
+  },
+  "version": null
+}
