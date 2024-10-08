@@ -28,7 +28,7 @@ After instantiation, a [public API](#public-api) is available with a limited num
 
 ```html
 <div id="my-map"></div>
-<script src="https://cdn.jsdelivr.net/npm/@ticketevolution/seatmaps-client/dist/bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ticketevolution/seatmaps-client/cjs/index.min.js"></script>
 <script>
   // create a new seatmap
   var seatmap = new Tevomaps({
