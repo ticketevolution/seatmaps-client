@@ -40,6 +40,10 @@ jobs:
         with:
           node-version: 18.x
           registry-url: https://npm.pkg.github.com/
+      - name: Use pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - run: cd packages/seatmaps-client && pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
