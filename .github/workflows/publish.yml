@@ -5,32 +5,36 @@ on:
     types:
       - completed
   push:
-    branches:
-      - master
-
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
 
 jobs:
   publish:
-    if: github.repository == 'ticketevolution/seatmaps-client' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-      - name: Generate a token
-        id: generate_token
-        uses: actions/create-github-app-token@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          app-id: ${{ secrets.TEVO_GITHUB_TOKEN_GENERATOR_APP_ID }}
-          private-key: ${{ secrets.TEVO_GITHUB_TOKEN_GENERATOR_PRIVATE_KEY }}
+          node-version: 18.x
+          registry-url: https://npm.pkg.github.com
+          scope: "@aisaac-lab"
 
-      - uses: actions/checkout@v3
-
-      - uses: ./.github/actions/ci-setup
-
-      - name: Create Release Pull Request or Publish
-        id: changesets
-        uses: changesets/action@v1
+      - name: Use pnpm
+        uses: pnpm/action-setup@v2
         with:
-          publish: pnpm run release
+          version: 8
+
+      - name: Dependencies Install
+        run: pnpm install
+
+      - name: Build
+        run: cd packages/seatmaps-client && pnpm build:esm
+
+      - name: Publish package
+        run: cd packages/seatmaps-client && pnpm publish --no-git-checks
         env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-          NPM_TOKEN: ${{ secrets.TEVO_NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

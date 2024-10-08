@@ -13,5 +13,5 @@ runs:
         version: 8
 
     - name: Install Dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --no-frozen-lockfile
       shell: bash
