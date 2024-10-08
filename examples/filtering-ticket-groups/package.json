@@ -5,7 +5,7 @@
     "run-example": "vite --force"
   },
   "dependencies": {
-    "@ticketevolution/seatmaps-client": "workspace:*"
+    "@aisaac-lab/seatmaps-client": "workspace:*"
   },
   "devDependencies": {
     "@-/mock-data": "workspace:*",

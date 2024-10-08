@@ -9,7 +9,7 @@
       "persistent": true,
       "cache": false
     },
-    "@ticketevolution/seatmaps-client#build": {
+    "@aisaac-lab/seatmaps-client#build": {
       "dependsOn": ["^build"],
       "outputs": ["esm/**", "cjs/**", "umd/**"]
     },

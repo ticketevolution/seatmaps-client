@@ -1,0 +1,22 @@
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Publish GitHub Packages
+
+on: workflow_dispatch
+
+jobs:
+  publish-gpr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: ./.github/actions/ci-setup
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com/
+          
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

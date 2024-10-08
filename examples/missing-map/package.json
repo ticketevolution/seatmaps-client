@@ -5,7 +5,7 @@
     "run-example": "vite --force"
   },
   "dependencies": {
-    "@ticketevolution/seatmaps-client": "workspace:*",
+    "@aisaac-lab/seatmaps-client": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
