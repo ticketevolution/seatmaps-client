@@ -5,7 +5,7 @@
     "run-example": "pnpm serve ."
   },
   "dependencies": {
-    "@ticketevolution/seatmaps-client": "workspace:*",
+    "@aisaac-lab/seatmaps-client": "workspace:*",
     "serve": "^14.2.3"
   },
   "devDependencies": {

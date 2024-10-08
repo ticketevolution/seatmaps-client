@@ -8,7 +8,7 @@
     "@-/mock-data": "workspace:*",
     "@types/react": "18.2.25",
     "@types/react-dom": "18.2.11",
-    "@ticketevolution/seatmaps-client": "workspace:*",
+    "@aisaac-lab/seatmaps-client": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

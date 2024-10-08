@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@-/mock-data": "workspace:*",
-    "@ticketevolution/seatmaps-client": "workspace:*"
+    "@aisaac-lab/seatmaps-client": "workspace:*"
   },
   "devDependencies": {
     "vite": "4.4.11"
