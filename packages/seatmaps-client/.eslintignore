@@ -3,3 +3,4 @@ cjs
 esm
 umd
 node_modules
+bundle.js 
