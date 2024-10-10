@@ -78,7 +78,7 @@ export { TicketMap };
 
 export const Tevomaps = SeatmapFactory;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare var define: any;
+declare let define: any;
 
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
