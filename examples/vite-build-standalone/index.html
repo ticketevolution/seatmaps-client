@@ -1,31 +1,45 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="data:,">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-</head>
-<body style="margin: 0;">
-  <div id="map" style="height: 100vh; width: 100vw;"></div>
-  <script src="node_modules/@ticketevolution/seatmaps-client/dist/bundle.js"></script>
-  <script>
-    window.onload = function() {
-      const data = {
-        "ticketGroups": [
-          {
-            "tevo_section_name": "upper end zone 232",
-            "retail_price": 100
-          }
-        ]
-      };
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:," />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+      rel="stylesheet"
+    />
+    <title>Seatmap Example</title>
+  </head>
+  <body>
+    <!-- Ensure this element has the correct id -->
+    <div id="map"></div>
 
-      window.seatmapsInstance = new window.Tevomaps({
-        venueId: '896',
-        configurationId: '14341',
-        mapFontFamily: '"Open Sans", sans-serif',
-        ticketGroups: data.ticketGroups
-      }).build('map');
-    }
-  </script>
-</body>
+    <script src="node_modules/@ticketevolution/seatmaps-client/dist/bundle.js"></script>
+    <!-- UMD build bundle -->
+    <script>
+      window.onload = function () {
+        fetch("./node_modules/@-/mock-data/data/ticket-groups-1591449.json")
+          .then((response) => response.json())
+          .then((data) => {
+            const options = {
+              venueId: "896",
+              configurationId: "14341",
+              mapFontFamily: '"Open Sans", sans-serif',
+              ticketGroups: data,
+            };
+
+            // Create a new instance of SeatmapFactory
+            const factory = new Tevomaps.SeatmapFactory(options);
+
+            // Ensure the element exists before calling the build method
+            const rootElementId = "map";
+            if (document.getElementById(rootElementId)) {
+              factory.build(rootElementId);
+            } else {
+              console.error(`Element with id '${rootElementId}' not found.`);
+            }
+          });
+      };
+    </script>
+  </body>
 </html>

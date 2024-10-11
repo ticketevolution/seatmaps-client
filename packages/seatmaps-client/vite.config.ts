@@ -7,10 +7,10 @@ export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: resolve("src/index.tsx"),
-      name: "Tevomaps",
-      fileName: () => `bundle.js`,
-      formats: ["umd"],
+      entry: resolve("src/index.tsx"), // Entry point to your main file
+      name: "Tevomaps", // Global variable name
+      fileName: () => `bundle.js`, // Output file name
+      formats: ["umd"], // UMD format to make it globally available
     },
     rollupOptions: {
       external: [],
@@ -22,7 +22,7 @@ export default defineConfig({
       },
       plugins: [
         inject({
-          process: "process/browser",
+          process: "process/browser", // Polyfill 'process' for browser environments
         }),
       ],
     },

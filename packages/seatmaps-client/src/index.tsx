@@ -75,20 +75,3 @@ export class SeatmapFactory {
 }
 
 export { TicketMap };
-
-export const Tevomaps = SeatmapFactory;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare let define: any;
-
-(function (root, factory) {
-  if (typeof define === "function" && define.amd) {
-    define([], factory);
-  } else if (typeof module === "object" && module.exports) {
-    module.exports = factory();
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (root as any).Tevomaps = factory();
-  }
-})(typeof self !== "undefined" ? self : this, function () {
-  return SeatmapFactory;
-});
