@@ -1,5 +1,28 @@
 # @ticketevolution/seatmaps-client
 
+## 3.2.0
+
+### Minor Changes
+
+- 2e3d208: updated files for to improve build ptrocess
+- a58fd28: - **Vite Configuration**: Updated `vite.config.ts` to ensure correct UMD module export. Added `@rollup/plugin-inject` to handle `process` polyfill.
+
+  - Added `rollupOptions` to define UMD build settings and inject `process` polyfill.
+  - Ensured the `name` and `format` properties are correctly set for UMD build.
+  - **Example HTML File**: Provided a sample `index.html` file to demonstrate the correct usage of the built UMD module.
+    - Included the built `bundle.js` script.
+    - Created an instance of `Tevomaps` and rendered it correctly in the HTML.
+
+- a58fd28: Updated `vite.config.ts` to build the UMD bundle correctly.
+
+  # Created a post-build script `copy-build.js` to copy the built `bundle.js` to the `examples/vite-build-standalone` directory.
+
+  # Updated `package.json` to include new build and serve scripts.
+
+  # Ensured `index.html` in `examples/vite-build-standalone` references `bundle.js`.
+
+  # Ensured `server.js` in `examples/vite-build-standalone` is set up to serve the directory.
+
 ## 3.1.1
 
 ### Patch Changes
