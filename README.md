@@ -27,27 +27,50 @@ After instantiation, a [public API](#public-api) is available with a limited num
 ### 1. Load the seatmaps client JS from CDN, create a map root, and build a map
 
 ```html
-<div id="my-map"></div>
-<script src="https://cdn.jsdelivr.net/npm/@ticketevolution/seatmaps-client/dist/bundle.js"></script>
-<script>
-  // create a new seatmap
-  var seatmap = new Tevomaps({
-    venueId: "10",
-    configurationId: "1046",
-    ticketGroups: [
-      {
-        tevo_section_name: "upper end zone 232",
-        retail_price: 100,
-      },
-    ],
-  });
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seatmap Example</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+      #my-map {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="my-map"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@ticketevolution/seatmaps-client/dist/bundle.js"></script>
+    <script>
+      // create a new seatmap
+      var seatmap = new Tevomaps.SeatmapFactory({
+        venueId: "896",
+        configurationId: "14341",
+        ticketGroups: [
+          {
+            tevo_section_name: "lower level corner 104",
+            retail_price: 100,
+          },
+        ],
+      });
 
-  // turn element with ID of 'my-map' into a seatmap for config 1046
-  var seatmapApi = seatmap.build("my-map");
+      // turn element with ID of 'my-map' into a seatmap for config 14341
+      var seatmapApi = seatmap.build("my-map");
 
-  // perform some actions, like highlighting section "upper end zone 232"
-  seatmapApi.highlightSection("upper end zone 232");
-</script>
+      // perform some actions, like highlighting section "lower level corner 104"
+      seatmapApi.highlightSection("lower level corner 104");
+    </script>
+  </body>
+</html>
 ```
 
 ## CommonJS
@@ -69,25 +92,52 @@ yarn add @ticketevolution/seatmaps-client
 ```js
 // main.js
 
-import Tevomaps from "@ticketevolution/seatmaps-client";
+import { SeatmapFactory } from "@ticketevolution/seatmaps-client";
 
 // create a new seatmap
-const seatmap = new Tevomaps({
-  venueId: "10",
-  configurationId: "1046",
+const seatmap = new SeatmapFactory({
+  venueId: "896",
+  configurationId: "14341",
   ticketGroups: [
     {
-      tevo_section_name: "upper end zone 232",
+      tevo_section_name: "lower level corner 104",
       retail_price: 100,
     },
   ],
 });
 
-// turn element with ID of 'my-map' into a seatmap for config 1046
+// turn element with ID of 'my-map' into a seatmap for config 14341
 const seatmapApi = seatmap.build("my-map");
 
-// perform some actions, like highlighting section "upper end zone 232"
-seatmapApi.highlightSection("upper end zone 232");
+// perform some actions, like highlighting section "lower level corner 104"
+seatmapApi.highlightSection("lower level corner 104");
+```
+
+### In case your app is a React app, you can use the `TicketMap` component
+
+```tsx
+import { createRoot } from "react-dom/client";
+import { TicketMap } from "@ticketevolution/seatmaps-client";
+
+const rootEl = document.getElementById("my-map");
+if (!rootEl) {
+  throw new Error("no root element in html");
+}
+
+const root = createRoot(rootEl);
+
+root.render(
+  <TicketMap
+    venueId="896"
+    configurationId="14341"
+    ticketGroups={[
+      {
+        tevo_section_name: "lower level corner 104",
+        retail_price: 100,
+      },
+    ]}
+  />,
+);
 ```
 
 ## API Reference
