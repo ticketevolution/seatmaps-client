@@ -651,9 +651,9 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
             onResetZoom={this.handleResetZoom}
           />
         )}
-        {this.state.isTouchDevice && this.props.mouseControlEnabled && this.props.showZoomHelper &&  (
-          <ZoomHelper />
-        )}
+        {this.state.isTouchDevice &&
+          this.props.mouseControlEnabled &&
+          this.props.showZoomHelper && <ZoomHelper />}
       </div>
     );
   }
