@@ -1,5 +1,11 @@
 # @ticketevolution/seatmaps-client
 
+## 3.3.0
+
+### Minor Changes
+
+- 1962bf5: Added the `showZoomHelper` flag to control the visibility of the ZoomHelper overlay. The overlay is displayed on mobile devices only when `mouseControlEnabled` is `true`. The default value of `showZoomHelper` is `true`.
+
 ## 3.2.0
 
 ### Minor Changes
