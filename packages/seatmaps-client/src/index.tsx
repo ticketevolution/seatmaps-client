@@ -25,6 +25,7 @@ const optionalConfigKeys: (keyof DefaultProps)[] = [
   "showControls",
   "showLegend",
   "mouseControlEnabled",
+  "showZoomHelper",
 ];
 
 export function extractConfigurationFromOptions(options: Props): Props {

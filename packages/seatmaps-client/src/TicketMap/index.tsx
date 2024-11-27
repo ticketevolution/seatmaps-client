@@ -69,6 +69,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     showLegend: true,
     showControls: true,
     mouseControlEnabled: true,
+    showZoomHelper: true,
     mapFontFamily: "inherit",
   };
 
@@ -650,9 +651,9 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
             onResetZoom={this.handleResetZoom}
           />
         )}
-        {this.state.isTouchDevice && this.props.mouseControlEnabled && (
-          <ZoomHelper />
-        )}
+        {this.state.isTouchDevice &&
+          this.props.mouseControlEnabled &&
+          this.props.showZoomHelper && <ZoomHelper />}
       </div>
     );
   }
