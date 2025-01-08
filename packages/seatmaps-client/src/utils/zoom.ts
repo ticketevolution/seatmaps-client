@@ -101,22 +101,53 @@ export function initializeZoom(svg: SVGSVGElement) {
   const originalViewboxWidth = viewbox.width;
   const originalViewboxHeight = viewbox.height;
 
+  function constrainPan() {
+    const minX = originalViewboxX;
+    const maxX = originalViewboxX + originalViewboxWidth - viewbox.width;
+  
+    const minY = originalViewboxY;
+    const maxY = originalViewboxY + originalViewboxHeight - viewbox.height;
+
+    viewbox.x = Math.max(minX, Math.min(maxX, viewbox.x));
+    viewbox.y = Math.max(minY, Math.min(maxY, viewbox.y));
+  }
+
   function translate(x: number, y: number) {
     viewbox.x += x;
     viewbox.y += y;
+    constrainPan();
   }
 
-  function scale(scale: number) {
+  const MIN_ZOOM = 0.1; // Minimum zoom scale (10% of the original size)
+  const MAX_ZOOM = 1.0; // Maximum zoom scale (100% of the original size)
+
+  function scale(scaleFactor: number) {
+    // Calculate the new dimensions of the viewbox
+    const newHeight = viewbox.height * scaleFactor ;
+    const newWidth = viewbox.width * scaleFactor;
+
+    // Ensure the new dimensions are within the min and max zoom bounds
+    const minViewboxHeight = originalViewboxHeight * MIN_ZOOM;
+    const maxViewboxHeight = originalViewboxHeight * MAX_ZOOM;
+
+    if (newHeight < minViewboxHeight || newHeight > maxViewboxHeight) {
+      return; // Prevent scaling if the zoom level is outside the allowed bounds
+    }
+  
+    // Apply the scaling
     const initialViewboxHeight = viewbox.height;
     const initialViewboxWidth = viewbox.width;
-
-    viewbox.height *= scale;
-    viewbox.width *= scale;
-
+  
+    viewbox.height = newHeight;
+    viewbox.width = newWidth;
+  
+    // Adjust the viewbox to keep the zoom centered
     translate(
       0 - (viewbox.width - initialViewboxWidth) / 2,
-      0 - (viewbox.height - initialViewboxHeight) / 2,
+      0 - (viewbox.height - initialViewboxHeight) / 2
     );
+  
+    constrainPan(); // Ensure panning stays within bounds after scaling
   }
 
   // decreases the size of the map, relative to the viewport size
@@ -238,7 +269,7 @@ export function initializeZoom(svg: SVGSVGElement) {
       magnitude(e.clientX, e.clientY, iMouseX, iMouseY) >
       MOUSE_MOVEMENT_TRAP_LOWER_BOUND
     ) {
-      e.stopPropagation();
+        e.stopPropagation();
     }
   }
 
@@ -262,7 +293,7 @@ export function initializeZoom(svg: SVGSVGElement) {
 
   function handleWheel(event: WheelEvent) {
     let deltaX, deltaY;
-
+  
     if (event.deltaMode === WheelEvent.DOM_DELTA_PIXEL) {
       deltaX = event.deltaX;
       deltaY = event.deltaY;
@@ -272,24 +303,42 @@ export function initializeZoom(svg: SVGSVGElement) {
     } else {
       return;
     }
-
+  
     event.preventDefault();
-
+  
     updateInitialViewbox();
-
+  
     if (event.ctrlKey) {
       // Handle controlled scrolls as zoom inputs.
       const delta = deltaY;
+  
+      // Calculate the scaling factor
+      const scaleFactor = 1 + (delta / window.innerHeight) * ZOOM_COEFFICIENT;
+      
+      // Determine the new dimensions
+      const newHeight = viewbox.height * scaleFactor;
+      const newWidth = viewbox.width * scaleFactor;
 
-      viewbox.height =
-        viewbox.height * (1 + (delta / window.innerHeight) * ZOOM_COEFFICIENT);
-      viewbox.width =
-        viewbox.width * (1 + (delta / window.innerWidth) * ZOOM_COEFFICIENT);
+      // Enforce zoom restrictions
+      const minViewboxHeight = originalViewboxHeight * MIN_ZOOM;
+      const maxViewboxHeight = originalViewboxHeight * MAX_ZOOM;
 
+      // Check and enforce the minimum and maximum zoom
+      if (newHeight < minViewboxHeight || newHeight > maxViewboxHeight) {
+        return; 
+      }
+    
+      // Apply the scaling
+      viewbox.height = newHeight;
+      viewbox.width = newWidth;
+  
+      // Adjust the viewbox to keep the zoom centered
       translate(
         0 - (viewbox.width - initialViewboxWidth) / 2,
         0 - (viewbox.height - initialViewboxHeight) / 2,
       );
+      
+      constrainPan(); // Ensure panning stays within bounds after scaling
     } else {
       // Handle non-controlled scrolls as pan inputs.
       translate(
