@@ -433,7 +433,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     if (!sectionId) {
       return;
     }
-    
+
     return sectionId.toLowerCase();
   }
 
@@ -461,11 +461,19 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
    * Interaction Callbacks
    */
 
-  onMouseOver = ({ clientX, clientY, target }: React.MouseEvent<HTMLElement>) =>
-   {if (this.state.isTouchDevice) return; this.doHover(target as HTMLElement, clientX, clientY);}
+  onMouseOver = ({
+    clientX,
+    clientY,
+    target,
+  }: React.MouseEvent<HTMLElement>) => {
+    if (this.state.isTouchDevice) return;
+    this.doHover(target as HTMLElement, clientX, clientY);
+  };
 
-  onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) =>
-    {if (this.state.isTouchDevice) return;this.doHoverCleanup(relatedTarget as HTMLElement);}
+  onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) => {
+    if (this.state.isTouchDevice) return;
+    this.doHoverCleanup(relatedTarget as HTMLElement);
+  };
 
   onMouseMove = ({ nativeEvent }: React.MouseEvent<HTMLElement>) =>
     this.setState({
@@ -549,10 +557,10 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     if (!section) {
       return;
     }
-      this.toggleSectionSelect(
-        section,
-        !this.state.selectedSections.has(section),
-      );
+    this.toggleSectionSelect(
+      section,
+      !this.state.selectedSections.has(section),
+    );
   }
 
   handleZoomIn = () => {

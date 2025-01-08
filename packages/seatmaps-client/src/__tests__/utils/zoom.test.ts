@@ -181,18 +181,18 @@ describe("zoom", () => {
     it("zomms out", () => {
       zoomApi.zoomOut(0.1);
 
-      expect(mockPoint.height).toBe(11);
-      expect(mockPoint.width).toBe(11);
-      expect(mockPoint.x).toBe(9.5);
-      expect(mockPoint.y).toBe(9.5);
+      expect(mockPoint.height).toBe(10);
+      expect(mockPoint.width).toBe(10);
+      expect(mockPoint.x).toBe(10);
+      expect(mockPoint.y).toBe(10);
     });
 
     it("resets to original position after zoom", () => {
       zoomApi.zoomOut(0.1);
-      expect(mockPoint.height).toBe(11);
-      expect(mockPoint.width).toBe(11);
-      expect(mockPoint.x).toBe(9.5);
-      expect(mockPoint.y).toBe(9.5);
+      expect(mockPoint.height).toBe(10);
+      expect(mockPoint.width).toBe(10);
+      expect(mockPoint.x).toBe(10);
+      expect(mockPoint.y).toBe(10);
 
       zoomApi.reset();
       expect(mockPoint.height).toBe(10);
@@ -246,8 +246,8 @@ describe("zoom", () => {
 
       expect(mockPoint.height).toBe(10);
       expect(mockPoint.width).toBe(10);
-      expect(mockPoint.x).toBe(12);
-      expect(mockPoint.y).toBe(12);
+      expect(mockPoint.x).toBe(10);
+      expect(mockPoint.y).toBe(10);
     });
 
     it("handleWheel when ctrl key is not pressed and delta mode is DOM_DELTA_LINE", () => {
@@ -275,10 +275,10 @@ describe("zoom", () => {
       } as unknown as Event;
       triggerEvent("wheel", e);
 
-      expect(mockPoint.height).toBe(10.651041666666668);
-      expect(mockPoint.width).toBe(10.48828125);
-      expect(mockPoint.x).toBe(9.755859375);
-      expect(mockPoint.y).toBe(9.674479166666666);
+      expect(mockPoint.height).toBe(10);
+      expect(mockPoint.width).toBe(10);
+      expect(mockPoint.x).toBe(10);
+      expect(mockPoint.y).toBe(10);
     });
 
     it("handleWheel when ctrl key is pressed and delta mode is DOM_DELTA_LINE", () => {

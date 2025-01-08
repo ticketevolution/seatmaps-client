@@ -104,7 +104,7 @@ export function initializeZoom(svg: SVGSVGElement) {
   function constrainPan() {
     const minX = originalViewboxX;
     const maxX = originalViewboxX + originalViewboxWidth - viewbox.width;
-  
+
     const minY = originalViewboxY;
     const maxY = originalViewboxY + originalViewboxHeight - viewbox.height;
 
@@ -123,7 +123,7 @@ export function initializeZoom(svg: SVGSVGElement) {
 
   function scale(scaleFactor: number) {
     // Calculate the new dimensions of the viewbox
-    const newHeight = viewbox.height * scaleFactor ;
+    const newHeight = viewbox.height * scaleFactor;
     const newWidth = viewbox.width * scaleFactor;
 
     // Ensure the new dimensions are within the min and max zoom bounds
@@ -133,20 +133,20 @@ export function initializeZoom(svg: SVGSVGElement) {
     if (newHeight < minViewboxHeight || newHeight > maxViewboxHeight) {
       return; // Prevent scaling if the zoom level is outside the allowed bounds
     }
-  
+
     // Apply the scaling
     const initialViewboxHeight = viewbox.height;
     const initialViewboxWidth = viewbox.width;
-  
+
     viewbox.height = newHeight;
     viewbox.width = newWidth;
-  
+
     // Adjust the viewbox to keep the zoom centered
     translate(
       0 - (viewbox.width - initialViewboxWidth) / 2,
-      0 - (viewbox.height - initialViewboxHeight) / 2
+      0 - (viewbox.height - initialViewboxHeight) / 2,
     );
-  
+
     constrainPan(); // Ensure panning stays within bounds after scaling
   }
 
@@ -269,7 +269,7 @@ export function initializeZoom(svg: SVGSVGElement) {
       magnitude(e.clientX, e.clientY, iMouseX, iMouseY) >
       MOUSE_MOVEMENT_TRAP_LOWER_BOUND
     ) {
-        e.stopPropagation();
+      e.stopPropagation();
     }
   }
 
@@ -293,7 +293,7 @@ export function initializeZoom(svg: SVGSVGElement) {
 
   function handleWheel(event: WheelEvent) {
     let deltaX, deltaY;
-  
+
     if (event.deltaMode === WheelEvent.DOM_DELTA_PIXEL) {
       deltaX = event.deltaX;
       deltaY = event.deltaY;
@@ -303,18 +303,18 @@ export function initializeZoom(svg: SVGSVGElement) {
     } else {
       return;
     }
-  
+
     event.preventDefault();
-  
+
     updateInitialViewbox();
-  
+
     if (event.ctrlKey) {
       // Handle controlled scrolls as zoom inputs.
       const delta = deltaY;
-  
+
       // Calculate the scaling factor
       const scaleFactor = 1 + (delta / window.innerHeight) * ZOOM_COEFFICIENT;
-      
+
       // Determine the new dimensions
       const newHeight = viewbox.height * scaleFactor;
       const newWidth = viewbox.width * scaleFactor;
@@ -325,19 +325,19 @@ export function initializeZoom(svg: SVGSVGElement) {
 
       // Check and enforce the minimum and maximum zoom
       if (newHeight < minViewboxHeight || newHeight > maxViewboxHeight) {
-        return; 
+        return;
       }
-    
+
       // Apply the scaling
       viewbox.height = newHeight;
       viewbox.width = newWidth;
-  
+
       // Adjust the viewbox to keep the zoom centered
       translate(
         0 - (viewbox.width - initialViewboxWidth) / 2,
         0 - (viewbox.height - initialViewboxHeight) / 2,
       );
-      
+
       constrainPan(); // Ensure panning stays within bounds after scaling
     } else {
       // Handle non-controlled scrolls as pan inputs.
