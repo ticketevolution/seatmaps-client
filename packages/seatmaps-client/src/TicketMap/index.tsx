@@ -461,11 +461,19 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
    * Interaction Callbacks
    */
 
-  onMouseOver = ({ clientX, clientY, target }: React.MouseEvent<HTMLElement>) =>
+  onMouseOver = ({
+    clientX,
+    clientY,
+    target,
+  }: React.MouseEvent<HTMLElement>) => {
+    if (this.state.isTouchDevice) return;
     this.doHover(target as HTMLElement, clientX, clientY);
+  };
 
-  onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) =>
+  onMouseOut = ({ relatedTarget }: React.MouseEvent<HTMLElement>) => {
+    if (this.state.isTouchDevice) return;
     this.doHoverCleanup(relatedTarget as HTMLElement);
+  };
 
   onMouseMove = ({ nativeEvent }: React.MouseEvent<HTMLElement>) =>
     this.setState({
@@ -475,15 +483,29 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
 
   onClick = () => this.doSelect();
 
+  onTouchStart = (e: React.TouchEvent<HTMLElement>) => {
+    const section = this.getSectionFromTarget(e.target as HTMLElement);
+    if (section) {
+      this.setState({
+        currentHoveredSection: section,
+      });
+      this.highlightSection(section);
+    }
+  };
+
   onTouchMove = () => {
     this.setState({ dragging: true });
   };
 
   onTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
+    const section = this.state.currentHoveredSection;
+    if (section) {
+      this.doSelect(section);
+      this.setState({ currentHoveredSection: undefined });
+    }
     if (this.state.dragging) {
       e.preventDefault();
     }
-
     this.setState({ dragging: false });
   };
 
@@ -602,6 +624,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
         onMouseOut={this.onMouseOut}
         onMouseMove={this.onMouseMove}
         onClick={this.onClick}
+        onTouchStart={this.onTouchStart}
         onTouchEnd={this.onTouchEnd}
         onTouchMove={this.onTouchMove}
         style={{
