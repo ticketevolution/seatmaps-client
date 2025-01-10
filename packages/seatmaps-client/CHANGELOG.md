@@ -1,5 +1,11 @@
 # @ticketevolution/seatmaps-client
 
+## 3.3.1
+
+### Patch Changes
+
+- edeaa09: Fix mobile click issues and restrict infinite zooming and panning behavior. Limit zoom in to 10% of the original size and prevent zooming out beyond the original size.
+
 ## 3.3.0
 
 ### Minor Changes
