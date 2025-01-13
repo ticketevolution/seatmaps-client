@@ -37,6 +37,7 @@ export interface DefaultProps {
   mapsDomain: string;
   onSelection(sections: string[]): void;
   showControls: boolean;
+  showLegendOpenAlwaysForDesktop: boolean,
   mouseControlEnabled: boolean;
   showZoomHelper: boolean;
   missingSeatMapLogo?: React.ReactNode;
