@@ -669,7 +669,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
             onClearSelection={this.clearSelection}
             ranges={$costRanges(this.state, this.props)}
             showLegend={this.props.showLegend}
-            showLegendOpenAlwaysForDesktop={true}
+            showLegendOpenAlwaysForDesktop={this.props.showLegendOpenAlwaysForDesktop}
             showControls={this.props.showControls}
             onZoomIn={this.handleZoomIn}
             onZoomOut={this.handleZoomOut}
