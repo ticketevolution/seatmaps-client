@@ -170,7 +170,12 @@ export default class Actions extends React.Component<
         )}
         {showRightActions && (
           <ActionGroup>
-            <Legend ranges={this.props.ranges} showLegendOpenAlwaysForDesktop={this.props.showLegendOpenAlwaysForDesktop}/>
+            <Legend
+              ranges={this.props.ranges}
+              showLegendOpenAlwaysForDesktop={
+                this.props.showLegendOpenAlwaysForDesktop
+              }
+            />
           </ActionGroup>
         )}
       </div>
