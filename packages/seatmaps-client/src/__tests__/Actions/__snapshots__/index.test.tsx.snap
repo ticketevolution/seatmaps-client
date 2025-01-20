@@ -9,6 +9,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
   ranges={[]}
   showControls={true}
   showLegend={true}
+  showLegendOpenAlwaysForDesktop={false}
 >
   <div
     data-testid="seatmaps-actions-menu"
@@ -251,6 +252,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
         <Legend
           isMobile={false}
           ranges={[]}
+          showLegendOpenAlwaysForDesktop={false}
         >
           <div
             style={
@@ -314,6 +316,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
   ranges={[]}
   showControls={true}
   showLegend={true}
+  showLegendOpenAlwaysForDesktop={false}
 >
   <div
     data-testid="seatmaps-actions-menu"
@@ -556,6 +559,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
         <Legend
           isMobile={false}
           ranges={[]}
+          showLegendOpenAlwaysForDesktop={false}
         >
           <div
             style={

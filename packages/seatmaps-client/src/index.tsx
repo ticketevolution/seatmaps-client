@@ -23,6 +23,7 @@ const optionalConfigKeys: (keyof DefaultProps)[] = [
   "sectionPercentiles",
   "mapsDomain",
   "showControls",
+  "showLegendOpenAlwaysForDesktop",
   "showLegend",
   "mouseControlEnabled",
   "showZoomHelper",
