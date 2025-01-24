@@ -177,7 +177,7 @@ export default class Actions extends React.Component<
               showLegendOpenAlwaysForDesktop={
                 this.props.showLegendOpenAlwaysForDesktop
               }
-              openLegendInitially = {this.props.openLegendInitially}
+              openLegendInitially={this.props.openLegendInitially}
             />
           </ActionGroup>
         )}
