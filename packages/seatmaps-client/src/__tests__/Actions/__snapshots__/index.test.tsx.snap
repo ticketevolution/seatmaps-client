@@ -6,6 +6,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
   onResetZoom={[MockFunction]}
   onZoomIn={[MockFunction]}
   onZoomOut={[MockFunction]}
+  openLegendInitially={false}
   ranges={[]}
   showControls={true}
   showLegend={true}
@@ -251,6 +252,7 @@ exports[`Actions when controls are visible on desktop browsers matches snapshot 
       >
         <Legend
           isMobile={false}
+          openLegendInitially={false}
           ranges={[]}
           showLegendOpenAlwaysForDesktop={false}
         >
@@ -313,6 +315,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
   onResetZoom={[MockFunction]}
   onZoomIn={[MockFunction]}
   onZoomOut={[MockFunction]}
+  openLegendInitially={false}
   ranges={[]}
   showControls={true}
   showLegend={true}
@@ -558,6 +561,7 @@ exports[`Actions when controls are visible on mobile browsers matches snapshot 1
       >
         <Legend
           isMobile={false}
+          openLegendInitially={false}
           ranges={[]}
           showLegendOpenAlwaysForDesktop={false}
         >
