@@ -1,5 +1,11 @@
 # @ticketevolution/seatmaps-client
 
+## 3.4.0
+
+### Minor Changes
+
+- c8ede68: Added showLegendOpenAlwaysForDesktop flag to always display the map legend on desktop when this flag is set to true.
+
 ## 3.3.1
 
 ### Patch Changes
