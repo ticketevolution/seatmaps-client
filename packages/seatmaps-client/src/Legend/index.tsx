@@ -21,6 +21,7 @@ export interface Props {
   ranges: Range[];
   isMobile?: boolean;
   showLegendOpenAlwaysForDesktop?: boolean;
+  openLegendInitially?: boolean;
 }
 
 interface State {
@@ -31,10 +32,11 @@ export default class Legend extends Component<Props, State> {
   static defaultProps = {
     isMobile: false,
     showLegendOpenAlwaysForDesktop: false,
+    openLegendInitially: false,
   };
 
   state = {
-    isOpen: false,
+    isOpen: this.props.openLegendInitially || false,
   };
 
   render() {

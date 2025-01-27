@@ -38,6 +38,7 @@ export interface DefaultProps {
   onSelection(sections: string[]): void;
   showControls: boolean;
   showLegendOpenAlwaysForDesktop: boolean;
+  openLegendInitially: boolean;
   mouseControlEnabled: boolean;
   showZoomHelper: boolean;
   missingSeatMapLogo?: React.ReactNode;

@@ -21,6 +21,7 @@ export interface Props {
 interface DefaultProps {
   showLegend: boolean;
   showLegendOpenAlwaysForDesktop: boolean;
+  openLegendInitially: boolean;
   showControls: boolean;
   onClearSelection(): void;
 }
@@ -46,6 +47,7 @@ export default class Actions extends React.Component<
     showLegend: true,
     showLegendOpenAlwaysForDesktop: false,
     showControls: true,
+    openLegendInitially: false,
     onClearSelection: () => {},
   };
 
@@ -175,6 +177,7 @@ export default class Actions extends React.Component<
               showLegendOpenAlwaysForDesktop={
                 this.props.showLegendOpenAlwaysForDesktop
               }
+              openLegendInitially={this.props.openLegendInitially}
             />
           </ActionGroup>
         )}

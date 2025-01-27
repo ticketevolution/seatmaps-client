@@ -69,6 +69,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     showLegend: true,
     showLegendOpenAlwaysForDesktop: false,
     showControls: true,
+    openLegendInitially: false,
     mouseControlEnabled: true,
     showZoomHelper: true,
     mapFontFamily: "inherit",
@@ -673,6 +674,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
               this.props.showLegendOpenAlwaysForDesktop
             }
             showControls={this.props.showControls}
+            openLegendInitially={this.props.openLegendInitially}
             onZoomIn={this.handleZoomIn}
             onZoomOut={this.handleZoomOut}
             onResetZoom={this.handleResetZoom}

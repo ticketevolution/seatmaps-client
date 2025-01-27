@@ -25,6 +25,7 @@ const optionalConfigKeys: (keyof DefaultProps)[] = [
   "showControls",
   "showLegendOpenAlwaysForDesktop",
   "showLegend",
+  "openLegendInitially",
   "mouseControlEnabled",
   "showZoomHelper",
 ];
