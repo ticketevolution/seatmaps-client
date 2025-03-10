@@ -70,7 +70,7 @@ export const $costRanges = createDeepEqualSelector(
       costRanges[costRanges.length - 1].ticketGroups.push(ticketGroups[0]);
     } else {
       for (let i = 0; i < ticketGroups.length; i++) {
-        const percentile = i / ticketGroups.length ; 
+        const percentile = i / ticketGroups.length;
         for (const costRange of costRanges) {
           if (costRange.percentile > percentile) {
             costRange.ticketGroups.push(ticketGroups[i]);

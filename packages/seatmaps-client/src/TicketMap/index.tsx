@@ -56,7 +56,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
 
   static defaultProps: DefaultProps = {
     mapsDomain: "https://maps.ticketevolution.com",
-    onSelection: () => {},
+    onSelection: () => { },
     selectedSections: [],
     sectionPercentiles: {
       "0.2": "#FFC515",
@@ -453,7 +453,7 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
     if (ranges.length === 0) return "#CCCCCC";
 
     for (const range of ranges) {
-      if (range.max >= lowestTicketPriceInSection) { 
+      if (range.max >= lowestTicketPriceInSection) {
         return range.color;
       }
     }
@@ -648,10 +648,10 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
             color={
               this.state.currentHoveredSection
                 ? this.getDefaultColor(
-                    $ticketGroupsBySection(this.state)[
-                      this.state.currentHoveredSection
-                    ],
-                  )
+                  $ticketGroupsBySection(this.state)[
+                  this.state.currentHoveredSection
+                  ],
+                )
                 : ""
             }
             ticketGroups={$availableTicketGroups(this.state).filter(
