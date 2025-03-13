@@ -66,12 +66,16 @@ export const $costRanges = createDeepEqualSelector(
       )
       .sort((a, b) => a.percentile - b.percentile);
 
-    for (let i = 0; i < ticketGroups.length; i++) {
-      const percentile = i / ticketGroups.length;
-      for (const costRange of costRanges) {
-        if (costRange.percentile > percentile) {
-          costRange.ticketGroups.push(ticketGroups[i]);
-          break;
+    if (ticketGroups.length === 1) {
+      costRanges[costRanges.length - 1].ticketGroups.push(ticketGroups[0]);
+    } else {
+      for (let i = 0; i < ticketGroups.length; i++) {
+        const percentile = i / ticketGroups.length;
+        for (const costRange of costRanges) {
+          if (costRange.percentile > percentile) {
+            costRange.ticketGroups.push(ticketGroups[i]);
+            break;
+          }
         }
       }
     }
@@ -86,7 +90,7 @@ export const $costRanges = createDeepEqualSelector(
       }
     });
 
-    return costRanges;
+    return costRanges.filter(({ min, max }) => !(min === 0 && max === 0));
   },
 );
 

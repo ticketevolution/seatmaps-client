@@ -444,14 +444,16 @@ export class TicketMap extends Component<Props & DefaultProps, State> {
    */
 
   getDefaultColor(ticketGroups: NormalizedTicketGroup[] = []): string {
-    const lowestTicketPriceInSection = ticketGroups
-      .map(({ price }) => price)
-      .sort((a, b) => a - b)[0];
+    const lowestTicketPriceInSection =
+      ticketGroups.length > 0
+        ? Math.min(...ticketGroups.map(({ price }) => price))
+        : 0;
 
     const ranges = $costRanges(this.state, this.props);
+    if (ranges.length === 0) return "#CCCCCC";
 
     for (const range of ranges) {
-      if (range.max > lowestTicketPriceInSection) {
+      if (range.max >= lowestTicketPriceInSection) {
         return range.color;
       }
     }

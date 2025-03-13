@@ -103,7 +103,8 @@ describe("$costRanges", () => {
 
   it("sets min and max to 0 if there are no ticket groups in the range", () => {
     (props.sectionPercentiles as Percentiles)["1"] = "#00c";
-    expect($costRanges(state, props)[2]).toMatchObject({ min: 0, max: 0 });
+    state.ticketGroups = [];
+    expect($costRanges(state, props)).toMatchObject([]);
   });
 
   it("adds ticket groups to their associated cost range", () => {
