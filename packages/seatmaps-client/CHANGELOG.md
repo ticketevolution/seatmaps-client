@@ -1,5 +1,11 @@
 # @ticketevolution/seatmaps-client
 
+## 3.5.1
+
+### Patch Changes
+
+- e2ade85: Fixed Legend to Seats color mismatch.
+
 ## 3.5.0
 
 ### Minor Changes
