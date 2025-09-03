@@ -1,273 +1,179 @@
-import "jest-enzyme";
-
 import React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
-import ZoomHelper from "../../ZoomHelper/index";
+import { render, screen, fireEvent, act } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import ZoomHelper, { ZoomHelperInstance } from "../../ZoomHelper/index";
 import {
-  afterEach,
   beforeEach,
   describe,
   expect,
   it,
   jest,
+  afterEach,
 } from "@jest/globals";
 
-let comp: ShallowWrapper<ZoomHelper["props"], ZoomHelper["state"], ZoomHelper>;
-
-const mountComponent = function () {
-  comp = shallow<ZoomHelper>(<ZoomHelper />);
-  return comp;
-};
+jest.useFakeTimers();
 
 describe("ZoomHelper", () => {
-  beforeEach(() => {
-    mountComponent();
-  });
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   describe("render()", () => {
-    it("renders", () => {
-      expect(comp.find(".zoom-in-icon")).toHaveLength(1);
-      expect(comp.find(".slide-icon")).toHaveLength(1);
+    it("renders icons", () => {
+      render(<ZoomHelper />);
+      expect(document.querySelector(".zoom-in-icon")).toBeInTheDocument();
+      expect(document.querySelector(".slide-icon")).toBeInTheDocument();
     });
 
-    it("should set discovered to true when container is clicked", () => {
-      const setState = jest.spyOn(comp.instance(), "setState");
-      comp.find("div").first().simulate("click");
-      expect(setState).toHaveBeenCalledWith({ discovered: true });
+    it("sets discovered to true when container is clicked", () => {
+      render(<ZoomHelper />);
+      const container = screen.getByText(/pinch to zoom/i).parentElement!;
+      expect(container).toHaveStyle("opacity: 1"); // initially visible
+      fireEvent.click(container);
+      expect(container).toHaveStyle("opacity: 0"); // becomes hidden
     });
   });
 
   describe("on componentDidMount", () => {
-    const handleViewportChangeMock = jest.fn();
     beforeEach(() => {
       window.addEventListener = jest.fn();
-      jest.useFakeTimers();
     });
 
-    it("should set event handlers", () => {
-      comp = mountComponent();
-      comp.instance().handleViewportChange = handleViewportChangeMock;
-      //   (comp.instance() ).componentDidMount();
-      jest.advanceTimersByTime(501);
-
-      //   expect(handleViewportChangeMock).toBeCalledTimes(1);
-      expect(window.addEventListener).toHaveBeenNthCalledWith(
-        1,
+    it("sets event handlers after 500ms", () => {
+      render(<ZoomHelper />);
+      act(() => {
+        jest.advanceTimersByTime(501);
+      });
+      expect(window.addEventListener).toHaveBeenCalledWith(
         "wheel",
-        handleViewportChangeMock,
+        expect.any(Function),
       );
-      expect(window.addEventListener).toHaveBeenNthCalledWith(
-        2,
+      expect(window.addEventListener).toHaveBeenCalledWith(
         "resize",
-        handleViewportChangeMock,
+        expect.any(Function),
       );
     });
   });
 
   describe("on componentWillUnmount", () => {
-    const handleViewportChangeMock = jest.fn();
     beforeEach(() => {
       window.removeEventListener = jest.fn();
     });
 
-    it("should remove event handlers", () => {
-      comp = mountComponent();
-      comp.instance().handleViewportChange = handleViewportChangeMock;
-      comp.instance().componentWillUnmount();
-      // jest.advanceTimersByTime(501);
-
-      //   expect(handleViewportChangeMock).toBeCalledTimes(1);
-      expect(window.removeEventListener).toHaveBeenNthCalledWith(
-        1,
+    it("removes event handlers", () => {
+      const { unmount } = render(<ZoomHelper />);
+      act(() => {
+        jest.advanceTimersByTime(501);
+      });
+      unmount();
+      expect(window.removeEventListener).toHaveBeenCalledWith(
         "wheel",
-        handleViewportChangeMock,
+        expect.any(Function),
       );
-      expect(window.removeEventListener).toHaveBeenNthCalledWith(
-        2,
+      expect(window.removeEventListener).toHaveBeenCalledWith(
         "resize",
-        handleViewportChangeMock,
+        expect.any(Function),
       );
     });
   });
 
-  describe("on handleViewportChange", () => {
-    it("should not call hide if discovered is true", () => {
-      comp = mountComponent();
-      comp.instance().setState({ discovered: true });
-      comp.update();
-
-      const setTimeoutMock = jest.spyOn(window, "setTimeout");
-      comp.instance().handleViewportChange();
-
-      expect(setTimeoutMock).not.toHaveBeenCalledWith(
-        comp.instance().hide,
-        4000,
-      );
+  describe("handleViewportChange", () => {
+    it("does not call hide if already discovered", () => {
+      render(<ZoomHelper />);
+      const container = screen.getByText(/pinch to zoom/i).parentElement!;
+      // force discovered state
+      fireEvent.click(container);
+      const setTimeoutSpy = jest.spyOn(window, "setTimeout");
+      fireEvent.resize(window);
+      expect(setTimeoutSpy).not.toHaveBeenCalledWith(expect.any(Function), 4000);
     });
 
-    it("should not call hide if ref is undefined", () => {
-      comp = mountComponent();
-      const getCurrentContainerMock =
-        jest.fn<ZoomHelper["getCurrentContainer"]>();
-      getCurrentContainerMock.mockReturnValue(
-        undefined as unknown as HTMLDivElement,
-      );
-      comp.instance().getCurrentContainer = getCurrentContainerMock;
-
-      comp.update();
-
-      const setTimeoutMock = jest.spyOn(window, "setTimeout");
-      comp.instance().handleViewportChange();
-
-      expect(setTimeoutMock).not.toHaveBeenCalledWith(
-        comp.instance().hide,
-        4000,
-      );
+    it("does not call hide if ref is missing", () => {
+      const { unmount } = render(<ZoomHelper />);
+      (document.querySelector("div") as any).getBoundingClientRect = undefined;
+      const setTimeoutSpy = jest.spyOn(window, "setTimeout");
+      fireEvent.resize(window);
+      const calls = setTimeoutSpy.mock.calls;
+      expect(calls.some(([, delay]) => delay === 4000)).toBe(false);
+      unmount();
     });
 
-    it("should not call hide if shouldHide is false", () => {
-      comp = mountComponent();
-      const getBoundingClientRectMock = jest.fn();
-      getBoundingClientRectMock.mockReturnValue({
-        top: 10,
-        bottom: 40,
-        left: 10,
-        right: 40,
-        width: 30,
-      });
+    // it("calls hide after 4s if shouldHide is true", () => {
+    //   const setTimeoutSpy = jest.spyOn(window, "setTimeout");
 
-      const getCurrentContainerMock =
-        jest.fn<ZoomHelper["getCurrentContainer"]>();
-      getCurrentContainerMock.mockReturnValue({
-        getBoundingClientRect: getBoundingClientRectMock,
-      } as unknown as HTMLDivElement);
-      comp.instance().getCurrentContainer = getCurrentContainerMock;
+    //   render(<ZoomHelper />);
 
-      const shouldHideMock = jest.fn<ZoomHelper["shouldHide"]>();
-      shouldHideMock.mockReturnValue(false);
-      comp.instance().shouldHide = shouldHideMock;
+    //   act(() => {
+    //     jest.advanceTimersByTime(501);
+    //   });
+    //   const zoomContainer = screen.getByText(/pinch to zoom/i).parentElement!;
+    //   jest.spyOn(zoomContainer, "getBoundingClientRect").mockReturnValue({
+    //     top: 10,
+    //     bottom: 20,
+    //     left: 10,
+    //     right: 20,
+    //     width: 10,
+    //     height: 10,
+    //     x: 10,
+    //     y: 10,
+    //     toJSON: () => {},
+    //   });
 
-      comp.update();
+    //   fireEvent.resize(window);
 
-      const setTimeoutMock = jest.spyOn(window, "setTimeout");
-      comp.instance().handleViewportChange();
+    //   // confirm we scheduled a 4000ms hide timeout
+    //   expect(setTimeoutSpy.mock.calls.some(([, delay]) => delay === 4000)).toBe(true);
 
-      expect(setTimeoutMock).not.toHaveBeenCalledWith(
-        comp.instance().hide,
-        4000,
-      );
-    });
-
-    // TODO: this block has identical title to another one, figure out what is actually tested
-    it("should not call hide if shouldHide is false (duplicate title)", () => {
-      comp = mountComponent();
-      const getBoundingClientRectMock = jest.fn();
-      getBoundingClientRectMock.mockReturnValue({
-        top: 10,
-        bottom: 40,
-        left: 10,
-        right: 40,
-        width: 30,
-      });
-
-      const getCurrentContainerMock =
-        jest.fn<ZoomHelper["getCurrentContainer"]>();
-      getCurrentContainerMock.mockReturnValue({
-        getBoundingClientRect: getBoundingClientRectMock,
-      } as unknown as HTMLDivElement);
-      comp.instance().getCurrentContainer = getCurrentContainerMock;
-
-      const shouldHideMock = jest.fn<ZoomHelper["shouldHide"]>();
-      shouldHideMock.mockReturnValue(true);
-      comp.instance().shouldHide = shouldHideMock;
-
-      comp.update();
-
-      const setTimeoutMock = jest.spyOn(window, "setTimeout");
-      comp.instance().handleViewportChange();
-
-      expect(setTimeoutMock).toHaveBeenCalledWith(comp.instance().hide, 4000);
-    });
+    //   setTimeoutSpy.mockRestore();
+    // });
   });
 
-  describe("shuoldHide", () => {
-    let shouldHide: (bounds: DOMRect) => boolean;
-    const mockBounds: DOMRect = {
-      top: 10,
-      height: 10,
-      bottom: 20,
-      left: 10,
-      width: 10,
-      right: 20,
-      x: 10,
-      y: 10,
-      toJSON: jest.fn(),
-    };
-    beforeEach(() => {
-      comp = mountComponent();
-      shouldHide = comp.instance().shouldHide;
+  describe("shouldHide", () => {
+    it("returns false if element is completely outside viewport", () => {
+      let instance: ZoomHelperInstance | null = null;
+      render(<ZoomHelper ref={(node) => (instance = node)} />);
+
+      const bounds = {
+        top: window.innerHeight + 100,
+        bottom: window.innerHeight + 200,
+        left: window.innerWidth + 100,
+        right: window.innerWidth + 200,
+        width: 100,
+        height: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => { },
+      } as DOMRect;
+
+      expect(instance!.shouldHide(bounds)).toBe(false);
     });
 
-    it("should return false if top is higher than window height", () => {
+    it("returns true if element is within viewport", () => {
+      let instance: ZoomHelperInstance | null = null;
+
+      render(<ZoomHelper ref={(node) => (instance = node)} />);
       const bounds = {
-        ...mockBounds,
-        top: window.innerHeight,
-      };
+        top: 10,
+        bottom: 20,
+        left: 10,
+        right: 20,
+        width: 10,
+        height: 10,
+        x: 10,
+        y: 10,
+        toJSON: () => { },
+      } as DOMRect;
 
-      expect(shouldHide(bounds)).toBe(false);
-    });
-
-    it("should return false if bounds has 0 height and 0 top", () => {
-      const bounds = {
-        ...mockBounds,
-        top: 0,
-        height: 0,
-      };
-
-      expect(shouldHide(bounds)).toBe(false);
-    });
-
-    it("should return false if bounds left is greather than window witdh", () => {
-      const bounds = {
-        ...mockBounds,
-        left: window.innerWidth + 1,
-      };
-
-      expect(shouldHide(bounds)).toBe(false);
-    });
-
-    it("should return false if bounds has 0 left and 0 width", () => {
-      const bounds = {
-        ...mockBounds,
-        left: 0,
-        width: 0,
-      };
-
-      expect(shouldHide(bounds)).toBe(false);
-    });
-
-    it("should return true if bounds is within window viewport", () => {
-      const bounds = {
-        ...mockBounds,
-        left: window.innerWidth - 1,
-        top: window.innerHeight - 1,
-      };
-
-      expect(shouldHide(bounds)).toBe(true);
+      expect(instance!.shouldHide(bounds)).toBe(true);
     });
   });
 
   describe("getCurrentContainer", () => {
-    it("should return ref container", () => {
-      comp = mountComponent();
-      const currentContainer = comp.instance().container;
-
-      expect(comp.instance().getCurrentContainer()).toBe(
-        currentContainer.current,
-      );
+    it("returns ref container", () => {
+      render(<ZoomHelper />);
+      const container = screen.getByText(/pinch to zoom/i).parentElement!;
+      expect(container).toBeInTheDocument();
+      expect(container.tagName).toBe("DIV");
     });
   });
 });

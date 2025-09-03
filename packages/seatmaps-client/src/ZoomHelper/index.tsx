@@ -114,3 +114,5 @@ export default class ZoomHelper extends React.Component {
     );
   }
 }
+
+export type ZoomHelperInstance = ZoomHelper;

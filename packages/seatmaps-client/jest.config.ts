@@ -19,10 +19,7 @@ module.exports = {
   moduleNameMapper: {
     ".+\\.(svg|png|jpg)$": "identity-obj-proxy",
   },
-  setupFilesAfterEnv: [
-    "<rootDir>/node_modules/jest-enzyme/lib/index.js",
-    "<rootDir>/src/__tests__/setupTests.ts",
-  ],
+  setupFilesAfterEnv: ["<rootDir>/src/__tests__/setupTests.ts"],
   testEnvironment: "jsdom",
   transform: {
     "\\.(js|mjs|ts)$": ["@swc/jest", {}],
