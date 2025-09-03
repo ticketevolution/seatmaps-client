@@ -1,7 +1,7 @@
 import pick from "lodash.pick";
 import union from "lodash.union";
 import React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import {
   DefaultProps,
   Props,
@@ -63,14 +63,13 @@ export class SeatmapFactory {
 
     let map: TicketMap | undefined;
 
-    render(
+    createRoot(rootElement).render(
       <TicketMap
         {...this.configuration}
         ref={(ref: TicketMap) => {
           map = ref;
         }}
       />,
-      rootElement,
     );
 
     return map?.publicApi;
