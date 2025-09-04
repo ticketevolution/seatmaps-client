@@ -23,7 +23,7 @@ describe("Actions", () => {
   });
 
   it("renders the actions and legend in one group on mobile", async () => {
-    render(<Actions {...props} showControls showLegend isMobile />);
+    render(<Actions {...props} showControls showLegend />);
 
     await waitFor(() => {
       const groups = screen.getByTestId("seatmaps-actions-menu").children;
@@ -33,7 +33,7 @@ describe("Actions", () => {
   });
 
   it("renders the actions and legend in separate groups on desktop", () => {
-    render(<Actions {...props} showControls showLegend isMobile={false} />);
+    render(<Actions {...props} showControls showLegend />);
     const groups = screen.getByTestId("seatmaps-actions-menu").children;
     expect(groups).toHaveLength(2);
     expect(screen.getByText(/show map legend/i)).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe("Actions", () => {
 
   describe("when controls are visible", () => {
     it("renders all control buttons on desktop", () => {
-      render(<Actions {...props} showControls isMobile={false} />);
+      render(<Actions {...props} showControls />);
       expect(screen.getByText(/clear all/i)).toBeInTheDocument();
       expect(screen.getByTestId("zoom-in")).toBeInTheDocument();
       expect(screen.getByTestId("zoom-out")).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe("Actions", () => {
     });
 
     it("buttons call correct handlers on desktop", () => {
-      render(<Actions {...props} showControls isMobile={false} />);
+      render(<Actions {...props} showControls />);
 
       fireEvent.click(screen.getByText(/clear all/i));
       fireEvent.click(screen.getByTestId("zoom-in"));
@@ -63,7 +63,7 @@ describe("Actions", () => {
     });
 
     it("renders limited controls on mobile", () => {
-      render(<Actions {...props} showControls isMobile />);
+      render(<Actions {...props} showControls />);
       expect(screen.getByText(/clear all/i)).toBeInTheDocument();
       expect(
         screen.queryByRole("button", { name: /zoom in/i }),

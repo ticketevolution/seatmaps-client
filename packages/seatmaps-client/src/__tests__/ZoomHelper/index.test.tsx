@@ -81,57 +81,39 @@ describe("ZoomHelper", () => {
     it("does not call hide if already discovered", () => {
       render(<ZoomHelper />);
       const container = screen.getByText(/pinch to zoom/i).parentElement!;
-      // force discovered state
       fireEvent.click(container);
       const setTimeoutSpy = jest.spyOn(window, "setTimeout");
       fireEvent.resize(window);
-      expect(setTimeoutSpy).not.toHaveBeenCalledWith(expect.any(Function), 4000);
+      expect(setTimeoutSpy).not.toHaveBeenCalledWith(
+        expect.any(Function),
+        4000,
+      );
     });
 
     it("does not call hide if ref is missing", () => {
       const { unmount } = render(<ZoomHelper />);
-      (document.querySelector("div") as any).getBoundingClientRect = undefined;
+      const div = document.querySelector("div");
+      if (div) {
+        div.getBoundingClientRect = () => undefined as unknown as DOMRect;
+      }
       const setTimeoutSpy = jest.spyOn(window, "setTimeout");
       fireEvent.resize(window);
       const calls = setTimeoutSpy.mock.calls;
       expect(calls.some(([, delay]) => delay === 4000)).toBe(false);
       unmount();
     });
-
-    // it("calls hide after 4s if shouldHide is true", () => {
-    //   const setTimeoutSpy = jest.spyOn(window, "setTimeout");
-
-    //   render(<ZoomHelper />);
-
-    //   act(() => {
-    //     jest.advanceTimersByTime(501);
-    //   });
-    //   const zoomContainer = screen.getByText(/pinch to zoom/i).parentElement!;
-    //   jest.spyOn(zoomContainer, "getBoundingClientRect").mockReturnValue({
-    //     top: 10,
-    //     bottom: 20,
-    //     left: 10,
-    //     right: 20,
-    //     width: 10,
-    //     height: 10,
-    //     x: 10,
-    //     y: 10,
-    //     toJSON: () => {},
-    //   });
-
-    //   fireEvent.resize(window);
-
-    //   // confirm we scheduled a 4000ms hide timeout
-    //   expect(setTimeoutSpy.mock.calls.some(([, delay]) => delay === 4000)).toBe(true);
-
-    //   setTimeoutSpy.mockRestore();
-    // });
   });
 
   describe("shouldHide", () => {
     it("returns false if element is completely outside viewport", () => {
       let instance: ZoomHelperInstance | null = null;
-      render(<ZoomHelper ref={(node) => (instance = node)} />);
+      render(
+        <ZoomHelper
+          ref={(node) => {
+            instance = node;
+          }}
+        />,
+      );
 
       const bounds = {
         top: window.innerHeight + 100,
@@ -142,7 +124,7 @@ describe("ZoomHelper", () => {
         height: 100,
         x: 0,
         y: 0,
-        toJSON: () => { },
+        toJSON: () => {},
       } as DOMRect;
 
       expect(instance!.shouldHide(bounds)).toBe(false);
@@ -151,7 +133,13 @@ describe("ZoomHelper", () => {
     it("returns true if element is within viewport", () => {
       let instance: ZoomHelperInstance | null = null;
 
-      render(<ZoomHelper ref={(node) => (instance = node)} />);
+      render(
+        <ZoomHelper
+          ref={(node) => {
+            instance = node;
+          }}
+        />,
+      );
       const bounds = {
         top: 10,
         bottom: 20,
@@ -161,7 +149,7 @@ describe("ZoomHelper", () => {
         height: 10,
         x: 10,
         y: 10,
-        toJSON: () => { },
+        toJSON: () => {},
       } as DOMRect;
 
       expect(instance!.shouldHide(bounds)).toBe(true);

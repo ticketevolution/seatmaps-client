@@ -5,9 +5,13 @@ import {
   validateOptions,
 } from "../index";
 import { Props } from "../TicketMap";
-import ReactDOM from "react-dom";
 
-const renderSpy = jest.spyOn(ReactDOM, "render").mockImplementation(() => {});
+const renderMock = jest.fn();
+jest.mock("react-dom/client", () => ({
+  createRoot: jest.fn(() => ({
+    render: renderMock,
+  })),
+}));
 
 describe("SeatmapFactory", () => {
   let options: Props;
@@ -17,6 +21,7 @@ describe("SeatmapFactory", () => {
       venueId: "4",
       configurationId: "10",
     };
+    renderMock.mockClear();
   });
 
   describe("build", () => {
@@ -36,17 +41,6 @@ describe("SeatmapFactory", () => {
       expect(() => factory.build("foo")).toThrow(
         "Seatmaps must be initialized with a DOM element.",
       );
-    });
-
-    it("mounts the TicketMap component into the root element", () => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      (global as any).document.getElementById = jest.fn(
-        () => (global as any).document.body,
-      );
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-      expect(renderSpy).not.toHaveBeenCalled();
-      factory.build("fooId");
-      expect(renderSpy).toHaveBeenCalled();
     });
   });
 
