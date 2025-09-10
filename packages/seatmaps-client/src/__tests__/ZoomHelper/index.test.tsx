@@ -34,27 +34,6 @@ describe("ZoomHelper", () => {
     });
   });
 
-  describe("on componentDidMount", () => {
-    beforeEach(() => {
-      window.addEventListener = jest.fn();
-    });
-
-    it("sets event handlers after 500ms", () => {
-      render(<ZoomHelper />);
-      act(() => {
-        jest.advanceTimersByTime(501);
-      });
-      expect(window.addEventListener).toHaveBeenCalledWith(
-        "wheel",
-        expect.any(Function),
-      );
-      expect(window.addEventListener).toHaveBeenCalledWith(
-        "resize",
-        expect.any(Function),
-      );
-    });
-  });
-
   describe("on componentWillUnmount", () => {
     beforeEach(() => {
       window.removeEventListener = jest.fn();
@@ -101,6 +80,57 @@ describe("ZoomHelper", () => {
       const calls = setTimeoutSpy.mock.calls;
       expect(calls.some(([, delay]) => delay === 4000)).toBe(false);
       unmount();
+    });
+
+    it("calls hide after 4s if shouldHide is true", () => {
+      const setTimeoutSpy = jest.spyOn(global, "setTimeout");
+
+      render(<ZoomHelper />);
+
+      act(() => {
+        jest.advanceTimersByTime(501);
+      });
+      const zoomContainer = screen.getByText(/pinch to zoom/i).parentElement!;
+      jest.spyOn(zoomContainer, "getBoundingClientRect").mockReturnValue({
+        top: 10,
+        bottom: 20,
+        left: 10,
+        right: 20,
+        width: 10,
+        height: 10,
+        x: 10,
+        y: 10,
+        toJSON: () => {},
+      });
+
+      fireEvent.resize(window);
+
+      expect(setTimeoutSpy.mock.calls.some(([, delay]) => delay === 4000)).toBe(
+        true,
+      );
+
+      setTimeoutSpy.mockRestore();
+    });
+  });
+
+  describe("on componentDidMount", () => {
+    beforeEach(() => {
+      window.addEventListener = jest.fn();
+    });
+
+    it("sets event handlers after 500ms", () => {
+      render(<ZoomHelper />);
+      act(() => {
+        jest.advanceTimersByTime(501);
+      });
+      expect(window.addEventListener).toHaveBeenCalledWith(
+        "wheel",
+        expect.any(Function),
+      );
+      expect(window.addEventListener).toHaveBeenCalledWith(
+        "resize",
+        expect.any(Function),
+      );
     });
   });
 
