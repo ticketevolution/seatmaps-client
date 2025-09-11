@@ -91,7 +91,7 @@ describe("Tooltip", () => {
           clientWidth: 10,
           parentElement: { clientWidth: 5 },
         },
-      } as any;
+      } as Tooltip["container"];
 
       expect(ref.current.direction()[1]).toEqual("left");
     });
@@ -106,7 +106,7 @@ describe("Tooltip", () => {
           clientWidth: 5,
           parentElement: { clientWidth: 5 },
         },
-      } as any;
+      } as Tooltip["container"];
 
       expect(ref.current.direction()[1]).toEqual("left");
     });
@@ -121,7 +121,7 @@ describe("Tooltip", () => {
           clientHeight: 5,
           parentElement: {},
         },
-      } as any;
+      } as Tooltip["container"];
 
       expect(ref.current.direction()[0]).toEqual("down");
     });
@@ -143,9 +143,9 @@ describe("Tooltip", () => {
       render(<Tooltip ref={ref} x={5} />);
       if (!ref.current) throw new Error("ref not set");
 
-      (ref.current as any).container = {
+      ref.current.container = {
         current: { clientWidth: 10 },
-      };
+      } as Tooltip["container"];
 
       jest
         .spyOn(ref.current as Tooltip, "direction")
@@ -162,7 +162,7 @@ describe("Tooltip", () => {
 
       ref.current.container = {
         current: { clientHeight: 10 },
-      } as any;
+      } as Tooltip["container"];
       jest.spyOn(ref.current, "direction").mockReturnValue(["up", "right"]);
 
       const pos = ref.current.position();
@@ -174,9 +174,9 @@ describe("Tooltip", () => {
       render(<Tooltip ref={ref} x={5} y={5} />);
       if (!ref.current) throw new Error("ref not set");
 
-      (ref.current as any).container = {
+      ref.current.container = {
         current: { clientWidth: 10, clientHeight: 10 },
-      };
+      } as Tooltip["container"];
 
       jest.spyOn(ref.current, "direction").mockReturnValue(["down", "right"]);
 
