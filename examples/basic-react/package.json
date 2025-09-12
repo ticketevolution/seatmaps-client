@@ -6,11 +6,11 @@
   },
   "dependencies": {
     "@-/mock-data": "workspace:*",
-    "@types/react": "18.2.25",
-    "@types/react-dom": "18.2.11",
+    "@types/react": "19.1.9",
+    "@types/react-dom": "19.1.7",
     "@ticketevolution/seatmaps-client": "workspace:*",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
   },
   "devDependencies": {
     "vite": "4.4.11",

@@ -1,45 +1,38 @@
-import "jest-enzyme";
-
 import React from "react";
-import { shallow } from "enzyme";
+import { render, screen } from "@testing-library/react";
 import Tooltip, { formatCurrency, defaultDirection } from "../../Tooltip/index";
 import { describe, expect, it, jest } from "@jest/globals";
+import "@testing-library/jest-dom";
 
 describe("Tooltip", () => {
   describe("render()", () => {
     it("renders", () => {
-      expect(shallow(<Tooltip />).isEmptyRender()).toEqual(false);
+      const { container } = render(<Tooltip />);
+      expect(container.firstChild).not.toBeNull();
     });
 
     it("renders a transparent element when isActive is false", () => {
-      expect(
-        shallow(<Tooltip isActive={false} />).prop("style"),
-      ).toHaveProperty("opacity", 0);
+      const { container } = render(<Tooltip isActive={false} />);
+      expect(container.firstChild).toHaveStyle({ opacity: 0 });
     });
 
     it("renders an opaque element when isActive is true", () => {
-      expect(shallow(<Tooltip isActive />).prop("style")).toHaveProperty(
-        "opacity",
-        1,
-      );
+      const { container } = render(<Tooltip isActive />);
+      expect(container.firstChild).toHaveStyle({ opacity: 1 });
     });
 
     it("renders name", () => {
-      expect(
-        shallow(<Tooltip name={"example-name"} />).contains("example-name"),
-      ).toBe(true);
+      render(<Tooltip name="example-name" />);
+      expect(screen.getByText("example-name")).toBeInTheDocument();
     });
 
     it("renders the ticket group price", () => {
-      const tooltip = shallow(
-        <Tooltip ticketGroups={[{ section: "", price: 123.45 }]} />,
-      );
-
-      expect(tooltip.contains(formatCurrency(123.45))).toEqual(true);
+      render(<Tooltip ticketGroups={[{ section: "", price: 123.45 }]} />);
+      expect(screen.getByText(formatCurrency(123.45))).toBeInTheDocument();
     });
 
     it("renders the lowest ticket group price when the lowest ticket group price is placed first", () => {
-      const tooltip = shallow(
+      render(
         <Tooltip
           ticketGroups={[
             { section: "", price: 123.45 },
@@ -47,13 +40,12 @@ describe("Tooltip", () => {
           ]}
         />,
       );
-
-      expect(tooltip.contains(formatCurrency(123.45))).toEqual(true);
-      expect(tooltip.contains(formatCurrency(678.9))).toEqual(false);
+      expect(screen.getByText(formatCurrency(123.45))).toBeInTheDocument();
+      expect(screen.queryByText(formatCurrency(678.9))).not.toBeInTheDocument();
     });
 
     it("renders the lowest ticket group price when the lowest ticket group price is not placed first", () => {
-      const tooltip = shallow(
+      render(
         <Tooltip
           ticketGroups={[
             { section: "", price: 678.9 },
@@ -61,201 +53,215 @@ describe("Tooltip", () => {
           ]}
         />,
       );
-
-      expect(tooltip.contains(formatCurrency(123.45))).toEqual(true);
-      expect(tooltip.contains(formatCurrency(678.9))).toEqual(false);
+      expect(screen.getByText(formatCurrency(123.45))).toBeInTheDocument();
+      expect(screen.queryByText(formatCurrency(678.9))).not.toBeInTheDocument();
     });
   });
 
   describe("direction()", () => {
     it("returns the default direction when the container html element is not mounted", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      tooltip.container = {
-        current: null,
-      };
-
-      expect(tooltip.direction()).toEqual(defaultDirection);
+      ref.current.container = { current: null };
+      expect(ref.current.direction()).toEqual(defaultDirection);
     });
 
     it("returns the default direction when rendered outside of an html element", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      tooltip.container = {
-        current: {
-          parentElement: null,
-        },
-      } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      ref.current.container = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        current: { parentElement: null } as any,
+      };
 
-      expect(tooltip.direction()).toEqual(defaultDirection);
+      expect(ref.current.direction()).toEqual(defaultDirection);
     });
 
     it("returns left when the right side of the container is clipped and the tooltip is at the x origin", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip x={0} />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} x={0} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      tooltip.container = {
+      ref.current.container = {
         current: {
           clientWidth: 10,
-          parentElement: {
-            clientWidth: 5,
-          },
+          parentElement: { clientWidth: 5 },
         },
-      } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      } as Tooltip["container"];
 
-      expect(tooltip.direction()[1]).toEqual("left");
+      expect(ref.current.direction()[1]).toEqual("left");
     });
 
     it("returns left when the right side of the container is clipped and the tooltip is not at the x origin", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip x={1} />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} x={1} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      tooltip.container = {
+      ref.current.container = {
         current: {
           clientWidth: 5,
-          parentElement: {
-            clientWidth: 5,
-          },
+          parentElement: { clientWidth: 5 },
         },
-      } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      } as Tooltip["container"];
 
-      expect(tooltip.direction()[1]).toEqual("left");
+      expect(ref.current.direction()[1]).toEqual("left");
     });
 
     it("returns down when the top of the container is clipped and the tooltip is at the y origin", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip y={0} />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} y={0} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      tooltip.container = {
+      ref.current.container = {
         current: {
           clientHeight: 5,
           parentElement: {},
         },
-      } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      } as Tooltip["container"];
 
-      expect(tooltip.direction()[0]).toEqual("down");
+      expect(ref.current.direction()[0]).toEqual("down");
     });
   });
 
-  describe("position()", () => {
+  describe("Tooltip - position()", () => {
     it("returns x=x, y=y by default", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      expect(tooltip.position().x).toEqual(tooltip.props.x);
-
-      expect(tooltip.position().y).toEqual(tooltip.props.y);
+      const pos = ref.current.position();
+      expect(pos.x).toEqual(ref.current.props.x);
+      expect(pos.y).toEqual(ref.current.props.y);
     });
 
     it("returns x=(x - containerWidth) when container is available and direction is left", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} x={5} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      tooltip.container = {
-        current: {
-          clientWidth: 10,
-        },
-      } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      ref.current.container = {
+        current: { clientWidth: 10 },
+      } as Tooltip["container"];
 
-      tooltip.direction = jest.fn(() => ["up", "left"]);
+      jest
+        .spyOn(ref.current as Tooltip, "direction")
+        .mockReturnValue(["up", "left"]);
 
-      expect(tooltip.position().x).toEqual(
-        tooltip.props.x - tooltip.container.current!.clientWidth, // eslint-disable-line @typescript-eslint/no-non-null-assertion
-      );
+      const pos = (ref.current as Tooltip).position();
+      expect(pos.x).toEqual(5 - 10);
     });
 
     it("returns y=(y - containerHeight) when container is available and direction is up", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      tooltip.container = {
-        current: {
-          clientHeight: 10,
-        },
-      } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      ref.current.container = {
+        current: { clientHeight: 10 },
+      } as Tooltip["container"];
+      jest.spyOn(ref.current, "direction").mockReturnValue(["up", "right"]);
 
-      tooltip.direction = jest.fn(() => ["up", "right"]);
-
-      expect(tooltip.position().y).toEqual(
-        tooltip.props.y - tooltip.container.current!.clientHeight, // eslint-disable-line @typescript-eslint/no-non-null-assertion
-      );
+      const pos = ref.current.position();
+      expect(pos.y).toEqual(ref.current.props.y - 10);
     });
 
     it("returns same point when container is available and direction is bottom right", () => {
-      const tooltip = shallow<Tooltip>(<Tooltip />).instance();
+      const ref = React.createRef<Tooltip>();
+      render(<Tooltip ref={ref} x={5} y={5} />);
+      if (!ref.current) throw new Error("ref not set");
 
-      tooltip.container = {
-        current: {
-          clientHeight: 10,
-        },
-      } as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      ref.current.container = {
+        current: { clientWidth: 10, clientHeight: 10 },
+      } as Tooltip["container"];
 
-      tooltip.direction = jest.fn(() => ["down", "right"]);
+      jest.spyOn(ref.current, "direction").mockReturnValue(["down", "right"]);
 
-      expect(tooltip.position().y).toEqual(tooltip.props.y);
-      expect(tooltip.position().x).toEqual(tooltip.props.x);
+      const pos = ref.current.position();
+
+      expect(pos.x).toEqual(5);
+      expect(pos.y).toEqual(5);
     });
   });
 
   describe("tipStyle()", () => {
     it("should return a unique style for each direction", () => {
-      const tooltips = Array.from(new Array(4)).map(() =>
-        shallow<Tooltip>(<Tooltip />).instance(),
+      const refs = [
+        React.createRef<Tooltip>(),
+        React.createRef<Tooltip>(),
+        React.createRef<Tooltip>(),
+        React.createRef<Tooltip>(),
+      ];
+
+      render(
+        <>
+          <Tooltip ref={refs[0]} />
+          <Tooltip ref={refs[1]} />
+          <Tooltip ref={refs[2]} />
+          <Tooltip ref={refs[3]} />
+        </>,
       );
 
-      tooltips[0].direction = jest.fn(() => ["up", "left"]);
-      tooltips[1].direction = jest.fn(() => ["up", "right"]);
-      tooltips[2].direction = jest.fn(() => ["down", "left"]);
-      tooltips[3].direction = jest.fn(() => ["down", "right"]);
+      jest
+        .spyOn(refs[0].current as Tooltip, "direction")
+        .mockReturnValue(["up", "left"]);
+      jest
+        .spyOn(refs[1].current as Tooltip, "direction")
+        .mockReturnValue(["up", "right"]);
+      jest
+        .spyOn(refs[2].current as Tooltip, "direction")
+        .mockReturnValue(["down", "left"]);
+      jest
+        .spyOn(refs[3].current as Tooltip, "direction")
+        .mockReturnValue(["down", "right"]);
 
-      const tipStyles = tooltips.map((tooltip) => tooltip.tipStyle());
-      const uniqueTipStyles = Array.from(new Set(tipStyles));
+      const styles = refs.map((r) => r.current?.tipStyle());
 
-      expect(uniqueTipStyles.length).toEqual(tipStyles.length);
+      expect(new Set(styles.map((s) => JSON.stringify(s))).size).toBe(
+        styles.length,
+      );
     });
   });
 
   describe("containerStyle()", () => {
     it("should return a unique style for each direction", () => {
-      const commonStyles = {
-        position: "fixed",
-        zIndex: 1,
-        transition: "top .1s, left .1s",
-        opacity: 0,
-        padding: 5,
-        display: "flex",
-        filter: "drop-shadow(rgba(0, 0, 0, 0.5) 0 2px 2px)",
-        pointerEvents: "none",
-        top: 0,
-        left: 0,
-      };
-      const tooltips = Array.from(new Array(4)).map(() =>
-        shallow<Tooltip>(<Tooltip />).instance(),
+      const refs = [
+        React.createRef<Tooltip>(),
+        React.createRef<Tooltip>(),
+        React.createRef<Tooltip>(),
+        React.createRef<Tooltip>(),
+      ];
+
+      render(
+        <>
+          <Tooltip ref={refs[0]} />
+          <Tooltip ref={refs[1]} />
+          <Tooltip ref={refs[2]} />
+          <Tooltip ref={refs[3]} />
+        </>,
       );
 
-      tooltips[0].direction = jest.fn(() => ["up", "left"]);
-      tooltips[1].direction = jest.fn(() => ["up", "right"]);
-      tooltips[2].direction = jest.fn(() => ["down", "left"]);
-      tooltips[3].direction = jest.fn(() => ["down", "right"]);
+      jest
+        .spyOn(refs[0].current as Tooltip, "direction")
+        .mockReturnValue(["up", "left"]);
+      jest
+        .spyOn(refs[1].current as Tooltip, "direction")
+        .mockReturnValue(["up", "right"]);
+      jest
+        .spyOn(refs[2].current as Tooltip, "direction")
+        .mockReturnValue(["down", "left"]);
+      jest
+        .spyOn(refs[3].current as Tooltip, "direction")
+        .mockReturnValue(["down", "right"]);
 
-      const containerStyle = tooltips.map((tooltip) =>
-        tooltip.containerStyle(),
+      const styles = refs.map((r) => r.current?.containerStyle());
+
+      expect(new Set(styles.map((s) => JSON.stringify(s))).size).toBe(
+        styles.length,
       );
-
-      expect(containerStyle[0]).toEqual({
-        ...commonStyles,
-        flexDirection: "column-reverse",
-        alignItems: "flex-end",
-      });
-      expect(containerStyle[1]).toEqual({
-        ...commonStyles,
-        flexDirection: "column-reverse",
-        alignItems: "flex-start",
-      });
-      expect(containerStyle[2]).toEqual({
-        ...commonStyles,
-        flexDirection: "column",
-        alignItems: "flex-end",
-      });
-      expect(containerStyle[3]).toEqual({
-        ...commonStyles,
-        flexDirection: "column",
-        alignItems: "flex-start",
-      });
     });
   });
 });

@@ -1,15 +1,21 @@
+import { act } from "@testing-library/react";
 import { jest, describe, beforeEach, it, expect } from "@jest/globals";
-import {
-  SeatmapFactory,
-  extractConfigurationFromOptions,
-  validateOptions,
-} from "../index";
 import { Props } from "../TicketMap";
-import ReactDOM from "react-dom";
 
-const renderSpy = jest.spyOn(ReactDOM, "render").mockImplementation(() => {});
+const renderMock = jest.fn();
+jest.mock("react-dom/client", () => ({
+  createRoot: jest.fn(() => ({
+    render: renderMock,
+  })),
+}));
 
 describe("SeatmapFactory", () => {
+  const {
+    SeatmapFactory,
+    extractConfigurationFromOptions,
+    validateOptions,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+  } = require("../index");
   let options: Props;
 
   beforeEach(() => {
@@ -17,10 +23,11 @@ describe("SeatmapFactory", () => {
       venueId: "4",
       configurationId: "10",
     };
+    renderMock.mockClear();
   });
 
   describe("build", () => {
-    let factory: SeatmapFactory;
+    let factory: typeof SeatmapFactory;
 
     beforeEach(() => {
       factory = new SeatmapFactory(options);
@@ -38,15 +45,19 @@ describe("SeatmapFactory", () => {
       );
     });
 
-    it("mounts the TicketMap component into the root element", () => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      (global as any).document.getElementById = jest.fn(
-        () => (global as any).document.body,
-      );
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-      expect(renderSpy).not.toHaveBeenCalled();
-      factory.build("fooId");
-      expect(renderSpy).toHaveBeenCalled();
+    it("mounts the TicketMap component into the root element", async () => {
+      const container = document.createElement("div");
+      container.id = "fooId";
+      document.body.appendChild(container);
+      const factory = new SeatmapFactory({
+        venueId: "4",
+        configurationId: "10",
+      });
+      expect(renderMock).not.toHaveBeenCalled();
+      act(() => {
+        factory.build("fooId");
+      });
+      expect(renderMock).toHaveBeenCalled();
     });
   });
 

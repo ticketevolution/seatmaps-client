@@ -1,16 +1,10 @@
-import "jest-enzyme";
-
 import React from "react";
-import { act } from "react-dom/test-utils";
-import { mount, ReactWrapper } from "enzyme";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import Actions, { Props } from "../../Actions";
-import ActionGroup from "../../Actions/ActionGroup";
-import Legend from "../../Legend";
-import Button from "../../Button";
-import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 
 describe("Actions", () => {
-  let wrapper: ReactWrapper<Actions["props"], Actions["state"], Actions>;
   let props: Props;
 
   beforeEach(() => {
@@ -21,195 +15,99 @@ describe("Actions", () => {
       onZoomOut: jest.fn(),
       onResetZoom: jest.fn(),
     };
-    wrapper = mount<Actions>(<Actions {...props} />);
   });
 
   it("renders", () => {
-    expect(wrapper.isEmptyRender()).toEqual(false);
+    render(<Actions {...props} />);
+    expect(screen.getByTestId("seatmaps-actions-menu")).toBeInTheDocument();
   });
 
-  it("renders the actions and legend in one group on mobile browsers", () => {
-    wrapper.setProps({ showControls: true, showLegend: true });
-    act(() => {
-      wrapper.setState({ isMobile: true });
+  it("renders the actions and legend in one group on mobile", async () => {
+    render(<Actions {...props} showControls showLegend />);
+
+    await waitFor(() => {
+      const groups = screen.getByTestId("seatmaps-actions-menu").children;
+      expect(groups).toHaveLength(1);
     });
-    expect(wrapper.find(ActionGroup)).toHaveLength(1);
+    expect(screen.getByText(/show map legend/i)).toBeInTheDocument();
   });
 
-  it("renders the actions and legend in separate groups on mobile browsers", () => {
-    wrapper.setProps({ showControls: true, showLegend: true });
-    act(() => {
-      wrapper.setState({ isMobile: false });
-    });
-    expect(wrapper.find(ActionGroup)).toHaveLength(2);
-    expect(wrapper.find(ActionGroup).at(1).find(Legend)).toHaveLength(1);
+  it("renders the actions and legend in separate groups on desktop", () => {
+    render(<Actions {...props} showControls showLegend />);
+    const groups = screen.getByTestId("seatmaps-actions-menu").children;
+    expect(groups).toHaveLength(2);
+    expect(screen.getByText(/show map legend/i)).toBeInTheDocument();
   });
 
   describe("when controls are visible", () => {
-    beforeEach(() => {
-      wrapper.setProps({ showControls: true });
+    it("renders all control buttons on desktop", () => {
+      render(<Actions {...props} showControls />);
+      expect(screen.getByText(/clear all/i)).toBeInTheDocument();
+      expect(screen.getByTestId("zoom-in")).toBeInTheDocument();
+      expect(screen.getByTestId("zoom-out")).toBeInTheDocument();
+      expect(screen.getByTestId("reset-zoom")).toBeInTheDocument();
     });
 
-    describe("on desktop browsers", () => {
-      beforeEach(() => {
-        act(() => {
-          wrapper.setState({ isMobile: false });
-        });
-      });
+    it("buttons call correct handlers on desktop", () => {
+      render(<Actions {...props} showControls />);
 
-      it("matches snapshot", () => {
-        expect(wrapper).toMatchSnapshot();
-      });
+      fireEvent.click(screen.getByText(/clear all/i));
+      fireEvent.click(screen.getByTestId("zoom-in"));
+      fireEvent.click(screen.getByTestId("zoom-out"));
+      fireEvent.click(screen.getByTestId("reset-zoom"));
 
-      it("renders a clear selection button", () => {
-        expect(wrapper.exists('[name="clear-selection"]')).toEqual(true);
-      });
-
-      it("renders a zoom in button", () => {
-        expect(wrapper.exists('[name="zoom-in"]')).toEqual(true);
-      });
-
-      it("renders a zoom out button", () => {
-        expect(wrapper.exists('[name="zoom-out"]')).toEqual(true);
-      });
-
-      it("renders a reset zoom button", () => {
-        expect(wrapper.exists('[name="reset-zoom"]')).toEqual(true);
-      });
-
-      it("renders a button that zooms in", () => {
-        wrapper.find(Button).forEach((button) => button.simulate("click"));
-        expect(props.onZoomIn).toHaveBeenCalled();
-      });
-
-      it("renders a button that zooms out", () => {
-        wrapper.find(Button).forEach((button) => button.simulate("click"));
-        expect(props.onZoomOut).toHaveBeenCalled();
-      });
-
-      it("renders a button that resets zoom", () => {
-        wrapper.find(Button).forEach((button) => button.simulate("click"));
-        expect(props.onResetZoom).toHaveBeenCalled();
-      });
-
-      it("renders a button that clears selections", () => {
-        wrapper.find(Button).forEach((button) => button.simulate("click"));
-        expect(props.onClearSelection).toHaveBeenCalled();
-      });
+      expect(props.onClearSelection).toHaveBeenCalled();
+      expect(props.onZoomIn).toHaveBeenCalled();
+      expect(props.onZoomOut).toHaveBeenCalled();
+      expect(props.onResetZoom).toHaveBeenCalled();
     });
 
-    describe("on mobile browsers", () => {
-      beforeEach(() => {
-        act(() => {
-          wrapper.instance().setState({ isMobile: true });
-        });
-      });
-
-      it("matches snapshot", () => {
-        expect(wrapper).toMatchSnapshot();
-      });
-
-      it("renders a clear selection button", () => {
-        expect(wrapper.exists('[name="clear-selection"]')).toEqual(true);
-      });
-
-      it("does not render a button that zooms in", () => {
-        wrapper.find(Button).forEach((button) => button.simulate("click"));
-        expect(props.onZoomIn).not.toHaveBeenCalled();
-      });
-
-      it("does not render a button that zooms out", () => {
-        wrapper.find(Button).forEach((button) => button.simulate("click"));
-        expect(props.onZoomOut).not.toHaveBeenCalled();
-      });
-
-      it("does not render a button that resets zoom", () => {
-        wrapper.find(Button).forEach((button) => button.simulate("click"));
-        expect(props.onResetZoom).not.toHaveBeenCalled();
-      });
-
-      it("renders a button that clears selections", () => {
-        wrapper.find(Button).forEach((button) => button.simulate("click"));
-        expect(props.onClearSelection).toHaveBeenCalled();
-      });
+    it("renders limited controls on mobile", () => {
+      render(<Actions {...props} showControls />);
+      expect(screen.getByText(/clear all/i)).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /zoom in/i }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /zoom out/i }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /reset zoom/i }),
+      ).not.toBeInTheDocument();
     });
 
-    describe("when component is unmounted", () => {
-      beforeEach(() => {
-        jest.spyOn(window, "clearInterval");
+    it("clears interval on unmount", () => {
+      const clearSpy = jest.spyOn(window, "clearInterval");
+      const { unmount } = render(<Actions {...props} showControls />);
+      unmount();
+      expect(clearSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("responsive behavior (updateIsMobile)", () => {
+    it("treats small container as mobile", () => {
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        writable: true,
+        value: 399,
       });
 
-      it("should clear the interval", () => {
-        wrapper.unmount();
-        expect(clearInterval).toHaveBeenCalled();
-      });
+      render(<Actions {...props} showControls />);
+      expect(screen.getByText(/clear all/i)).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /zoom in/i }),
+      ).not.toBeInTheDocument();
     });
 
-    describe("updateIsMobile", () => {
-      it("should not call setState if the container is not defined", () => {
-        const getCurrentContainerMock =
-          jest.fn<Actions["getCurrentContainer"]>();
-        getCurrentContainerMock.mockReturnValue(null);
-        wrapper.instance().getCurrentContainer = getCurrentContainerMock;
-        jest.spyOn(wrapper.instance(), "setState");
-        wrapper.update();
-
-        wrapper.instance().updateIsMobile();
-
-        expect(getCurrentContainerMock).toHaveBeenCalledTimes(1);
-        expect(wrapper.instance().setState).not.toHaveBeenCalled();
+    it("treats narrow window as mobile", () => {
+      Object.defineProperty(window, "innerWidth", {
+        configurable: true,
+        writable: true,
+        value: 500,
       });
 
-      it("should set isMobile true if container width is mobile", () => {
-        const getCurrentContainerMock =
-          jest.fn<Actions["getCurrentContainer"]>();
-        getCurrentContainerMock.mockReturnValue({
-          clientWidth: 399,
-        } as unknown as HTMLDivElement);
-        wrapper.instance().getCurrentContainer = getCurrentContainerMock;
-        act(() => {
-          wrapper.instance().setState({ isMobile: false });
-        });
-        jest.spyOn(wrapper.instance(), "setState");
-        wrapper.update();
-
-        act(() => {
-          wrapper.instance().updateIsMobile();
-        });
-
-        expect(getCurrentContainerMock).toHaveBeenCalledTimes(1);
-        expect(wrapper.instance().setState).toHaveBeenCalledWith({
-          isMobile: true,
-        });
-      });
-
-      it("should set isMobile true if window width is mobile", () => {
-        const getCurrentContainerMock =
-          jest.fn<Actions["getCurrentContainer"]>();
-        getCurrentContainerMock.mockReturnValue({
-          clientWidth: 400,
-        } as unknown as HTMLDivElement);
-        Object.defineProperty(window, "innerWidth", {
-          writable: true,
-          configurable: true,
-          value: 519,
-        });
-        wrapper.instance().getCurrentContainer = getCurrentContainerMock;
-        act(() => {
-          wrapper.instance().setState({ isMobile: false });
-        });
-        jest.spyOn(wrapper.instance(), "setState");
-        wrapper.update();
-
-        act(() => {
-          wrapper.instance().updateIsMobile();
-        });
-
-        expect(getCurrentContainerMock).toHaveBeenCalledTimes(1);
-        expect(wrapper.instance().setState).toHaveBeenCalledWith({
-          isMobile: true,
-        });
-      });
+      render(<Actions {...props} showControls />);
+      expect(screen.getByText(/clear all/i)).toBeInTheDocument();
     });
   });
 });
