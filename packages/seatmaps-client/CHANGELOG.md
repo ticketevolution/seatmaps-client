@@ -1,5 +1,11 @@
 # @ticketevolution/seatmaps-client
 
+## 4.0.0
+
+### Major Changes
+
+- 7a8d6dd: React upgraded from 18.2.0 to 19.1.1
+
 ## 3.5.1
 
 ### Patch Changes
@@ -40,7 +46,6 @@
 
 - 2e3d208: updated files for to improve build ptrocess
 - a58fd28: - **Vite Configuration**: Updated `vite.config.ts` to ensure correct UMD module export. Added `@rollup/plugin-inject` to handle `process` polyfill.
-
   - Added `rollupOptions` to define UMD build settings and inject `process` polyfill.
   - Ensured the `name` and `format` properties are correctly set for UMD build.
   - **Example HTML File**: Provided a sample `index.html` file to demonstrate the correct usage of the built UMD module.
