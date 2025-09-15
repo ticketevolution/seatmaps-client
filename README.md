@@ -4,6 +4,10 @@
 
 <h1 align="center">Ticket Evolution Seatmaps</h1>
 
+> ⚠️ **React Compatibility Notice**  
+> - Use `^3.5.1` if your app is on **React 18**  
+> - Use `^4.0.0` if your app is on **React 19+**  
+
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Known Vulnerabilities](https://snyk.io/test/github/ticketevolution/seatmaps-client/badge.svg?targetFile=package.json)](https://snyk.io/test/github/ticketevolution/seatmaps-client?targetFile=package.json)
 
@@ -77,14 +81,22 @@ After instantiation, a [public API](#public-api) is available with a limited num
 
 ### 1. Install via `npm` or `yarn`
 
+For React <19:
 ```sh
-npm install --save @ticketevolution/seatmaps-client
+npm install @ticketevolution/seatmaps-client@^3.5.1
+
+# or
+
+yarn add @ticketevolution/seatmaps-client@^3.5.1
 ```
 
-or
-
+For React 19+:
 ```sh
-yarn add @ticketevolution/seatmaps-client
+npm install @ticketevolution/seatmaps-client@^4.0.0
+
+# or
+
+yarn add @ticketevolution/seatmaps-client@^4.0.0
 ```
 
 ### 2. Create a script that includes `@ticketevolution/seatmaps-client`
