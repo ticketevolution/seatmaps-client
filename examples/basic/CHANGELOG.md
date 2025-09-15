@@ -4,6 +4,13 @@
 
 ### Patch Changes
 
+- Updated dependencies [7a8d6dd]
+  - @ticketevolution/seatmaps-client@4.0.0
+
+## null
+
+### Patch Changes
+
 - Updated dependencies [e2ade85]
   - @ticketevolution/seatmaps-client@3.5.1
 
