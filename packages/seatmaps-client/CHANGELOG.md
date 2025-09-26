@@ -1,5 +1,11 @@
 # @ticketevolution/seatmaps-client
 
+## 4.0.1
+
+### Patch Changes
+
+- f92cacb: ReadMe updated with React version notice
+
 ## 4.0.0
 
 ### Major Changes
