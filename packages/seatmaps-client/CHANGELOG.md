@@ -1,5 +1,15 @@
 # @ticketevolution/seatmaps-client
 
+## 5.0.0
+
+### Major Changes
+
+- 8e8a5d1: Fixed seatmapApi returning undefined.
+
+### Patch Changes
+
+- f92cacb: ReadMe updated with React version notice
+
 ## 4.0.0
 
 ### Major Changes
