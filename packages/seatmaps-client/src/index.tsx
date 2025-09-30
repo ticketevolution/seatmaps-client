@@ -1,7 +1,7 @@
 import pick from "lodash.pick";
 import union from "lodash.union";
 import React from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, Root } from "react-dom/client";
 import {
   DefaultProps,
   Props,
@@ -45,13 +45,14 @@ export function validateOptions(options: Props) {
 
 export class SeatmapFactory {
   configuration: Props;
+  private root?: Root;
 
   constructor(options: Props) {
     validateOptions(options);
     this.configuration = extractConfigurationFromOptions(options);
   }
 
-  build(rootElementId: string): PublicApi | undefined {
+  build(rootElementId: string): Promise<PublicApi | undefined> {
     if (!rootElementId) {
       throw new Error("Seatmaps must be initialized with a DOM element.");
     }
@@ -61,18 +62,17 @@ export class SeatmapFactory {
       throw new Error("Seatmaps must be initialized with a DOM element.");
     }
 
-    let map: TicketMap | undefined;
-
-    createRoot(rootElement).render(
-      <TicketMap
-        {...this.configuration}
-        ref={(ref: TicketMap) => {
-          map = ref;
-        }}
-      />,
-    );
-
-    return map?.publicApi;
+    return new Promise((resolve) => {
+      this.root = createRoot(rootElement);
+      this.root.render(
+        <TicketMap
+          {...this.configuration}
+          ref={(ref: TicketMap) => {
+            resolve(ref?.publicApi);
+          }}
+        />,
+      );
+    });
   }
 }
 

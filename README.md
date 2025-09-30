@@ -6,7 +6,12 @@
 
 > ⚠️ **React Compatibility Notice**  
 > - Use `^3.5.1` if your app is on **React 18**  
-> - Use `^4.0.0` if your app is on **React 19+**  
+> - Use `^5.0.0` if your app is on **React 19+**
+> - For non-React apps, **do not use v4.0.0**.  
+> - Use `3.5.1` or `^5.0.0`.
+
+> ⚠️ **Breaking Change in v5.0.0**  
+> The `.build()` method now returns a **Promise** instead of directly returning the API. You must use `await` or `.then()` to access the seatmap API.
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Known Vulnerabilities](https://snyk.io/test/github/ticketevolution/seatmaps-client/badge.svg?targetFile=package.json)](https://snyk.io/test/github/ticketevolution/seatmaps-client?targetFile=package.json)
@@ -56,25 +61,53 @@ After instantiation, a [public API](#public-api) is available with a limited num
     <script src="https://cdn.jsdelivr.net/npm/@ticketevolution/seatmaps-client/dist/bundle.js"></script>
     <script>
       // create a new seatmap
-      var seatmap = new Tevomaps.SeatmapFactory({
-        venueId: "896",
-        configurationId: "14341",
-        ticketGroups: [
-          {
-            tevo_section_name: "lower level corner 104",
-            retail_price: 100,
-          },
-        ],
-      });
+      (async () => {
+        const seatmap = new Tevomaps.SeatmapFactory({
+          venueId: "896",
+          configurationId: "14341",
+          ticketGroups: [
+            {
+              tevo_section_name: "lower level corner 104",
+              retail_price: 100,
+            },
+          ],
+        });
 
-      // turn element with ID of 'my-map' into a seatmap for config 14341
-      var seatmapApi = seatmap.build("my-map");
+        // turn element with ID of 'my-map' into a seatmap for config 14341
+        // Note: build() now returns a Promise in v5.0.0+
+        const seatmapApi = await seatmap.build("my-map");
 
-      // perform some actions, like highlighting section "lower level corner 104"
-      seatmapApi.highlightSection("lower level corner 104");
+        // perform some actions, like highlighting section "lower level corner 104"
+        if (seatmapApi) {
+          seatmapApi.highlightSection("lower level corner 104");
+        }
+      })();
     </script>
   </body>
 </html>
+```
+
+### Alternative: Using `.then()` instead of `async/await`
+
+```html
+<script>
+  const seatmap = new Tevomaps.SeatmapFactory({
+    venueId: "896",
+    configurationId: "14341",
+    ticketGroups: [
+      {
+        tevo_section_name: "lower level corner 104",
+        retail_price: 100,
+      },
+    ],
+  });
+
+  seatmap.build("my-map").then(function (seatmapApi) {
+    if (seatmapApi) {
+      seatmapApi.highlightSection("lower level corner 104");
+    }
+  });
+</script>
 ```
 
 ## CommonJS
@@ -92,14 +125,16 @@ yarn add @ticketevolution/seatmaps-client@^3.5.1
 
 For React 19+:
 ```sh
-npm install @ticketevolution/seatmaps-client@^4.0.0
+npm install @ticketevolution/seatmaps-client@^5.0.0
 
 # or
 
-yarn add @ticketevolution/seatmaps-client@^4.0.0
+yarn add @ticketevolution/seatmaps-client@^5.0.0
 ```
 
 ### 2. Create a script that includes `@ticketevolution/seatmaps-client`
+
+**For v5.0.0+ (React 19+):**
 
 ```js
 // main.js
@@ -119,6 +154,36 @@ const seatmap = new SeatmapFactory({
 });
 
 // turn element with ID of 'my-map' into a seatmap for config 14341
+// Note: build() returns a Promise in v5.0.0+
+const seatmapApi = await seatmap.build("my-map");
+
+// perform some actions, like highlighting section "lower level corner 104"
+if (seatmapApi) {
+  seatmapApi.highlightSection("lower level corner 104");
+}
+```
+
+**For v3.5.1 (React 18):**
+
+```js
+// main.js
+
+import { SeatmapFactory } from "@ticketevolution/seatmaps-client";
+
+// create a new seatmap
+const seatmap = new SeatmapFactory({
+  venueId: "896",
+  configurationId: "14341",
+  ticketGroups: [
+    {
+      tevo_section_name: "lower level corner 104",
+      retail_price: 100,
+    },
+  ],
+});
+
+// turn element with ID of 'my-map' into a seatmap for config 14341
+// Note: build() returns the API directly in v3.5.1
 const seatmapApi = seatmap.build("my-map");
 
 // perform some actions, like highlighting section "lower level corner 104"
@@ -175,6 +240,30 @@ Options:
 | `mouseControlEnabled` |          | `boolean`                      | `true`                                                                                                                                                                                                                                             | When set to true, the map will respond to mouse events (such as click, move, and hover).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `showZoomHelper` |          | `boolean`                      | `true`                                                                                                                                                                                                                                             | When set to `true`, the ZoomHelper overlay will appear when the page loads on mobile devices.<br>**Note:** This flag applies only when `mouseControlEnabled` is set to `true`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
+## Public API
+
+After calling `.build()`, the following methods are available on the returned API object:
+
+#### `.build(elementId: string): Promise<PublicApi | undefined>`
+
+**Changed in v5.0.0:** This method now returns a **Promise** that resolves to the PublicApi object.
+
+Renders the seatmap into the DOM element with the given ID. In v5.0.0+, you must use `await` or `.then()` to access the API.
+
+**Example (v5.0.0+):**
+```js
+const api = await seatmap.build("my-map");
+// or
+seatmap.build("my-map").then(api => {
+  // use api here
+});
+```
+
+**Example (v3.5.1):**
+```js
+const api = seatmap.build("my-map");
+```
+
 #### `updateTicketGroups(groups: TicketGroup[])`
 
 Changes the collection of ticket groups in the map used to calculate available sections and section prices. Useful if you have a feature for filtering ticket groups and you want the map to update.
@@ -194,6 +283,34 @@ This is the same effect used for clicking on a section to select it. It colors t
 #### `deselectSection(section: string)`
 
 This is the same effect used for clicking on a section to deselect it. It reverts the color of the section and is the only way to unhighlight a selected section. Calls the `onSelection` callback with the updated array of selected sections.
+
+# Migration Guide
+
+## Migrating from v3.5.1 to v5.0.0
+
+The main breaking change in v5.0.0 is that the `.build()` method now returns a Promise instead of directly returning the API object.
+
+**Before (v3.5.1):**
+```js
+const seatmapApi = seatmap.build("my-map");
+seatmapApi.highlightSection("section-1");
+```
+
+**After (v5.0.0):**
+```js
+// Option 1: async/await
+const seatmapApi = await seatmap.build("my-map");
+if (seatmapApi) {
+  seatmapApi.highlightSection("section-1");
+}
+
+// Option 2: .then()
+seatmap.build("my-map").then((seatmapApi) => {
+  if (seatmapApi) {
+    seatmapApi.highlightSection("section-1");
+  }
+});
+```
 
 # Interfaces
 
