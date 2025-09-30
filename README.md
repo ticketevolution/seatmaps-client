@@ -6,9 +6,9 @@
 
 > ⚠️ **React Compatibility Notice**  
 > - Use `^3.5.1` if your app is on **React 18**  
-> - Use `^4.0.0` if your app is on **React 19+**  
+> - Use `^5.0.0` if your app is on **React 19+**  
 
-> ⚠️ **Breaking Change in v4.0.0**  
+> ⚠️ **Breaking Change in v5.0.0**  
 > The `.build()` method now returns a **Promise** instead of directly returning the API. You must use `await` or `.then()` to access the seatmap API.
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
@@ -60,7 +60,7 @@ After instantiation, a [public API](#public-api) is available with a limited num
     <script>
       // create a new seatmap
       (async () => {
-        var seatmap = new Tevomaps.SeatmapFactory({
+        const seatmap = new Tevomaps.SeatmapFactory({
           venueId: "896",
           configurationId: "14341",
           ticketGroups: [
@@ -72,8 +72,8 @@ After instantiation, a [public API](#public-api) is available with a limited num
         });
 
         // turn element with ID of 'my-map' into a seatmap for config 14341
-        // Note: build() now returns a Promise in v4.0.0+
-        var seatmapApi = await seatmap.build("my-map");
+        // Note: build() now returns a Promise in v5.0.0+
+        const seatmapApi = await seatmap.build("my-map");
 
         // perform some actions, like highlighting section "lower level corner 104"
         if (seatmapApi) {
@@ -89,7 +89,7 @@ After instantiation, a [public API](#public-api) is available with a limited num
 
 ```html
 <script>
-  var seatmap = new Tevomaps.SeatmapFactory({
+  const seatmap = new Tevomaps.SeatmapFactory({
     venueId: "896",
     configurationId: "14341",
     ticketGroups: [
@@ -123,16 +123,16 @@ yarn add @ticketevolution/seatmaps-client@^3.5.1
 
 For React 19+:
 ```sh
-npm install @ticketevolution/seatmaps-client@^4.0.0
+npm install @ticketevolution/seatmaps-client@^5.0.0
 
 # or
 
-yarn add @ticketevolution/seatmaps-client@^4.0.0
+yarn add @ticketevolution/seatmaps-client@^5.0.0
 ```
 
 ### 2. Create a script that includes `@ticketevolution/seatmaps-client`
 
-**For v4.0.0+ (React 19+):**
+**For v5.0.0+ (React 19+):**
 
 ```js
 // main.js
@@ -152,7 +152,7 @@ const seatmap = new SeatmapFactory({
 });
 
 // turn element with ID of 'my-map' into a seatmap for config 14341
-// Note: build() returns a Promise in v4.0.0+
+// Note: build() returns a Promise in v5.0.0+
 const seatmapApi = await seatmap.build("my-map");
 
 // perform some actions, like highlighting section "lower level corner 104"
@@ -244,11 +244,11 @@ After calling `.build()`, the following methods are available on the returned AP
 
 #### `.build(elementId: string): Promise<PublicApi | undefined>`
 
-**Changed in v4.0.0:** This method now returns a **Promise** that resolves to the PublicApi object.
+**Changed in v5.0.0:** This method now returns a **Promise** that resolves to the PublicApi object.
 
-Renders the seatmap into the DOM element with the given ID. In v4.0.0+, you must use `await` or `.then()` to access the API.
+Renders the seatmap into the DOM element with the given ID. In v5.0.0+, you must use `await` or `.then()` to access the API.
 
-**Example (v4.0.0+):**
+**Example (v5.0.0+):**
 ```js
 const api = await seatmap.build("my-map");
 // or
@@ -284,9 +284,9 @@ This is the same effect used for clicking on a section to deselect it. It revert
 
 # Migration Guide
 
-## Migrating from v3.5.1 to v4.0.0
+## Migrating from v3.5.1 to v5.0.0
 
-The main breaking change in v4.0.0 is that the `.build()` method now returns a Promise instead of directly returning the API object.
+The main breaking change in v5.0.0 is that the `.build()` method now returns a Promise instead of directly returning the API object.
 
 **Before (v3.5.1):**
 ```js
@@ -294,7 +294,7 @@ const seatmapApi = seatmap.build("my-map");
 seatmapApi.highlightSection("section-1");
 ```
 
-**After (v4.0.0):**
+**After (v5.0.0):**
 ```js
 // Option 1: async/await
 const seatmapApi = await seatmap.build("my-map");

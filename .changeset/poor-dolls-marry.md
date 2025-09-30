@@ -1,5 +1,5 @@
 ---
-"@ticketevolution/seatmaps-client": patch
+"@ticketevolution/seatmaps-client": major
 ---
 
 Fixed seatmapApi returning undefined.
