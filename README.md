@@ -6,7 +6,9 @@
 
 > ⚠️ **React Compatibility Notice**  
 > - Use `^3.5.1` if your app is on **React 18**  
-> - Use `^5.0.0` if your app is on **React 19+**  
+> - Use `^5.0.0` if your app is on **React 19+**
+> - For non-React apps, **do not use v4.0.0**.  
+> - Use `3.5.1` or `^5.0.0`.
 
 > ⚠️ **Breaking Change in v5.0.0**  
 > The `.build()` method now returns a **Promise** instead of directly returning the API. You must use `await` or `.then()` to access the seatmap API.
